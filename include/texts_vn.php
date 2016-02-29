@@ -6,6 +6,7 @@ $M_NAME_EXPECTED_POSITION="Vị trí mong muốn";
 $M_CAREER_OBJECTIVE ="Mục tiêu nghề nghiệp";
 $M_FACEBOOK_URL="Facebook URL";
 $M_NAME_EXPECTED_SALARY="Mức lương mong muốn";
+$WORK_LOCATION="Vị trí làm việc";
 //SonDang
 
 

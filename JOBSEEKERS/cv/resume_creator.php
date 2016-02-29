@@ -70,27 +70,12 @@ if(!defined('IN_SCRIPT')) die("");
                                                                 get_param("js-experience"),
                                                                 get_param("skills"),
                                                                 get_param("js-Language"),
-                                                                get_param("job_3_duties"),
-                                                                get_param("employer_name_4"),
-                                                                get_param("employer_address_4"),
-                                                                get_param("job_4_dates"),
-                                                                get_param("job_4_title"),
-                                                                get_param("job_4_duties"),
-                                                                get_param("skills"),
-                                                                get_param("js-language"),
                                                                 get_param("js-LanguageLevel")
-					)
-					,
-					
+					),
 					"username='".$AuthUserName."'"
 				);
-				
-				
-		
 		}
-		
-		
-		
+                
 		$arrResume = $database->DataArray("jobseeker_resumes","username='".$AuthUserName."'");
 		
 		
@@ -132,10 +117,11 @@ if(!defined('IN_SCRIPT')) die("");
                                                 <ul class="jobseeker-select">
                                                     <li><b><?php echo $M_CURRENT_POSITION;?></b></li>
                                                     <li style="float: right">
-                                                        <select name="js-current-position">
-                                                            <option>Manager</option>
-                                                            <option>Staff</option>
-                                                            <option>Other</option>
+                                                        <select name="js-current-position" required>
+                                                            <option value="">Please select</option>
+                                                            <option value="1">Manager</option>
+                                                            <option value="2">Staff</option>
+                                                            <option value="3">Other</option>
                                                         </select>
                                                     </li>
                                                 </ul>
@@ -143,14 +129,14 @@ if(!defined('IN_SCRIPT')) die("");
                                                 <ul class="jobseeker-select">
                                                     <li><b><?php echo $M_SALARY;?></b></li>						
                                                     <li style="float: right;">
-                                                        <select name="js-salary">
-                                                            <option>Please select</option>
-                                                            <option>50-150 USD</option>
-                                                            <option>150-350 USD</option>
-                                                            <option>350-500 USD</option>
-                                                            <option>500-1000 USD</option>
-                                                            <option>Above 1000 USD</option>
-                                                            <option>Other</option>
+                                                        <select name="js-salary" required>
+                                                            <option value="">Please select</option>
+                                                            <option value="1">50-150 USD</option>
+                                                            <option value="2">150-350 USD</option>
+                                                            <option value="3">350-500 USD</option>
+                                                            <option value="4">500-1000 USD</option>
+                                                            <option value="5">Above 1000 USD</option>
+                                                            <option value="6">Other</option>
                                                         </select>
                                                     </li>
                                                 </ul>
@@ -159,9 +145,10 @@ if(!defined('IN_SCRIPT')) die("");
                                                     <li><b><?php echo $M_NAME_EXPECTED_POSITION;?></b></li>                                               
                                                     <li style="float: right;">
                                                         <select name="js-expected-position">
-                                                            <option>Manager</option>
-                                                            <option>Staff</option>
-                                                            <option>Other</option>
+                                                            <option value="">Please select</option>
+                                                            <option value="1">Manager</option>
+                                                            <option value="2">Staff</option>
+                                                            <option value="3">Other</option>
                                                         </select>
                                                     </li>
                                                 </ul>
@@ -170,13 +157,13 @@ if(!defined('IN_SCRIPT')) die("");
                                                     <li><b><?php echo $M_NAME_EXPECTED_SALARY;?></b></li>						
                                                     <li style="float: right;">
                                                         <select name="js-expected-salary" required>
-                                                            <option>Please select</option>
-                                                            <option>Negotiate</option>
-                                                            <option>50-150 USD</option>
-                                                            <option>150-350 USD</option>
-                                                            <option>350-500 USD</option>
-                                                            <option>500-1000 USD</option>
-                                                            <option>Above 1000 USD</option>
+                                                            <option value="">Please select</option>
+                                                            <option value="1">50-150 USD</option>
+                                                            <option value="2">150-350 USD</option>
+                                                            <option value="3">350-500 USD</option>
+                                                            <option value="4">500-1000 USD</option>
+                                                            <option value="5">Above 1000 USD</option>
+                                                            <option value="6">Negotiate</option>
                                                         </select>
                                                     </li>
                                                 </ul>
@@ -187,24 +174,20 @@ if(!defined('IN_SCRIPT')) die("");
                                                     </li>
                                                     <li style="float: right">
                                                         <select name="js-categories">
-                                                            <?php foreach ($database->get_categories() as $value) :?>
-                                                                <option><?php echo $value?></option>
+                                                            <?php foreach ($database->get_data('categories', 'category_name') as $value) :?>
+                                                            <option value="<?php echo $value?>"><?php echo $value?></option>
                                                             <?php endforeach;?>
                                                         </select>
                                                     </li>
                                                 </ul>
                                                 
                                                 <ul class="jobseeker-select">
-                                                    <li><b><?php echo $LOCATION;?></b></li>						
+                                                    <li><b><?php echo $WORK_LOCATION;?></b></li>						
                                                     <li style="float: right;">
-                                                        <select name="js-location" required>
-                                                            <option>Please select</option>
-                                                            <option>Negotiate</option>
-                                                            <option>50-150 USD</option>
-                                                            <option>150-350 USD</option>
-                                                            <option>350-500 USD</option>
-                                                            <option>500-1000 USD</option>
-                                                            <option>Above 1000 USD</option>
+                                                        <select name="js-categories">
+                                                            <?php foreach ($database->get_data('locations', 'City_en') as $value) :?>
+                                                            <option value="<?php echo $value?>"><?php echo $value?></option>
+                                                            <?php endforeach;?>
                                                         </select>
                                                     </li>
                                                 </ul>
@@ -213,13 +196,13 @@ if(!defined('IN_SCRIPT')) die("");
                                                     <li><b><?php echo $M_EDUCATION;?></b></li>						
                                                     <li style="float: right">
                                                         <select name="education_level">
-                                                                <option value="-1"><?php echo $M_PLEASE_SELECT;?></option>
-                                                            <?php
-                                                            foreach($website->GetParam("arrEducationLevels") as $key=>$value)
-                                                            {
-                                                                            echo "<option value=\"".$key."\" ".($key==$arrResume["education_level"]?"selected":"").">".$value."</option>";
-                                                            }
-                                                            ?>
+                                                                <option value=""><?php echo $M_PLEASE_SELECT;?></option>
+                                                                <?php
+                                                                foreach($website->GetParam("arrEducationLevels") as $key=>$value)
+                                                                {
+                                                                                echo "<option value=\"".$key."\" ".($key==$arrResume["education_level"]?"selected":"").">".$value."</option>";
+                                                                }
+                                                                ?>
                                                         </select>
                                                     </li>
                                                 </ul>
@@ -227,14 +210,10 @@ if(!defined('IN_SCRIPT')) die("");
                                                 <ul class="jobseeker-select">
                                                     <li><b><?php echo $M_JOB_TYPE;?></b></li>						
                                                     <li style="float: right">
-                                                        <select name="js-jobType">
-                                                                <option value="-1"><?php echo $M_PLEASE_SELECT;?></option>
-                                                            <?php
-                                                            foreach($website->GetParam("arrEducationLevels") as $key=>$value)
-                                                            {
-                                                                            echo "<option value=\"".$key."\" ".($key==$arrResume["education_level"]?"selected":"").">".$value."</option>";
-                                                            }
-                                                            ?>
+                                                        <select name="js-categories">
+                                                            <?php foreach ($database->get_data('job_types', 'job_name_en') as $value) :?>
+                                                            <option value="<?php echo $value?>"><?php echo $value?></option>
+                                                            <?php endforeach;?>
                                                         </select>
                                                     </li>
                                                 </ul>
@@ -264,26 +243,19 @@ if(!defined('IN_SCRIPT')) die("");
                                                 <ul class="jobseeker-select">
                                                     <li><label for="js-Language">Select language: </label></li>
                                                     <li>
-                                                        <select name="js-language">
-                                                            <option value="-1"><?php echo $M_PLEASE_SELECT;?></option>
-                                                            <?php
-                                                            foreach($website->GetParam("arrResumeLanguages") as $key=>$value)
-                                                            {
-                                                                    echo "<option value=\"".$key."\" ".($key==$arrResume["language_".$i]?"selected":"").">".$value."</option>";
-                                                            }
-                                                            ?>
+                                                        <select name="js-language" required>
+                                                            <?php foreach ($database->get_data('languages', 'name') as $value) :?>
+                                                            <option value="<?php echo $value?>"><?php echo $value?></option>
+                                                            <?php endforeach;?>
                                                         </select>
                                                     </li>
                                                     <li><label for="js-LanguageLevel">Level: </label></li>
                                                     <li class="language-level">
-                                                        <select name="js-languageLevel">
-                                                            <option value="-1"><?php echo $M_PLEASE_SELECT;?></option>
-                                                            <?php
-                                                            foreach($website->GetParam("arrProficiencies") as $key=>$value)
-                                                            {
-                                                                    echo "<option value=\"".$key."\" ".($key==$arrResume["language_".$i."_level"]?"selected":"").">".$value."</option>";
-                                                            }
-                                                            ?>
+                                                        <select name="js-languageLevel" required>
+                                                            <option value=""><?php echo $M_PLEASE_SELECT;?></option>
+                                                            <?php foreach ($database->get_data('language_levels', 'level_name') as $value) :?>
+                                                            <option value="<?php echo $value?>"><?php echo $value?></option>
+                                                            <?php endforeach;?>
                                                         </select>
                                                     </li>
                                                 </ul>

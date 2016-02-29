@@ -494,11 +494,11 @@ class Database
 		return $strResult;
 	}
         
-        public function get_categories($table="categories") {
+        public function get_data($table="categories", $field="category_name") {
             $data_list = $this->DataTable($table);
             $data = array();
             foreach ($data_list as $value) {
-                $data[] = $value['category_name'];
+                $data[] = $value[$field];
             }          
             return $data;
         }
