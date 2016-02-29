@@ -1,14 +1,14 @@
 <?php
-$DOMAIN_NAME = "www.vieclambanthoigian.com.vn";
+$DOMAIN_NAME = "localhost/vieclambanthoigian.com.vn";
 
 //MYSQL DATABASE ACCESS SETTINGS
 $DBHost="localhost";
-$DBUser="viea83fe_anton";
-$DBPass="Zok;z(iTQ&s-";
+$DBUser="root";
+$DBPass="";
 $DBName="viea83fe_vieclambanthoigian";
 $DBprefix="jobsportal_";
 
-$DEBUG_MODE=false;
+$DEBUG_MODE=true;
 $MULTI_LANGUAGE_SITE = true;
 $AdminPanelLanguages=
 array

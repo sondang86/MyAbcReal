@@ -1,4 +1,14 @@
 <?php
+//SonDang
+$M_NAME_CURRENT_POSITION="Tên của vị trí làm việc hiện tại";
+$M_CURRENT_POSITION="Vị trí hiện tại";
+$M_NAME_EXPECTED_POSITION="Vị trí mong muốn";
+$M_CAREER_OBJECTIVE ="Mục tiêu nghề nghiệp";
+$M_FACEBOOK_URL="Facebook URL";
+$M_NAME_EXPECTED_SALARY="Mức lương mong muốn";
+//SonDang
+
+
 $M_BROWSE_MAP="Browse by Map";
 $M_ADD_MAP="Thêm địa chỉ vào bản đồ";
 $M_LONGITUDE="Longitude";
@@ -29,7 +39,7 @@ $M_1_5_YEARS="15 năm";
 $M_0_1_YEAR="0-1 năm";
 $M_STUDENT="Học sinh";
 $M_DONT_SAY="Không muốn nói";
-$M_EXPERIENCE="Trải qua";
+$M_EXPERIENCE="Kinh nghiệm làm việc";
 $M_MORE_3_MONTHS="Hơn 3 tháng";
 $M_3_MONTHS="3 tháng";
 $M_1_MONTH="1 tháng";
@@ -313,7 +323,7 @@ $M_ADS_DELETED_SUCCESS="việc xóa thành công";
 $M_ADS_POSTED_SUCCESS="việc đăng thành công";
 $M_EXPORT_OR_IMPORT="Xuất khẩu hoặc nhập khẩu";
 $M_DATE_AVAILABLE="Ngày bắt đầu";
-$M_SALARY="Tiền lương";
+$M_SALARY="Mức lương";
 $M_MR="Ông";
 $M_MRS="Bà";
 $M_MSS="Quý cô";

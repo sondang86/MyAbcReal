@@ -16,6 +16,26 @@ else
 	$arrUserFields = array();
 }
 ?>
+
+<?php
+    if(isset($_COOKIE["AuthJ"])&&$_COOKIE["AuthJ"]!="")//User logged in, list all jobseekers
+    { 
+            $table_jobseekers = $database->DataTable("jobseekers","WHERE active=1");
+            echo "<div class='candidates-list'><ul class='jobseeker-info'>";
+            
+            while ($jobseeker_list = $database->fetch_array($table_jobseekers)) :?>
+                    <li>
+                        <div class="jobseeker-title">Name: <?php echo $jobseeker_list['first_name']?></div>
+                        <div class="jobseeker-name">Address: <?php echo $jobseeker_list['address']?></div>
+                        <div class="jobseeker-description">About: <?php echo $jobseeker_list['username']?></div>
+                    </li>
+            <?php endwhile;
+            echo "</ul></div>";
+    } else //Display register form
+    { 
+?>
+
+
 <div class="page-wrap">
 <?php	
 if(isset($_POST["ProceedSend"]))
@@ -711,5 +731,7 @@ function ValidateSignupForm(x){
 <?php
 $website->Title($M_ARE_YOU_JOBSEEKER);
 $website->MetaDescription("");
-$website->MetaKeywords("");
+$website->MetaKeywords(""); 
+    
+}
 ?>

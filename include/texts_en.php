@@ -1,4 +1,14 @@
 <?php
+//SonDang
+$M_NAME_CURRENT_POSITION="Name of the current position";
+$M_CURRENT_POSITION="Current position";
+$M_NAME_EXPECTED_POSITION="Expected position";
+$M_CAREER_OBJECTIVE ="Career objective";
+$M_FACEBOOK_URL="Facebook URL";
+$M_NAME_EXPECTED_SALARY="Expected salary";
+
+//SonDang
+
 $M_MINIMUM_SALARY="Minimum monthly salary";
 $M_YOUR_REVIEW_POSTED="Your review was posted successfully!";
 $M_BY="By";

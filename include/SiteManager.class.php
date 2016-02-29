@@ -1614,8 +1614,8 @@ class SiteManager
 		
 		return $result;
 	}
-	
-	function show_category($category)
+                
+ 	function show_category($category)
 	{
 		global $l,$l1,$l2,$l3,$l4;
 		

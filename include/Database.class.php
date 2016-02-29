@@ -124,12 +124,11 @@ class Database
 
 	}
 	
-	public function DataTable($strTable,$sqlClause)
+	public function DataTable($strTable,$sqlClause="")
 	{
 		global $DBprefix;
 		
-		$sql_query = "SELECT * FROM ".$DBprefix.$strTable." ".$sqlClause;
-
+		$sql_query = "SELECT * FROM ".$DBprefix.$strTable." ".$sqlClause;		
 		
 		$data_table = $this->Query($sql_query);
 		
@@ -494,6 +493,16 @@ class Database
 		
 		return $strResult;
 	}
+        
+        public function get_categories($table="categories") {
+            $data_list = $this->DataTable($table);
+            $data = array();
+            foreach ($data_list as $value) {
+                $data[] = $value['category_name'];
+            }          
+            return $data;
+        }
+
 	
 }
 ?>
