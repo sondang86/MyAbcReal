@@ -154,7 +154,7 @@ if(!defined('IN_SCRIPT')) die("");
                                                     <li style="float: right">
                                                         <select name="js-category">
                                                             <?php foreach ($database->get_data('categories') as $value) :?>
-                                                            <option value="<?php echo $value['category_name']?>" <?php if($value['category_name'] == $jobseeker_data[0]['job_category']) {echo "selected";}?>><?php echo $value['category_name']?></option>
+                                                            <option value="<?php echo $value['category_id']?>" <?php if($value['category_name'] == $jobseeker_data[0]['job_category']) {echo "selected";}?>><?php echo $value['category_name']?></option>
                                                             <?php endforeach;?>
                                                         </select>
                                                     </li>

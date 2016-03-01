@@ -11,7 +11,7 @@ include("../config.php");
 if(!$DEBUG_MODE) error_reporting(0);
 include("../include/SiteManager.class.php");
 include("../include/Database.class.php");
-require_once("../include/input_data_sanitize_gump.class.php");
+require_once("../include/gump.class.php");
 $website = new SiteManager();
 $website->isAdminPanel = true;
 $database = new Database();

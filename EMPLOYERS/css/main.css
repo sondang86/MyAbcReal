@@ -1292,3 +1292,7 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
 	background-color: #fff;
 	cursor: default;
 }
+
+.jobseeker-cv input[readonly]{
+    color: #999;
+}
