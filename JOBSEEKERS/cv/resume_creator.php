@@ -69,8 +69,8 @@ if(!defined('IN_SCRIPT')) die("");
                                                                 get_param("js-facebookURL"),
                                                                 get_param("js-experience"),
                                                                 get_param("skills"),
-                                                                get_param("js-Language"),
-                                                                get_param("js-LanguageLevel")
+                                                                get_param("js-language"),
+                                                                get_param("js-languageLevel")
 					),
 					"username='".$AuthUserName."'"
 				);
@@ -89,29 +89,11 @@ if(!defined('IN_SCRIPT')) die("");
 						<input type="hidden" name="category" value="<?php echo $category;?>">
 					
 						
-						<span style="font-size:14px;font-weight:400">
-							<i><b><?php echo $M_PERSONAL_INFORMATION;?></b></i>
-						</span>
-						
-						<br><br><br>
-						
-						<?php echo $M_VIEW_MODIFY_PROFILE;?>
-						<a href="index.php?category=profile&action=edit"><?php echo $M_PROFILE_MODIFY;?></a> 
-						<?php echo $M_PAGE;?>!
-						
-						<br><br><br>
-						<span style="font-size:14px;font-weight:400">
-							<i><b><?php echo $M_WORK_HISTORY;?></b></i>
-						</span>
-						<br><br>
-						<font size=1><i><?php echo $M_WORK_HISTORY_EXPL;?> </i></font>
-						
-						<br><br>
-						
-                                                <!--SonDang modify here-->
+						<!--SonDang modify here-->
                                                 <?php
                                                     //Get the current jobseeker data
                                                     $jobseeker_data = $database->get_data("jobseeker_resumes", "", "WHERE username = '$AuthUserName'");
+                                                    
                                                 ?>
                                                 <b><?php echo $M_NAME_CURRENT_POSITION;?></b>						
 						<br><br style="line-height:2px">
@@ -241,8 +223,8 @@ if(!defined('IN_SCRIPT')) die("");
                                                     <li><label for="js-Language">Select language: </label></li>
                                                     <li>
                                                         <select name="js-language" required>
-                                                            <?php foreach ($database->get_data('languages', 'name') as $value) :?>
-                                                            <option value="<?php echo $value?>"><?php echo $value?></option>
+                                                            <?php foreach ($database->get_data('languages') as $value) :?>
+                                                            <option value="<?php echo $value['id']?>" <?php if($value['id'] == $jobseeker_data[0]['language']) {echo "selected";}?>><?php echo $value['name']?></option>
                                                             <?php endforeach;?>
                                                         </select>
                                                     </li>
@@ -252,7 +234,7 @@ if(!defined('IN_SCRIPT')) die("");
                                                     <li class="language-level">
                                                         <select name="js-languageLevel" required>
                                                             <option value=""><?php echo $M_PLEASE_SELECT;?></option>
-                                                            <?php foreach ($database->get_data('language_levels') as $value) :?>
+                                                            <?php foreach ($database->get_data('language_levels', "", "WHERE language_id = " . $database->get_default_language()) as $value) :?>
                                                             <option value="<?php echo $value['level']?>" <?php if($value['level'] == $jobseeker_data[0]['language_level']) {echo "selected";}?>><?php echo $value['level_name']?></option>
                                                             <?php endforeach;?>
                                                         </select>
@@ -267,8 +249,3 @@ if(!defined('IN_SCRIPT')) die("");
 
 						
 						</form>
-		
-<?php
-    $test = $database->get_data("jobseeker_resumes", "", "WHERE username = '$AuthUserName'");
-    print_r($test);
-?>

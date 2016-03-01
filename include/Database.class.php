@@ -494,6 +494,8 @@ class Database
 		return $strResult;
 	}
         
+        
+        
         public function get_data($table="categories", $field="", $additional_query="") {
             $data_list = $this->DataTable($table,$additional_query);
             $data = array();           
@@ -510,6 +512,12 @@ class Database
             
             return $data;
         }
+        
+        public function get_default_language() {
+            $default_language = $this->get_data("languages","default_language", "WHERE default_language=1")[0];
+            return $default_language;            
+        }
+        
         
 }
 ?>
