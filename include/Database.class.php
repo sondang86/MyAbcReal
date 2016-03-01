@@ -494,15 +494,22 @@ class Database
 		return $strResult;
 	}
         
-        public function get_data($table="categories", $field="category_name") {
-            $data_list = $this->DataTable($table);
-            $data = array();
-            foreach ($data_list as $value) {
-                $data[] = $value[$field];
-            }          
+        public function get_data($table="categories", $field="", $additional_query="") {
+            $data_list = $this->DataTable($table,$additional_query);
+            $data = array();           
+            
+            if(empty($field) || $field === NULL){
+                foreach ($data_list as $value) {
+                    $data[] = $value;
+                }                
+            } else {            
+                foreach ($data_list as $value) {
+                    $data[] = $value[$field];
+                }
+            }            
+            
             return $data;
         }
-
-	
+        
 }
 ?>
