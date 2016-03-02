@@ -1190,3 +1190,20 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
     width: 1360px !important;
   }
 }
+
+
+/*jobseeker form*/
+
+.js-languages-selects {
+    width: 30em;
+}
+
+.js-languages-selects li{
+    display: inline-block;
+}
+
+.title-small {
+    color: green;
+    margin: 15px 0;
+    border-bottom: 2px solid yellowgreen;
+}

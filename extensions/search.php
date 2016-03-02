@@ -484,10 +484,13 @@ else
 			$arrCategories = explode("\n", trim($categories_content));
 
 			$categories=array();
-			
 			foreach($arrCategories as $str_category)
 			{
-				list($key,$value)=explode(". ",$str_category);
+//				list($key,$value)=explode(". ",$str_category);
+                                //Avoid undefined offset 1 in Vietnamese language 
+                                //http://stackoverflow.com/questions/6576313/how-to-avoid-undefined-offset
+                                list($key,$value)=array_pad(explode(". ",$str_category, 2),2,null);
+                                
 				$categories["".trim($key)]=trim($value);
 			}
 			asort($categories);
@@ -793,8 +796,9 @@ if(!$has_results)
 				$strSearchString .= $key."=".$value."&";
 			}
 		}
-		
-		if($website->GetParam("FEEDS_USAGE")!=0&&$iJCounter_indeed>0)
+
+//		if($website->GetParam("FEEDS_USAGE")!=0&& $iJCounter_indeed > 0)
+                if($website->GetParam("FEEDS_USAGE")!=0)
 		{
 			echo '<ul class="pagination">';
 			if(isset($_REQUEST["num"]))

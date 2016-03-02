@@ -1293,6 +1293,40 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
 	cursor: default;
 }
 
+/*jobseekers form*/
+
 .jobseeker-cv input[readonly]{
     color: #999;
+}
+
+.jobseeker-cv textarea[readonly]{
+    border: 0.1em solid #ccc;
+    border-radius: 0.5em;
+    background: #fff;
+}
+
+
+.jobseeker-messageArea {
+    padding: 10px;
+    margin-bottom: 25px;
+    border: 0.1em solid #ccc;
+    border-radius: 0.5em;
+    background: #fff;
+    min-height: 200px;
+}
+
+.jobseeker-mainTitle {
+    border-bottom: 2px #D8D5D5 solid;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.jobseeker-cv {
+    border-top: 2px #D8D5D5 solid;
+    padding-top: 20px;
+}
+
+.jobseeker-title h4 {
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
 }

@@ -1,12 +1,13 @@
 <?php
 //SonDang
-$M_NAME_CURRENT_POSITION="Tên của vị trí làm việc hiện tại";
+$M_NAME_CURRENT_POSITION="Tiêu đề hồ sơ";
 $M_CURRENT_POSITION="Vị trí hiện tại";
 $M_NAME_EXPECTED_POSITION="Vị trí mong muốn";
 $M_CAREER_OBJECTIVE ="Mục tiêu nghề nghiệp";
 $M_FACEBOOK_URL="Facebook URL";
 $M_NAME_EXPECTED_SALARY="Mức lương mong muốn";
 $WORK_LOCATION="Vị trí làm việc";
+$M_MINIMUM_SALARY="Mức lương tối thiểu";
 //SonDang
 
 

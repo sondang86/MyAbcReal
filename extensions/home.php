@@ -81,7 +81,10 @@ if(!defined('IN_SCRIPT')) die("");
 
 	foreach($cat_lines as $strCategory)
 	{
-		list($key,$value)=explode(". ",$strCategory);
+                //list($key,$value)=explode(". ",$strCategory);
+                //Avoid undefined offset 1 in Vietnamese language 
+                //http://stackoverflow.com/questions/6576313/how-to-avoid-undefined-offset
+                list($key,$value)=array_pad(explode(". ",$strCategory, 2),2,null);
 		$arr_categories[trim($key)]=trim($value);
 
 		$strLink = $website->category_link($key,$value);
