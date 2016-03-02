@@ -2119,10 +2119,51 @@ height: 150px;
     .jobseeker-select li{
         display: list-item;
     }
+    
+    .jobseeker-cv {
+        margin: 20px 0 20px;            
+        background: #F7F7F7;
+        padding: 25px 15px 25px 10px;
+        font: 12px Georgia, "Times New Roman", Times, serif;
+        color: #888;
+        text-shadow: 1px 1px 1px #FFF;
+        border:1px solid #E4E4E4;    
+    }
+    
+    .js-forms label{
+        display: block;
+        margin: 0;
+        text-align: center;
+    }
+    
+    .js-forms span {
+        float: left;
+        width: 100%;
+        text-align: center;
+        padding-right: 10px;
+        margin: 10px auto 0;
+        color: #888;
+    }
+    
+    .js-forms input[type="text"], .js-forms select{
+        border: 1px solid #DADADA;
+        color: #888;
+        height: 30px;
+        margin: 2px 6px 16px 0;
+        outline: 0 none;
+        padding: 3px 3px 3px 5px;
+        width: 70%;
+        font-size: 12px;
+        line-height: 15px;
+        box-shadow: inset 0px 1px 4px #ECECEC;
+        -moz-box-shadow: inset 0px 1px 4px #ECECEC;
+        -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+    }
+    
 }
  
 /* D�nh cho m�y t�nh b?ng chi?u d?c */
-@media all and (min-width: 600px) {
+@media all and (min-width: 600px) {    
     .jobseeker-info li{
         display: inline-block;
         width: 45%;
@@ -2132,13 +2173,54 @@ height: 150px;
         border-bottom: 1px #C1BFBF solid;
     }
     
-    .jobseeker-select li{
-        display: inline-block;
+    .jobseeker-cv {
+        margin: 20px 0 20px;            
+        background: #F7F7F7;
+        padding: 25px 15px 25px 10px;
+        font: 12px Georgia, "Times New Roman", Times, serif;
+        color: #888;
+        text-shadow: 1px 1px 1px #FFF;
+        border:1px solid #E4E4E4;    
     }
     
-    .jobseeker-select li select {
+    .jobseeker-mainTitle {
 
     }
+    
+    .js-forms {
+        margin: 10px auto;
+        max-width: 500px;
+    }
+    
+    .js-forms label{
+        display: block;
+        margin: 0;        
+    }
+    
+    .js-forms span {
+        float: left;
+        width: 28%;
+        text-align: right;
+        padding-right: 10px;
+        margin-top: 10px;
+        color: #888;
+    }
+    
+    .js-forms input[type="text"], .js-forms select{
+        border: 1px solid #DADADA;
+        color: #888;
+        height: 30px;
+        margin: 2px 6px 16px 0;
+        outline: 0 none;
+        padding: 3px 3px 3px 5px;
+        width: 70%;
+        font-size: 12px;
+        line-height: 15px;
+        box-shadow: inset 0px 1px 4px #ECECEC;
+        -moz-box-shadow: inset 0px 1px 4px #ECECEC;
+        -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+    }
+    
 }
  
 /* D�nh cho m�y t�nh b?ng chi?u ngang */
@@ -2149,4 +2231,8 @@ height: 150px;
 /* D�nh cho m�n h�nh desktop */
 @media all and (min-width: 1280px) {
     
+}
+
+.jobseeker-messageArea textArea {
+    min-height: 150px;
 }
