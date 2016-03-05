@@ -2087,17 +2087,9 @@ nav{
 
 .formWrapper {
     
-/* width: 390px; */
     
-height: 150px;
-    
-/* background: #fff; */
-    
-/* display: block; */
-    
-/* padding: 1px 10px 0; */
-    
-/* position: relative; */
+height: 150px;    
+
 }
 
 .languages-options {
@@ -2160,6 +2152,28 @@ height: 150px;
         -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
     }
     
+    .js-forms aside{
+        text-align: right;
+        width: 70%;
+        float: left;
+    }
+    
+    .cv-details label{
+        width: 100%;
+        margin: 10px 0;
+    }
+    
+    .cv-details label span {
+        float: left;
+        width: 35%;
+    }
+    
+    .cv-details label aside{
+        float: left;
+        width: 60%;
+        text-align: right;
+    }
+    
 }
  
 /* D�nh cho m�y t�nh b?ng chi?u d?c */
@@ -2219,6 +2233,22 @@ height: 150px;
         box-shadow: inset 0px 1px 4px #ECECEC;
         -moz-box-shadow: inset 0px 1px 4px #ECECEC;
         -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+    }
+    
+    .cv-details label{
+        width: 100%;
+        margin: 10px 0;
+    }
+    
+    .cv-details label span {
+        float: left;
+        width: 35%;
+    }
+    
+    .cv-details label aside{
+        float: left;
+        width: 60%;
+        text-align: right;
     }
     
 }

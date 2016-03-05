@@ -92,66 +92,66 @@ else
 <div class="jobseeker-cv">    
     <div class="jobseeker-main">
         <div class="row jobseeker-mainTitle">
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <ul class="jobseeker-select">
-                    <li><b><?php echo $M_CURRENT_POSITION;?></b></li>
-                    <li style="float: right">
+            <div class="col-md-6 col-sm-6 col-xs-12 cv-details">
+                <label>
+                    <span><b><?php echo $M_CURRENT_POSITION;?></b></span>
+                    <aside>
                         <?php echo $database->get_data('positions', 'position_name', "WHERE position_id =". $jobseeker_data[0]['current_position'])[0]?>                
-                    </li>
-                </ul>
+                    </aside>
+                </label>
 
-                <ul class="jobseeker-select">
-                    <li><b><?php echo $M_SALARY;?></b></li>						
-                    <li style="float: right;">
+                <label>
+                    <span><b><?php echo $M_SALARY;?></b></span>						
+                    <aside>
                         <?php echo $database->get_data('salary', 'salary_range', "WHERE salary_id =". $jobseeker_data[0]['salary'])[0]?>                
-                    </li>
-                </ul>
+                    </aside>
+                </label>
 
-                <ul class="jobseeker-select">
-                    <li><b><?php echo $M_NAME_EXPECTED_POSITION;?></b></li>                                               
-                    <li style="float: right;">
+                <label>
+                    <span><b><?php echo $M_NAME_EXPECTED_POSITION;?></b></span>                                               
+                    <aside>
                         <?php echo $database->get_data('positions', 'position_name', "WHERE position_id =". $jobseeker_data[0]['expected_position'])[0]?>                
-                    </li>
-                </ul>
-                <ul class="jobseeker-select">
-                    <li><b><?php echo $M_NAME_EXPECTED_SALARY;?></b></li>						
-                    <li style="float: right;">
+                    </aside>
+                </label>
+                <label>
+                    <span><b><?php echo $M_NAME_EXPECTED_SALARY;?></b></span>						
+                    <aside>
                         <?php echo $database->get_data('salary', 'salary_range', "WHERE salary_id =". $jobseeker_data[0]['expected_salary'])[0]?> 
-                    </li>
-                </ul>
-                <ul class="jobseeker-select">
-                    <li><label for="js-Language"><?php echo $M_FOREIGN_LANGUAGE;?>/Level: </label></li>
-                    <li style="float: right"><?php echo $database->get_data('languages', 'name', "WHERE id =". $jobseeker_data[0]['language'])[0]?>/<?php echo $database->get_data('language_levels', 'level_name', "WHERE id =". $jobseeker_data[0]['language_level'])[0]?></li>
-                </ul>
+                    </aside>
+                </label>
+                <label>
+                    <span><b><?php echo $M_FOREIGN_LANGUAGE;?>/Level: </b></span>
+                    <aside><?php echo $database->get_data('languages', 'name', "WHERE id =". $jobseeker_data[0]['language'])[0]?>/<?php echo $database->get_data('language_levels', 'level_name', "WHERE id =". $jobseeker_data[0]['language_level'])[0]?></aside>
+                </label>
             </div>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <ul class="jobseeker-select">
-                    <li><b><?php echo $M_BROWSE_CATEGORY;?></b></li>						
-                    <li style="float: right">
+            <div class="col-md-6 col-sm-6 col-xs-12 cv-details">
+                <label>
+                    <span><b><?php echo $M_BROWSE_CATEGORY;?></b></span>						
+                    <aside>
                         <?php echo $database->get_data('categories', 'category_name', "WHERE category_id =". $jobseeker_data[0]['job_category'])[0]?>
-                    </li>
-                </ul>
+                    </aside>
+                </label>
 
-                <ul class="jobseeker-select">
-                    <li><b><?php echo $WORK_LOCATION;?></b></li>						
-                    <li style="float: right;">
+                <label>
+                    <span><b><?php echo $WORK_LOCATION;?></b></span>						
+                    <aside>
                         <?php echo $database->get_data('locations', 'City_en', "WHERE id =". $jobseeker_data[0]['location'])[0]?>
-                    </li>
-                </ul>
+                    </aside>
+                </label>
 
-                <ul class="jobseeker-select">
-                    <li><b><?php echo $M_EDUCATION;?></b></li>						
-                    <li style="float: right">
+                <label>
+                    <span><b><?php echo $M_EDUCATION;?></b></span>						
+                    <aside>
                         <?php echo $database->get_data('education', 'education_name', "WHERE id =". $jobseeker_data[0]['education_level'])[0]?>
-                    </li>
-                </ul>
+                    </aside>
+                </label>
 
-                <ul class="jobseeker-select">
-                    <li><b><?php echo $M_JOB_TYPE;?></b></li>						
-                    <li style="float: right">
+                <label>
+                    <span><b><?php echo $M_JOB_TYPE;?></b></span>						
+                    <aside>
                         <?php echo $database->get_data('job_types', 'job_name', "WHERE id =". $jobseeker_data[0]['job_type'])[0]?>
-                    </li>
-                </ul>
+                    </aside>
+                </label>
             </div>
         </div>
             <div class="jobseeker-messageArea" name="js-careerObjective" class="jobseeker-messageArea" rows="5" style="width: 100%">
@@ -159,12 +159,12 @@ else
                 <?php echo $jobseeker_data[0]['career_objective'];?>
             </div>
             <br><br>
-
-            <b><?php echo $M_FACEBOOK_URL;?></b>						
-            <br><br style="line-height:2px">
-            <input type="text" name="js-facebookURL" style="width:350px" value="<?php echo $jobseeker_data[0]['facebook_URL'];?>" readonly="readonly">
-            <br><br>
-
+            <div class="cv-details">
+                <label>
+                    <span style="width:100px; margin-top: 7px;"><b><?php echo $M_FACEBOOK_URL;?></b></span>
+                    <aside style="width:200px; float: left; text-align: left;"><input type="text" name="js-facebookURL" style="width:350px" value="<?php echo $jobseeker_data[0]['facebook_URL'];?>" readonly="readonly"></aside>
+                </label>
+            </div>
             <div class="jobseeker-messageArea" rows="5" style="width: 100%">
                 <div class="jobseeker-title"><h4><?php echo $M_EXPERIENCE;?></h4></div>
                 <?php echo $jobseeker_data[0]['experiences'];?>

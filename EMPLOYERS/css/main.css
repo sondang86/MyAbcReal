@@ -1316,7 +1316,6 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
 }
 
 .jobseeker-mainTitle {
-    border-bottom: 2px #D8D5D5 solid;
     margin-bottom: 20px;
     margin-top: 20px;
 }
