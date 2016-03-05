@@ -9,9 +9,23 @@ $is_mobile=false;
 if(isset($_POST["Export"])) ob_start();
 include("../config.php");
 if(!$DEBUG_MODE) error_reporting(0);
-include("../include/SiteManager.class.php");
-include("../include/Database.class.php");
-require_once("../include/gump.class.php");
+
+function __autoload($classname) {
+    $filename = "../include/". $classname .".class.php";
+    include($filename);
+}
+
+$db = new MysqliDb (Array (
+        'host' => $DBHost,
+        'username' => $DBUser, 
+        'password' => $DBPass,
+        'db'=> $DBName,
+        'port' => 3306,
+        'prefix' => $DBprefix,
+        'charset' => 'utf-8'
+    ));
+
+
 $website = new SiteManager();
 $website->isAdminPanel = true;
 $database = new Database();

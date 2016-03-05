@@ -29,23 +29,19 @@ else
 }
 ?>
 <div class="fright">
-	<?php
-            
-            
-		echo LinkTile
-		 (
-			"",
-			"",
-			$M_GO_BACK,
-			"",
-                            
-			"red",
-			"small",
-			"true",
-			"window.history.back"
-		 );
-                
+<?php
+    echo LinkTile
+     (
+            "",
+            "",
+            $M_GO_BACK,
+            "",
 
+            "red",
+            "small",
+            "true",
+            "window.history.back"
+     );
 ?>
 </div>
 <div class="clear"></div>
@@ -86,9 +82,6 @@ else
     ?>
 </div>
 <!--SonDang modify here-->
-<?php
-    $test_data = $database->get_data('positions', 'position_name', "WHERE position_id =". $jobseeker_data[0]['current_position'])[0];
-?>
 <div class="jobseeker-cv">    
     <div class="jobseeker-main">
         <div class="row jobseeker-mainTitle">
@@ -181,9 +174,8 @@ else
         
 </div>
 <!--###SonDang modify here###-->
-        
-        
+                 
 <?php
     $datatete = "12345";
     echo $datatete;
-?>                                                
+?>        
