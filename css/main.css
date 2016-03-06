@@ -2097,7 +2097,7 @@ height: 150px;
     margin-left: 15px;
 }
 
-/* D�nh cho ?i?n tho?i */
+/* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {
     .jobseeker-info li{
         display: inline-block;
@@ -2176,7 +2176,7 @@ height: 150px;
     
 }
  
-/* D�nh cho m�y t�nh b?ng chi?u d?c */
+/* D?nh cho m?y t?nh b?ng chi?u d?c */
 @media all and (min-width: 600px) {    
     .jobseeker-info li{
         display: inline-block;
@@ -2253,12 +2253,12 @@ height: 150px;
     
 }
  
-/* D�nh cho m�y t�nh b?ng chi?u ngang */
+/* D?nh cho m?y t?nh b?ng chi?u ngang */
 @media all and (min-width: 1024px) {
     
 }
  
-/* D�nh cho m�n h�nh desktop */
+/* D?nh cho m?n h?nh desktop */
 @media all and (min-width: 1280px) {
     
 }

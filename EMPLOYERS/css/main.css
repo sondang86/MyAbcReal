@@ -1329,3 +1329,85 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
     border-bottom: 2px solid #ccc;
     padding-bottom: 10px;
 }
+
+/* D?nh cho ?i?n tho?i */
+@media all and (min-width: 250px) {
+        
+}
+ 
+/* D?nh cho m?y t?nh b?ng chi?u d?c */
+@media all and (min-width: 600px) {    
+    .employer-post-form {
+        width: 100%;
+        margin: 10px auto;
+    }
+    
+    .employer-post-form label {
+        display: block;
+        margin: 0;
+    }
+    
+    .employer-post-form span {
+        float: left;
+        width: 15%;
+        /* text-align: right; */
+        padding-right: 10px;
+        margin-top: 10px;
+        color: #888;
+    }
+    
+    .employer-post-form select {
+        border: 1px solid #DADADA;
+        color: #888;
+        height: 30px;
+        margin: 2px 6px 16px 0;
+        outline: 0 none;
+        padding: 3px 3px 3px 5px;
+        width: 40%;
+        font-size: 12px;
+        line-height: 15px;
+        box-shadow: inset 0px 1px 4px #ECECEC;
+        -moz-box-shadow: inset 0px 1px 4px #ECECEC;
+        -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+    }
+    
+    .employer-post-form label input {
+        border: 1px solid #DADADA;
+        color: #888;
+        height: 30px;
+        margin: 2px 6px 16px 0;
+        outline: 0 none;
+        padding: 3px 3px 3px 5px;
+        width: 40%;
+        font-size: 12px;
+        line-height: 15px;
+        box-shadow: inset 0px 1px 4px #ECECEC;
+        -moz-box-shadow: inset 0px 1px 4px #ECECEC;
+        -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+    }
+    
+    .employer-post-form label textarea {
+        border: 1px solid #DADADA;
+        color: #888;
+        min-height: 300px;
+        margin: 2px 6px 16px 0;
+        outline: 0 none;
+        padding: 3px 3px 3px 5px;
+        width: 84%;
+        font-size: 12px;
+        line-height: 15px;
+        box-shadow: inset 0px 1px 4px #ECECEC;
+        -moz-box-shadow: inset 0px 1px 4px #ECECEC;
+        -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+    }
+}
+ 
+/* D?nh cho m?y t?nh b?ng chi?u ngang */
+@media all and (min-width: 1024px) {
+    
+}
+ 
+/* D?nh cho m?n h?nh desktop */
+@media all and (min-width: 1280px) {
+    
+}

@@ -2170,6 +2170,11 @@ class SiteManager
 		return $type."/1.jpg";
 	}
         
+        /**
+        * Strip Vietnamese texts to Latin texts
+        *
+        */
+        
         function stripVN($str) {
             $str = preg_replace("/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/", 'a', $str);
             $str = preg_replace("/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/", 'e', $str);
@@ -2187,6 +2192,23 @@ class SiteManager
             $str = preg_replace("/(Ỳ|Ý|Ỵ|Ỷ|Ỹ)/", 'Y', $str);
             $str = preg_replace("/(Đ)/", 'D', $str);
             return $str;
+        }
+        
+        
+        /**
+        * Convert strings to SEO friendly
+        *
+        */
+        function seoUrl($string) {
+            //Lower case everything
+            $string = strtolower($string);
+            //Make alphanumeric (removes all other characters)
+            $string = preg_replace("/[^a-z0-9_\s-]/", "", $string);
+            //Clean up multiple dashes or whitespaces
+            $string = preg_replace("/[\s-]+/", " ", $string);
+            //Convert whitespaces and underscore to dash
+            $string = preg_replace("/[\s_]/", "-", $string);
+            return $string;
         }
 	
 }	

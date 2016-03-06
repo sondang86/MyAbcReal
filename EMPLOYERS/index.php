@@ -22,7 +22,7 @@ $db = new MysqliDb (Array (
         'db'=> $DBName,
         'port' => 3306,
         'prefix' => $DBprefix,
-        'charset' => 'utf-8'
+        'charset' => 'utf8'
     ));
 
 
@@ -58,8 +58,7 @@ $website->TemplateHTML=str_replace('"css/','"../css/',$website->TemplateHTML);
 $website->TemplateHTML=str_replace('"images/','"../images/',$website->TemplateHTML);
 $website->TemplateHTML=str_replace('</head>','<link rel="stylesheet" href="css/main.css"/></head>',$website->TemplateHTML);
 $website->TemplateHTML=str_replace
-('</body>','
-  <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+('</body>','  
 <script type="text/javascript" src="js/admin.js"></script>
 <script>
 $(init);
@@ -77,3 +76,12 @@ $currentPage->Process($is_mobile);
 $website->Render();
 if(isset($_POST["Export"])) ob_end_flush();
 ?>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script>
+    jQuery(document).ready(function(){
+        jQuery("#employer-start-date").datepicker({
+            dateFormat: 'yy-mm-dd' 
+        }).datepicker("setDate", new Date());;
+    });
+</script>

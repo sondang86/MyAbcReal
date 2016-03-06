@@ -1883,6 +1883,20 @@ class MysqliDb
         $this->totalPages = ceil($this->totalCount / $this->pageLimit);
         return $res;
     }
+    
+    /**
+     * Secure user input the safest way
+     *
+     * @access public
+     * @param string  string user input
+     * @return secure string
+     */
+    
+    public function secure_input($user_input){
+        $db_value = $this->escape(strip_tags(trim($user_input)));
+        return $db_value;
+    }
+    
 }
 
 // END class
