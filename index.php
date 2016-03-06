@@ -64,5 +64,4 @@ $website->Render();
 /// Inserrting the statistics information in the database
 $website->Statistics();
 
-
 ?>

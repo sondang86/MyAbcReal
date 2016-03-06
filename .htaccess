@@ -42,4 +42,7 @@ RewriteRule ^mod-featured-jobs.html$ index.php?mod=search&featured=1 [L]
 RewriteRule ^mod-([a-z]{2})-([^/\.]+).html$ index.php?lang=$1&mod=$2 [L]
 RewriteRule ^mod-([^/\.]+).html$ index.php?mod=$1 [L]
 
+RewriteRule ^nguoi-tim-viec.html$ index.php?mod=jobseekers&lang=vn
+RewriteRule ^nha-tuyen-dung.html$ index.php?mod=employers_registration&lang=vn
+
 RewriteRule ^([^/\.]+).html$ index.php?page=$1 [L]

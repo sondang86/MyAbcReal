@@ -416,16 +416,16 @@ if($insertID > 0)
 			?>
 				<br/><br/>				
 				<form id="paypal_form" name="_xclick" action="https://www.paypal.com/cgi-bin/webscr" method="post">
-				<input type="hidden" name="cmd" value="_xclick">
-				<input type="hidden" name="business" value="<?php echo $website->GetParam("PAYPAL_ID");?>">
-				<input type="hidden" name="currency_code" value="<?php echo $website->GetParam("CURRENCY_CODE");?>">
-				<input type="hidden" name="item_name" value="<?php echo "Payment for job #".$insertID." on ".$DOMAIN_NAME;?> ">
-				<input type="hidden" name="item_number" value="<?php echo $insertID;?>">
-				<input type="hidden" name="amount" value="<?php echo number_format($website->GetParam("PRICE_JOB"), 2, '.', '');?>">
-				<input type="hidden" name="notify_url" value="<?php echo "http://".$DOMAIN_NAME."/ipn_job.php";?>">
-				<input type="hidden" name="return" value="<?php echo "http://".$DOMAIN_NAME."/EMPLOYERS/index.php?category=jobs&action=my";?>">
-				<input type="hidden" name="cancel_return" value="<?php echo "http://".$DOMAIN_NAME."/EMPLOYERS/index.php?category=jobs&action=my";?>">
-				<input type="image"  src="../images/paypal.gif" border="0" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
+                                    <input type="hidden" name="cmd" value="_xclick">
+                                    <input type="hidden" name="business" value="<?php echo $website->GetParam("PAYPAL_ID");?>">
+                                    <input type="hidden" name="currency_code" value="<?php echo $website->GetParam("CURRENCY_CODE");?>">
+                                    <input type="hidden" name="item_name" value="<?php echo "Payment for job #".$insertID." on ".$DOMAIN_NAME;?> ">
+                                    <input type="hidden" name="item_number" value="<?php echo $insertID;?>">
+                                    <input type="hidden" name="amount" value="<?php echo number_format($website->GetParam("PRICE_JOB"), 2, '.', '');?>">
+                                    <input type="hidden" name="notify_url" value="<?php echo "http://".$DOMAIN_NAME."/ipn_job.php";?>">
+                                    <input type="hidden" name="return" value="<?php echo "http://".$DOMAIN_NAME."/EMPLOYERS/index.php?category=jobs&action=my";?>">
+                                    <input type="hidden" name="cancel_return" value="<?php echo "http://".$DOMAIN_NAME."/EMPLOYERS/index.php?category=jobs&action=my";?>">
+                                    <input type="image"  src="../images/paypal.gif" border="0" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
 				</form>
 				<script>
 				document.getElementById("paypal_form").submit();

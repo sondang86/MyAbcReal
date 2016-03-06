@@ -88,7 +88,7 @@ if(!defined('IN_SCRIPT')) die("");
 		$arr_categories[trim($key)]=trim($value);
 
 		$strLink = $website->category_link($key,$value);
-		
+                
 		if(substr_count($key, '.') == 0)
 		{
 			if($i_category_counter!=0) echo "\n</div>";
