@@ -2210,6 +2210,10 @@ class SiteManager
             $string = preg_replace("/[\s_]/", "-", $string);
             return $string;
         }
-	
+        
+        function limitCharacters($string, $limit=50){
+            $data = substr($string,0,$limit).'...';
+            return $data;
+        }	
 }	
 ?>

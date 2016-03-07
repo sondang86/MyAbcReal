@@ -5,6 +5,6 @@
     */
     class CommonsQueries extends MysqliDb{
         public function get_data($table, $query="") {
-            $this->get($table);
+            return $this->get($table);
         }
     }

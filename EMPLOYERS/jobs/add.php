@@ -1,11 +1,6 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
-global $db;
-$categories = $db->get ('categories');
-$job_types = $db->get ('job_types');
-$locations = $db->get ('locations');
-$salaries = $db->get ('salary');
-
+global $db, $categories, $job_types, $locations, $salaries;
 ?>
 <div class="fright">
     
