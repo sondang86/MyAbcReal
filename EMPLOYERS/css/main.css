@@ -1415,3 +1415,7 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
 @media all and (min-width: 1280px) {
     
 }
+
+.job-details {
+    margin-top: 20px;
+}
