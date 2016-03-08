@@ -1332,7 +1332,11 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
 
 /* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {
-        
+    .sort-by div {
+        display: inline-block;
+        text-align: center;
+        margin-left: 5px;
+    }
 }
  
 /* D?nh cho m?y t?nh b?ng chi?u d?c */
