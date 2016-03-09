@@ -104,10 +104,10 @@ elseif($website->GetParam("CHARGE_TYPE") == 2)
         
     $id = $db->insert('jobs', $data);
     if($id){
-        echo 'job was created. Id=' . $id;
-        die;
+        $message = 'job was created. Id=' . $id;
+        $website->redirect("index.php?category=jobs&action=add");
     } else {
-        echo "there were an error occurred";
+        $message = "there were an error occurred";
         die;
     }
 }

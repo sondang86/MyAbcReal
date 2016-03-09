@@ -43,7 +43,7 @@ if (isset($_GET['query'])):
                 <table class="table">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" name=""></th>
+                            <th><input type="checkbox" name="select_all" id="checkAll"></th>
                             <th>Sửa đổi</th>
                             <th>Ngày đăng</th>
                             <th>Hạn đăng</th>
@@ -57,7 +57,7 @@ if (isset($_GET['query'])):
                     <tbody>
                         <?php foreach ($cv as $value) :?>
                         <tr>
-                            <td><input type="checkbox" name=""></td>
+                            <td><input type="checkbox" name="post" value="<?php echo $value['id']?>"></td>
                             <td class="col-md-1" style="text-align: center"><a href="index.php?category=jobs&amp;folder=my&amp;page=edit&amp;id=25"><img src="../images/edit-icon.gif" width="24" height="20" border="0"></a></td>
                             <td class="col-md-1"><?php echo date('Y-m-d', $value['date'])?></td>
                             <td class="col-md-1"><?php echo date('Y-m-d', $value['expires'])?></td>

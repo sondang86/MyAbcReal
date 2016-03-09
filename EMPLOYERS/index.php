@@ -91,4 +91,6 @@ if(isset($_POST["Export"])) ob_end_flush();
             dateFormat: 'yy-mm-dd' 
         }).datepicker("setDate", new Date());;
     });
+    
+    $("#checkAll").change(select_all);
 </script>

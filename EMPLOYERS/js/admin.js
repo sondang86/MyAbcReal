@@ -199,3 +199,7 @@ function get_cat_value(x)
 function sort_by(){
     alert("test");
 }
+
+function select_all(){
+    $("input:checkbox").prop('checked', $(this).prop("checked"));
+}
