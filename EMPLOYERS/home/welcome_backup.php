@@ -4,12 +4,6 @@
 // Check http://www.netartmedia.net/jobsportal for demos and information
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-global $db;
-$db->orderBy("id","asc");
-$db->where ("employer", "$AuthUserName");
-$jobs_by_employer = $db->get("jobs");
-
-
 if(isset($_REQUEST["bn"]))
 {
 	if($_REQUEST["bn"]=="s")
@@ -234,10 +228,15 @@ function CallBack()
 		<div class="panel-body">
 			<div class="list-group">
 			<?php
-                            foreach ($jobs_by_employer as $job) {
+			$jobs = $database->DataTable("jobs","WHERE employer='".$AuthUserName."' ORDER BY id DESC LIMIT 0,3");
+			$i_job_counter=0;
+			while($job = $database->fetch_array($jobs))
+			{
+				if(trim($job["title"])=="") continue;
+				$i_job_counter++;
 			?>
 			
-				<a  href="index.php?category=jobs&action=details&id=<?php echo $job["id"];?>" class="list-group-item no-decoration" >
+				<a  href="index.php?category=jobs&action=details&id=<?php echo $job["id"];?>" class="list-group-item no-decoration <?php if($i_job_counter%2==0) echo 'alt-back';?>" >
 					<div class="row">
 						<div class="col-md-2">
 							<?php echo date($website->GetParam("DATE_HOUR_FORMAT"),$job["date"]);?>

@@ -12,105 +12,14 @@ if($database->SQLCount("jobs","WHERE employer='".$AuthUserName."' AND id=".$id."
 {
 	die("");
 }
+global $db, $commonQueries;
+$db->where ("id", "$id");
+$jobs_by_employer = $db->get("jobs");
 ?>
-
+    
 <div class="row">
-
-<div class="col-md-9">
-
-<h3>
-	<?php echo $M_JOB_DETAILS;?>
-</h3>
-<br/>
-
-<?php
-$_REQUEST["message-column-width"]=120;
-$_REQUEST["select-width"]=400;
-$_REQUEST["HideSubmit"]=true;
-
-  $strJobType="";
-
-foreach($website->GetParam("arrJobTypes") as $arrJobType)
-{
-	if($arrJobType[0]==0) continue;
-	$strJobType.="_".$arrJobType[1]."^".$arrJobType[0];
-
-}
-
-AddEditForm
-(
-	array
-	(
-		$M_TITLE.":",
-		$M_DESCRIPTION.":",
-		$M_CATEGORY.":",
-		$M_JOB_TYPE.":",
-		
-		$M_REGION.":",
-		$M_ZIP.":",
-	
-		$M_SALARY.":",
-		$M_DATE_AVAILABLE.":",
-		$ACTIVE.":"
-	),
-	array
-	(
-		"title",
-		"message",
-		"job_category",
-		
-		"job_type",
-		
-		"region",
-		"zip",
-		"salary",
-		"date_available",
-		"active"
-	),
-	array
-	(
-		"job_category",
-		
-		"job_type",
-		"title",
-		"message",
-		"region",
-		"zip",
-		"salary",
-		"date_available",
-		"active"
-	),
-	array
-	(
-		"combobox_special",
-		
-		"combobox".$strJobType,
-		"textbox_67",
-		"textarea_70_10",
-		"combobox_region",
-		"textbox_5",
-		
-		"textbox_8",
-		"textbox_8",
-		"combobox_".$M_YES."^YES_".$M_NO."^NO"
-	),
-	"jobs",
-	"id",
-	$id,
-	$VALEURS_MODFIEES_SUCCESS
-);
-
-
-
-?>
-<br/>
-<a href="index.php?category=jobs&action=my"><?php echo $GO_BACK_TO." <strong>\"".$MY_JOB_ADS."\"</strong>";?></a>
-
-</div>
-
-
-<div class="col-md-3">
-
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        
 	<?php
 		echo LinkTile
 		 (
@@ -120,8 +29,11 @@ AddEditForm
 			"",
 			"lila"
 		 );
-		 
-		 echo LinkTile
+        ?>
+    </div>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+	<?php	 
+                echo LinkTile
 		 (
 			"jobs",
 			"questionnaire&id=".$id,
@@ -129,7 +41,10 @@ AddEditForm
 			"",
 			"blue"
 		 );
-		 
+        ?>
+    </div>
+    <div class="col-md-3 col-sm-6 col-xs-12">    
+        <?php
 		 echo LinkTile
 		 (
 			"jobs",
@@ -138,8 +53,11 @@ AddEditForm
 			"",
 			"gray"
 		 );
-		 
-		 echo LinkTile
+        ?> 
+    </div>    
+    <div class="col-md-3 col-sm-6 col-xs-12">
+	<?php
+                echo LinkTile
 		 (
 			"application_management",
 			"list&Proceed=1&id=".$id,
@@ -148,5 +66,58 @@ AddEditForm
 			"yellow"
 		 );
 	?>
+    </div>
 </div>
+<div class="row">
+    <div class="col-md-9">
+        <?php foreach ($jobs_by_employer as $job):?>
+        <div class="row top-bottom-margin">
+            <div class="col-md-2">Tiêu đề</div>
+            <div class="col-md-10"><?php echo $job['title']?></div>
+        </div>
+            <?php 
+//                echo "<pre>";
+//                print_r($job);
+//                echo "</pre>";
+            ?>
+        <div class="row top-bottom-margin">
+            <div class="col-md-2">Chi tiết</div>
+            <div class="col-md-10"><?php echo $job['message']?></div>
+        </div>
+            
+        <div class="row top-bottom-margin">
+            <div class="col-md-2">Ngành</div>
+            <div class="col-md-10"><?php echo $commonQueries->get_data('categories', 'category_id', $job['job_category'])[0]['category_name_vi']?></div>
+        </div>
+            
+        <div class="row top-bottom-margin">
+            <div class="col-md-2">Loại công việc:</div>
+            <div class="col-md-10"><?php echo $commonQueries->get_data('job_types', 'id', $job['job_type'])[0]['job_name'];?></div>
+        </div>
+            
+        <div class="row top-bottom-margin">
+            <div class="col-md-2">Địa điểm:</div>
+            <div class="col-md-10"><?php echo $commonQueries->get_data('locations', 'id', $job['region'])[0]['City'];?></div>
+        </div>
+            
+        <div class="row top-bottom-margin">
+            <div class="col-md-2">Mức lương:</div>
+            <div class="col-md-10"><?php echo $commonQueries->get_data('salary', 'id', $job['salary'])[0]['salary_range'];?></div>
+        </div>
+            
+        <div class="row top-bottom-margin">
+            <div class="col-md-2">Ngày bắt đầu:</div>
+            <div class="col-md-10"><?php echo date('Y:m:d',$job['date'])?></div>
+        </div>
+            
+        <div class="row top-bottom-margin">
+            <div class="col-md-2">Đang hoạt động:</div>
+            <div class="col-md-10"><?php echo $job['status']?></div>
+        </div>
+        <?php endforeach;?>
+    </div>
+</div>
+    
+<div class="row">
+    <div class="col-md-12"><a href="index.php?category=jobs&action=my"><?php echo $GO_BACK_TO." <strong>\"".$MY_JOB_ADS."\"</strong>";?></a></div>
 </div>

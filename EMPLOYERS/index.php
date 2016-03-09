@@ -25,6 +25,8 @@ $db = new MysqliDb (Array (
         'charset' => 'utf8'
     ));
 
+$commonQueries = new CommonsQueries($db);
+
 //Common tables
 $categories = $db->get ('categories');
 $job_types = $db->get ('job_types');
