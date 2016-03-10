@@ -91,8 +91,16 @@ if(isset($_POST["Export"])) ob_end_flush();
     jQuery(document).ready(function(){
         jQuery("#employer-start-date").datepicker({
             dateFormat: 'yy-mm-dd' 
-        }).datepicker("setDate", new Date());;
+        }).datepicker("setDate", new Date());
+    
+        jQuery("#datePicker").datepicker({
+            dateFormat: 'yy-mm-dd' 
+        });
+    
     });
     
+    
+    
+    /*Select all option*/
     $("#checkAll").change(select_all);
 </script>

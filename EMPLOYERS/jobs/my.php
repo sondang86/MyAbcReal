@@ -96,7 +96,7 @@ if (isset($_POST['delete']) && !empty($_POST['post'])){
                                 <?php foreach ($all_jobs as $value) :?>
                                 <tr>
                                     <td><input type="checkbox" name="post[]" value="<?php echo $value['id']?>"></td>
-                                    <td class="col-md-1" style="text-align: center"><a href="index.php?category=jobs&amp;folder=my&amp;page=edit&amp;id=25"><img src="../images/edit-icon.gif" width="24" height="20" border="0"></a></td>
+                                    <td class="col-md-1" style="text-align: center"><a href="index.php?category=jobs&amp;folder=my&amp;page=edit&amp;id=<?php echo $value['id']?>"><img src="../images/edit-icon.gif" width="24" height="20" border="0"></a></td>
                                     <td class="col-md-1"><?php echo date('Y-m-d', $value['date'])?></td>
                                     <td class="col-md-1"><?php echo date('Y-m-d', $value['expires'])?></td>
                                     <td class="col-md-2"><?php echo $website->limitCharacters($value['title'],50);?></td>

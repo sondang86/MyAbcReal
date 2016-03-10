@@ -12,396 +12,159 @@ $website->ms_i($id);
 if($database->SQLCount("jobs","WHERE employer='".$AuthUserName."' AND id=".$id." ") == 0)
 {
 	die("");
+}    
+global $db, $commonQueries,$categories, $job_types, $locations, $salaries;
+$db->where ("id", "$id");
+$jobs_by_employer = $db->get("jobs");
+?>
+
+<?php //Edit data
+    if(isset($_POST['submit'])){
+        //Insert data to database
+        $data = Array( 
+            "employer" => "$AuthUserName",
+            "job_category" => filter_input(INPUT_POST, 'post-category'),
+            "job_type" => filter_input(INPUT_POST, 'post-jobtypes'),
+            "title" => $db->cleanData(filter_input(INPUT_POST, 'employer-post-title')), 
+            "message" => $db->cleanData(filter_input(INPUT_POST,'employer-post-details')),
+            "region" => filter_input(INPUT_POST,'post-locations'),
+            "salary" => filter_input(INPUT_POST,'post-salary'),
+            "date" => strtotime(filter_input(INPUT_POST,'employer-start-date')),
+            "expires" => (strtotime(filter_input(INPUT_POST,'employer-start-date')) + 21*86400), //21 days limitation
+            "status" => filter_input(INPUT_POST,'post-active'),
+            "SEO_title" => $db->secure_input($website->seoURL($website->stripVN(filter_input(INPUT_POST,'employer-post-title'))))
+         );
+    
+    
+    $db->where('id', filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT));
+    $id = $db->update('jobs', $data);
+    if($id){
+        $message = 'Job Id' . $id . ' updated';
+        $website->redirect($_SERVER['REQUEST_URI']);
+    } else {
+        $message = "there were an error occurred";
+        die;
+    }
 }
 ?>
-<div class="fright">
-
-	<?php
-		echo LinkTile
-		 (
-			"jobs",
-			"my_stat&id=".$id,
-			$M_VISITS." (".$database->SQLCount("jobs_stat","WHERE posting_id=".$id).")",
-			"",
-			"gray"
-		 );
-		 
-		 echo LinkTile
-		 (
-			"application_management",
-			"list&Proceed=1&id=".$id,
-			$M_APPLICATIONS." (".$database->SQLCount("apply","WHERE posting_id=".$id).")",
-			"",
-			"yellow"
-		 );
-		 
-		 
-		echo LinkTile
-		 (
-			"jobs",
-			"my",
-			$M_GO_BACK,
-			"",
-			"red"
-		 );
-	?>
-</div>
-<div class="clear"></div>
-<br/>
 
 
 <h3>
-	<?php echo $MODIFY_SELECTED_ADD;?>
+        <?php echo $MODIFY_SELECTED_ADD;?>
 </h3>
-<br/>
-
-<?php
-if(get_param("featured")=="1")
-{
-
-if(get_param("confirm")=="1")
-{
-	$website->ms_i($id);
-	
-	$database->SQLUpdate_SingleValue
-	(
-		"jobs",
-		"id",
-		$id,
-		"featured",
-		"1"
-	);	
-	
-	$database->SQLUpdate_SingleValue
-	(
-		"jobs",
-		"id",
-		$id,
-		"featured_expires",
-		time()+86400*$website->GetParam("FEATURED_ADS_EXPIRE")
-	);	
-	
-if(!$website->GetParam("FREE_WEBSITE"))
-{	
-	$database->SQLUpdate_SingleValue
-	(
-		"employers",
-		"username",
-		"'".$AuthUserName."'",
-		"credits",
-		$arrUser["credits"]-aParameter(703)
-	);	
-}
-?>
-
-<br>
-<h3><?php echo $M_THANK_YOU;?>!</h3>
-<br><br>
-		
-	
-<?php
-}
-else
-{
-
-?>
-
-
-
-		
-		<?php
-		if(!$website->GetParam("FREE_WEBSITE"))
-		{
-		?>
-		
-		
-		<?php echo $M_PRICE_CREDITS_ADS_FEATURED;?>:
-		
-		<b style="font-size:14px"><?php echo aParameter(703);?></b>
-		
-		<br><br>
-		<?php
-		}
-		?> 
-		
-		
-		<?php
-		
-		if($arrUser["credits"]<aParameter(703)&&!$website->GetParam("FREE_WEBSITE"))
-		{
-		
-				echo $M_NOT_ENOUGH_CREDITS_TO_MAKE_FEATURED;
-		
-		}
-		else
-		{
-			
-		?>	
-			
-			<script>
-			
-			function yesClicked()
-			{
-				document.location.href="index.php?category=jobs&folder=my&page=edit&featured=1&confirm=1&id=<?php echo $id;?>";	
-			}
-			
-			
-			function noClicked()
-			{
-				document.location.href="index.php?category=jobs&folder=my&page=edit&id=<?php echo $id;?>";
-			}
-			
-			</script>
-			
-			<form>
-			<br><br>
-			<i><?php echo $M_PLEASE_CONFIRM_FEATURED;?>:</i>
-			<br>
-			<br><br>
-			<center>
-			<input type="button" onclick="javascript:yesClicked()" value=" <?php echo $M_YES;?> " class="adminButton">
-			&nbsp;&nbsp;&nbsp;
-			<input type="button" onclick="javascript:noClicked()" value=" <?php echo $M_NO;?> " class="adminButton">
-			</center>
-			</form><br>
-			
-		<?php		
-		}
-		?>
-		
-<?php
-}
-
-}
-else
-{
-?>
-
-<?php
-
-$MessageTDLength = 130;
-
-$SubmitButtonText = $SAUVEGARDER;
-
-$strSpecialHiddenFieldsToAdd="";
-
-
-if(is_array(unserialize(stripslashes(aParameter(280)))))
-{
-		$arrJobFields = unserialize(stripslashes(aParameter(280)));
-}
-else
-{
-		$arrJobFields = array();
-}	
-
-	$arrAd = $database->DataArray("jobs","id=".$id);
-
-if(isset($SpecialProcessEditForm))
-{
-		$iFCounter = 0;
-
-		$arrPValues = array();
-			
-		$iFCounter = 0;
-			
-		foreach($arrJobFields as $arrJobField)
-		{		
-			$arrPValues[$arrJobField[0]]=get_param("pfield".$iFCounter);
-			$iFCounter++;
-		}		
-		
-		$database->SQLUpdate_SingleValue
-		(
-				"jobs",
-				"id",
-				$id,
-				"more_fields",
-				serialize($arrPValues)
-		);
-		$arrAd = $database->DataArray("jobs","id=".$id);
-
-}
-
-		
-
-$arrPropFields = array();
-							
-if(is_array(unserialize($arrAd["more_fields"])))
-{
-				
-		$arrPropFields = unserialize($arrAd["more_fields"]);
-}
-
-
-
-$iFCounter = 0;
-
-foreach($arrJobFields as $arrJobField)
-{
-	
-	$strSpecialHiddenFieldsToAdd.="<tr>";
-	
-	$strSpecialHiddenFieldsToAdd.= "<td ><i>".str_show($arrJobField[0], true).":</i></td>";	
-	
-	$strSpecialHiddenFieldsToAdd.= "<td >";
-	
-	if(trim($arrJobField[2]) != "")
-	{
-			$strSpecialHiddenFieldsToAdd.= "<select  name=\"pfield".$iFCounter."\" style=\"width:150px\">";
-			
-			
-			$arrFieldValues = explode("\n", trim($arrJobField[2]));
-					
-						
-			if(sizeof($arrFieldValues) > 0)
-			{
-				foreach($arrFieldValues as $strFieldValue)
-				{
-					$strFieldValue = trim($strFieldValue);
-					if(strstr($strFieldValue,"{"))
-					{
-					
-						$strVName = substr($strFieldValue,1,strlen($strFieldValue)-2);
-						
-						$strSpecialHiddenFieldsToAdd.= "<option ".(trim($$strVName)==$arrPropFields[$arrJobField[0]]?"selected":"").">".trim($$strVName)."</option>";
-						
-					}
-					else
-					{
-						$strSpecialHiddenFieldsToAdd.= "<option ".(isset($arrPropFields[$arrJobField[0]])&&trim($strFieldValue)==$arrPropFields[$arrJobField[0]]?"selected":"").">".trim($strFieldValue)."</option>";
-					}		
-				
-				}
-			}
-			
-			$strSpecialHiddenFieldsToAdd.= "</select>";
-	}
-	else
-	{
-			$strSpecialHiddenFieldsToAdd.= "<input value=\"".(isset($arrPropFields[$arrJobField[0]])?$arrPropFields[$arrJobField[0]]:"")."\" type=text name=\"pfield".$iFCounter."\" style=\"width:150px\">";
-	}
-	
-	$strSpecialHiddenFieldsToAdd.= "</td>";
-	
-	
-		$strSpecialHiddenFieldsToAdd.= "</tr>";
-	
-
-	$iFCounter++;		
-}
-		
-
-  $strJobType="";
-
-foreach($website->GetParam("arrJobTypes") as $key=>$value)
-{
-	
-	$strJobType.="_".$value."^".$key;
-
-}
-
-
-$SelectWidth = 500;
-$MessageTDLength=120;
-$strAuthQuery = "employer='".$AuthUserName."'";
-?>
-<script src="js/nicEdit.js" type="text/javascript"></script>
-<script type="text/javascript">
-bkLib.onDomLoaded(function() {
-	new nicEditor({buttonList : ['fontSize','bold','italic','forecolor','fontFamily','link','unlink','left','center','right','justify','ol','ul','removeformat','indent','outdent','hr','bgcolor','underline','html'],iconsPath : 'js/nicEditorIcons.gif'}).panelInstance('message');
-});
-</script>
-
-<script>
-String.prototype.trim = function() {
-	return this.replace(/^\s+|\s+$/g,"");
-}
-
-function EditJob(x)
-{
-
-	
-		
-	if(x.title.value=="")
-	{
-		alert("<?php echo $JOB_TITLE_EMPTY;?>");
-		x.title.focus();
-		return false;
-	}
-	
-	var wEditor = new nicEditors.findEditor('message');
-	
-	
-	wEditor.saveContent();
-	
-	if(x.message.value=="")
-	{
-		alert("<?php echo $JOB_DESCRIPTION_EMPTY;?>");
-		x.message.focus();
-		return false;
-	}
-	
-	return true;
-}
-
-</script>
-<?php
-
-$_REQUEST["message-column-width"]=120;
-$_REQUEST["select-width"]=400;
-
-AddEditForm
-(
-	array
-	(
-		$M_CATEGORY.":",
-		$M_JOB_TYPE.":",
-		$M_TITLE.":",
-		$M_DESCRIPTION.":",
-		$M_REGION.":",
-		$M_ZIP.":",
-	
-		$M_SALARY.":",
-		$M_DATE_AVAILABLE.":",
-		$ACTIVE.":"
-	),
-	array
-	(
-		"job_category",
-		
-		"job_type",
-		"title",
-		"message",
-		"region",
-		"zip",
-		"salary",
-		"date_available",
-		"active"
-	),
-	array(),
-	array
-	(
-		"combobox_special",
-		
-		"combobox".$strJobType,
-		"textbox_67",
-		"textarea_75_10",
-		"combobox_region",
-		"textbox_5",
-		
-		"textbox_8",
-		"textbox_8",
-		"combobox_".$M_YES."^YES_".$M_NO."^NO"
-	),
-	"jobs",
-	"id",
-	$id,
-	$VALEURS_MODFIEES_SUCCESS,
-	"EditJob"
-);
-
-
-}
-?>
+<div class="row">
+    <div class="col-md-3 col-md-push-9">
+        <div class="row top-bottom-margin">
+            <?php
+                    echo LinkTile
+                     (
+                            "jobs",
+                            "my_stat&id=".$id,
+                            $M_VISITS." (".$database->SQLCount("jobs_stat","WHERE posting_id=".$id).")",
+                            "",
+                            "gray"
+                     );
+            ?>
+        </div>
+        <div class="row top-bottom-margin">
+            <?php echo LinkTile
+                     (
+                            "application_management",
+                            "list&Proceed=1&id=".$id,
+                            $M_APPLICATIONS." (".$database->SQLCount("apply","WHERE posting_id=".$id).")",
+                            "",
+                            "yellow"
+                     );?>
+        </div>                         
+        <div class="row top-bottom-margin">
+            <?php echo LinkTile
+             (
+                    "jobs",
+                    "my",
+                    $M_GO_BACK,
+                    "",
+                    "red"
+             );?>
+        </div>
+    </div>
+    <form action="index.php?category=jobs&folder=my&page=edit&id=<?php echo $id?>" method="POST">
+        <div class="col-md-9 col-md-pull-3">
+            <div class="employer-post-form">
+                <?php foreach ($jobs_by_employer as $job):?>
+                <label>
+                    <span>Tiêu đề</span>
+                    <input type="text" name="employer-post-title" value="<?php echo $job['title']?>">
+                </label>
+                <label>
+                    <span><h4>Chi tiết</h4></span>
+                    <aside><textarea type="text" name="employer-post-details" required><?php echo $job['message']?></textarea></aside>
+                </label>
+                
+                <label>
+                    <span>Ngành: </span>
+                    <select name="post-category" required>
+                        <option value="">Vui lòng chọn</option>
+                        <?php foreach ($categories as $value) :?>
+                        <option value="<?php echo $value['category_id']?>" <?php if($job['job_category'] == $value['category_id']){ echo "selected";}?>><?php echo $value['category_name_vi']?></option>    
+                        <?php endforeach;?>
+                    </select>
+                </label>
+                
+                <!--Job types-->
+                <label>
+                    <span>Loại công việc: </span>
+                    <select name="post-jobtypes" required>
+                        <option value="">Vui lòng chọn</option>
+                        <?php foreach ($job_types as $value) :?>
+                        <option value="<?php echo $value['id']?>" <?php if($job['job_type'] == $value['id']){ echo "selected";}?>><?php echo $value['job_name']?></option>    
+                        <?php endforeach;?>
+                    </select>
+                </label>
+                
+                <!--Location-->
+                <label>
+                    <span>Địa điểm: </span>
+                    <select name="post-locations" required>
+                        <option value="">Vui lòng chọn</option>
+                        <?php foreach ($locations as $value) :?>
+                        <option value="<?php echo $value['id']?>" <?php if($job['region'] == $value['id']){ echo "selected";}?>><?php echo $value['City']?></option>    
+                        <?php endforeach;?>
+                    </select>
+                </label>
+                
+                <!--Salary-->
+                <label>
+                    <span>Lương: </span>
+                    <select name="post-salary" required>
+                        <option value="">Vui lòng chọn</option>
+                        <?php foreach ($salaries as $value) :?>
+                        <option value="<?php echo $value['salary_id']?>" <?php if($job['salary'] == $value['salary_id']){ echo "selected";}?>><?php echo $value['salary_range']?></option>    
+                        <?php endforeach;?>
+                    </select>
+                </label>
+                
+                <!--Date start-->
+                <label>
+                    <span>Ngày bắt đầu: </span>
+                    <input type="text" name="employer-start-date" id="datePicker" value="<?php echo date('Y-m-d',$job['date'])?>">
+                </label>
+                
+                <!--Active or not?-->
+                <label>
+                    <span>Đang hoạt động : </span>
+                    <select name="post-active">
+                        <option value="1" <?php if($job['status'] == 1){echo "selected";} ?>>Có</option>
+                        <option value="0" <?php if($job['status'] == 0){echo "selected";} ?>>Không</option>
+                    </select>
+                </label>
+            </div>
+                <?php endforeach;?>
+            <ul class="inline-buttons">
+                <li><button><a href="#">Cancel</a></button></li>
+                <li><input type="submit" name="submit"></li>
+            </ul>
+        </div>
+</div>
+</form>
+</div>    
 <br/>

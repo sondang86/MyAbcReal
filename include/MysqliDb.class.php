@@ -1897,6 +1897,14 @@ class MysqliDb
         return $db_value;
     }
     
+    
+    public function cleanData($str) {
+        $str = urldecode ($str );
+        $str = filter_var($str, FILTER_SANITIZE_STRING);
+        $str = filter_var($str, FILTER_SANITIZE_SPECIAL_CHARS);
+        return $str ;
+    }
+    
 }
 
 // END class

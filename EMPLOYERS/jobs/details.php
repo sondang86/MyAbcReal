@@ -16,77 +16,75 @@ global $db, $commonQueries;
 $db->where ("id", "$id");
 $jobs_by_employer = $db->get("jobs");
 ?>
-    
+
 <div class="row">
-    <div class="col-md-3 col-sm-6 col-xs-12">
-        
-	<?php
-		echo LinkTile
-		 (
-			"jobs",
-			"my_edit&id=".$id,
-			$MODIFY,
-			"",
-			"lila"
-		 );
-        ?>
-    </div>
-    <div class="col-md-3 col-sm-6 col-xs-12">
-	<?php	 
-                echo LinkTile
-		 (
-			"jobs",
-			"questionnaire&id=".$id,
-			$M_QUESTIONNAIRE." (".$database->SQLCount("questionnaire","WHERE job_id=".$id).")",
-			"",
-			"blue"
-		 );
-        ?>
-    </div>
-    <div class="col-md-3 col-sm-6 col-xs-12">    
-        <?php
-		 echo LinkTile
-		 (
-			"jobs",
-			"my_stat&id=".$id,
-			$M_VISITS." (".$database->SQLCount("jobs_stat","WHERE posting_id=".$id).")",
-			"",
-			"gray"
-		 );
-        ?> 
-    </div>    
-    <div class="col-md-3 col-sm-6 col-xs-12">
-	<?php
-                echo LinkTile
-		 (
-			"application_management",
-			"list&Proceed=1&id=".$id,
-			$M_APPLICATIONS." (".$database->SQLCount("apply","WHERE posting_id=".$id).")",
-			"",
-			"yellow"
-		 );
-	?>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-9">
+    <div class="col-md-3 col-md-push-9">
+        <div class="row">
+            <div class="col-md-12 col-sm-6 col-xs-12 top-bottom-margin">
+                
+            <?php
+                    echo LinkTile
+                     (
+                            "jobs",
+                            "my_edit&id=".$id,
+                            $MODIFY,
+                            "",
+                            "lila"
+                     );
+            ?>
+            </div>
+            <div class="col-md-12 col-sm-6 col-sm-6 top-bottom-margin">
+            <?php	 
+                    echo LinkTile
+                     (
+                            "jobs",
+                            "questionnaire&id=".$id,
+                            $M_QUESTIONNAIRE." (".$database->SQLCount("questionnaire","WHERE job_id=".$id).")",
+                            "",
+                            "blue"
+                     );
+            ?>
+            </div>
+            <div class="col-md-12 col-sm-6 col-xs-12 top-bottom-margin">    
+            <?php
+                     echo LinkTile
+                     (
+                            "jobs",
+                            "my_stat&id=".$id,
+                            $M_VISITS." (".$database->SQLCount("jobs_stat","WHERE posting_id=".$id).")",
+                            "",
+                            "gray"
+                     );
+            ?> 
+            </div>    
+            <div class="col-md-12 col-sm-6 col-xs-12 top-bottom-margin">
+            <?php
+                    echo LinkTile
+                     (
+                            "application_management",
+                            "list&Proceed=1&id=".$id,
+                            $M_APPLICATIONS." (".$database->SQLCount("apply","WHERE posting_id=".$id).")",
+                            "",
+                            "yellow"
+                     );
+            ?>
+            </div>
+        </div>
+    </div>  
+    <div class="col-md-9 col-md-pull-3">
         <?php foreach ($jobs_by_employer as $job):?>
         <div class="row top-bottom-margin">
-            <div class="col-md-2">Tiêu đề</div>
+            <div class="col-md-2"><h3>Tiêu đề</h3></div>
             <div class="col-md-10"><?php echo $job['title']?></div>
         </div>
-            <?php 
-//                echo "<pre>";
-//                print_r($job);
-//                echo "</pre>";
-            ?>
+
         <div class="row top-bottom-margin">
-            <div class="col-md-2">Chi tiết</div>
+            <div class="col-md-2"><h4>Chi tiết</h4></div>
             <div class="col-md-10"><?php echo $job['message']?></div>
         </div>
             
         <div class="row top-bottom-margin">
-            <div class="col-md-2">Ngành</div>
+            <div class="col-md-2"><h5>Ngành</h5></div>
             <div class="col-md-10"><?php echo $commonQueries->get_data('categories', 'category_id', $job['job_category'])[0]['category_name_vi']?></div>
         </div>
             
@@ -116,8 +114,8 @@ $jobs_by_employer = $db->get("jobs");
         </div>
         <?php endforeach;?>
     </div>
+        
 </div>
-    
 <div class="row">
     <div class="col-md-12"><a href="index.php?category=jobs&action=my"><?php echo $GO_BACK_TO." <strong>\"".$MY_JOB_ADS."\"</strong>";?></a></div>
 </div>
