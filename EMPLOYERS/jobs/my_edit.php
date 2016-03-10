@@ -160,8 +160,7 @@ $jobs_by_employer = $db->get("jobs");
             </div>
                 <?php endforeach;?>
             <ul class="inline-buttons">
-                <li><button><a href="#">Cancel</a></button></li>
-                <li><input type="submit" name="submit"></li>
+                <li><input type="submit" name="submit" value="Lưu"></li>
             </ul>
         </div>
 </div>
