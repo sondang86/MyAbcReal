@@ -1,3 +1,7 @@
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
 .clear
 {
 	clear: both;
@@ -1333,6 +1337,70 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
     padding-bottom: 10px;
 }
 
+
+.job-details {
+    margin-top: 20px;
+}
+
+.form-submit {
+    float: left;
+}
+
+.form-submit :disabled{
+    background-color: #F0F1F4;
+}
+
+input[type="submit"]{
+    min-width: 140px;
+    border: 1px solid #A53333 !important;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    padding: 6px;
+    background-color: #EFD5A6;
+    transition: background-color 1s ease;
+}
+
+.navigation-tab {
+    width: 100% !important;
+}
+
+.inline-buttons {
+    float: right;
+}
+
+.inline-buttons li{
+    display: inline-block;
+    margin-top: 30px;
+    margin-left: -10px;
+    margin-right: 25px;
+}
+
+.user-form {
+    width: 100%;
+    border: 1px #DADADA solid;
+    min-height: 300px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    background-color: #e5e6e3;
+}
+
+.user-form label {
+    display: block;
+}
+
+.block-display {
+    display: block;
+}
+
+.menu-navigation {
+    min-height: 180px;
+}
+
+/* Responsive design goes here */
+
 /* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {
     .sort-by div {
@@ -1383,6 +1451,19 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
     .employer-post-form label select {
         width: 70%;
     }
+    
+    .user-form label {
+        width: 100%;
+        margin: 10px 0;
+        padding: 0 10px;
+        font-weight: normal;
+    }
+    
+    .user-form label span{
+        float: left;
+        margin-right: 10px;
+        font-weight: bold;
+    }
 }
  
 /* D?nh cho m?y t?nh b?ng chi?u d?c */
@@ -1400,7 +1481,7 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
     
     .employer-post-form span {
         float: left;
-        width: 14%;
+        width: 15%;
         /* text-align: right; */
         padding-right: 10px;
         margin-top: 10px;
@@ -1445,7 +1526,7 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
         margin: 2px 6px 16px 0;
         outline: 0 none;
         padding: 3px 3px 3px 5px;
-        width: 84%;
+        width: 83%;
         font-size: 12px;
         line-height: 15px;
         box-shadow: inset 0px 1px 4px #ECECEC;
@@ -1464,41 +1545,4 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
     
 }
 
-.job-details {
-    margin-top: 20px;
-}
-
-.form-submit {
-    float: left;
-}
-
-.form-submit :disabled{
-    background-color: #F0F1F4;
-}
-
-input[type="submit"]{
-    min-width: 140px;
-    border: 1px solid #A53333 !important;
-    border-radius: 3px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    -khtml-border-radius: 3px;
-    padding: 6px;
-    background-color: #EFD5A6;
-    transition: background-color 1s ease;
-}
-
-.navigation-tab {
-    width: 100% !important;
-}
-
-.inline-buttons {
-    float: right;
-}
-
-.inline-buttons li{
-    display: inline-block;
-    margin-top: 30px;
-    margin-left: -10px;
-    margin-right: 25px;
-}
+/*### Responsive design goes here */

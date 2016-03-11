@@ -28,21 +28,23 @@ else
 	$arrJobseeker = $database->DataArray("jobseekers","username='$id'");
 }
 ?>
-<div class="fright">
-<?php
-    echo LinkTile
-     (
-            "",
-            "",
-            $M_GO_BACK,
-            "",
+<div class="row">
+    <div class="col-md-3 col-sm-6 col-xs-12 fright">
+        <?php
+            echo LinkTile
+             (
+                    "",
+                    "",
+                    $M_GO_BACK,
+                    "",
 
-            "red",
-            "small",
-            "true",
-            "window.history.back"
-     );
-?>
+                    "red",
+                    "small",
+                    "true",
+                    "window.history.back"
+             );
+        ?>
+    </div>
 </div>
 <div class="clear"></div>
     

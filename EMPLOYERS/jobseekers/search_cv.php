@@ -17,338 +17,97 @@ if($database->SQLCount("jobseekers","WHERE id=".$id." AND profile_public=1") < 1
 
 $show_cv = true;
 
-if($website->GetParam("CHARGE_TYPE") == 3&&!isset($_REQUEST["rsm"]))
-{
-	$show_cv = false;
-?>
-<h4>Please click on the icon below to purchase this resume</h4>
-
-	<?php
-			if(trim($website->GetParam("PAYPAL_ID"))!="")
-			{
-			?>
-<br/><br/>				
-<form id="paypal_form" name="_xclick" action="https://www.paypal.com/cgi-bin/webscr" method="post">
-    <input type="hidden" name="cmd" value="_xclick">
-    <input type="hidden" name="business" value="<?php echo $website->GetParam("PAYPAL_ID");?>">
-    <input type="hidden" name="currency_code" value="<?php echo $website->GetParam("CURRENCY_CODE");?>">
-    <input type="hidden" name="item_name" value="<?php echo "Payment for CV #".$id." on ".$DOMAIN_NAME;?> ">
-    <input type="hidden" name="item_number" value="<?php echo $id;?>">
-    <input type="hidden" name="amount" value="<?php echo number_format($website->params[712], 2, '.', '');?>">
-    <input type="hidden" name="cancel_return" value="<?php echo "http://".$DOMAIN_NAME."/EMPLOYERS/index.php?category=jobseekers&action=search";?>">
-    
-    <input type="hidden" name="return" value="<?php echo "http://".$DOMAIN_NAME."/EMPLOYERS/index.php?category=jobseekers&folder=search&page=cv&rsm=".md5($DOMAIN_NAME.$id)."&id=".$id;?>">
-    <input type="image"  src="../images/paypal.gif" border="0" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
-</form>
-<script>
-    document.getElementById("paypal_form").submit();
-</script>
-<br><br><br>
-			<?php
-			}
-			?>
-
-<?php
-}
-else
-
-if($website->GetParam("CHARGE_TYPE") == 1&&$arrUser["subscription"]==0)
-{
-	$show_cv = false;
-?>
-<br><br>
-<a class="underline-link" href="index.php?category=home&action=credits"><?php echo $M_NEED_SUBSCRIPTION_RESUMES;?></a>
-<?php
-}
-else	
-if($website->GetParam("CHARGE_TYPE") == 2&&aParameter(704)>$arrUser["credits"])
-{
-	$show_cv = false;
-?>
-<br><br>
-<a class="underline-link" href="index.php?category=home&action=credits"><?php echo $M_NOT_ENOUGH_CREDITS_TO_VIEW_RESUME;?></a>
-<?php
-}
-else
-{
-
-	if($website->GetParam("CHARGE_TYPE") == 2)
-	{
-		$database->SQLUpdate_SingleValue
-		(
-			"employers",
-			"username",
-			"'".$AuthUserName."'",
-			"credits",
-			$arrUser["credits"]-aParameter(704)
-		);	
-	}
-	
-	if($website->GetParam("CHARGE_TYPE") == 3&&!isset($_REQUEST["rsm"]))
-	{
-		if($_REQUEST["rsm"]!=md5($DOMAIN_NAME.$id)) die("Access denied");
-	}
-
-				$arrSeeker = $database->DataArray("jobseekers","id=".$id);
-				
-				$database->SQLInsert
-				(
-					"jobseekers_stat",
-					array("date","jobseeker","ip","employer"),
-					array(time(),$arrSeeker["username"],$_SERVER["REMOTE_ADDR"],$AuthUserName)
-				);
-				
-				$arrResume = $database->DataArray("jobseeker_resumes","username='".$arrSeeker["username"]."'");
-						
-}
-
 if($show_cv)		
 {
 	$arrSeeker = $arrJobseeker = $database->DataArray("jobseekers","id=".$id);
 	$arrResume = $database->DataArray("jobseeker_resumes","username='".$arrSeeker["username"]."'");
 	
 ?>
-
-
-
-<div class="fright">
-	<?php
-	
-	
-	echo LinkTile
-		 (
-			"",
-			"",
-			$M_SAVE_RESUME_AS_PDF,
-			"",
-			
-			"green",
-			"small",
-			"true",
-			"SubmitForm"
-		 );
-		 
-		echo LinkTile
-		 (
-			"jobseekers",
-			"list_message-id=".$id,
-			$SEND_MESSAGE,
-			"",
-			
-			"yellow",
-			"small"
-		 );
-		 
-		 
-	echo LinkTile
-	 (
-		"jobseekers",
-		"search",
-		$M_GO_BACK,
-		"",
-		"red"
-	 );
-?>
+<div class="row">
+    <div class="col-md-6">
+        <h4>
+            <?php echo $CV_OF;?> <?php echo $arrSeeker["first_name"];?> <?php echo $arrSeeker["last_name"];?>
+        </h4>
+    </div>
 </div>
-<div class="clear"></div>
-<br/>
+
+<div class="row">
+    <div class="col-md-3 col-sm-12">
+        <div class="menu-navigation">
+            <?php
+                    echo LinkTile
+                     (
+                            "",
+                            "",
+                            $M_SAVE_RESUME_AS_PDF,
+                            "",
+
+                            "green",
+                            "small",
+                            "true",
+                            "SubmitForm"
+                     );
+
+                    echo LinkTile
+                     (
+                            "jobseekers",
+                            "list_message-id=".$id,
+                            $SEND_MESSAGE,
+                            "",
+
+                            "yellow",
+                            "small"
+                     );
+
+
+                    echo LinkTile
+                     (
+                            "jobseekers",
+                            "search",
+                            $M_GO_BACK,
+                            "",
+                            "red"
+                     );
+                ?>
+        </div>
+    </div>
+    <div class="col-md-9 col-sm-12">
+        <div class="user-form">
+            <label>
+                <span>Tên: </span>
+                <aside><?php echo $arrSeeker['first_name'] . " " . $arrSeeker['last_name']?></aside>
+            </label>
+            <label>
+                <span>Địa chỉ: </span>
+                <aside><?php echo $arrSeeker['address']?>dasdasd</aside>
+            </label>
+            <label>
+                <span>Điện thoại: </span>
+                <aside><?php echo $arrSeeker['phone']?>dsadadad</aside>
+            </label>
+            <label>
+                <span>Email: </span>
+                <aside><?php echo $arrSeeker['username']?></aside>
+            </label>
+            <label>
+                <span>Ngày sinh: </span>
+                <aside><?php echo date('d/M/Y' ,$arrSeeker['date'])?></aside>
+            </label>
+        </div>
+    </div>    
+</div>    
+
 <form id="html_form" action="pdf/resume.php" method="post">
     <input id="html_field" type="hidden" name="html" value="">
 </form>
 
-<h3>
-		<?php echo $CV_OF;?> <?php echo $arrSeeker["first_name"];?> <?php echo $arrSeeker["last_name"];?>
-</h3>
 
 
 <?php
-if($database->SQLCount("files","WHERE user='".$arrSeeker["username"]."'  AND is_resume=1 ","file_id") == 0)
-{
-
-}
-else
-{
-
-?>
-
-<div class="pull-right">
-    <i><b><?php echo $M_UPLOADED_RESUMES_JOBSEEKER;?>:</b></i>
-    
-    <br><br>
-    
-<?php
-	$JobseekerFiles=$database->DataTable("files","WHERE user='".$arrSeeker["username"]."' AND is_resume=1");
-	
-	while($js_file = $database->fetch_array($JobseekerFiles))
-	{
-		$file_show_link = "../file.php?id=".$js_file["file_id"];
-		foreach($website->GetParam("ACCEPTED_FILE_TYPES") as $c_file_type)
-		{	
-			if(file_exists("../user_files/".$js_file["file_id"].".".$c_file_type[1]))
-			{
-				$file_show_link = "../user_files/".$js_file["file_id"].".".$c_file_type[1];
-				break;
-			}
-		}
-	?>
-    
-    <a target="_blank" href="<?php echo $file_show_link;?>"><b><?php echo $js_file["file_name"];?></b></a>
-    <br>
-    <i style="font-size;10px"><?php echo $js_file["description"];?></i>
-    <br><br>
-	<?php
-	}
-	
-
-						
-}
-?>
+if($database->SQLCount("files","WHERE user='".$arrSeeker["username"]."'  AND is_resume=1 ","file_id") == 0){} else {}?>
     
     
-</div>
-
-
-
-<script>
-		
-    function SubmitForm()
-    {
-			
-        document.getElementById("html_field").value=document.getElementById("resume_content").innerHTML;	
-        document.getElementById("html_form").submit();
-    }
-		
-</script>
-
-
-<div class="clear"></div><br>
-
-
-
-<div id="resume_content">
-    
-    
-    <span style="font-size:14px;font-weight:400">
-        <i><b><?php echo $M_PERSONAL_INFORMATION;?></b></i>
-    </span>
-    
-    <br><br>
-    
-    
-		<?php
-$MessageTDLength = 140;
-
-$_REQUEST["HideSubmit"] = true;
-
-	AddEditForm
-	(
-	array(
-	
-	" <i>".$FIRST_NAME.":</i>",
-	" <i>".$LAST_NAME.":</i>",
-	" <i>".$M_ADDRESS.":</i>",
-	" <i>".$TELEPHONE.":</i>",
-	" <i>".$M_MOBILE.":</i>",
-	" <i>".$M_EMAIL.":</i>",
-	" <i>".$M_DOB.":</i>",
-	
-	" <i>".$M_PICTURE.":</i>"),
-	array("first_name","last_name","address","phone",
-	"mobile","username","dob","logo"),
-	array("profile_public","title","first_name","last_name","address","phone",
-	"mobile","username","dob","logo"),
-	array("textbox_30","textbox_30","textarea_50_4","textbox_30",
-	"textbox_30","textbox_30","textbox_30","textbox_30"),
-	"jobseekers",
-	"id",
-	$id,
-	""
-	);
-
-?>
-    
-    <table summary="" border="0" width="100%">
-        <tr>
-            <td>
-                
-                
-<?php	
-
-
-if($arrJobseeker["experience"]!=0)
-{
-?>
-        <tr height="32">
-            <td >
-                <i><?php echo $M_EXPERIENCE;?>:</i>
-            </td>
-            <td><strong><?php echo $website->show_value("arrExperienceLevels",$arrJobseeker["experience"]);?></strong></td>
-        </tr>
-<?php
-}
-
-if($arrJobseeker["availability"]!=0)
-{
-?>
-        <tr height="32">
-            <td width="<?php echo $MessageTDLength;?>">
-                <i><?php echo $M_AVAILABILITY;?>:</i>
-            </td>
-            <td><strong><?php echo $website->show_value("arrAvailabilityTypes",$arrJobseeker["availability"]);?></strong></td>
-        </tr>
-<?php
-}
-
-if($arrJobseeker["job_type"]!=0)
-{
-	
-?>
-        <tr height="32">
-            <td width="<?php echo $MessageTDLength;?>">
-                <i><?php echo $M_JOB_TYPE;?>:</i>
-            </td>
-            <td><strong><?php echo $website->show_value("arrJobTypes",$arrJobseeker["job_type"]);?></strong></td>
-        </tr>
-<?php
-}
-
-
-if(trim($arrJobseeker["jobseeker_fields"]) != "")
-{
-
-	$arrEmployerFields = array();
-
-	if(is_array(unserialize($arrJobseeker["jobseeker_fields"])))
-	{
-		$arrEmployerFields = unserialize($arrJobseeker["jobseeker_fields"]);
-	}
-
-	$bFirst = true;
-	while (list($key, $val) = each($arrEmployerFields)) 
-	{
-
-	?>
-        <tr height="32">
-            <td width="<?php echo $MessageTDLength;?>"><i><?php str_show($key);?>:</i></td>
-            <td><?php str_show($val);?></td>
-        </tr>
-	<?php
-
-	}
-}
-
-?>
-        </td>
-        </tr>
-    </table>
-    
-    
-    
-    
-<?php 
-    }
-
-?>
+<?php } ?>
     
     <div class="jobseeker-cv">    
         <div class="jobseeker-main">
@@ -441,8 +200,3 @@ if(trim($arrJobseeker["jobseeker_fields"]) != "")
         </div>    
         
     </div>       
-        
-<?php
-    $datatete = "12345";
-    echo $datatete;
-?>        

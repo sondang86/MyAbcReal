@@ -6,24 +6,25 @@
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
 ?>
-<div class="fright">
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12 fright">
+            <?php
 
-	<?php
-				 
-		echo LinkTile
-		(
-			"jobseekers",
-			"search",
-			$SEARCH,
-			"",
-			"green"
-		);
-	
-		
-	
-	?>
+                    echo LinkTile
+                    (
+                            "jobseekers",
+                            "search",
+                            $SEARCH,
+                            "",
+                            "green"
+                    );
 
-</div>
+
+
+            ?>
+        </div>
+    </div>
+
 <div class="clear"></div>
 
 <?php
