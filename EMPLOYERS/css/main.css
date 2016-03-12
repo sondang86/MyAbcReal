@@ -1393,10 +1393,20 @@ input[type="submit"]{
 
 .block-display {
     display: block;
+    margin: 5px 0;
 }
 
 .menu-navigation {
     min-height: 180px;
+}
+
+.reply-form span {
+    display: block;
+    margin: 15px 0;
+}
+
+.reply-form span textarea{
+    width: 100%;
 }
 
 /* Responsive design goes here */

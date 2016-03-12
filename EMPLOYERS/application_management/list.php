@@ -1,29 +1,30 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
+global $db;
 ?>
-<div class="fright">
+<div class="row">
+    <div class="col-md-4 col-sm-6 col-xs-12 fright">
+        <?php
+                echo LinkTile
+                 (
+                        "application_management",
+                        "approved",
+                        $M_APPROVED_APPLICATIONS,
+                        "",
+                        "green"
+                 );
 
-	<?php
-		echo LinkTile
-		 (
-			"application_management",
-			"approved",
-			$M_APPROVED_APPLICATIONS,
-			"",
-			"green"
-		 );
-	
-	echo LinkTile
-		 (
-			"application_management",
-			"rejected",
-			$M_REJECTED_APPLICATIONS,
-			"",
-			"red"
-		 );
-	?>
-
-</div>
+        echo LinkTile
+                 (
+                        "application_management",
+                        "rejected",
+                        $M_REJECTED_APPLICATIONS,
+                        "",
+                        "red"
+                 );
+        ?>
+    </div>
+</div>    
 <div class="clear"></div>
 <h3>
 	<?php echo $CONSULT_LIST_APPLIED;?>
@@ -46,26 +47,27 @@ else
 {
 	$_REQUEST["hide_refine_search"]=true;
 ?>
-		
-		<form action="index.php" method="post">
-		
-		<div id="div1">
-		<i><?php echo $PLEASE_SELECT_AD;?></i>
-	
-	
-		<br><br>
-		</div>
-		
-		
-		<input type="hidden" name="Proceed">
-		<input type="hidden" name="category" value="<?php echo $category;?>">
-		<input type="hidden" name="action" value="<?php echo $action;?>">
-		
-		
+
+<form action="index.php" method="post">
+    
+    <div id="div1">
+        <i><?php echo $PLEASE_SELECT_AD;?></i>
+        
+        
+        <br><br>
+    </div>
+    
+    
+    <input type="hidden" name="Proceed">
+    <input type="hidden" name="category" value="<?php echo $category;?>">
+    <input type="hidden" name="action" value="<?php echo $action;?>">
+    
+    
 		<?php
 		
-		$tableJobs=$database->Query
-		("
+		        
+                $applicants_applied = $db->withTotalCount()->rawQuery(
+                    "
 			SELECT 
 			".$DBprefix."jobs.id,
 			title,
@@ -79,48 +81,35 @@ else
 			AND 
 			".$DBprefix."apply.status=0
 			GROUP BY ".$DBprefix."jobs.id
-		 ");
-		
-		
-		if($database->num_rows($tableJobs) == 0)
-		{
-		
-				echo "<br><i>".$M_NO_CANDIDATES_APPLIED."</i>
-				<script>
-				
-				document.getElementById(\"div1\").style.display=\"none\";				
-				</script>
-				
-				";
-		
+                    "
+                );
+                
+                
+		if($db->totalCount == 0)
+		{		
+                    echo "<br><i>".$M_NO_CANDIDATES_APPLIED."</i>
+                    <script>
+
+                    document.getElementById(\"div1\").style.display=\"none\";				
+                    </script>
+
+                    ";		
 		}
 		else
-		{
-		
-						while($arrJob=$database->fetch_array($tableJobs))
-						{
-						
-							echo "
-								<a href=\"index.php?category=".$category."&action=".$action."&Proceed=1&id=".$arrJob["id"]."\"><img src=\"images/link_arrow.gif\" width=\"16\" height=\"16\" border=\"0\"></a>
-										
-											&nbsp; <a class=\"underline-link\" href=\"index.php?category=".$category."&action=".$action."&Proceed=1&id=".$arrJob["id"]."\"><b>".$arrJob["title"]."</b></a>
-										
-										, &nbsp; 
-										<strong class=\"red-font\">".$arrJob["cc"]."</strong>
-										".$M_APPLICATIONS." 
-									
-								<br><br>
-								";								
-						}
-		
-		}
-		
-		?>
-		
-		
-		</form>
-		
-	
+		{		
+                    foreach ($applicants_applied as $value) { ?>
+                        <div class="block-display">
+                            <b><a title="<?php echo $value['title']?>" href="index.php?category=<?php echo $category;?>&action=<?php echo $action;?>&Proceed=1&id=<?php echo $value['id']?>"><img src="images/link_arrow.gif"> <?php echo mb_strimwidth($value['title'],0, 40, "...")?></a></b>
+                            <i><strong class="red-font"><?php echo $value["cc"]?></strong> <?php echo $M_APPLICATIONS;?></i>
+                        </div>                                                    
+<?php               }
+		}		
+?>
+    
+    
+</form>
+
+
 <?php
 }
 ?>
@@ -145,18 +134,8 @@ if(isset($_REQUEST["id"]) && $_REQUEST["id"] != "")
 	{
 		die("");
 	}
-
-	if(isset($_REQUEST["Delete"])&&isset($_REQUEST["CheckList"]))
-	{
-		if(sizeof($_REQUEST["CheckList"])>0)
-		{
-			$website->ms_ia($_REQUEST["CheckList"]);
-			$database->SQLDelete("apply","id",$_REQUEST["CheckList"]);
-		}
-	}
-
-	$hideSearchFields = true;
-	$strSQLQuery ="
+        
+    $QueryListCVs_Applied ="
 			(SELECT ".
 			 $DBprefix."jobseekers.first_name,"
 			.$DBprefix."jobseekers.last_name,"
@@ -197,45 +176,40 @@ if(isset($_REQUEST["id"]) && $_REQUEST["id"] != "")
 			AND
 			".$DBprefix."apply.status = '0')
 	";
-	
-	$strListFields = 
-			 $DBprefix."jobseekers.first_name,"
-			.$DBprefix."jobseekers.last_name,"
-			.$DBprefix."jobseekers.id,"
-			.$DBprefix."apply.id id2,"
-			.$DBprefix."apply.posting_id,"
-			.$DBprefix."apply.jobseeker,"
-			.$DBprefix."apply.date";
-	
-		RenderTable
-		(
-			"apply,".$DBprefix."jobseekers",
-			array("date","first_name","last_name","ApproveReject","JobseekerDetails"),
-			array($DATE_MESSAGE,$FIRST_NAME,$LAST_NAME,"",$M_DETAILS),
-			"500",
-			"WHERE 
-			".$DBprefix."jobseekers.username=".$DBprefix."apply.jobseeker 
-			AND 
-			posting_id=".$id."
-			AND
-			".$DBprefix."apply.status = '0' ",
-			$EFFACER,
-			"id2",
-			"index.php?category=".$category."&action=".$action."&id=".$id."&Proceed=1",
-			false,
-			20,
-			false,
-			-1,
-			"",
-			$strSQLQuery
-		);
-}
+
+    $CVs_applied = $db->withTotalCount()->rawQuery($QueryListCVs_Applied);    
 ?>
-
-
-
-
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>#</td>
+                    <td>Ngày đăng</td>
+                    <td>Tên</td>
+                    <td>Họ</td>
+                    <td></td>
+                    <td>Chi tiết</td>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($CVs_applied as $CV_applied) :?>
+                <tr>
+                    <td>#</td>
+                    <td><?php echo date('d/m/Y H:i', $CV_applied['date'])?></td>
+                    <td><?php echo $CV_applied['first_name']?></td>
+                    <td><?php echo $CV_applied['last_name']?></td>
+                    <td style="text-align: center;">
+                        <a href="index.php?category=application_management&amp;folder=list&amp;page=reply&amp;Proceed=approve&amp;id=<?php echo $CV_applied['id2']?>&amp;posting_id=<?php echo $CV_applied['posting_id']?>" style="color:green;text-decoration:underline"><b>Phê duyệt</b></a>
+                        <a href="index.php?category=application_management&amp;folder=list&amp;page=reply2&amp;Proceed=reject&amp;id=<?php echo $CV_applied['id2']?>&amp;posting_id=<?php echo $CV_applied['posting_id']?>" style="color:red;text-decoration:underline"><b>Từ chối</b></a>
+                    </td>
+                    <td><a href="index.php?category=application_management&amp;folder=my&amp;page=details&amp;posting_id=<?php echo $CV_applied['posting_id']?>&amp;apply_id=<?php echo $CV_applied['id2']?>"><img src="../images/job-details.png" border="0"></a></td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+        </table>
+    </div>
 <?php
+    }
 }
 ?>
 
