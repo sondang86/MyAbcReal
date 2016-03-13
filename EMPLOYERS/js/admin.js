@@ -203,3 +203,11 @@ function sort_by(){
 function select_all(){
     $("input:checkbox").prop('checked', $(this).prop("checked"));
 }
+
+function CheckAll(source) 
+{
+  checkboxes = document.getElementsByName('CheckList[]');
+  for(var i=0, n=checkboxes.length;i<n;i++) {
+        checkboxes[i].checked = source.checked;
+        }
+}

@@ -53,7 +53,7 @@ $jobs_by_employer = $db->get("jobs");
         <?php echo $MODIFY_SELECTED_ADD;?>
 </h3>
 <div class="row">
-    <div class="col-md-2 col-md-push-10">
+    <div class="col-md-3 col-md-push-9">
         <div class="row top-bottom-margin">
             <?php
                     echo LinkTile
@@ -88,7 +88,7 @@ $jobs_by_employer = $db->get("jobs");
         </div>
     </div>
     <form action="index.php?category=jobs&folder=my&page=edit&id=<?php echo $id?>" method="POST">
-        <div class="col-md-10 col-md-pull-2">
+        <div class="col-md-9 col-md-pull-3">
             <div class="employer-post-form">
                 <?php foreach ($jobs_by_employer as $job):?>
                 <label>

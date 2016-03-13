@@ -85,6 +85,7 @@ $currentPage->Process($is_mobile);
 $website->Render();
 if(isset($_POST["Export"])) ob_end_flush();
 ?>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'  type='text/css'>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script>
@@ -99,8 +100,7 @@ if(isset($_POST["Export"])) ob_end_flush();
     
     });
     
-    
-    
     /*Select all option*/
-    $("#checkAll").change(select_all);
+    $("#checkAll").change(select_all);    
+
 </script>

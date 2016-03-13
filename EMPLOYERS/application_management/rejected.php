@@ -4,10 +4,11 @@
 // Check http://www.netartmedia.net/jobsportal for demos and information
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
+global $db;
 ?>
 
 <div class="fright">
-
+    
 	<?php
 	
 	echo LinkTile
@@ -31,7 +32,7 @@ if(!defined('IN_SCRIPT')) die("");
 	
 	
 	?>
-
+    
 </div>
 <div class="clear"></div>
 <h3>
@@ -40,7 +41,7 @@ if(!defined('IN_SCRIPT')) die("");
 <br/>
 <?php
 
-
+        //Delete selected value
 	if(isset($_REQUEST["Delete"])&&isset($_REQUEST["CheckList"]))
 	{
 		if(sizeof($_REQUEST["CheckList"])>0)
@@ -50,8 +51,7 @@ if(!defined('IN_SCRIPT')) die("");
 		}
 	}
 	
-		$hideSearchFields = true;
-	$strSQLQuery ="
+	$QueryListCVs_Rejected ="
 			(SELECT ".
 			 $DBprefix."jobseekers.first_name,"
 			.$DBprefix."jobseekers.last_name,"
@@ -92,52 +92,47 @@ if(!defined('IN_SCRIPT')) die("");
 			AND
 			".$DBprefix."apply.status = '2')
 	";
-	
-	$strListFields = 
-			 $DBprefix."jobseekers.first_name,"
-			.$DBprefix."jobseekers.last_name,"
-			.$DBprefix."jobseekers.id,"
-			.$DBprefix."apply.id id2,"
-			.$DBprefix."apply.posting_id,"
-			.$DBprefix."apply.jobseeker,"
-			.$DBprefix."apply.date";
+ $CVs_approved = $db->withTotalCount()->rawQuery($QueryListCVs_Rejected);    
 
-if($database->SQLCount_Query($strSQLQuery)==0)	
-{
-	?>
-	<br>
-	<table summary="" border="0" width="100%">
- 	<tr>
- 		<td>
-		
-			<i>
-			<?php echo $M_NO_REJECTED_CANDIDATED;?>
-			</i>
-		
-		</td>
- 	</tr>
- </table>
-	
-	<?php
-}
-else
-{
-	
-		RenderTable(
-						"apply,".$DBprefix."jobseekers",
-						array("JobseekerDetails","first_name","last_name","date","ApproveReject1"),
-						array($M_JOBSEEKER,$FIRST_NAME,$LAST_NAME,$DATE_MESSAGE,""),
-						"500",
-						"WHERE ".$DBprefix."jobseekers.username=".$DBprefix."apply.jobseeker AND ".$DBprefix."apply.status = '2' ",
-						$EFFACER,
-						"id2",
-						"index.php?category=".$category."&action=".$action,
-						false,
-						20,
-						false,
-						-1,
-						"",
-						$strSQLQuery
-					);
-}						
-	?>
+    if($db->totalCount==0){
+        echo "<div><i>".$M_NO_APPROVED_CANDIDATED."</i></div>";
+    } else { ?>
+
+
+<form action="index.php?category=application_management&action=rejected" method="POST">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td><input type="checkbox" class="th-check" title="Xóa toàn bộ" onclick="CheckAll(this)"></td>
+                    <td>Ngày đăng</td>
+                    <td>Tên</td>
+                    <td>Họ</td>
+                    <td></td>
+                    <td>Chi tiết</td>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($CVs_approved as $CV_approved) :?>
+                <tr>
+                    <td><input type="checkbox" name="CheckList[]" value="<?php echo $CV_approved['id2']?>"></td>
+                    <td><?php echo date('d/m/Y H:i', $CV_approved['date'])?></td>
+                    <td><?php echo $CV_approved['first_name']?></td>
+                    <td><?php echo $CV_approved['last_name']?></td>
+                    <td style="text-align: center;">
+                        <a href="index.php?category=application_management&amp;folder=list&amp;page=reply&amp;Proceed=approve&amp;id=<?php echo $CV_approved['id2']?>&amp;posting_id=<?php echo $CV_approved['posting_id']?>" style="color:green;text-decoration:underline"><b>Phê duyệt</b></a>
+                    </td>
+                    <td><a href="index.php?category=application_management&amp;folder=my&amp;page=details&amp;posting_id=<?php echo $CV_approved['posting_id']?>&amp;apply_id=<?php echo $CV_approved['id2']?>"><img src="../images/job-details.png" border="0"></a></td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+        </table>
+        
+        <div class="fleft">
+            <input type="hidden" name="Delete" value="1">
+            <input type="submit" value=" Xóa bỏ " class="btn btn-default btn-gradient">
+        </div>
+    </div>
+</form>
+
+<?php }	?>

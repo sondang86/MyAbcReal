@@ -2191,7 +2191,8 @@ height: 150px;
         margin: 20px 0 20px;            
         background: #F7F7F7;
         padding: 25px 15px 25px 10px;
-        font: 12px Georgia, "Times New Roman", Times, serif;
+        /*font: 12px Georgia, "Times New Roman", Times, serif;*/
+        font-family: 'Open Sans', sans-serif;
         color: #888;
         text-shadow: 1px 1px 1px #FFF;
         border:1px solid #E4E4E4;    
