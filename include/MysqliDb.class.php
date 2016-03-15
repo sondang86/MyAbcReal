@@ -1905,6 +1905,35 @@ class MysqliDb
         return $str ;
     }
     
+    
+    public function DataTable($strTable,$sqlClause=""){
+        global $DBprefix;
+
+        $sql_query = "SELECT * FROM ".$DBprefix.$strTable." ".$sqlClause;		
+
+        $data_table = $this->rawQuery($sql_query);
+
+        return $data_table;
+    }
+    
+    public function get_data($table="categories", $field="", $additional_query="") {
+            $data_list = $this->DataTable($table,$additional_query);
+            $data = array();           
+            
+            //No specific column
+            if(empty($field) || $field === NULL){
+                foreach ($data_list as $value) {
+                    $data[] = $value;
+                }                
+            } else { //Column specificed            
+                foreach ($data_list as $value) {
+                    $data[] = $value[$field];
+                }
+            }            
+            
+            return $data;            
+
+        }
 }
 
 // END class

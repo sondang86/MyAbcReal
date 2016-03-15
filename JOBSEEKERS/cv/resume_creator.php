@@ -6,6 +6,7 @@
 // http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
+global $db;
 ?>
 <div class="fright">
     
@@ -25,6 +26,13 @@ if(!defined('IN_SCRIPT')) die("");
                                                 ?>
                                                     
 </div>
+<?php
+    $job_types = $db->get_data('job_types');
+    echo "<pre>";
+    print_r($testing);
+    echo "</pre>";
+?>
+
 <div class="clear"></div>		
 		<?php
 		if(isset($_POST["ProceedSaveResume"]))

@@ -8,11 +8,25 @@ define("IN_SCRIPT","1");
 $is_mobile=false;
 include("../config.php");
 if(!$DEBUG_MODE) error_reporting(0);
-include("../include/SiteManager.class.php");
-include("../include/Database.class.php");
-require_once("../include/gump.class.php");
+
+
+//Autoload classes once called
+function __autoload($classname) {
+    $filename = "../include/". $classname .".class.php";
+    include($filename);
+}
+
 $website = new SiteManager();
 $website->isAdminPanel = true;
+$db = new MysqliDb (Array (
+        'host' => $DBHost,
+        'username' => $DBUser, 
+        'password' => $DBPass,
+        'db'=> $DBName,
+        'port' => 3306,
+        'prefix' => $DBprefix,
+        'charset' => 'utf8'
+    ));
 $database = new Database();
 $database->Connect($DBHost, $DBUser,$DBPass );
 $database->SelectDB($DBName);
@@ -60,4 +74,12 @@ include("include/AdminPage.class.php");
 $currentPage = new AdminPage();
 $currentPage->Process($is_mobile);
 $website->Render();
+
+//Common tables
+$categories = $db->get_data();
+$locations = $db->get_data('locations');
+$education = $db->get_data('education');
+$job_types = $db->get_data('job_types');
+$salaries = $db->get_data('salary');
+
 ?>
