@@ -2177,7 +2177,40 @@ height: 150px;
 }
  
 /* D?nh cho m?y t?nh b?ng chi?u d?c */
-@media all and (min-width: 600px) {    
+@media all and (min-width: 600px) {
+    
+    .js-editForm label{
+        display: block;
+        margin: 0; 
+        text-align: left;
+        margin: 10px 0;
+    }
+    
+    .js-editForm label span{
+        float: left;
+        width: 15%;
+        /* text-align: right; */
+        padding-right: 10px;
+        margin-top: 10px;
+        color: #888;
+        margin-bottom: 0px;
+    }
+    
+    .js-editForm label aside select{
+        border: 1px solid #DADADA;
+        color: #888;
+        height: 30px;
+        margin: 2px 6px 16px 0;
+        outline: 0 none;
+        padding: 3px 3px 3px 5px;
+        width: 40%;
+        font-size: 12px;
+        line-height: 15px;
+        box-shadow: inset 0px 1px 4px #ECECEC;
+        -moz-box-shadow: inset 0px 1px 4px #ECECEC;
+        -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+    }
+    
     .jobseeker-info li{
         display: inline-block;
         width: 45%;

@@ -6,9 +6,6 @@
 // http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-global $db;
-$db->where('username', "$AuthUserName");
-$jobseekers = $db->get("jobseekers");
 
 if(isset($_REQUEST["bn"]))
 {
@@ -62,7 +59,7 @@ function CallBack()
 	<div class="col-md-3 welcome-left-block">
 	
 		<span class="large-font">
-		<?php echo $M_WELCOME;?> <?php echo $jobseekers[0]["first_name"];?>,
+		<?php echo $M_WELCOME;?> <?php echo $LoginInfo["first_name"];?>,
 		</span>
 		<br/><br/>
 		
@@ -226,50 +223,30 @@ function CallBack()
 		<div class="panel-body">
 			<div class="list-group">
 			<?php
-                            $applications_list = $db->rawQuery(
-                                "SELECT 
-                                        a.id as app_id,
-                                        a.date,
-
-                                        a.jobseeker,
-                                        a.message,
-                                        a.status,
-                                        a.employer_reply,
-                                        b.title
-                                FROM
-                                ".$DBprefix."apply a
-                                RIGHT JOIN ".$DBprefix."jobs b ON
-                                (a.posting_id = b.id)
-                                WHERE a.jobseeker='".$AuthUserName."' 
-                                ORDER BY a.id DESC
-                                LIMIT 0,3"
-                            );
-                            
-                            
-
-                            $applications = $database->Query
-                            (
-                                    "SELECT 
-                                            a.id as app_id,
-                                            a.date,
-
-                                            a.jobseeker,
-                                            a.message,
-                                            a.status,
-                                            a.employer_reply,
-                                            b.title
-                                    FROM
-                                    ".$DBprefix."apply a
-                                    RIGHT JOIN ".$DBprefix."jobs b ON
-                                    (a.posting_id = b.id)
-                                    WHERE a.jobseeker='".$AuthUserName."' 
-                                    ORDER BY a.id DESC
-                                    LIMIT 0,3"
-                            );
-
+			$applications = $database->Query
+			(
+				"
+				SELECT 
+					a.id as app_id,
+					a.date,
+				
+					a.jobseeker,
+					a.message,
+					a.status,
+					a.employer_reply,
+					b.title
+				FROM
+				".$DBprefix."apply a
+				RIGHT JOIN ".$DBprefix."jobs b ON
+				(a.posting_id = b.id)
+				WHERE a.jobseeker='".$AuthUserName."' 
+				ORDER BY a.id DESC
+				LIMIT 0,3"
+			);
 			$i_app_counter=0;
-			foreach($applications_list as $application)
+			while($application = $database->fetch_array($applications))
 			{
+				
 				$i_app_counter++;
 			?>
 			

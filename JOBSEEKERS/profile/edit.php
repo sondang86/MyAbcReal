@@ -92,6 +92,7 @@ if(is_array(unserialize($arrUser["jobseeker_fields"])))
 $iFCounter = 0;
 $SelectWidth=280;
 
+
 foreach($arrUserFields as $arrUserField)
 {
 	
@@ -174,6 +175,57 @@ AddEditForm
 
 
 <i>(*) <?php echo $M_PUBLIC_PROFILE_EXPL;?></i>
+
+<div class="row">
+    <div class="js-editForm">
+        <label>
+            <span>Hồ sơ(*):</span>
+            <select>
+                <option>YES</option>
+                <option>NO</option>
+            </select>
+        </label>
+        <label>
+            <span>Giới tính:</span>
+            <select>
+                <option>YES</option>
+                <option>NO</option>
+            </select>
+        </label>
+        <label>
+            <span>Tên:</span>
+            <input type="text" name="first_name">
+        </label>
+        <label>
+            <span>Họ:</span>
+            <input type="text" name="first_name">
+        </label>
+        <label>
+            <span>Địa chỉ:</span>
+            <textarea name=""></textarea>
+        </label>        
+        <label>
+            <span>Điện thoại:</span>
+            <input type="text" name="first_name">
+        </label>
+        <label>
+            <span>Điện thoại:</span>
+            <input type="text" name="first_name">
+        </label>
+        <label>
+            <span>Địa chỉ:</span>
+            <textarea name=""></textarea>
+        </label>
+        <label>
+            <span>Địa chỉ:</span>
+            <input type="file" name="logo" id="logo">
+        </label>
+        <label>
+            <span>Địa chỉ:</span>
+            <input class="btn btn-primary" type="submit" value="Save">
+        </label>        
+    </div>
+</div>
 		
 	
 
