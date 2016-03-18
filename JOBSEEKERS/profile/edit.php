@@ -177,53 +177,59 @@ AddEditForm
 <i>(*) <?php echo $M_PUBLIC_PROFILE_EXPL;?></i>
 
 <div class="row">
-    <div class="js-editForm">
-        <label>
-            <span>Hồ sơ(*):</span>
-            <select>
-                <option>YES</option>
-                <option>NO</option>
-            </select>
-        </label>
-        <label>
-            <span>Giới tính:</span>
-            <select>
-                <option>YES</option>
-                <option>NO</option>
-            </select>
-        </label>
+    <div class="col-md-12 js-editForm">
         <label>
             <span>Tên:</span>
-            <input type="text" name="first_name">
+            <input type="text" name="first_name" id="first_name">
         </label>
         <label>
             <span>Họ:</span>
-            <input type="text" name="first_name">
+            <input type="text" name="last_name" id="last_name">
         </label>
         <label>
             <span>Địa chỉ:</span>
-            <textarea name=""></textarea>
+            <textarea name="address" id="address"></textarea>
         </label>        
         <label>
             <span>Điện thoại:</span>
-            <input type="text" name="first_name">
+            <input type="text" name="phone" id="phone">
         </label>
         <label>
-            <span>Điện thoại:</span>
-            <input type="text" name="first_name">
-        </label>
-        <label>
-            <span>Địa chỉ:</span>
-            <textarea name=""></textarea>
+            <span>Ngày sinh:</span>
+            <input type="text" name="dob" id="dob">
         </label>
         <label>
             <span>Địa chỉ:</span>
+            <textarea name="address" id="address"></textarea>
+        </label>
+        <label>
+            <span>Giới tính:</span>
+            <select name="gender">
+                <option>Nam</option>
+                <option>Nữ</option>
+            </select>
+        </label>  
+        <label>
+            <span>Hiển thị hồ sơ:</span>
+            <select name="profile_public">
+                <option>Có</option>
+                <option>Không</option>
+            </select>
+        </label>      
+        <label>
+            <span>Ảnh cá nhân:</span>
             <input type="file" name="logo" id="logo">
         </label>
         <label>
-            <span>Địa chỉ:</span>
+            <span>Nhận tin tức: </span>
+            <select name="newsletter">
+                <option>Có</option>
+                <option>Không</option>
+            </select>
+        </label>
+        <label style="text-align: right;width: 95%;">
             <input class="btn btn-primary" type="submit" value="Save">
-        </label>        
+        </label>
     </div>
 </div>
 		

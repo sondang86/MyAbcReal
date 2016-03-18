@@ -1,3 +1,7 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+
 .clear
 {
 	clear: both;
@@ -1206,4 +1210,70 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
     color: green;
     margin: 15px 0;
     border-bottom: 2px solid yellowgreen;
+}
+
+/* D?nh cho ?i?n tho?i */
+@media all and (min-width: 250px) {
+        
+}
+ 
+/* D?nh cho m?y t?nh b?ng chi?u d?c */
+@media all and (min-width: 600px) {
+    .js-editForm label select {
+        width: 15%;
+        border: 1px solid #DADADA;
+        color: #888;
+        height: 30px;
+        margin: 2px 6px 16px 0;
+        outline: 0 none;
+        padding: 3px 3px 3px 5px;
+        font-size: 12px;
+        line-height: 15px;
+        box-shadow: inset 0px 1px 4px #ECECEC;
+        -moz-box-shadow: inset 0px 1px 4px #ECECEC;
+        -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+    }
+    
+    .js-editForm label textarea {
+        width: 80%;
+        min-height: 250px;
+        border: 1px solid #DADADA;
+        color: #888;
+        height: 30px;
+        margin: 2px 6px 16px 0;
+        outline: 0 none;
+        padding: 3px 3px 3px 5px;
+        font-size: 12px;
+        line-height: 15px;
+        box-shadow: inset 0px 1px 4px #ECECEC;
+        -moz-box-shadow: inset 0px 1px 4px #ECECEC;
+        -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+    }
+    
+    .js-editForm label input {
+        border: 1px solid #DADADA;
+        height: 30px;
+        margin: 2px 6px 16px 0;
+        outline: 0 none;
+        padding: 3px 3px 3px 5px;
+        font-size: 12px;
+        line-height: 15px;
+        box-shadow: inset 0px 1px 4px #ECECEC;
+        -moz-box-shadow: inset 0px 1px 4px #ECECEC;
+        -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+    }  
+    
+    .js-editForm label input[type="file"]{
+        border: none;
+    }
+}
+ 
+/* D?nh cho m?y t?nh b?ng chi?u ngang */
+@media all and (min-width: 1024px) {
+    
+}
+ 
+/* D?nh cho m?n h?nh desktop */
+@media all and (min-width: 1280px) {
+    
 }
