@@ -1916,6 +1916,11 @@ class MysqliDb
         return $data_table;
     }
     
+    /**
+     * get data in specific table
+     * 
+     */
+    
     public function get_data($table="categories", $field="", $additional_query="") {
             $data_list = $this->DataTable($table,$additional_query);
             $data = array();           
@@ -1925,7 +1930,7 @@ class MysqliDb
                 foreach ($data_list as $value) {
                     $data[] = $value;
                 }                
-            } else { //Column specificed            
+            } else { //Show data in column specified            
                 foreach ($data_list as $value) {
                     $data[] = $value[$field];
                 }

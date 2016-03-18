@@ -1261,6 +1261,7 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
         box-shadow: inset 0px 1px 4px #ECECEC;
         -moz-box-shadow: inset 0px 1px 4px #ECECEC;
         -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+        width: 20%;
     }  
     
     .js-editForm label input[type="file"]{

@@ -3,7 +3,10 @@
 // A software product of NetArt Media, All Rights Reserved
 // Find out more about our products and services on:
 // http://www.netartmedia.net
-?><?php
+?>
+
+    
+<?php
 define("IN_SCRIPT","1");
 $is_mobile=false;
 include("../config.php");
@@ -13,7 +16,7 @@ if(!$DEBUG_MODE) error_reporting(0);
 //Autoload classes once called
 function __autoload($classname) {
     $filename = "../include/". $classname .".class.php";
-    include($filename);
+    include_once($filename);
 }
 
 $website = new SiteManager();
@@ -27,6 +30,8 @@ $db = new MysqliDb (Array (
         'prefix' => $DBprefix,
         'charset' => 'utf8'
     ));
+$commonQueries = new CommonsQueries(new MysqliDb ());
+
 $database = new Database();
 $database->Connect($DBHost, $DBUser,$DBPass );
 $database->SelectDB($DBName);
@@ -83,3 +88,35 @@ $job_types = $db->get_data('job_types');
 $salaries = $db->get_data('salary');
 
 ?>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'  type='text/css'>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="http://jqueryvalidation.org/files/dist/jquery.validate.min.js"></script>
+<script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
+
+<script>
+    jQuery(document).ready(function(){
+        jQuery("#datePicker").datepicker({
+            dateFormat: 'yy-mm-dd' 
+        });    
+    });
+    
+    /*file upload validation*/
+    $('#editForm').validate({
+        rules: {
+            logo: {
+                /*required: true,*/
+                extension: "jpg|png|gif|jpeg|bmp"
+            }
+        },
+        messages: {
+            logo: {
+                /*required: "<p style='color:red;'>Vui lòng chọn ảnh</p>",*/
+                extension: "<p style='color:red;'>Vui lòng up định dạng ảnh với đuôi mở rộng là jpg|png|gif|jpeg|bmp </p>"
+            }
+        }
+    });
+    /*file upload validation*/
+
+</script>

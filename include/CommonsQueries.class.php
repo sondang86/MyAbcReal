@@ -26,5 +26,17 @@
                 return $this->_db->get($table);
             }
         }
+        
+        /**
+        * Output "selected" text if 2 params equal
+        *  
+        */
+        public function Selected($param1, $param2) {
+            if ($param1 == $param2){
+                echo "selected";
+            } else {
+                return NULL;
+            }
+        }
 
     }
