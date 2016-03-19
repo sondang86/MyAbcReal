@@ -2096,6 +2096,37 @@ height: 150px;
     margin-left: 15px;
 }
 
+
+.jobseeker-messageArea textArea {
+    min-height: 150px;
+}
+
+.profilePic {
+    display: inline-block;
+}
+
+.profilePic img {
+    margin-bottom: 15px;
+}
+
+div.upload {
+    width: 100%;
+    height: 57px;
+    background: url(https://lh6.googleusercontent.com/-dqTIJRTqEAQ/UJaofTQm3hI/AAAAAAAABHo/w7ruR1SOIsA/s157/upload.png) no-repeat;
+}
+
+div.upload input {
+    display: block !important;
+    width: 157px !important;
+    height: 57px !important;
+    opacity: 0 !important;
+    overflow: hidden !important;
+}
+
+div.upload input:hover {
+    cursor: pointer;
+}
+
 /* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {
     .jobseeker-info li{
@@ -2178,14 +2209,14 @@ height: 150px;
 /* D?nh cho m?y t?nh b?ng chi?u d?c */
 @media all and (min-width: 600px) {
     
-    .js-editForm label{
+    .js-editForm section{
         display: block;
         margin: 0; 
         text-align: left;
         margin: 10px 0;
     }
     
-    .js-editForm label span{
+    .js-editForm section span{
         float: left;
         width: 15%;
         /* text-align: right; */
@@ -2195,7 +2226,7 @@ height: 150px;
         margin-bottom: 0px;
     }
     
-    .js-editForm label aside select{
+    .js-editForm section aside select{
         border: 1px solid #DADADA;
         color: #888;
         height: 30px;
@@ -2208,6 +2239,27 @@ height: 150px;
         box-shadow: inset 0px 1px 4px #ECECEC;
         -moz-box-shadow: inset 0px 1px 4px #ECECEC;
         -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+    }
+    
+    .js-editForm section textarea{
+        border: 1px solid #DADADA;
+        color: #888;
+        height: 30px;
+        margin: 2px 6px 16px 0;
+        outline: 0 none;
+        padding: 3px 3px 3px 5px;
+        width: 80%;
+        min-height: 150px;
+        font-size: 12px;
+        line-height: 15px;
+        box-shadow: inset 0px 1px 4px #ECECEC;
+        -moz-box-shadow: inset 0px 1px 4px #ECECEC;
+        -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+    }
+    
+    .js-editForm section p {
+        display: inline-block;
+        margin-top: 10px;
     }
     
     .jobseeker-info li{
@@ -2294,8 +2346,4 @@ height: 150px;
 /* D?nh cho m?n h?nh desktop */
 @media all and (min-width: 1280px) {
     
-}
-
-.jobseeker-messageArea textArea {
-    min-height: 150px;
 }

@@ -1148,7 +1148,7 @@ body {
 
 input:not([type=checkbox]):not([type=radio]),select,textarea
 {
-	min-width:140px;
+	min-width:240px;
 	border:1px solid #dddddd;
 	border-radius: 3px;
 	-moz-border-radius: 3px;

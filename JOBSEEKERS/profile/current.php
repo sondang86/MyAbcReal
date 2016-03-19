@@ -6,109 +6,73 @@
 // http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
+global $db, $commonQueries, $current_language, $gender, $jobseeker_profile;
 ?>
-<div class="fright">
-	<?php
-	echo LinkTile
-	 (
-		"profile",
-		"edit",
-		$EDIT_YOUR_PROFILE,
-		"",
-		"green"
-	 );
-	 
-	echo LinkTile
-	 (
-		"cv",
-		"description",
-		$EDIT_YOUR_CV,
-		"",
-		"yellow"
-	 );
-?>
+<div class="row">
+    <div class="fright">
+    <?php
+        echo LinkTile ("profile","edit",$EDIT_YOUR_PROFILE,"","green");	 
+        echo LinkTile ("cv","description",$EDIT_YOUR_CV,"","yellow");
+    ?>
+    </div>
+    <div class="clear"></div>
+    <h3>
+            <?php echo $VIEW_CURRENT_PROFILE;?>
+    </h3>
+    <br/>
 </div>
-<div class="clear"></div>
-<h3>
-	<?php echo $VIEW_CURRENT_PROFILE;?>
-</h3>
-<br/>
-<?php
-if($arrUser["profile_public"]==0)
-{
-?>
-	<span class="red-font"><i><?php echo $M_CURRENTLY_SET_NOT_PUBLIC;?> <?php echo $M_PUBLIC_PROFILE_EXPL;?></i></span>
-	
-<br/>
 
-<?php
-}
+<?php foreach ($jobseeker_profile as $value) :?>
+    <div class="row">
+        <div class="col-md-12 js-editForm">
+            <section>
+                <span>Email:</span>
+                <p><?php echo $value['username']?></p>
+            </section>
+            <section>
+                <span>Tên:</span>
+                <p><?php echo $value['first_name']?></p>
+            </section>
+            <section>
+                <span>Họ:</span>
+                <p><?php echo $value['last_name']?></p>
+            </section>
+            <section>
+                <span>Địa chỉ:</span>
+                <p><?php echo $value['address']?></p>
+            </section>        
+            <section>
+                <span>Điện thoại:</span>
+                <p><?php echo $value['phone']?></p>
+            </section>
+            <section>
+                <span>Ngày sinh:</span>
+                <p><?php echo date('Y-m-d',$value['dob'])?></p>
+            </section>
+            <section>
+                <span>Giới tính:</span>
+                <p><?php echo $gender['Text']?></p>
+            </section>  
+            <section>
+                <span>Hiển thị hồ sơ:</span>
+                <p><?php echo $commonQueries->YesOrNo($value['profile_public']);?></p>
+            </section>  
+            <section>
+                <span>Nhận tin tức: </span>
+                <p><?php echo $commonQueries->YesOrNo($value['newsletter']);?></p>
+            </section>
+            <section>
+                <span>Ảnh cá nhân:</span>
+                
+                <?php if($value['profile_pic'] == NULL){?>
+                <input type="file" name="logo" id="logo"> 
+                <?php } else {?>
+                <div class="profilePic">
+                    <div><img src="../images/jobseekers/profile_pic/<?php echo $jobseeker_profile[0]['profile_pic'];?>" id="preview" alt="Ảnh cá nhân hiện tại" width="150px" height="200px"></div>
+                </div>                
+                <?php }?>
+            </section>
+        </div>
+    </div>
 
-
-$_REQUEST["HideSubmit"] = true;
-
-$website->ms_i($arrUser["id"]);
-
-
-AddEditForm
-(
-	array
-	(
-		"<i>".$str_PageNamePage."</i>",
-		"<i>".$FIRST_NAME.":</i>",
-		"<i>".$LAST_NAME.":</i>",
-		"<i>".$M_ADDRESS.":</i>",
-		"<i>".$TELEPHONE.":</i>",
-		"<i>".$M_MOBILE.":</i>",
-		"<i>".$M_DOB.":</i>",
-		"<i>".$M_GENDER.":</i>",
-		"<i>".$M_PICTURE.":</i>"
-	),
-	array("title","first_name","last_name","address","phone",
-	"mobile","dob","gender","logo"),
-	array("profile_public","title","first_name","last_name","address","phone",
-	"mobile","dob","gender","logo"),
-	array("textbox_5","textbox_30","textbox_30","textarea_50_4","textbox_30",
-	"textbox_30","textbox_30","textbox_30","textbox_30"),
-	"jobseekers",
-	"id",
-	$arrUser["id"],
-	"",
-	"",
-	180
-
-);
-
-
-?>
-
-<table summary="" border="0" width="100%">
-	<tr>
-		<td>
-		
-		
-<?php	
-$arrPropFields = array();
-
-if(is_array(unserialize($arrUser["jobseeker_fields"])))
-{
-	$arrPropFields = unserialize($arrUser["jobseeker_fields"]);
-}
-
-$bFirst = true;
-while (list($key, $val) = each($arrPropFields)) 
-{
-
-?>
-<tr height="38">
-		<td width="180"><i><?php str_show($key);?>:</i></td>
-		<td><b><?php str_show($val);?></b></td>
-		</tr>
-<?php
-
-}
-
-?>
-		</td>
-	</tr>
-</table>
+<?php endforeach;?>	

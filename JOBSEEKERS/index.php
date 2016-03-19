@@ -55,6 +55,17 @@ else
 }
 include("../include/texts_".$lang.".php");
 
+//Common tables
+$categories = $db->get_data();
+$locations = $db->get_data('locations');
+$education = $db->get_data('education');
+$job_types = $db->get_data('job_types');
+$salaries = $db->get_data('salary');
+$current_language = $db->get_data('languages','id',"WHERE default_language=1")[0];
+$jobseeker_profile = $db->get_data('jobseekers', '', "WHERE username='$AuthUserName'");
+$gender = $db->get_data('gender','',"WHERE language_id=$current_language AND gender_id=".$jobseeker_profile[0]['gender'])[0];
+
+
 
 
 $website->LoadTemplate(-1);
@@ -80,12 +91,7 @@ $currentPage = new AdminPage();
 $currentPage->Process($is_mobile);
 $website->Render();
 
-//Common tables
-$categories = $db->get_data();
-$locations = $db->get_data('locations');
-$education = $db->get_data('education');
-$job_types = $db->get_data('job_types');
-$salaries = $db->get_data('salary');
+
 
 ?>
 <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'  type='text/css'>
@@ -99,7 +105,7 @@ $salaries = $db->get_data('salary');
     jQuery(document).ready(function(){
         jQuery("#datePicker").datepicker({
             dateFormat: 'yy-mm-dd' 
-        });    
+        });
     });
     
     /*file upload validation*/
@@ -118,5 +124,26 @@ $salaries = $db->get_data('salary');
         }
     });
     /*file upload validation*/
+    
+    /*
+    * Preview image before upload
+    * http://stackoverflow.com/questions/18694437/how-to-preview-image-before-uploading-in-jquery
+    */
+    
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function(e) {
+            $('#preview').attr('src', e.target.result);
+          };
+
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+
+      $("#logo").change(function() {
+        readURL(this);
+      });
+    /*Preview image before upload*/
 
 </script>

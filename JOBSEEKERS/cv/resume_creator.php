@@ -28,9 +28,6 @@ global $db;
 </div>
 <?php
     $job_types = $db->get_data('job_types');
-    echo "<pre>";
-    print_r($testing);
-    echo "</pre>";
 ?>
 
 <div class="clear"></div>		
