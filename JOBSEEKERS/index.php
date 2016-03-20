@@ -60,6 +60,8 @@ $categories = $db->get_data();
 $locations = $db->get_data('locations');
 $education = $db->get_data('education');
 $job_types = $db->get_data('job_types');
+$job_experience = $db->get_data('job_experience');
+$job_availability = $db->get_data('job_availability');
 $salaries = $db->get_data('salary');
 $current_language = $db->get_data('languages','id',"WHERE default_language=1")[0];
 $jobseeker_profile = $db->get_data('jobseekers', '', "WHERE username='$AuthUserName'");

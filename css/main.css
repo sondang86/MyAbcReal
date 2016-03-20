@@ -2260,6 +2260,7 @@ div.upload input:hover {
     .js-editForm section p {
         display: inline-block;
         margin-top: 10px;
+        width: 80%;
     }
     
     .jobseeker-info li{

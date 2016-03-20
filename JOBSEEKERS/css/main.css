@@ -1214,7 +1214,27 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
 
 /* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {
-        
+    .locationCheckbox {
+        position: relative;
+    }
+    
+    .locationCheckbox p{
+        display: inline-block;
+        font-size: 10px;
+        position: absolute;
+        top: 2px;
+        left: 40px;
+    }
+    
+    .locationCheckbox input[type="checkbox"]{
+        display: inline-block;
+        font-size: 10px;
+    }
+    
+    .fullWidth {
+        width: 60%;
+        min-height: 250px;
+    }
 }
  
 /* D?nh cho m?y t?nh b?ng chi?u d?c */
