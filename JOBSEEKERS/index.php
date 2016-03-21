@@ -102,6 +102,8 @@ $website->Render();
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script src="http://jqueryvalidation.org/files/dist/jquery.validate.min.js"></script>
 <script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
+<link href="../include/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
+<script src="../include/select2/js/select2.min.js" type="text/javascript"></script>
 
 <script>
     jQuery(document).ready(function(){
@@ -148,4 +150,6 @@ $website->Render();
       });
     /*Preview image before upload*/
 
+    $("#preferred_locations").select2({});
+    $("#preferred_categories").select2({});
 </script>

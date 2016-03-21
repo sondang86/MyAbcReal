@@ -2337,6 +2337,10 @@ div.upload input:hover {
         text-align: right;
     }
     
+    .select2-container {
+        width: 90% !important;
+    }
+    
 }
  
 /* D?nh cho m?y t?nh b?ng chi?u ngang */

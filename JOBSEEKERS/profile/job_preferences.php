@@ -1,9 +1,40 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries, $jobseeker_profile, $locations, $categories, $job_types, $job_experience, $job_availability;
-//echo "<pre>";
-//print_r($jobseeker_profile);
-//echo "</pre>";
+global $db, $commonQueries, $jobseeker_profile, $locations, $categories,
+$job_types, $job_experience, $job_availability;
+$jobseeker_categories = $db->get_data('jobseeker_categories','', "WHERE jobseeker_id=". $jobseeker_profile[0]['id']);
+$jobseeker_locations = $db->get_data('jobseeker_locations','', "WHERE jobseeker_id=". $jobseeker_profile[0]['id']);
+
+//Get jobseeker selected categories names only
+foreach ($jobseeker_categories as $smallKey => $smallElement) {
+    foreach ($categories as $bigKey => $bigElement) {
+        if ($bigElement['id'] == $smallElement['category_id']) {
+            $jobseeker_categories[$smallKey] = array(
+                'category_name'     => $bigElement['category_name'],
+                'category_name_vi'  => $bigElement['category_name_vi'],
+                'category_id'       => $bigElement['category_id']
+            );
+            break; // for performance and no extra looping
+        }
+    }
+}
+
+
+//Get jobseeker selected locations names only
+//foreach ($jobseeker_locations as $smallKey => $smallElement) {
+//    foreach ($locations as $bigKey => $bigElement) {
+//        if ($bigElement['id'] == $smallElement['category_id']) {
+//            $jobseeker_locations[$smallKey] = array(
+//                'category_name' => $bigElement['category_name'],
+//            );
+//            break; // for performance and no extra looping
+//        }
+//    }
+//}
+
+echo "<pre>";
+print_r($locations);
+echo "</pre>";
 ?>
 
 
@@ -24,7 +55,7 @@ global $db, $commonQueries, $jobseeker_profile, $locations, $categories, $job_ty
 
 <?php
     if(isset($_POST['submit'])){
-        
+        print_r($_POST['preferred_categories']);die;
         //Locations update
         if(isset($_POST['preferred_locations'])){
             //If user records exists
@@ -152,31 +183,38 @@ global $db, $commonQueries, $jobseeker_profile, $locations, $categories, $job_ty
         
         <!--LOCATIONS-->
         <div class="row top-bottom-margin">
-            <span><h4>Nơi làm việc mong muốn</h4></span>
-            <?php foreach ($locations as $location) :?>
-            <section class="col-md-2 col-sm-3 col-xs-6 locationCheckbox">
-                <label>
-                    <input type="checkbox" name="preferred_locations[]" value="<?php echo $location['id']?>">
-                    <p><?php echo $location['City']?></p>
-                </label>
+            <span class="col-md-3"><h4>Nơi làm việc mong muốn</h4></span>
+            <section class="col-md-5">
+                <?php foreach ($jobseeker_categories as $jobseeker_category) :?>
+                <?php echo $jobseeker_category['category_name'] ?>,
+                <?php endforeach;?>
             </section>
-            <?php endforeach; ?>
+            <section class="col-md-4">
+                <select name="preferred_locations[]" id="preferred_locations" multiple="multiple">
+                    <?php foreach ($locations as $location) :?>
+                    <option value="<?php echo $location['id']?>"><?php echo $location['City']?></option>
+                    <?php endforeach; ?>
+                </select>
+            </section>
         </div>
         <!--LOCATIONS-->
             
         <!--CATEGORIES-->
         <div class="row top-bottom-margin">
-            <h4>Ngành nghề mong muốn</h4>
-            <?php foreach ($categories as $value) :?>
-            <div class="col-md-2 col-sm-3 col-xs-6 locationCheckbox">
-                <label>
-                    <input type="checkbox" name="preferred_categories[]" value="<?php echo $value['id']?>">
-                    <p><?php echo $value['category_name_vi']?></p>
-                </label>
-            </div>
-            <?php endforeach; ?>
+            <span class="col-md-3"><h4>Ngành nghề mong muốn</h4></span>
+            <section class="col-md-5">
+                
+            </section>
+            <section class="col-md-4">
+                <select name="preferred_categories[]" id="preferred_categories" multiple="multiple">
+                    <?php foreach ($categories as $value) :?>
+                    <option value="<?php echo $value['id']?>"><?php echo $value['category_name_vi']?></option>
+                    <?php endforeach; ?>
+                </select>
+            </section>
         </div>
         <!--CATEGORIES-->
+        
         <div class="row">
             <input type="submit" name="submit" class="btn btn-lg btn-primary pull-right" value=" <?php echo $SAUVEGARDER;?> "/>
         </div>
