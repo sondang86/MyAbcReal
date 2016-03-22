@@ -1585,6 +1585,13 @@ input[type="submit"]{
         -moz-box-shadow: inset 0px 1px 4px #ECECEC;
         -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
     }
+    
+    .attached-section {
+        border-radius: 5px;
+        border: 1px #cccccc solid;
+        padding: 5px;
+        background: #ffffff;
+    }
 }
  
 /* D?nh cho m?y t?nh b?ng chi?u ngang */

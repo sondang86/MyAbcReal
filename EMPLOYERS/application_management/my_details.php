@@ -131,6 +131,8 @@ $answers=$db->rawQuery
 <!--SonDang modify here-->
 <div class="jobseeker-cv">    
     <div class="jobseeker-main">
+        
+        <!--MAIN-->
         <div class="row jobseeker-mainTitle">
             <div class="col-md-6 col-sm-6 col-xs-12 cv-details">
                 <label>
@@ -194,29 +196,65 @@ $answers=$db->rawQuery
                 </label>
             </div>
         </div>
+        
+        <!--CAREER OBJECTIVE-->
         <div class="jobseeker-messageArea" name="js-careerObjective" class="jobseeker-messageArea" rows="5" style="width: 100%">
             <div class="jobseeker-title"><h4><?php echo $M_CAREER_OBJECTIVE;?></h4></div>
                 <?php echo $jobseeker_data[0]['career_objective'];?>
         </div>
-        <br><br>
+
+        <!--FACEBOOK URL-->
         <div class="cv-details">
             <label>
                 <span style="width:100px; margin-top: 7px;"><b><?php echo $M_FACEBOOK_URL;?></b></span>
                 <aside style="width:200px; float: left; text-align: left;"><input type="text" name="js-facebookURL" style="width:350px" value="<?php echo $jobseeker_data[0]['facebook_URL'];?>" readonly="readonly"></aside>
             </label>
         </div>
+        
+        <!--EXPERIENCE AREA-->
         <div class="jobseeker-messageArea" rows="5" style="width: 100%">
             <div class="jobseeker-title"><h4><?php echo $M_EXPERIENCE;?></h4></div>
                 <?php echo $jobseeker_data[0]['experiences'];?>
         </div>
-        <br><br>
         
+        <!--SKILLS AREA-->
         <div class="jobseeker-messageArea" style="width:100%">
             <div class="jobseeker-title"><h4><?php echo $M_YOUR_SKILLS;?></h4></div>
                 <?php echo $jobseeker_data[0]['skills'];?>
         </div>
-        <br><br>
-        <strong><i><?php echo $LIST_ATTACHED;?>:</i></strong>
+
+        <!--LIST ATTACHED FILES-->
+        <div class="row">
+            <div class="col-md-12">
+                <section class="attached-section">
+                    <label><i><?php echo $LIST_ATTACHED;?>:</i></label>
+                    <?php
+                            $userFiles = $database->DataTable("files","WHERE user='$id'");
+
+                            while($js_file = $database->fetch_array($userFiles))
+                            {
+                                    $file_show_link = "";
+                                    foreach($website->GetParam("ACCEPTED_FILE_TYPES") as $c_file_type)
+                                    {	
+                                            if(file_exists("../user_files/".$js_file["file_id"].".".$c_file_type[1]))
+                                            {
+                                                    $file_show_link = "../user_files/".$js_file["file_id"].".".$c_file_type[1];
+                                                    break;
+                                            }
+                                    }
+
+                                    if(trim($file_show_link)=="") continue;
+                        ?>
+                    <p>
+                        <a target="_blank" href="<?php echo $file_show_link;?>"><b><?php echo $js_file["file_name"];?></b></a>
+                        <br>
+                        <i style="font-size:10px"><?php echo $js_file["description"];?></i>
+                        <br><br>
+                    </p>
+                    <?php }?>	
+                </section>
+                </div>
+        </div>
     </div>    
     
 </div>

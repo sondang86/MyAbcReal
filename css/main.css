@@ -1,5 +1,8 @@
 body {
     font-family: 'Open Sans', sans-serif;
+    color: #555;
+    background: #ebebeb;
+    margin-bottom: 0;
 }
 
 a
@@ -1358,7 +1361,7 @@ nav{
 
 .admin-main-content
 {
-	background:#fbfbfb;
+	background:#ffffff;
 	border-top:1px solid #eeeeee;
 	padding:10px;
 	min-height:400px;

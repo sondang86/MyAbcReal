@@ -4,18 +4,10 @@
 // Check http://www.netartmedia.net/jobsportal for demos and information
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
+global $db;
 ?>
 <div class="fright">
-	<?php
-	echo LinkTile
-	 (
-		"home",
-		"apply",
-		$M_GO_BACK,
-		"",
-		"red"
-	 );
-?>
+    <?php echo LinkTile("home","apply",$M_GO_BACK,"","red");?>
 </div>
 <div class="clear"></div>
 <h3>
@@ -27,82 +19,81 @@ if(!defined('IN_SCRIPT')) die("");
 
 $id=$_REQUEST["id"];
 $website->ms_i($id);
-$arrApplication=$database->DataArray("apply","id=".$id);
-$arrPosting=$database->DataArray("jobs","id=".$arrApplication["posting_id"]);
-$arrEmployer = $database->DataArray("employers","username='".$arrPosting["employer"]."' ");
-echo "<b>".$JOB_TITLE.":</b><br>";
-echo "".stripslashes($arrPosting["title"])."  ";
-echo "<br/><br/>";
-	
-echo "<b>".$DESCRIPTION.":</b><br>";
+$application = $db->where('id', $id)->get('apply');
+$Posting =  $db->join("categories", "jobsportal_jobs.job_category=jobsportal_categories.category_id", "LEFT")
+            ->join("locations", "jobsportal_jobs.region=jobsportal_locations.id", "LEFT")
+            ->join("salary", "jobsportal_jobs.salary=jobsportal_salary.salary_id", "LEFT")
+            ->where('jobsportal_jobs.id', $application[0]['posting_id'])->get('jobs');
+$employer = $db->where('username', $Posting[0]['employer'])->get('employers');
 
- echo stripslashes($arrPosting["message"]); 
+//echo "<pre>";
+//print_r($Posting);
+//echo "</pre>";
+//$bad_string = "Hi! <script>alert('you are here');</script> It's a good day!";
+//$goodstring = $db->cleanData($bad_string);
+//print_r($goodstring);
 
-echo "<br><br>";
-echo "<b>$M_JOB_TYPE:</b><br> ";
-
-echo $website->job_type($arrPosting["job_type"]);
-
-echo "<br><br>";
-echo "<b>$M_REGION:</b><br> ".$website->show_full_location($arrPosting["region"]);
-echo "<br><br>";
-echo "<b>$M_SALARY:</b><br> ".(trim($arrPosting["salary"])!=""&&trim($arrPosting["salary"])!="0"?$arrPosting["salary"]:"[n/a]");
-echo "<br><br>";
-echo "<b>$M_DATE_AVAILABLE:</b><br> ".(trim($arrPosting["date_available"])!=""?$arrPosting["date_available"]:"[n/a]");
-
-if(trim($arrPosting["more_fields"]) != "")
-{
-$arrFields = array();
-
-if(is_array(unserialize($arrPosting["more_fields"])))
-{
-	$arrFields = unserialize($arrPosting["more_fields"]);
-}
-
-$bFirst = true;
-while (list($key, $val) = each($arrFields)) 
-{
-	echo "<br><br>";
-	echo "<b>";
-	str_show($key);
-	echo ":</b>"; 
-	echo "<br> ";
-	str_show($val);
-}
-}
-
-echo "<br><br>";
-echo "<b>$M_COMPANY:</b><br> ".(trim($arrEmployer["company"])!=""?stripslashes($arrEmployer["company"]):"[n/a]");
-echo "<br><br>";
-echo "<b>$COMPANY_DESCRIPTION:</b><br> ".stripslashes(trim($arrEmployer["company_description"])!=""?$arrEmployer["company_description"]:"[n/a]");
-echo "<br><br>";
-echo "<b>$COMPANY_WEBSITE:</b><br> ".(trim($arrEmployer["website"])!=""?$arrEmployer["website"]:"[n/a]");
-
-if(trim($arrEmployer["employer_fields"]) != "")
-{
-$arrFields = array();
-
-if(is_array(unserialize($arrEmployer["employer_fields"])))
-{
-	$arrFields = unserialize($arrEmployer["employer_fields"]);
-}
-
-$bFirst = true;
-while (list($key, $val) = each($arrFields)) 
-{
-	echo "<br><br>";
-	echo "<b>";
-	str_show($key);
-	echo ":</b>"; 
-	echo "<br> ";
-	str_show($val);
-}
-}
-
-
-		
-
-
-echo "<br><br>";
 ?>
-		
+
+<div class="row">
+    <section class="col-md-12 info-section">
+        <label><?php echo $JOB_TITLE?></label>
+        <p><?php echo stripslashes($Posting[0]["title"])?></p>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col-md-12 info-section">
+        <label><?php echo $DESCRIPTION?></label>
+        <p><?php echo stripslashes($Posting[0]["message"])?></p>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col-md-12 info-section">
+        <label><?php echo $M_JOB_TYPE?>: </label>
+        <span><?php echo stripslashes($Posting[0]["category_name_vi"])?></span>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col-md-12 info-section">
+        <label><?php echo $M_REGION?>: </label>
+        <span><?php echo stripslashes($Posting[0]["City"])?></span>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col-md-12 info-section">
+        <label><?php echo $M_SALARY?>: </label>
+        <span><?php echo stripslashes($Posting[0]["salary_range"])?> USD</span>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col-md-12 info-section">
+        <label><?php echo $M_DATE_AVAILABLE?>: </label>
+        <span><?php echo date('Y-m-d',stripslashes($Posting[0]["date"]))?></span>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col-md-12 info-section">
+        <label><?php echo $M_COMPANY?>: </label>
+        <span><?php echo (trim($employer[0]["company"])!=""?stripslashes($employer[0]["company"]):"[n/a]")?></span>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col-md-12 info-section">
+        <label><?php echo $COMPANY_DESCRIPTION?>: </label>
+        <p><?php echo stripslashes(trim($employer[0]["company_description"])!=""?$employer[0]["company_description"]:"[n/a]")?></p>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col-md-12 info-section">
+        <label><?php echo $COMPANY_WEBSITE?>: </label>
+        <span><a href="<?php echo (trim($employer[0]["website"])!=""?$employer[0]["website"]:"[n/a]")?>"><?php echo (trim($employer[0]["website"])!=""?$employer[0]["website"]:"[n/a]")?></a></span>
+    </section>
+</div>		

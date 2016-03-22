@@ -1233,7 +1233,7 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
     
     .fullWidth {
         width: 60%;
-        min-height: 250px;
+        min-height: 150px;
     }
 }
  
@@ -1286,6 +1286,57 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
     
     .js-editForm label input[type="file"]{
         border: none;
+    }
+    
+    .desires-section {
+        padding: 10px;
+        border-radius: 5px;
+    }
+    
+    .description-section {
+        padding: 10px;
+    }
+    
+    .desires-section:hover{
+        border: 1px #cccccc solid;
+    }
+    
+    .select2-searchBox {
+        margin: 10px 0;
+    }
+    
+    .ListDesires-section {
+        text-align: center;
+        /*border: 1px solid rosybrown;*/
+        border-radius: 5px;
+        min-height: 80px;
+        padding: 10px 0;
+        
+    }
+    
+    .desire-tag {
+        display: inline-block;
+        padding: 0 10px 0 25px;
+        border-right: 1px #d0d0d0 solid;
+        margin: 0 5px 5px 5px;
+        background: url(../images/icon-tag.png) no-repeat;
+        cursor: pointer;
+        overflow: hidden;
+        line-height: 21px;
+        height: 24px;
+        -webkit-transition: color .3s;
+        transition: color .3s;
+    }
+    
+    .info-section {
+        display: block;
+        margin: 10px 0;
+        border-radius: 5px;
+        padding: 5px;
+    }
+    
+    .info-section:hover {
+        border: 1px #cccccc solid;
     }
 }
  

@@ -131,7 +131,7 @@ if(trim($arrPostingApply["message"])!="")
 	}
 				?>
 				
-				</table>
+</table>
 <br>
 
 

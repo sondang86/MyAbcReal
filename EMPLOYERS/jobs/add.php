@@ -5,14 +5,7 @@ global $db, $categories, $job_types, $locations, $salaries;
 <div class="fright">
     
 <?php
-        echo LinkTile
-         (
-                "jobs",
-                "my",
-                $MY_JOB_ADS,
-                "",
-                "blue"
-         );
+        echo LinkTile("jobs","my",$MY_JOB_ADS,"","blue");
 ?>
 </div>
 <div class="clear"></div>

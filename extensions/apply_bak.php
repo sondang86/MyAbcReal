@@ -24,7 +24,6 @@ $arrPosting = $database->DataArray("jobs","id=".$posting_id);
 
 $show_page_form = true;
 
-//Update when form submitted
 if(get_param("ProceedApply_Update") != "")
 {
 
@@ -325,12 +324,13 @@ if(get_param("ProceedApply_Update") != "")
 if($show_page_form && isset($_COOKIE["AuthJ"]))
 {
 
-	$arrUserLgn = explode("~", $_COOKIE["AuthJ"]);	
+	$arrUserLgn = explode("~", $_COOKIE["AuthJ"]);
+	
 	$username = $arrUserLgn[0];
-	$password = $arrUserLgn[1];	
+	$password = $arrUserLgn[1];
+	
 	$arrJ = $database->DataArray("jobseekers","username='$username'");
-	print_r($_COOKIE["AuthJ"]);
-        
+	
 	$userExists = true;
 	
 	if(!isset($arrJ["id"]))
@@ -338,15 +338,25 @@ if($show_page_form && isset($_COOKIE["AuthJ"]))
 		$userExists = false;
 	}
 
-        //User already applied for this job
 	if($userExists&&($database->SQLCount("apply","WHERE jobseeker='$username' AND posting_id='$posting_id'") >0 ))
-	{	
-		echo "<br><span class=\"red-font\"><strong>".$M_ALREADY_APPLIED."</strong></span><br><br><br><br><br><br>";		
+	{
+	
+		echo "<br><span class=\"red-font\"><strong>".$M_ALREADY_APPLIED."</strong></span><br><br><br><br><br><br>";
+		
 	}
-	elseif($userExists&&md5($arrJ["password"])==$password)
-	{	
+	else
+	if($userExists&&md5($arrJ["password"])==$password)
+	{
+	
+	
+						
+		
+		
+		
 	?>
-    
+	
+	
+	
 				<form action="index.php" method="post">
 				<input type="hidden" name="ProceedApply_Update" value="1">
 				<input type="hidden" name="mod" value="apply">

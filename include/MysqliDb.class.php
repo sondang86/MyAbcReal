@@ -1897,30 +1897,45 @@ class MysqliDb
         return $db_value;
     }
     
-    
+    /**
+     * Clean the user harmful characters before insert to db
+     *
+     * 
+     * @param string  string input
+     * 
+     */
     public function cleanData($str) {
+        $str = $this->cleanInput($str);    
         $str = urldecode ($str );
         $str = filter_var($str, FILTER_SANITIZE_STRING);
         $str = filter_var($str, FILTER_SANITIZE_SPECIAL_CHARS);
-        return $str ;
+        return $this->escape($str);  //mysqli_real_escape_string for strings      
     }
     
-    
-    public function DataTable($strTable,$sqlClause=""){
-        global $DBprefix;
+    /**
+     * Prevent HTML malicious codes
+     *
+     * 
+     * @param string  string input
+     * 
+     */    
+    protected function cleanInput($input) {
+        $search = array(
+          '@<script[^>]*?>.*?</script>@si',   // Strip out javascript
+          '@<[\/\!]*?[^<>]*?>@si',            // Strip out HTML tags
+          '@<style[^>]*?>.*?</style>@siU',    // Strip style tags properly
+          '@<![\s\S]*?--[ \t\n\r]*>@'         // Strip multi-line comments
+        );
 
-        $sql_query = "SELECT * FROM ".$DBprefix.$strTable." ".$sqlClause;		
-
-        $data_table = $this->rawQuery($sql_query);
-
-        return $data_table;
+          $output = preg_replace($search, '', $input);
+          return $output;
     }
+
     
     /**
      * get data in specific table
      * 
-     */
-    
+     */    
     public function get_data($table="categories", $field="", $additional_query="") {
             $data_list = $this->DataTable($table,$additional_query);
             $data = array();           
@@ -1939,6 +1954,18 @@ class MysqliDb
             return $data;            
 
         }
+        
+       
+    
+    public function DataTable($strTable,$sqlClause=""){
+        global $DBprefix;
+
+        $sql_query = "SELECT * FROM ".$DBprefix.$strTable." ".$sqlClause;		
+
+        $data_table = $this->rawQuery($sql_query);
+
+        return $data_table;
+    }
 }
 
 // END class

@@ -10,7 +10,14 @@ if(!defined('IN_SCRIPT')) die("");
 	<div class="fright">
 
 	<?php
-		echo LinkTile("home","welcome",	$M_DASHBOARD,"","blue");
+		echo LinkTile
+		 (
+			"home",
+			"welcome",
+			$M_DASHBOARD,
+			"",
+			"blue"
+		 );
 	
 	?>
 
