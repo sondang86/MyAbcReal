@@ -83,21 +83,48 @@ global $db;
 			".$DBprefix."apply.status = '2')
 	";
     $CVs_approved = $db->withTotalCount()->rawQuery($QueryListCVs_Rejected);
-
+//    print_r($CVs_approved);
+    
     //Delete selected value
     if(isset($_REQUEST["Delete"])&&isset($_REQUEST["CheckList"]))
-    {
+    { 
             if(sizeof($_REQUEST["CheckList"])>0)
-            {
+            {      
                     $website->ms_ia($_REQUEST["CheckList"]);
-                    $database->SQLDelete("apply","id",$_REQUEST["CheckList"]);
+                
+                    //Check if records exist in apply_documents table first
+                    $db->withTotalCount()
+                       ->where('job_id', $CVs_approved[0]['posting_id'])->where('jobseeker', $CVs_approved[0]['jobseeker'])
+                       ->get('apply_documents');
+                    
 
-                    $db->where('job_id', $CVs_approved[0]['posting_id'])->where('user', $CVs_approved[0]['jobseeker']);
-                    if($db->delete('questionnaire_answers')) {
-                        $website->redirect("index.php?category=application_management&action=rejected");
-                    } else {
-                        echo "failed to delete";die;
+                    
+                    if ($db->totalCount > 0){
+
+                    //Delete records in apply_documents if exist
+                    $db->where('job_id', $CVs_approved[0]['posting_id'])->where('jobseeker', $CVs_approved[0]['jobseeker']);
+                    if(!$db->delete('apply_documents')) {
+                            echo "failed to delete apply documents";die;
+                        }
                     }
+                    
+                    //Check if records exist in questionnaire_answers table first
+                    $db->withTotalCount()
+                       ->where('job_id', $CVs_approved[0]['posting_id'])->where('user', $CVs_approved[0]['jobseeker'])
+                       ->get('questionnaire_answers');
+                    
+                    //Delete questionnaire answers if exist
+                    if ($db->totalCount > 0){
+                    $db->where('job_id', $CVs_approved[0]['posting_id'])->where('user', $CVs_approved[0]['jobseeker']);
+                        if(!$db->delete('questionnaire_answers')) { 
+                                echo "failed to delete questionnaries";die;
+                            }
+                    }
+                    
+                    //Final delete apply Id 
+                    $database->SQLDelete("apply","id",$_REQUEST["CheckList"]);
+                    $website->redirect("index.php?category=application_management&action=rejected");                    
+                    
             }
     }
 

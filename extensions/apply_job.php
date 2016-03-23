@@ -31,95 +31,89 @@ $show_page_form = true;
 //Update when form submitted
 if(get_param("ProceedApply_Update") != "")
 {
-	if(get_param("guest")== "") //User logged in apply
-	{ 
+    if($website->GetParam("USE_CAPTCHA_IMAGES") && ( (md5($_POST['code']) != $_SESSION['code'])|| trim($_POST['code']) == "" ) )
+    {
+        echo "<br><span class=\"red-font\"><b>
+        ".$M_WRONG_CODE."
+        </b></span><br><br>";
 
-            if($website->GetParam("USE_CAPTCHA_IMAGES") && ( (md5($_POST['code']) != $_SESSION['code'])|| trim($_POST['code']) == "" ) )
+        $show_page_form = true;
+    }
+    else
+    {
+        $arrUserLgn = explode("~", $_COOKIE["AuthJ"]);
+
+        $username = $arrUserLgn[0];
+        $password = $arrUserLgn[1];
+
+        $iInsertID = 
+        $database->SQLInsert
+                (
+                    "apply",
+                    array("date","posting_id","jobseeker","message"),
+                    array(time(),$posting_id,$username,get_param("message"))
+                );
+
+        $database->Query
+        ("
+                UPDATE ".$DBprefix."jobs
+                SET applications=applications+1
+                WHERE id=".$posting_id
+        );	
+
+        $questions = $database->DataTable("questionnaire","WHERE job_id=".$posting_id);
+
+            if($database->num_rows($questions)>0)
             {
-                echo "<br><span class=\"red-font\"><b>
-                ".$M_WRONG_CODE."
-                </b></span><br><br>";
-
-                $show_page_form = true;
-            }
-            else
-            {
-                $arrUserLgn = explode("~", $_COOKIE["AuthJ"]);
-
-                $username = $arrUserLgn[0];
-                $password = $arrUserLgn[1];
-
-                $iInsertID = 
-                $database->SQLInsert
-                        (
-                            "apply",
-                            array("date","posting_id","jobseeker","message"),
-                            array(time(),$posting_id,$username,get_param("message"))
-                        );
-
-                $database->Query
-                ("
-                        UPDATE ".$DBprefix."jobs
-                        SET applications=applications+1
-                        WHERE id=".$posting_id
-                );	
-
-                $questions = $database->DataTable("questionnaire","WHERE job_id=".$posting_id);
-
-                    if($database->num_rows($questions)>0)
+                    while($question = $database->fetch_array($questions))
                     {
-                            while($question = $database->fetch_array($questions))
+                            if(trim(get_param("question".$question["id"]))!="")
                             {
-                                    if(trim(get_param("question".$question["id"]))!="")
-                                    {
-                                        $database->SQLInsert
-                                        (
-                                            "questionnaire_answers",
-                                            array("question_id","app_id","answer","user", "job_id"),
-                                            array($question["id"],$iInsertID,strip_tags(get_param("question".$question["id"])),$username, $posting_id)
-                                        );
-                                    }
+                                $database->SQLInsert
+                                (
+                                    "questionnaire_answers",
+                                    array("question_id","app_id","answer","user", "job_id"),
+                                    array($question["id"],$iInsertID,strip_tags(get_param("question".$question["id"])),$username, $posting_id)
+                                );
                             }
                     }
+            }
 
 
-                    $show_page_form = false;
+            $show_page_form = false;
 
-                    //Send email
-                    if($website->GetParam("ENABLE_EMAIL_NOTIFICATIONS"))
-                    {	
+            //Send email
+            if($website->GetParam("ENABLE_EMAIL_NOTIFICATIONS"))
+            {	
 
-                            $oPosting = $database->DataArray("jobs","id=".$posting_id);
+                    $oPosting = $database->DataArray("jobs","id=".$posting_id);
 
-                            $headers  = "From: \"".$website->GetParam("SYSTEM_EMAIL_FROM")."\"<".$website->GetParam("SYSTEM_EMAIL_ADDRESS").">\n";
+                    $headers  = "From: \"".$website->GetParam("SYSTEM_EMAIL_FROM")."\"<".$website->GetParam("SYSTEM_EMAIL_ADDRESS").">\n";
 
 
-                            $message="[$username] ".$M_APPLIED_JOB_POSITION.": ".strip_tags($oPosting["title"])."\n\n".$M_WE_INVITE_LOGIN." ".$DOMAIN_NAME." ".$M_AND_VIEW_INFO;
+                    $message="[$username] ".$M_APPLIED_JOB_POSITION.": ".strip_tags($oPosting["title"])."\n\n".$M_WE_INVITE_LOGIN." ".$DOMAIN_NAME." ".$M_AND_VIEW_INFO;
 
-                            mail($oPosting["employer"], "".$M_NEW_JOBSEEKER_APPLIED.": \"".strip_tags($oPosting["title"])."\"", $message, $headers);
-
-                    }
-
-                    //Attachments handle
-                    if(isset($_POST['Ids']))	
-                    {
-                        foreach($_POST['Ids'] as $db->cleanData($file_id))
-                        {
-                            //Insert to db
-                            $database->SQLInsert(
-                                "apply_documents",
-                                array("file_id","apply_id","job_id", "jobseeker"),
-                                array($file_id,$iInsertID,$posting_id, $username)
-                            );
-                        }
-                    }	
-                    echo "<h3>".$CONGRATULATIONS_APPLIED_SUCCESS."</h3>";
+                    mail($oPosting["employer"], "".$M_NEW_JOBSEEKER_APPLIED.": \"".strip_tags($oPosting["title"])."\"", $message, $headers);
 
             }
-	
-	} else {
-            die;
-        }
+
+            //Attachments handle
+            if(isset($_POST['Ids']))	
+            {
+                foreach($_POST['Ids'] as $file_id)
+                {
+                    //Insert to db
+                    $database->SQLInsert(
+                        "apply_documents",
+                        array("file_id","apply_id","job_id", "jobseeker"),
+                        array($file_id,$iInsertID,$posting_id, $username)
+                    );
+                }
+            }	
+            echo "<h3>".$CONGRATULATIONS_APPLIED_SUCCESS."</h3>";
+
+    }
+
 	
 	
 }
@@ -152,7 +146,7 @@ if($show_page_form && isset($_COOKIE["AuthJ"]))
     
     <form action="index.php" method="post">
         <input type="hidden" name="ProceedApply_Update" value="1">
-        <input type="hidden" name="mod" value="apply">
+        <input type="hidden" name="mod" value="apply_job">
         <input type="hidden" name="posting_id" value="<?php echo $posting_id;?>">
         
         
@@ -360,7 +354,7 @@ elseif($show_page_form)
 }
 ?>
                                 
-</div>
+                                </div>
                                 
 <?php
 $website->Title($APPLY_JOB_OFFER." ".strip_tags(stripslashes($arrPosting["title"])));

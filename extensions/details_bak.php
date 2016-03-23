@@ -189,8 +189,8 @@ $strLink = "http://".$DOMAIN_NAME."/".$website->job_link($arrPosting["id"],$arrP
 		<br/><br/><br/>
 		
 		<div class="pull-right">
-			<form action="index.php" method="get" >
-				<input type="hidden" name="mod" value="apply_job"/>
+			<form action="index.php" method="post" >
+				<input type="hidden" name="mod" value="apply"/>
 				<input type="hidden" name="posting_id" value="<?php echo $arrPosting["id"];?>"/>
 				<?php
 				if($MULTI_LANGUAGE_SITE)
