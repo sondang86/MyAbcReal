@@ -33,12 +33,12 @@
                             <div class="form-group email">
                                 <label class="sr-only" for="login-email"><?php echo $M_YOUR_EMAIL;?></label>
 								<img src="images/icon-user.gif" alt="" class="login-icon"/>
-                                <input id="login-email" name="Email" type="text" class="form-control login-email" placeholder="<?php echo $M_YOUR_EMAIL;?>">
+                                                                <input id="login-email" name="Email" type="email" class="form-control login-email" placeholder="<?php echo $M_YOUR_EMAIL;?>" required>
                             </div>
                             <div class="form-group password">
                                 <label class="sr-only" for="login-password"><?php echo $M_PASSWORD;?></label>
 								<img src="images/icon-password.gif" alt="" class="login-icon"/>
-                                <input id="login-password" name="Password" type="password" class="form-control login-password" placeholder="<?php echo $M_PASSWORD;?>">
+                                                                <input id="login-password" name="Password" type="password" class="form-control login-password" placeholder="<?php echo $M_PASSWORD;?>" required>
                                 <p class="forgot-password">
                                    <a class="underline-link" href="<?php echo $this->mod_link("forgotten_password");?>"><?php echo $FORGOTTEN_PASSWORD;?></a> 
                                 </p>

@@ -53,18 +53,7 @@ $answers=$db->rawQuery
 <div class="row">
     <div class="col-md-3 col-sm-6 col-xs-12 fright">
         <?php
-            echo LinkTile
-             (
-                    "",
-                    "",
-                    $M_GO_BACK,
-                    "",
-
-                    "red",
-                    "small",
-                    "true",
-                    "window.history.back"
-             );
+            echo LinkTile("","",$M_GO_BACK,"","red","small","true","window.history.back");
             
             //Get the current jobseeker data
             $jobseeker_profile = $GET['apply_id'];

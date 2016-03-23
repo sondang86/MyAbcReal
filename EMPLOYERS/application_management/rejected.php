@@ -40,19 +40,9 @@ global $db;
 </h3>
 <br/>
 <?php
-
-        //Delete selected value
-	if(isset($_REQUEST["Delete"])&&isset($_REQUEST["CheckList"]))
-	{
-		if(sizeof($_REQUEST["CheckList"])>0)
-		{
-			$website->ms_ia($_REQUEST["CheckList"]);
-			$database->SQLDelete("apply","id",$_REQUEST["CheckList"]);
-		}
-	}
 	
 	$QueryListCVs_Rejected ="
-			(SELECT ".
+                    (SELECT ".
 			 $DBprefix."jobseekers.first_name,"
 			.$DBprefix."jobseekers.last_name,"
 			.$DBprefix."jobseekers.id,"
@@ -92,8 +82,26 @@ global $db;
 			AND
 			".$DBprefix."apply.status = '2')
 	";
- $CVs_approved = $db->withTotalCount()->rawQuery($QueryListCVs_Rejected);    
+    $CVs_approved = $db->withTotalCount()->rawQuery($QueryListCVs_Rejected);
 
+    //Delete selected value
+    if(isset($_REQUEST["Delete"])&&isset($_REQUEST["CheckList"]))
+    {
+            if(sizeof($_REQUEST["CheckList"])>0)
+            {
+                    $website->ms_ia($_REQUEST["CheckList"]);
+                    $database->SQLDelete("apply","id",$_REQUEST["CheckList"]);
+
+                    $db->where('job_id', $CVs_approved[0]['posting_id'])->where('user', $CVs_approved[0]['jobseeker']);
+                    if($db->delete('questionnaire_answers')) {
+                        $website->redirect("index.php?category=application_management&action=rejected");
+                    } else {
+                        echo "failed to delete";die;
+                    }
+            }
+    }
+
+ 
     if($db->totalCount==0){
         echo "<div><i>".$M_NO_APPROVED_CANDIDATED."</i></div>";
     } else { ?>
