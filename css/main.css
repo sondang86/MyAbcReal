@@ -1096,6 +1096,7 @@ form#main fieldset
 	width:100%;
 	min-height:90px;
 	padding-top:10px;
+        /*background: #358ECA;*/
 }
 
 
@@ -1964,7 +1965,8 @@ nav{
 
 .main-container
 {
-	padding-top:35px;
+    padding-top:35px;
+    background: #fff;
 }
 
 .languages-menu
@@ -2128,6 +2130,14 @@ div.upload input {
 
 div.upload input:hover {
     cursor: pointer;
+}
+
+.same_height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 /* D?nh cho ?i?n tho?i */
@@ -2347,14 +2357,10 @@ div.upload input:hover {
     .main-category {
         line-height: 25px;
         margin-bottom: 15px;
+        margin: 5px 0;        
     }
-    
-    .main-category strong{
-        display: block;
-        margin: 5px 0;
-    }
-    
-    .main-category strong a {
+
+    .main-category a {
         color: #0066cc;
         margin-right: 5px;
     }

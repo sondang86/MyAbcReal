@@ -6,7 +6,8 @@
 // http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-global $db,$categories, $categories_subs,$commonQueries;
+global $db,$categories, $categories_subs,$commonQueries, $locations, $companies;
+
 ?>
 <ul class="nav nav-tabs">
     <li class="active"><a href="#by_category"><?php echo $M_BROWSE_CATEGORY;?></a></li>
@@ -17,16 +18,16 @@ global $db,$categories, $categories_subs,$commonQueries;
 <!--CATEGORIES-->
 <div class="tab-content padding-5">
     <div id="by_category" class="tab-pane fade in active">
-        <div class="row">
+        <div class="row same_height">
             <?php foreach ($categories as $catkey => $category) :?>
             <span class="col-md-4 main-category">
                 <!--MAIN CATEGORIES-->
-                <strong><a href="#"><?php echo $category['category_name_vi']?></a>(<?php echo $commonQueries->countRecords("job_category", $category['category_id'], "jobs")->count?>)</strong>
+                <p><a href="index.php?mod=search&category=<?php echo $category['category_id']?>&lang=vn"><?php echo $category['category_name_vi']?></a>(<?php echo $commonQueries->countRecords("job_category", $category['category_id'], "jobs")->count?>)</p>
 
                 <!--LIST SUB CATEGORIES-->
                 <?php foreach ($categories_subs as $subkey => $category_subs) :
                         if ($category_subs['main_category_id'] == $category['category_id']){
-                            echo "<a href='#'><em><small>". $category_subs['sub_category_name_vn'] . "</small></em></a>";
+                            echo "<small><a href='#'><em><small>". $category_subs['sub_category_name_vn'] . "</small></em></a></small>";
                         }
                     ?>                    
                 <?php endforeach;?>
@@ -35,17 +36,25 @@ global $db,$categories, $categories_subs,$commonQueries;
         </div>
     </div> 
     
+    <!--BY LOCATIONS-->
     <div id="by_location" class="tab-pane fade padding-5">
-        <div class="row">
-            <p>đạká</p>
-            <p>test</p>
+        <div class="row same_height">
+            <?php foreach ($locations as $location) :?>
+            <span class="col-md-3 main-category">
+                <a href="index.php?mod=search&location=<?php echo $location['id']?>&lang=vn" class="main_category_link"><?php echo $location['City']?></a>
+            </span>
+            <?php endforeach;?>
         </div>
     </div>        
     
+    <!--BY COMPANIES-->
     <div id="by_company" class="tab-pane fade padding-5">
-        <div class="row">
-            <p>đạká</p>
-            <p>test</p>
+        <div class="row same_height">
+            <?php foreach ($companies as $company) :?>
+            <span class="col-md-3 main-category">
+                <a href="index.php?mod=search&location=<?php echo $company['id']?>&lang=vn"><?php echo $company['company']?></a>
+            </span>
+            <?php endforeach;?>
         </div>
     </div>
 </div>

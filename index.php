@@ -46,6 +46,7 @@ $job_types = $db->get ('job_types');
 $locations = $db->get ('locations');
 $salaries = $db->get ('salary');
 $all_jobs = $db->get('jobs');
+$companies = $db->get('employers');
 
 
 /// Loading the website default settings
