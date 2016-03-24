@@ -36,8 +36,8 @@ if(isset($_POST['submit'])){
 
     $db->where ('id', $id);
     $db->where('posting_id', $posting_id);    
-    if ($db->update ('apply', $dataInsert)){ //success redirect to approved page
-        $website->redirect('index.php?category=application_management&action=approved'); 
+    if ($db->update ('apply', $dataInsert)){ //success redirect to list applied jobs page
+        $website->redirect('index.php?category=application_management&action=list'); 
     } else {
         echo 'update failed: ' . $db->getLastError();die;
     }

@@ -32,8 +32,7 @@ $categories = $db->get ('categories');
 $job_types = $db->get ('job_types');
 $locations = $db->get ('locations');
 $salaries = $db->get ('salary');
-$all_jobs = $db->get('jobs');
-    
+$all_jobs = $db->get('jobs');   
     
 $website = new SiteManager();
 $website->isAdminPanel = true;
@@ -104,8 +103,4 @@ if(isset($_POST["Export"])) ob_end_flush();
     
     /*Select all option*/
     $("#checkAll").change(select_all);   
-    
-    
-
-    
 </script>

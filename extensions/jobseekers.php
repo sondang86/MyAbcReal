@@ -79,8 +79,8 @@ if(isset($_POST["ProceedSend"]))
 					$database->SQLInsert
 					(
 						"jobseekers",
-						array("date","jobseeker_fields","package","active","title","username","password","first_name","last_name","address","phone","mobile","newsletter"),
-						array(time(),serialize($arrPValues),(isset($_POST["package"])?$_POST["package"]:"0"),($website->GetParam("CHARGE_THE_JOBSEEKERS")?"0":"1"),$_POST["title"],$_POST["user_email"],$_POST["password"],$_POST["first_name"],$_POST["last_name"],$_POST["address"],$_POST["phone"],$_POST["mobile"],(isset($_POST["newsletter"])?"1":"0"))
+						array("date","jobseeker_fields","package","active","title","username","password","first_name","last_name","address","phone","mobile","newsletter", "gender"),
+						array(time(),serialize($arrPValues),(isset($_POST["package"])?$_POST["package"]:"0"),($website->GetParam("CHARGE_THE_JOBSEEKERS")?"0":"1"),$_POST["title"],$_POST["user_email"],$_POST["password"],$_POST["first_name"],$_POST["last_name"],$_POST["address"],$_POST["phone"],$_POST["mobile"],(isset($_POST["newsletter"])?"1":"0"),$_POST["gender"])
 					
 					);
 					
@@ -231,8 +231,8 @@ if(isset($_POST["ProceedSend"]))
 					$database->SQLInsert
 					(
 						"jobseekers",
-						array("date","jobseeker_fields","code","title","username","password","first_name","last_name","address","phone","mobile","newsletter"),
-						array(time(),serialize($arrPValues),$code,$_POST["title"],$user_email,$_POST["password"],$_POST["first_name"],$_POST["last_name"],$_POST["address"],$_POST["phone"],$_POST["mobile"],$_POST["newsletter"])
+						array("date","jobseeker_fields","code","title","username","password","first_name","last_name","address","phone","mobile","newsletter", "gender"),
+						array(time(),serialize($arrPValues),$code,$_POST["title"],$user_email,$_POST["password"],$_POST["first_name"],$_POST["last_name"],$_POST["address"],$_POST["phone"],$_POST["mobile"],$_POST["newsletter"], $_POST["gender"])
 					
 					);
 					$database->SQLInsert
@@ -343,6 +343,20 @@ else
 					<option  <?php if(get_param("title")==$M_MR) echo "selected";?>><?php echo $M_MR;?></option>
 					<option <?php if(get_param("title")==$M_MRS) echo "selected";?>><?php echo $M_MRS;?></option>
 					<option <?php if(get_param("title")==$M_MSS) echo "selected";?>><?php echo $M_MSS;?></option>
+				</select>
+			
+			</li>
+                        
+                        <li>
+		
+				<label>
+				<?php echo $M_GENDER;?>: (*)
+				</label>
+		
+				<select name="gender">
+                                    <option value="1">Nam</option>
+                                    <option value="2">Nữ</option>
+                                    <option value="3">Khác</option>
 				</select>
 			
 			</li>

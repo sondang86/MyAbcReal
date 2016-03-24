@@ -63,5 +63,17 @@
                 }    
             }
         }
+        
+        /**
+        *  Count records matched by id
+        *  @param var $column column to be count in table
+        *  @param var $id id of the selected column
+         * @param var $table table name
+        */
+        public function countRecords($column="job_category", $id="1", $table="jobs") {
+            $this->_db->where ($column, $id);
+            $stats = ((object)$this->_db->getOne ($table, "count(*) as count"));
+            return $stats;
+        }
 
     }

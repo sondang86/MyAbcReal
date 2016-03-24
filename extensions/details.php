@@ -1,5 +1,6 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
+global $db;
 if(!isset($_REQUEST["id"]))
 {
 	die("The job ID isn't set");
@@ -7,9 +8,8 @@ if(!isset($_REQUEST["id"]))
 $job=$_REQUEST["id"];
 $website->ms_i($job);
 
-
-$arrPosting = $database->DataArray("jobs","id=".$job);
-$arrEmployer = $database->DataArray("employers","username='".$arrPosting["employer"]."' ");
+$posting = $db->where('id', $job)->get('jobs')[0];
+$employer = $db->where('username', $posting['employer'])->get('employers')[0];
 
 
 $jobseeker_username="";
@@ -22,7 +22,7 @@ if(isset($_COOKIE["AuthJ"]))
 $database->SQLInsert("jobs_stat", array("date","posting_id","ip","user"), array(time(), $job, $_SERVER["REMOTE_ADDR"],$jobseeker_username));
 
 
-$strLink = "http://".$DOMAIN_NAME."/".$website->job_link($arrPosting["id"],$arrPosting["title"]);
+$strLink = "http://".$DOMAIN_NAME."/".$website->job_link($posting["id"],$posting["title"]);
 	
 ?>
 <div class="page-wrap">
@@ -65,21 +65,21 @@ $strLink = "http://".$DOMAIN_NAME."/".$website->job_link($arrPosting["id"],$arrP
 			
 	?>
 	
-	<a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&title=<?php echo urlencode(strip_tags(stripslashes(strip_tags($arrPosting["title"]))));?>&url=<?php echo $strLink;?>" target="_blank"><img src="images/linkedin.gif" width="18" height="18" class="pull-right" alt=""/></a>
+	<a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&title=<?php echo urlencode(strip_tags(stripslashes(strip_tags($posting["title"]))));?>&url=<?php echo $strLink;?>" target="_blank"><img src="images/linkedin.gif" width="18" height="18" class="pull-right" alt=""/></a>
 	<a rel="nofollow" href="http://plus.google.com/share?url=<?php echo $strLink;?>" target="_blank"><img src="images/googleplus.gif" width="18" height="18" class="pull-right r-margin-7" alt=""/></a>
-	<a rel="nofollow" href="http://www.twitter.com/intent/tweet?text=<?php echo urlencode(strip_tags(stripslashes(strip_tags($arrPosting["title"]))));?>&url=<?php echo $strLink;?>" target="_blank"><img src="images/twitter.gif" width="18" height="18" class="pull-right  r-margin-7" alt=""/></a>
+	<a rel="nofollow" href="http://www.twitter.com/intent/tweet?text=<?php echo urlencode(strip_tags(stripslashes(strip_tags($posting["title"]))));?>&url=<?php echo $strLink;?>" target="_blank"><img src="images/twitter.gif" width="18" height="18" class="pull-right  r-margin-7" alt=""/></a>
 	<a rel="nofollow" href="http://www.facebook.com/sharer.php?u=<?php echo $strLink;?>" target="_blank"><img src="images/facebook.gif" width="18" height="18" alt="" class="pull-right r-margin-7"/></a>
 	 
 	 
-	<h2 class="no-margin"><?php echo stripslashes(strip_tags($arrPosting["title"]));?></h2>
+	<h2 class="no-margin"><?php echo stripslashes(strip_tags($posting["title"]));?></h2>
 
 	<div class="job-details-info">
 		<div class="row">
 			<div class="col-md-6">
 				<?php 
-				if(trim($arrPosting["region"])!="")
+				if(trim($posting["region"])!="")
 				{
-					$str_job_location=$website->show_full_location(strip_tags($arrPosting["region"]));
+					$str_job_location=$website->show_full_location(strip_tags($posting["region"]));
 					
 					if($str_job_location!="")
 					{
@@ -88,9 +88,9 @@ $strLink = "http://".$DOMAIN_NAME."/".$website->job_link($arrPosting["id"],$arrP
 					}
 				}
 				
-				echo "<strong>".date($website->GetParam("DATE_HOUR_FORMAT"),$arrPosting["date"])."</strong>";
+				echo "<strong>".date($website->GetParam("DATE_HOUR_FORMAT"),$posting["date"])."</strong>";
 				echo "<br/>";
-				echo "<strong>".$arrPosting["applications"]."</strong> ".$M_APPLICATIONS;
+				echo "<strong>".$posting["applications"]."</strong> ".$M_APPLICATIONS;
 				?>
 				
 			</div>
@@ -101,24 +101,24 @@ $strLink = "http://".$DOMAIN_NAME."/".$website->job_link($arrPosting["id"],$arrP
 						<?php echo $M_JOB_TYPE;?>:
 					</div>
 					<div class="col-md-8">
-						<strong><?php echo $website->job_type($arrPosting["job_type"]);?></strong>
+						<strong><?php echo $website->job_type($posting["job_type"]);?></strong>
 					</div>
 					<div class="clearfix"></div>
 					<div class="col-md-4">
 						<?php echo $M_SALARY;?>:
 					</div>
 					<div class="col-md-8">
-						<strong><?php echo ((trim($arrPosting["salary"])!=""&&$arrPosting["salary"]!="0" )?$arrPosting["salary"]:"[n/a]");?></strong>
+						<strong><?php echo ((trim($posting["salary"])!=""&&$posting["salary"]!="0" )?$posting["salary"]:"[n/a]");?></strong>
 					</div>
 					<?php
-					if(trim($arrPosting["date_available"])!="")
+					if(trim($posting["date_available"])!="")
 					{
 					?>
 						<div class="col-md-4">
 							<?php echo $M_DATE_AVAILABLE;?>:
 						</div>
 						<div class="col-md-8">
-							<strong><?php echo strip_tags(stripslashes(trim($arrPosting["date_available"])!=""?$arrPosting["date_available"]:"[n/a]"));?></strong>
+							<strong><?php echo strip_tags(stripslashes(trim($posting["date_available"])!=""?$posting["date_available"]:"[n/a]"));?></strong>
 						</div>
 					<?php
 					}
@@ -134,19 +134,19 @@ $strLink = "http://".$DOMAIN_NAME."/".$website->job_link($arrPosting["id"],$arrP
 		<div class="col-md-8">
 		<?php
 			
-			$arrPosting["message"]=str_replace("&lt;!--","<!--",$arrPosting["message"]);
-			$arrPosting["message"]=str_replace("--&gt;","-->",$arrPosting["message"]);
+			$posting["message"]=str_replace("&lt;!--","<!--",$posting["message"]);
+			$posting["message"]=str_replace("--&gt;","-->",$posting["message"]);
 			echo "<br/>";	
-			echo stripslashes(strip_tags($arrPosting["message"],'<a><br><b><li><ul><span><div><p><font><strong><i><u><table><tr><td>')); 
+			echo stripslashes(strip_tags($posting["message"],'<a><br><b><li><ul><span><div><p><font><strong><i><u><table><tr><td>')); 
 
 
-			if(trim($arrPosting["more_fields"]) != "")
+			if(trim($posting["more_fields"]) != "")
 			{
 				$arrJobFields = array();
 
-				if(is_array(unserialize($arrPosting["more_fields"])))
+				if(is_array(unserialize($posting["more_fields"])))
 				{
-					$arrJobFields = unserialize($arrPosting["more_fields"]);
+					$arrJobFields = unserialize($posting["more_fields"]);
 				}
 
 				$bFirst = true;
@@ -164,22 +164,22 @@ $strLink = "http://".$DOMAIN_NAME."/".$website->job_link($arrPosting["id"],$arrP
 				?>
 		</div>
 		<div class="col-md-4 text-center">
-			<a href="<?php echo $website->company_link($arrEmployer["id"],$arrEmployer["company"]);?>">
+			<a href="<?php echo $website->company_link($employer["id"],$employer["company"]);?>">
 			<?php	
-			if($arrEmployer["logo"]!=""&&file_exists('thumbnails/'.$arrEmployer["logo"].'.jpg'))
+			if($employer["logo"]!=""&&file_exists('thumbnails/'.$employer["logo"].'.jpg'))
 			{
-				echo '<img class="logo-border img-responsive" src="thumbnails/'.$arrEmployer["logo"].'.jpg" alt="'.$arrEmployer["company"].'"/>';
+				echo '<img class="logo-border img-responsive" src="thumbnails/'.$employer["logo"].'.jpg" alt="'.$employer["company"].'"/>';
 			}
 			else
 			{
-				echo '<div class="company-wrap">'.$arrEmployer["company"].'</div>';
+				echo '<div class="company-wrap">'.$employer["company"].'</div>';
 			}
 			?>
 			</a>
 			<div class="clearfix underline-link"></div>
-			<a href="<?php echo $website->company_jobs_link($arrEmployer["id"],$arrEmployer["company"]);?>" class="sub-text underline-link"><?php echo $M_MORE_JOBS_FROM;?> <?php echo stripslashes($arrEmployer["company"]);?></a>
+			<a href="<?php echo $website->company_jobs_link($employer["id"],$employer["company"]);?>" class="sub-text underline-link"><?php echo $M_MORE_JOBS_FROM;?> <?php echo stripslashes($employer["company"]);?></a>
 			<br/>
-			<a href="<?php echo $website->company_link($arrEmployer["id"],$arrEmployer["company"]);?>" class="sub-text underline-link"><?php echo $M_COMPANY_DETAILS;?></a>
+			<a href="<?php echo $website->company_link($employer["id"],$employer["company"]);?>" class="sub-text underline-link"><?php echo $M_COMPANY_DETAILS;?></a>
 		</div>
 	</div>
 	
@@ -191,7 +191,7 @@ $strLink = "http://".$DOMAIN_NAME."/".$website->job_link($arrPosting["id"],$arrP
 		<div class="pull-right">
 			<form action="index.php" method="get" >
 				<input type="hidden" name="mod" value="apply_job"/>
-				<input type="hidden" name="posting_id" value="<?php echo $arrPosting["id"];?>"/>
+				<input type="hidden" name="posting_id" value="<?php echo $posting["id"];?>"/>
 				<?php
 				if($MULTI_LANGUAGE_SITE)
 				{
@@ -257,10 +257,10 @@ $strLink = "http://".$DOMAIN_NAME."/".$website->job_link($arrPosting["id"],$arrP
 	if(isset($_REQUEST["is_saved_page"]))
 	{
 		
-		echo '<a class="small-link gray-link" href="javascript:DeleteSavedListing('.$arrPosting["id"].')" id="save_'.$arrPosting["id"].'">'.$M_DELETE.'</a>';
+		echo '<a class="small-link gray-link" href="javascript:DeleteSavedListing('.$posting["id"].')" id="save_'.$posting["id"].'">'.$M_DELETE.'</a>';
 	}
 	else
-	if(isset($_COOKIE["saved_listings"]) && strpos($_COOKIE["saved_listings"], $arrPosting["id"].",") !== false)
+	if(isset($_COOKIE["saved_listings"]) && strpos($_COOKIE["saved_listings"], $posting["id"].",") !== false)
 	{
 
 		echo '<span class="small-link">'.$M_SAVED.'</span>';
@@ -269,7 +269,7 @@ $strLink = "http://".$DOMAIN_NAME."/".$website->job_link($arrPosting["id"],$arrP
 	else
 	{
 	
-		echo '<a class="small-link gray-link" href="javascript:SaveListing('.$arrPosting["id"].')" id="save_'.$arrPosting["id"].'">'.$M_SAVE_JOB.'</a>';
+		echo '<a class="small-link gray-link" href="javascript:SaveListing('.$posting["id"].')" id="save_'.$posting["id"].'">'.$M_SAVE_JOB.'</a>';
 
 	}
 	?>
@@ -282,7 +282,7 @@ $strLink = "http://".$DOMAIN_NAME."/".$website->job_link($arrPosting["id"],$arrP
 			<form action="index.php"  style="margin-top:0px;margin-bottom:0px" method="post" onsubmit="return ValidateSendForm(this)">
 				<input type="hidden" name="mod" value="details"/>
 				<input type="hidden" name="ProceedSendFriend" value="1"/>
-				<input type="hidden" name="id" value="<?php echo $arrPosting["id"];?>"/>
+				<input type="hidden" name="id" value="<?php echo $posting["id"];?>"/>
 				<?php
 				if($MULTI_LANGUAGE_SITE)
 				{
@@ -337,9 +337,9 @@ $strLink = "http://".$DOMAIN_NAME."/".$website->job_link($arrPosting["id"],$arrP
 </div>
 
 <?php
-$website->Title(strip_tags(stripslashes($arrPosting["title"])));
-$website->MetaDescription(text_words(strip_tags(stripslashes($arrPosting["message"])),30));
-$website->MetaKeywords(text_words(strip_tags(stripslashes($arrPosting["message"])),20));
+$website->Title(strip_tags(stripslashes($posting["title"])));
+$website->MetaDescription(text_words(strip_tags(stripslashes($posting["message"])),30));
+$website->MetaKeywords(text_words(strip_tags(stripslashes($posting["message"])),20));
 
 
 if($website->multi_language)
@@ -354,7 +354,7 @@ if($website->multi_language)
 			include("include/texts_".$language.".php");
 		}
 		
-		$str_job_lang_link=$website->job_link($arrPosting["id"],$arrPosting["title"],$language,$M_SEO_JOB);
+		$str_job_lang_link=$website->job_link($posting["id"],$posting["title"],$language,$M_SEO_JOB);
 		
 		$website->TemplateHTML = 
 		str_replace

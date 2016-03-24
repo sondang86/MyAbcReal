@@ -18,9 +18,8 @@ else
 }
 $website->ms_i($posting_id);
 $arrPosting = $database->DataArray("jobs","id=".$posting_id);
-//echo "<pre>";
-//print_r($arrPosting);
-//echo "</pre>";
+$job_info = $db->where('id', $posting_id)->get('jobs')[0];
+
 
 ?>
 <div class="page-wrap">
@@ -154,7 +153,7 @@ if($show_page_form && isset($_COOKIE["AuthJ"]))
         
         <div class="page-header">
 				 <?php
-					echo "<h3 class=\"no-margin\">".$APPLY_JOB_OFFER." \"<strong>".strip_tags(stripslashes($arrPosting["title"]))."</strong>\"</h3>";
+					echo "<h3 class=\"no-margin\">".$APPLY_JOB_OFFER." \"<strong>".strip_tags(stripslashes($job_info["title"]))."</strong>\"</h3>";
 				 ?>
         </div>
         
@@ -357,7 +356,7 @@ elseif($show_page_form)
                                 </div>
                                 
 <?php
-$website->Title($APPLY_JOB_OFFER." ".strip_tags(stripslashes($arrPosting["title"])));
+$website->Title($APPLY_JOB_OFFER." ".strip_tags(stripslashes($job_info["title"])));
 $website->MetaDescription("");
 $website->MetaKeywords("");
 ?>

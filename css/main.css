@@ -2344,6 +2344,21 @@ div.upload input:hover {
         width: 90% !important;
     }
     
+    .main-category {
+        line-height: 25px;
+        margin-bottom: 15px;
+    }
+    
+    .main-category strong{
+        display: block;
+        margin: 5px 0;
+    }
+    
+    .main-category strong a {
+        color: #0066cc;
+        margin-right: 5px;
+    }
+    
 }
  
 /* D?nh cho m?y t?nh b?ng chi?u ngang */

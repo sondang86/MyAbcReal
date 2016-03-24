@@ -10,8 +10,21 @@ define("IN_SCRIPT","1");
 session_start();
 require("config.php");
 if(!$DEBUG_MODE) error_reporting(0);
-require("include/SiteManager.class.php");
-include("include/Database.class.php");
+
+function __autoload($classname) {
+    $filename = "include/". $classname .".class.php";
+    include($filename);
+}
+    
+$db = new MysqliDb (Array (
+        'host' => $DBHost,
+        'username' => $DBUser, 
+        'password' => $DBPass,
+        'db'=> $DBName,
+        'port' => 3306,
+        'prefix' => $DBprefix,
+        'charset' => 'utf8'
+    ));
 
 /// Initialization of the site manager and database objects
 $database = new Database();
@@ -22,6 +35,17 @@ $database->SelectDB($DBName);
 $website = new SiteManager();
 $website->SetDatabase($database);
 
+$commonQueries = new CommonsQueries($db);
+
+//Common tables
+$categories = $db->get ('categories');
+
+$db->join('categories', 'jobsportal_categories_sub.main_category_id = jobsportal_categories.category_id', 'LEFT');
+$categories_subs = $db->get('categories_sub');
+$job_types = $db->get ('job_types');
+$locations = $db->get ('locations');
+$salaries = $db->get ('salary');
+$all_jobs = $db->get('jobs');
 
 
 /// Loading the website default settings

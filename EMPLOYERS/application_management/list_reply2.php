@@ -37,7 +37,7 @@ if(isset($_POST['submit'])){
     $db->where ('id', $id);
     $db->where('posting_id', $posting_id);    
     if ($db->update ('apply', $dataInsert)){ //success redirect to rejected page
-        $website->redirect('index.php?category=application_management&action=rejected'); 
+        $website->redirect('index.php?category=application_management&action=list'); 
     } else {
         echo 'update failed: ' . $db->getLastError();die;
     }
