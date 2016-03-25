@@ -2217,6 +2217,10 @@ div.upload input:hover {
         text-align: right;
     }
     
+    .aside-content img{
+        float: left;
+    }
+    
 }
  
 /* D?nh cho m?y t?nh b?ng chi?u d?c */

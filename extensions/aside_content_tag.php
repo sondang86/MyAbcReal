@@ -1,6 +1,6 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
-global $db;
+global $db, $website;
 if
 (
 	(isset($_REQUEST["page"])&&($_REQUEST["page"]=="en_Courses"||$_REQUEST["page"]=="es_Cursos"))
@@ -131,33 +131,36 @@ else
             </div>
             <hr class="top-bottom-margin"/>
             <div class="row">
-                <article class="aside-content">
-                <?php
-                    foreach($SearchTable as $value):
-
-                        $headline = stripslashes($value["title"]);
-                        $strLink = $this->job_link($value["id"],$value["title"]);
-                        
-                        //Image
-                        if($value["logo"]!="")
-                        {	
-                            if(file_exists("thumbnails/".$value["logo"].".jpg"))
-                            {
-                                echo "<a href=\"".$strLink."\"><img align=\"left\" src=\"thumbnails/".$value["logo"].".jpg\" width=\"50\" alt=\"".stripslashes(strip_tags($value["company"]))."\" class=\"img-shadow img-right-margin\"/></a>";
-                            }
-                        }
-                ?>
-                    <!--Content-->
-                    <h5 class="no-margin"><a href="<?php echo $strLink;?>" class="aside-link">
-                            <?php echo stripslashes(strip_tags($headline));?>
-                    </a></h5>
-                    <span class="sub-text">
-                    <?php echo $this->text_words(stripslashes(strip_tags($value["message"])),10);?>
-                    </span>
-
-                    <hr class="top-bottom-margin"/>			
-
-                    <?php endforeach;?>
+                <article class="col-md-12">
+                        <?php
+                            foreach($SearchTable as $value):
+                                $headline = stripslashes($value["title"]);
+                                $strLink = $this->job_link($value["id"],$value["title"]);
+                        ?>
+                        <div class="row">
+                            <div class="col-md-12 aside-content">
+                                <?php                                
+                                    //Image
+                                    if($value["logo"]!="")
+                                    {	
+                                        if(file_exists("thumbnails/".$value["logo"].".jpg"))
+                                        {
+                                            echo "<a href=\"".$strLink."\"><img src=\"thumbnails/".$value["logo"].".jpg\" width=\"50\" alt=\"".stripslashes(strip_tags($value["company"]))."\" title='". $value["title"] . "' class=\"img-shadow img-right-margin\"/></a>";
+                                        }
+                                    }
+                                ?>
+                                <!--Content-->
+                                <h5 class="no-margin"><a href="<?php echo $strLink;?>" class="aside-link" title="<?php echo $value['title']?>">
+                                        <?php echo $website->limitCharacters(stripslashes(strip_tags($headline)), 50);?>
+                                </a></h5>
+                                <span class="sub-text">
+                                <?php echo $this->text_words(stripslashes(strip_tags($value["message"])),10);?>
+                                </span>
+                                <hr class="top-bottom-margin"/>
+                            </div>    
+                        </div>
+                        <?php endforeach;?>
+                                
                 </article>
             </div>
 		<div class="text-center"><a class="underline-link" href="<?php echo $this->mod_link((isset($is_featured)?"featured":"latest")."-jobs");?>"><?php echo $M_SEE_ALL;?></a></div>
