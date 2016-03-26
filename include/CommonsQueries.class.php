@@ -75,5 +75,19 @@
             $stats = ((object)$this->_db->getOne ($table, "count(*) as count"));
             return $stats;
         }
+        
+        /**
+        *  Find jobs by id
+        *  @param var $table table name
+        *  @param var $column specific column in table
+        *  @param var $id id or name of the selected column
+        */
+        public function job_by_id($table="jobs",$column="employer", $id="1") {
+            if (!empty($column)){
+                $this->_db->where ($column, $id);
+            }
+            $data = ((object)$this->_db->get($table));
+            return $data;
+        }
 
     }

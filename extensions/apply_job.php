@@ -110,13 +110,8 @@ if(get_param("ProceedApply_Update") != "")
                 }
             }	
             echo "<h3>".$CONGRATULATIONS_APPLIED_SUCCESS."</h3>";
-
     }
-
-	
-	
 }
-
 //Showing form submittion
 if($show_page_form && isset($_COOKIE["AuthJ"]))
 {
@@ -346,14 +341,16 @@ if($show_page_form && isset($_COOKIE["AuthJ"]))
     
 	<?php
     }	
+} else {
+    echo "you must be jobseeker to apply this job";
 }
 
-elseif($show_page_form) 
-{
-}
+//elseif($show_page_form) 
+//{
+//}
 ?>
                                 
-                                </div>
+</div>
                                 
 <?php
 $website->Title($APPLY_JOB_OFFER." ".strip_tags(stripslashes($job_info["title"])));

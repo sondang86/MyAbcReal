@@ -3,9 +3,7 @@ if(!defined('IN_SCRIPT')) die("");
 $indeed_query = "";
 $indeed_location = "";
 $has_results=false;
-?>
-<br/>
-<?php
+
 if(isset($_POST["category"])&&($_POST["category"]=="-1"||$_POST["category"]=="")){if(isset($_POST["field_category"])&&$_POST["field_category"]!="") $_POST["category"]=$_POST["field_category"];} 
 if(isset($_POST["location"])&&($_POST["location"]=="-1"||$_POST["location"]=="")){if(isset($_POST["field_location"])&&$_POST["field_location"]!="") $_POST["location"]=$_POST["field_location"];} 
 

@@ -1935,6 +1935,10 @@ class MysqliDb
     /**
      * get data in specific table
      * 
+     * @param var $table table to get data
+     * @param var $field column to get data
+     * @param string $query additional query
+     * 
      */    
     public function get_data($table="categories", $field="", $additional_query="") {
             $data_list = $this->DataTable($table,$additional_query);

@@ -73,49 +73,49 @@ $jobs_by_employer = $db->get("jobs");
     </div>  
     <div class="col-md-9 col-md-pull-3">
         <?php foreach ($jobs_by_employer as $job):?>
-        <div class="row top-bottom-margin">
-            <div class="col-md-2"><h3>Tiêu đề</h3></div>
+        <section class="row top-bottom-margin">
+            <label class="col-md-2">Tiêu đề</label>
             <div class="col-md-10"><?php echo $job['title']?></div>
-        </div>
+        </section>
 
-        <div class="row top-bottom-margin">
-            <div class="col-md-2"><h4>Chi tiết</h4></div>
-            <div class="col-md-10"><?php echo $job['message']?></div>
-        </div>
+        <section class="row top-bottom-margin">
+            <label class="col-md-2">Chi tiết</label>
+            <article class="col-md-10"><?php echo nl2br($job['message'])?></article>
+        </section>
             
-        <div class="row top-bottom-margin">
-            <div class="col-md-2"><h5>Ngành</h5></div>
-            <div class="col-md-10"><?php echo $commonQueries->get_data('categories', 'category_id', $job['job_category'])[0]['category_name_vi']?></div>
-        </div>
+        <section class="row top-bottom-margin">
+            <label class="col-md-2">Ngành</label>
+            <article class="col-md-10"><?php echo $commonQueries->get_data('categories', 'category_id', $job['job_category'])[0]['category_name_vi']?></article>
+        </section>
             
-        <div class="row top-bottom-margin">
-            <div class="col-md-2">Loại công việc:</div>
-            <div class="col-md-10"><?php echo $commonQueries->get_data('job_types', 'id', $job['job_type'])[0]['job_name'];?></div>
-        </div>
+        <section class="row top-bottom-margin">
+            <label class="col-md-2">Loại công việc:</label>
+            <article class="col-md-10"><?php echo $commonQueries->get_data('job_types', 'id', $job['job_type'])[0]['job_name'];?></article>
+        </section>
             
-        <div class="row top-bottom-margin">
-            <div class="col-md-2">Địa điểm:</div>
-            <div class="col-md-10"><?php echo $commonQueries->get_data('locations', 'id', $job['region'])[0]['City'];?></div>
-        </div>
+        <section class="row top-bottom-margin">
+            <label class="col-md-2">Địa điểm:</label>
+            <article class="col-md-10"><?php echo $commonQueries->get_data('locations', 'id', $job['region'])[0]['City'];?></article>
+        </section>
             
-        <div class="row top-bottom-margin">
-            <div class="col-md-2">Mức lương:</div>
-            <div class="col-md-10"><?php echo $commonQueries->get_data('salary', 'id', $job['salary'])[0]['salary_range'];?></div>
-        </div>
+        <section class="row top-bottom-margin">
+            <label class="col-md-2">Mức lương:</label>
+            <article class="col-md-10"><?php echo $commonQueries->get_data('salary', 'id', $job['salary'])[0]['salary_range'];?></article>
+        </section>
             
-        <div class="row top-bottom-margin">
-            <div class="col-md-2">Ngày bắt đầu:</div>
-            <div class="col-md-10"><?php echo date('Y:m:d',$job['date'])?></div>
-        </div>
+        <section class="row top-bottom-margin">
+            <label class="col-md-2">Ngày bắt đầu:</label>
+            <article class="col-md-10"><?php echo date('Y:m:d',$job['date'])?></article>
+        </section>
             
-        <div class="row top-bottom-margin">
-            <div class="col-md-2">Đang hoạt động:</div>
-            <div class="col-md-10"><?php echo $job['status']?></div>
-        </div>
+        <section class="row top-bottom-margin">
+            <label class="col-md-2">Đang hoạt động:</label>
+            <article class="col-md-10"><?php echo $job['status']?></article>
+        </section>
         <?php endforeach;?>
     </div>
         
 </div>
 <div class="row">
-    <div class="col-md-12"><a href="index.php?category=jobs&action=my"><?php echo $GO_BACK_TO." <strong>\"".$MY_JOB_ADS."\"</strong>";?></a></div>
+    <div class="col-md-12"><button><a href="index.php?category=jobs&action=my"><?php echo $GO_BACK_TO." <strong>\"".$MY_JOB_ADS."\"</strong>";?></a></button></div>
 </div>

@@ -22,7 +22,7 @@ global $db,$categories, $categories_subs,$commonQueries, $locations, $companies;
             <?php foreach ($categories as $catkey => $category) :?>
             <span class="col-md-4 main-category">
                 <!--MAIN CATEGORIES-->
-                <p><a href="index.php?mod=search&category=<?php echo $category['category_id']?>&lang=vn"><?php echo $category['category_name_vi']?></a>(<?php echo $commonQueries->countRecords("job_category", $category['category_id'], "jobs")->count?>)</p>
+                <p><a href="index.php?mod=category&id=<?php echo $category['category_id']?>&lang=vn"><?php echo $category['category_name_vi']?></a>(<?php echo $commonQueries->countRecords("job_category", $category['category_id'], "jobs")->count?>)</p>
 
                 <!--LIST SUB CATEGORIES-->
                 <?php foreach ($categories_subs as $subkey => $category_subs) :
@@ -41,7 +41,7 @@ global $db,$categories, $categories_subs,$commonQueries, $locations, $companies;
         <div class="row same_height">
             <?php foreach ($locations as $location) :?>
             <span class="col-md-3 main-category">
-                <a href="index.php?mod=search&location=<?php echo $location['id']?>&lang=vn" class="main_category_link"><?php echo $location['City']?></a>
+                <a href="index.php?mod=location&id=<?php echo $location['id']?>&lang=vn" class="main_category_link"><?php echo $location['City']?></a>
             </span>
             <?php endforeach;?>
         </div>
@@ -52,7 +52,7 @@ global $db,$categories, $categories_subs,$commonQueries, $locations, $companies;
         <div class="row same_height">
             <?php foreach ($companies as $company) :?>
             <span class="col-md-3 main-category">
-                <a href="index.php?mod=search&location=<?php echo $company['id']?>&lang=vn"><?php echo $company['company']?></a>
+                <a href="index.php?mod=company&id=<?php echo $company['id']?>&lang=vn"><?php echo $company['company']?></a>
             </span>
             <?php endforeach;?>
         </div>

@@ -1073,7 +1073,7 @@ class SiteManager
 				break;
                                     
 			case "FEATURED_ADS_EXPIRE":
-				return 30;
+				return 10;
 				//return $this->params[97];
 				break;	
                                     
@@ -2214,7 +2214,12 @@ class SiteManager
             $string = preg_replace("/[\s_]/", "-", $string);
             return $string;
         }
-            
+         
+        /**
+        * Limit the characters output
+        * @param   var $string string need to limits
+        * @param   var $limit integer limit number
+        */
         function limitCharacters($string, $limit=50){
             $data = substr($string,0,$limit).'...';
             return $data;

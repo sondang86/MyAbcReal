@@ -16,6 +16,7 @@ if($database->SQLCount("jobs","WHERE employer='".$AuthUserName."' AND id=".$id."
 global $db, $commonQueries,$categories, $job_types, $locations, $salaries;
 $db->where ("id", "$id");
 $jobs_by_employer = $db->get("jobs");
+//print_r($jobs_by_employer);
 ?>
 
 <?php //Edit data
@@ -25,12 +26,12 @@ $jobs_by_employer = $db->get("jobs");
             "employer" => "$AuthUserName",
             "job_category" => filter_input(INPUT_POST, 'post-category'),
             "job_type" => filter_input(INPUT_POST, 'post-jobtypes'),
-            "title" => $db->cleanData(filter_input(INPUT_POST, 'employer-post-title')), 
-            "message" => $db->cleanData(filter_input(INPUT_POST,'employer-post-details')),
+            "title" => filter_input(INPUT_POST, 'employer-post-title', FILTER_SANITIZE_STRING), 
+            "message" => filter_input(INPUT_POST,'employer-post-details', FILTER_SANITIZE_STRING),
             "region" => filter_input(INPUT_POST,'post-locations'),
             "salary" => filter_input(INPUT_POST,'post-salary'),
             "date" => strtotime(filter_input(INPUT_POST,'employer-start-date')),
-            "expires" => (strtotime(filter_input(INPUT_POST,'employer-start-date')) + 21*86400), //21 days limitation
+            "expires" => (strtotime(filter_input(INPUT_POST,'employer-start-date')) + 30*86400), //30 days limitation
             "status" => filter_input(INPUT_POST,'post-active'),
             "SEO_title" => $db->secure_input($website->seoURL($website->stripVN(filter_input(INPUT_POST,'employer-post-title'))))
          );

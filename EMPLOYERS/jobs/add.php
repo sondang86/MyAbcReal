@@ -80,13 +80,15 @@ elseif($website->GetParam("CHARGE_TYPE") == 2)
 
 <?php
     if(isset($_POST['submit'])){
+//        print_r($_POST['employer-post-details']);die;
         //Insert data to database
         $data = Array( 
             "employer" => "$AuthUserName",
             "job_category" => filter_input(INPUT_POST, 'post-category'),
             "job_type" => filter_input(INPUT_POST, 'post-jobtypes'),
-            "title" => $db->cleanData(filter_input(INPUT_POST, 'employer-post-title')), 
-            "message" => $db->cleanData(filter_input(INPUT_POST,'employer-post-details')),
+            "title" => filter_input(INPUT_POST, 'employer-post-title',FILTER_SANITIZE_STRING), 
+//            "message" => filter_input(INPUT_POST,'employer-post-details',FILTER_SANITIZE_STRING),
+            "message" => $_POST['employer-post-details'],
             "region" => filter_input(INPUT_POST,'post-locations'),
             "salary" => filter_input(INPUT_POST,'post-salary'),
             "date" => strtotime(filter_input(INPUT_POST,'employer-start-date')),
