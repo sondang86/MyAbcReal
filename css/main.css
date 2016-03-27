@@ -5,14 +5,20 @@ body {
     margin-bottom: 0;
 }
 
-a
-{
-    color:#40A535;
+a{
+    color:#428bca;
+    -o-transition:.5s;
+    -ms-transition:.5s;
+    -moz-transition:.5s;
+    -webkit-transition:.5s;
+    /* ...and now for the proper property */
+    transition:.5s;   
 }
 
 a:hover
 {
-    color:#000000;
+    color: #a8e12a;
+    text-decoration: none;
 }
 
 .slider-back-core
@@ -414,12 +420,37 @@ form#main ol li
     width:100%;
     padding-left:15px;
     padding-right:15px;
-    padding-top:10px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     -khtml-border-radius: 3px;
-    border-radius: 3px;
+    border-radius: 5px;
+    margin-bottom: 25px;
 }
+
+.gray-wrap header {
+    background: #494949;
+    color: #fff;
+    text-align: center;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+/*Browser jobs section*/
+.browser-jobs {
+    background-color: rgba(52, 56, 27, 0.23);
+}
+
+.browser-jobs li:first-child{
+    padding: 15px 14px 15px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+}
+
+.browser-jobs ul li {
+    display: inline-block;
+}
+
 
 .white-wrap
 {
@@ -641,8 +672,8 @@ form#main ol li
 }
 
 .search-form-wrap{
-    width:100%;
-    margin-top:2px;
+    /*width:100%;*/
+    margin-top:20px;
     background-color: rgba(0, 0, 0, 0.3);
     filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
@@ -878,6 +909,7 @@ form#main ol li
 .nav > li > a:hover,
 .nav > li > a:focus {
     text-decoration: underline;
+    color: #a8e12a;
 }
 
 
@@ -1948,7 +1980,7 @@ nav{
 
 .nav-tabs li
 {
-    font-size:1.1em;	
+    font-size:0.9em;	
 }
 
 .text-logo
@@ -2247,7 +2279,55 @@ div.upload input:hover {
     padding-left: 30px;
 }
 
+/*content tabs/navs style*/
 
+.nav-tabs li a {
+    background-color: #017BC6;
+    border-color: #fff;
+    border-top: 0px solid #a8e12a;
+    border-bottom-color: transparent;
+    color: #fff;
+}
+
+.tab-content {
+    background: #F1F6FA;
+    padding: 10px;
+    margin-bottom: 30px;
+}
+
+/*Stats section*/
+
+.stats header h4{
+    border-bottom: 2px solid #ccc;
+    font-weight: bold;
+    color: #45494C;
+    font-size: 30px;
+    margin-bottom: 25px !important;
+    padding: 0px 0px 10px 0px;
+}
+
+.counter p{
+    text-align: center;
+}
+
+.counter-value {
+    font-size: 26px;
+    font-family: "Times New Roman", Times, serif;
+    line-height: 25px;
+    font-weight: 600;
+    /* margin-bottom: 10px; */
+    color: #017BC6;
+}
+
+.OrangeButton {
+    width: 100%;
+    height: 55px;
+    background: #ff9900;
+    font-size: 15px;
+    cursor: pointer;
+    color: #fff;
+    border-radius: 5px;
+}
 
 /* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {
@@ -2328,6 +2408,22 @@ div.upload input:hover {
     
     .aside-content img{
         float: left;
+    }
+    
+    .quick-register {
+        margin-top: 25px;
+        min-height: 205px;
+        border-radius: 5px;
+        margin-top: 0px;
+        width: 100%;
+        background-color: rgba(232, 232, 232, 0.52);
+        padding: 5px;
+        margin: 10px 0;
+    }
+    
+    .quick-register p {
+        text-align: center;
+        margin-top: 15px;
     }
     
 }
@@ -2478,6 +2574,18 @@ div.upload input:hover {
         margin-right: 5px;
     }
     
+    /*Quick register area*/
+
+    .quick-register {
+        width: 95%;
+        min-height: 205px;
+        border-radius: 5px;
+        margin-top: 0px;
+        width: 100%;
+        background-color: rgba(232, 232, 232, 0.52);
+        padding: 5px;
+        margin: 10px 0;        
+    }    
 }
 
 /* D?nh cho m?y t?nh b?ng chi?u ngang */

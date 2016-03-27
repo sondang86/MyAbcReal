@@ -1,7 +1,7 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
 global $db;
-$website->Title("Việc làm");
+$website->Title("Việc làm theo công ty");
 $website->MetaDescription("abc");
 $website->MetaKeywords("def");
 if (isset($_GET['id'])){
@@ -20,7 +20,7 @@ if (isset($_GET['id'])){
     $db->join('categories', "jobsportal_jobs.job_category = jobsportal_categories.category_id", "LEFT");
     $db->join('salary', "jobsportal_jobs.salary = jobsportal_salary.salary_id", "LEFT");
     $db->join('locations', "jobsportal_jobs.region = jobsportal_locations.id", "LEFT");
-    $db->where('job_category', filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT));
+    $db->where('region', filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT));
     $jobs_list = $db->withTotalCount()->get('jobs', NULL, $jobsInfo_columns);
     if ($db->totalCount > 0){ //List found records
 ?>

@@ -8,6 +8,8 @@ $M_FACEBOOK_URL="Facebook URL";
 $M_NAME_EXPECTED_SALARY="Mức lương mong muốn";
 $WORK_LOCATION="Vị trí làm việc";
 $M_MINIMUM_SALARY="Mức lương tối thiểu";
+$M_JOBS_BY_FEATURED="Việc làm nổi bật";
+$M_JOBS_BY_LATEST="Việc làm mới nhất";
 //SonDang
 
 
@@ -97,7 +99,7 @@ $M_SAVE_JOB="Lưu việc làm này";
 $M_MORE_JOBS_FROM="Việc làm khác từ";
 $M_EMAIL_JOB="Gửi email";
 $M_NO_RESULTS="không có kết quả nào được tìm thấy";
-$M_FEATURED_COMPANIES="Logo các nhà tuyển dụng";
+$M_FEATURED_COMPANIES="Nhà tuyển dụng nổi bật";
 $M_COURSE_DETAILS="Chi tiết khóa học";
 $M_BROWSE_COURSES="Trình duyệt khóa học theo thể loại";
 $M_KEYWORD="Từ khoá";
@@ -134,7 +136,7 @@ $M_SAVE="Lưu lại";
 $M_SAVE_SEARCH="Lưu tìm kiếm này";
 $M_ADVERTISEMENTS="Quảng cáo";
 $M_QUALIFICATION="Năng lực";
-$M_BROWSE_CATEGORY="Việc làm theo lĩnh vực";
+$M_BROWSE_CATEGORY="Ngành nghề";
 $M_POSTED_BY="Gửi bởi";
 $M_SHORTLIST="Shortlist";
 $M_SUBJECT="Đối tượng";
@@ -247,8 +249,8 @@ $M_MANAGE_YOUR_VIDEO_RESUME="Quản lý video xin việc của bạn";
 $M_VIDEO_RESUME="Video giới thiệu";
 $M_SEARCH_FOR_JOBS="Tìm kiếm việc làm";
 $MODIFY_CREDITS_PURCHASE="Sửa đổi thứ tự các khoản tín dụng mua hàng của bạn";
-$M_JOBS_BY_COMPANY="Việc làm theo công ty";
-$M_JOBS_BY_LOCATION="Việc làm theo Địa điểm";
+$M_JOBS_BY_COMPANY="Công ty";
+$M_JOBS_BY_LOCATION="Địa điểm";
 $M_BANK_WIRE="Ngân hàng chuyển khoản";
 $M_CHEQUE="Kiểm tra";
 $M_ACCOUNT_PAYPAL_NOT_ACTIVE="Tài khoản của bạn sẽ được kích hoạt ngay lập tức khi bạn thực hiện thanh toán PayPal của bạn.";

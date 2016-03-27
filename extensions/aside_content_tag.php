@@ -1,11 +1,32 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
-global $db, $website;
-if
-(
-	(isset($_REQUEST["page"])&&($_REQUEST["page"]=="en_Courses"||$_REQUEST["page"]=="es_Cursos"))
-	||
-	(isset($_REQUEST["mod"])&&$_REQUEST["mod"]=="courses")
+global $db, $website;?>
+
+<!--Job by attribute-->
+<div class="gray-wrap">
+    <header class="row top-bottom-margin">
+        <h4 class="aside-header"><i class="fa fa-tags"></i> Việc làm theo tính chất</h4>
+    </header>
+    <section class="row">
+        <article class="col-md-12">
+            <ul>
+                <li><a href="#">Việc làm lương cao</a></li>
+                <li><a href="#">Việc làm IT</a></li>
+                <li><a href="#">Việc làm phổ thông</a></li>
+                <li><a href="#">Việc làm bán thời gian</a></li>
+                <li><a href="#">Việc làm thêm, việc làm cho sinh viên</a></li>
+                <li><a href="#">Việc làm freelance</a></li>
+                <li><a href="#">Việc làm thực tập</a></li>
+            </ul>
+        </article>
+    </section>
+</div>
+
+
+<?php if(
+    (isset($_REQUEST["page"])&&($_REQUEST["page"]=="en_Courses"||$_REQUEST["page"]=="es_Cursos"))
+    ||
+    (isset($_REQUEST["mod"])&&$_REQUEST["mod"]=="courses")
 )
 {
 //featured courses
@@ -31,13 +52,15 @@ $SearchTable = $db->withTotalCount()->rawQuery
             LIMIT 0,".$this->GetParam("NUMBER_OF_FEATURED_LISTINGS")."
 	");
 
-	if($db->totalCount > 0)
-	{
-	?>
-	<div class="gray-wrap">
-            <div class="row">
-		<h4 class="aside-header">
-		
+        
+?>
+
+<?php 	if($db->totalCount > 0)	{ ?>
+
+<div class="gray-wrap">
+    <header class="row">
+        <h4 class="aside-header"><i class="fa fa-newspaper-o"></i> 
+            
 			<?php 
 			if(isset($_REQUEST["mod"])&&$_REQUEST["mod"]=="courses")
 			{
@@ -48,11 +71,11 @@ $SearchTable = $db->withTotalCount()->rawQuery
 				echo $M_FEATURED_COURSES;
 			}
 			?>
-			
-			
-		</h4>
-            </div>
-		<hr class="top-bottom-margin"/>
+            
+            
+        </h4>
+    </header>
+    <hr class="top-bottom-margin"/>
 	<?php
             foreach($SearchTable as $value)
             {
@@ -67,24 +90,23 @@ $SearchTable = $db->withTotalCount()->rawQuery
                         }
                     }
         ?>
-			
-			<h5 class="no-margin"><a href="<?php echo $strLink;?>" class="aside-link">
+    
+    <h5 class="no-margin"><a href="<?php echo $strLink;?>" class="aside-link">
 				<?php echo stripslashes(strip_tags($headline));?>
-			</a></h5>
-			<span class="sub-text">
+        </a></h5>
+    <span class="sub-text">
 			<?php echo $this->text_words(stripslashes(strip_tags($value["message"])),10);?>
-			</span>
-			
-			<hr class="top-bottom-margin"/>
-			
-			
+    </span>
+    
+    <hr class="top-bottom-margin"/>
+    
+    
 		<?php } ?>
-		
-		<br/>
-		</div>
+    
+    <br/>
+</div>
     <?php
 	}
-
 //end featured courses
 }
 else
@@ -120,25 +142,25 @@ else
 	if($db->totalCount > 0)
 	{
 	?>
-	<div class="gray-wrap">
-            <div class="row">
-		<h4 class="col-md-12 aside-header">
+<div class="gray-wrap">
+    <header class="row">
+        <h4 class="col-md-12 aside-header"><i class="fa fa-newspaper-o"></i> 
                     <?php
                         if(isset($is_featured)) { echo $FEATURED_JOBS;}
                         else { echo $M_LATEST_JOBS;}
                     ?>
-		</h4>
-            </div>
-            <hr class="top-bottom-margin"/>
-            <div class="row">
-                <article class="col-md-12">
+        </h4>
+    </header>
+    <hr class="top-bottom-margin"/>
+    <div class="row">
+        <article class="col-md-12">
                         <?php
                             foreach($SearchTable as $value):
                                 $headline = stripslashes($value["title"]);
                                 $strLink = $this->job_link($value["id"],$value["title"]);
                         ?>
-                        <div class="row">
-                            <div class="col-md-12 aside-content">
+            <div class="row">
+                <div class="col-md-12 aside-content">
                                 <?php                                
                                     //Image
                                     if($value["logo"]!="")
@@ -149,23 +171,23 @@ else
                                         }
                                     }
                                 ?>
-                                <!--Content-->
-                                <h5 class="no-margin"><a href="<?php echo $strLink;?>" class="aside-link" title="<?php echo $value['title']?>">
+                    <!--Content-->
+                    <h5 class="no-margin"><a href="<?php echo $strLink;?>" class="aside-link" title="<?php echo $value['title']?>">
                                         <?php echo $website->limitCharacters(stripslashes(strip_tags($headline)), 50);?>
-                                </a></h5>
-                                <span class="sub-text">
+                        </a></h5>
+                    <span class="sub-text">
                                 <?php echo $this->text_words(stripslashes(strip_tags($value["message"])),10);?>
-                                </span>
-                                <hr class="top-bottom-margin"/>
-                            </div>    
-                        </div>
-                        <?php endforeach;?>
-                                
-                </article>
+                    </span>
+                    <hr class="top-bottom-margin"/>
+                </div>    
             </div>
-		<div class="text-center"><a class="underline-link" href="<?php echo $this->mod_link((isset($is_featured)?"featured":"latest")."-jobs");?>"><?php echo $M_SEE_ALL;?></a></div>
-		<br/>
-		</div>
+                        <?php endforeach;?>
+            
+        </article>
+    </div>
+    <div class="text-center"><a class="underline-link" href="<?php echo $this->mod_link((isset($is_featured)?"featured":"latest")."-jobs");?>"><?php echo $M_SEE_ALL;?></a></div>
+    <br/>
+</div>
 		<?php
 	}
 }
