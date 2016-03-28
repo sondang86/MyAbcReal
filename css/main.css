@@ -2376,8 +2376,11 @@ div.upload input:hover {
 }
 
 .more-details {
-    padding: 10px 0 10px 25px;
-    
+    padding: 10px 0 10px 25px;    
+}
+
+.more {
+    height: 24px;
 }
 
 .more-details .other_details span{

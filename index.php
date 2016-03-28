@@ -49,19 +49,43 @@ $all_jobs = $db->get('jobs');
 $companies = $db->get('employers');
 
 //Get featured jobs list
-$featured_jobs = $db->withTotalCount()->rawQuery
-	("
-            SELECT 
-            ".$DBprefix."jobs.id,
-            ".$DBprefix."jobs.title,
-            ".$DBprefix."jobs.message,
-            ".$DBprefix."employers.company,
-            ".$DBprefix."employers.logo"
-            ." FROM ".$DBprefix."jobs,".$DBprefix."employers"
-            ." WHERE ".$DBprefix."jobs.employer =  ".$DBprefix."employers.username"
-            ." AND ".$DBprefix."jobs.active='YES' AND status=1 AND expires>".time()
-            ." AND featured=1 ORDER BY RAND() LIMIT 0, 10
-	");
+//$featured_jobs = $db->withTotalCount()->rawQuery
+//	("
+//            SELECT 
+//            ".$DBprefix."jobs.id,
+//            ".$DBprefix."jobs.title,
+//            ".$DBprefix."jobs.message,
+//            ".$DBprefix."employers.company,
+//            ".$DBprefix."employers.logo"
+//            ." FROM ".$DBprefix."jobs,".$DBprefix."employers"
+//            ." WHERE ".$DBprefix."jobs.employer =  ".$DBprefix."employers.username"
+//            ." AND ".$DBprefix."jobs.active='YES' AND status=1 AND expires>".time()
+//            ." AND featured=1 ORDER BY RAND() LIMIT 0, 10
+//	");
+
+$selected_columns = array(
+    $DBprefix."jobs.id as job_id",$DBprefix."jobs.job_category",$DBprefix."jobs.title",
+    $DBprefix."jobs.message",$DBprefix."employers.company",$DBprefix."employers.logo",
+    $DBprefix."categories.category_name_vi",$DBprefix."categories.category_name",
+    $DBprefix."locations.City",$DBprefix."locations.City_en",
+    $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",
+    $DBprefix."job_experience.name as experience_name",$DBprefix."job_experience.name_en as experience_name_en",
+    $DBprefix."salary.salary_range",$DBprefix."salary.salary_range_en"
+);
+
+$db->join("employers", $DBprefix."jobs.employer=".$DBprefix."employers.username", "LEFT");
+$db->join("categories", $DBprefix."jobs.job_category=".$DBprefix."categories.category_id", "LEFT");
+$db->join("locations", $DBprefix."jobs.region=".$DBprefix."locations.id", "LEFT");
+$db->join("job_types", $DBprefix."jobs.job_type=".$DBprefix."job_types.id", "LEFT");
+$db->join("job_experience", $DBprefix."jobs.experience=".$DBprefix."job_experience.experience_id", "LEFT");
+$db->join("salary", $DBprefix."jobs.salary=".$DBprefix."salary.salary_id", "LEFT");
+$db->where($DBprefix."jobs.active", "YES");
+$db->where($DBprefix."jobs.status", "1");
+$db->where($DBprefix."jobs.expires", time(), ">");
+$db->where($DBprefix."jobs.featured", "1");
+$db->orderBy('RAND()');
+$featured_jobs = $db->get("jobs", array(0,10),$selected_columns);
+
 
 /// Loading the website default settings
 $website->LoadSettings();

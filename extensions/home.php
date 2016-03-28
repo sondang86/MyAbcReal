@@ -22,7 +22,6 @@ global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,
 
 <ul class="nav nav-tabs">
     <li class="active"><a href="#by_featured"><i class="fa fa-eyedropper"></i> <?php echo $M_JOBS_BY_FEATURED;?></a></li>
-    <li><a href="#by_latest"><i class="fa fa-newspaper-o"></i> <?php echo $M_LATEST_JOBS;?></a></li>
 </ul>
 
 <!--CATEGORIES-->
@@ -34,26 +33,35 @@ global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,
             <div class="col-md-12 joblist">
                 <a href="#">
                     <section class="banner">
-                        <img alt="SKP Business Consulting LLP" src="http://img.naukimg.com/logo_images/v2/25773.gif">
+                        <img alt="SKP Business Consulting LLP" src="uploaded_images/<?php echo $featured_job['logo']?>.jpg" width="120" height="50">
                     </section>
                     <p title="<?php echo $featured_job['title']?>" class="desig"><?php echo $featured_job['title']?></p>
                     <p class="company">
                         <i class="fa fa-briefcase"></i>
                         <span><?php echo $featured_job['company']?></span>
                     </p>
-                    <form>
-                        <span class="exp"><i class="fa fa-comments-o"></i> 2-6 yrs</span>
+                    
+                    <form class="more">
+                        <span class="exp"><i class="fa fa-comments-o"></i> <?php echo $featured_job['experience_name']?></span>
                         <span class="loc">
                             <i class="fa fa-location-arrow"></i>
-                            <span>Mumbai, Chennai</span>            
+                            <span><?php echo $featured_job['City']?></span>            
                         </span> 
                     </form>
+                    
                     <form class="more"> 
-                        <i class="fa fa-diamond"></i><span> Keyskills:</span>
+                        <i class="fa fa-diamond"></i> <span> Chuyên ngành:</span>
                         <span class="desc"> 
-                            <p itemprop="skills" class="skill">Accounting, Taxation, FEMA, Assessment, Business Advisory...</p> 
+                            <p iclass="skill"><?php echo $featured_job['category_name_vi']?></p> 
                         </span>  
-                    </form>  
+                    </form>
+                    
+                    <form class="more"> 
+                        <i class="fa fa-money"></i> <span> Mức lương:</span>
+                        <span class="experience"> 
+                            <p><?php echo $featured_job['salary_range']?> $</p> 
+                        </span>  
+                    </form>
                 </a>
                 <span class="featuredjob" title="Featured Job">
                     <i class="fa fa-star"></i>
@@ -73,18 +81,7 @@ global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,
             </div>    
         </div>
         <?php endforeach;?>
-    </div>   
-    
-    <!--BY LATEST-->
-    <div id="by_latest" class="tab-pane fade padding-5">
-        <div class="row same_height">
-            <?php foreach ($locations as $location) :?>
-            <span class="col-md-3 main-category">
-                <a href="index.php?mod=location&id=<?php echo $location['id']?>&lang=vn" class="main_category_link"><?php echo $location['City']?></a>
-            </span>
-            <?php endforeach;?>
-        </div>
-    </div>     
+    </div>
 </section>
 <!--CATEGORIES--> 
 
