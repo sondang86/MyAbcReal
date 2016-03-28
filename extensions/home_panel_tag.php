@@ -8,6 +8,14 @@ if(
     || $_REQUEST["page"]=="vn_Trang chủ" ))
 )
 {
+    //Check if user is guests or logged in    
+    if(empty($_COOKIE["AuthJ"])){
+        $guest = TRUE;
+    } else {
+        $guest = FALSE;
+    }
+    
+    
     //Get featured jobs list
     $featured_jobs = $db->rawQuery
 	("
@@ -77,7 +85,7 @@ if(
             
         <!--SEARCH FORM-->
         <div class="row">
-            <main class="search-form-wrap col-md-9">
+            <main class="search-form-wrap col-md-<?php if ($guest==TRUE){echo "9";}else{echo "12";}?>">
                 <form name="home_form" id="home_form" action="index.php"  style="margin-top:0px;margin-bottom:0px;margin-left:0px;margin-right:0px" method="GET"> 
                     <input type="hidden" name="mod" value="search">
                     <input type="hidden" name="search" value="1">
@@ -134,16 +142,21 @@ if(
                 </form>
             </main>
             
-                                
             <!--QUICK REGISTER-->
+            <?php if($guest == TRUE): //SHOW THIS SECTION FOR GUESTS ONLY?>            
             <section class="col-md-3 form-group group-3">
                 <fieldset class="quick-register">
                     <a href="#">
                         <input type="button" class="OrangeButton" value="Đăng ký nhanh">
                     </a>
                     <p>Hoặc</p>
+                    <a href="#">
+                        <input type="button" class="BlueButton" value="Đăng nhập">
+                    </a>
                 </fieldset>
-            </section>
+            </section>            
+            <?php endif;?>
+            
         </div>
     </section>   
     <section class="browser-jobs">

@@ -6,8 +6,14 @@
 // http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-global $db,$categories, $categories_subs,$commonQueries, $locations, $companies;
+global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,$featured_jobs;
+//echo "<pre>";
+//print_r($featured_jobs);
+//echo "</pre>";
 ?>
+<style>    
+ 
+</style>
 <section class="row stats top-title">
     <header class="col-md-12">
         <h4>Việc làm nổi bật: </h4>
@@ -23,14 +29,52 @@ global $db,$categories, $categories_subs,$commonQueries, $locations, $companies;
 <section class="tab-content">        
     <!--BY FEATURED-->
     <div id="by_featured" class="tab-pane fade in active">
-        <div class="row same_height">
-            <?php foreach ($companies as $company) :?>
-            <span class="col-md-3 main-category">
-                <a href="index.php?mod=company&id=<?php echo $company['id']?>&lang=vn"><?php echo $company['company']?></a>
-            </span>
-            <?php endforeach;?>
+        <?php foreach ($featured_jobs as $featured_job) :?>
+        <div class="row joblistArea">
+            <div class="col-md-12 joblist">
+                <a href="#">
+                    <section class="banner">
+                        <img alt="SKP Business Consulting LLP" src="http://img.naukimg.com/logo_images/v2/25773.gif">
+                    </section>
+                    <p title="<?php echo $featured_job['title']?>" class="desig"><?php echo $featured_job['title']?></p>
+                    <p class="company">
+                        <i class="fa fa-briefcase"></i>
+                        <span><?php echo $featured_job['company']?></span>
+                    </p>
+                    <form>
+                        <span class="exp"><i class="fa fa-comments-o"></i> 2-6 yrs</span>
+                        <span class="loc">
+                            <i class="fa fa-location-arrow"></i>
+                            <span>Mumbai, Chennai</span>            
+                        </span> 
+                    </form>
+                    <form class="more"> 
+                        <i class="fa fa-diamond"></i><span> Keyskills:</span>
+                        <span class="desc"> 
+                            <p itemprop="skills" class="skill">Accounting, Taxation, FEMA, Assessment, Business Advisory...</p> 
+                        </span>  
+                    </form>  
+                </a>
+                <span class="featuredjob" title="Featured Job">
+                    <i class="fa fa-star"></i>
+                </span> 
+            </div>
+            <div class="col-md-12 more-details">           
+                <section class="col-md-6 col-xs-6 other_details">
+                    <span title=" Save this job " class="action savejob fav  favReady" jid="280316900272">
+                        <i class="fa fa-floppy-o"></i>
+                    </span> 
+                    <span class="salary"><em></em>  Not disclosed </span> 
+                </section>
+                <section class="col-md-6 col-xs-6 rec_details">
+                    <span> Posted  by   <a title="Job Posted by  HR " class="rec_name">  HR  </a>   , </span> 
+                    <span>Just Now</span>
+                </section>
+            </div>    
         </div>
-    </div>
+        <?php endforeach;?>
+    </div>   
+    
     <!--BY LATEST-->
     <div id="by_latest" class="tab-pane fade padding-5">
         <div class="row same_height">
@@ -142,4 +186,3 @@ global $db,$categories, $categories_subs,$commonQueries, $locations, $companies;
         });
     });
 </script>
-
