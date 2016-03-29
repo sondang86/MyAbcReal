@@ -33,7 +33,8 @@ $job_types = $db->get ('job_types');
 $locations = $db->get ('locations');
 $salaries = $db->get ('salary');
 $all_jobs = $db->get('jobs');   
-    
+$experience_list = $db->get('job_experience');
+
 $website = new SiteManager();
 $website->isAdminPanel = true;
 $database = new Database();
@@ -42,6 +43,30 @@ $database->SelectDB($DBName);
 $website->SetDatabase($database);
 include("security.php");
 $website->LoadSettings();
+
+//Get job by employer id
+if (isset($_REQUEST["id"])){    
+    $id=$_REQUEST["id"];
+    $website->ms_i($id);
+    $selected_columns = array(
+        $DBprefix."jobs.id as job_id",$DBprefix."jobs.employer",$DBprefix."jobs.job_category",
+        $DBprefix."jobs.experience",$DBprefix."jobs.region",$DBprefix."jobs.title",
+        $DBprefix."jobs.message",$DBprefix."jobs.active",$DBprefix."jobs.featured",
+        $DBprefix."jobs.job_type",$DBprefix."jobs.salary",$DBprefix."jobs.status",
+        $DBprefix."categories.category_name_vi",$DBprefix."categories.category_name",
+        $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",
+        $DBprefix."salary.salary_range",$DBprefix."salary.salary_range_en",
+    );
+
+    $db->join("categories", $DBprefix."jobs.job_category=".$DBprefix."categories.category_id", "LEFT");
+    $db->join("job_types", $DBprefix."jobs.job_type=".$DBprefix."job_types.id", "LEFT");
+    $db->join("salary", $DBprefix."jobs.salary=".$DBprefix."salary.salary_id", "LEFT");
+    $db->where ($DBprefix."jobs.id", "$id");
+    $jobs_by_employerId = $db->get("jobs", NULL, $selected_columns);
+}
+
+    
+
     
 include("include/AdminUser.class.php");
 if(!isset($AuthUserName) || !isset($AuthGroup)) $website->ForceLogin();

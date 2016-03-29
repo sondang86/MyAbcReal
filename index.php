@@ -48,20 +48,6 @@ $salaries = $db->get ('salary');
 $all_jobs = $db->get('jobs');
 $companies = $db->get('employers');
 
-//Get featured jobs list
-//$featured_jobs = $db->withTotalCount()->rawQuery
-//	("
-//            SELECT 
-//            ".$DBprefix."jobs.id,
-//            ".$DBprefix."jobs.title,
-//            ".$DBprefix."jobs.message,
-//            ".$DBprefix."employers.company,
-//            ".$DBprefix."employers.logo"
-//            ." FROM ".$DBprefix."jobs,".$DBprefix."employers"
-//            ." WHERE ".$DBprefix."jobs.employer =  ".$DBprefix."employers.username"
-//            ." AND ".$DBprefix."jobs.active='YES' AND status=1 AND expires>".time()
-//            ." AND featured=1 ORDER BY RAND() LIMIT 0, 10
-//	");
 
 $selected_columns = array(
     $DBprefix."jobs.id as job_id",$DBprefix."jobs.job_category",$DBprefix."jobs.title",

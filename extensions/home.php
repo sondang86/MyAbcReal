@@ -31,7 +31,7 @@ global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,
         <?php foreach ($featured_jobs as $featured_job) :?>
         <div class="row joblistArea">
             <div class="col-md-12 joblist">
-                <a href="#">
+                <a href="index.php?mod=details&id=<?php echo $featured_job['job_id']?>&lang=vn">
                     <section class="banner">
                         <img alt="SKP Business Consulting LLP" src="uploaded_images/<?php echo $featured_job['logo']?>.jpg" width="120" height="50">
                     </section>
@@ -70,7 +70,7 @@ global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,
             <div class="col-md-12 more-details">           
                 <section class="col-md-6 col-xs-6 other_details">
                     <span title=" Save this job " class="action savejob fav  favReady" jid="280316900272">
-                        <i class="fa fa-floppy-o"></i>
+                        <a href="javascript:SaveListing('<?php echo $featured_job["job_id"]?>')" id="save_<?php echo $featured_job["job_id"]?>" title="Lưu việc làm này"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
                     </span> 
                     <span class="salary"><em></em>  Not disclosed </span> 
                 </section>

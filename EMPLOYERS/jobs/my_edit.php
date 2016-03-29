@@ -5,6 +5,7 @@
 // http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
+global $db, $commonQueries,$categories, $job_types, $locations, $salaries, $experience_list,$jobs_by_employerId;
 ?>
 <?php
 $id=$_REQUEST["id"];
@@ -12,11 +13,9 @@ $website->ms_i($id);
 if($database->SQLCount("jobs","WHERE employer='".$AuthUserName."' AND id=".$id." ") == 0)
 {
 	die("");
-}    
-global $db, $commonQueries,$categories, $job_types, $locations, $salaries;
+}
 $db->where ("id", "$id");
 $jobs_by_employer = $db->get("jobs");
-//print_r($jobs_by_employer);
 ?>
 
 <?php //Edit data
@@ -28,6 +27,7 @@ $jobs_by_employer = $db->get("jobs");
             "job_type" => filter_input(INPUT_POST, 'post-jobtypes'),
             "title" => filter_input(INPUT_POST, 'employer-post-title', FILTER_SANITIZE_STRING), 
             "message" => filter_input(INPUT_POST,'employer-post-details', FILTER_SANITIZE_STRING),
+            "experience" => filter_input(INPUT_POST,'experience',FILTER_SANITIZE_NUMBER_INT),
             "region" => filter_input(INPUT_POST,'post-locations'),
             "salary" => filter_input(INPUT_POST,'post-salary'),
             "date" => strtotime(filter_input(INPUT_POST,'employer-start-date')),
@@ -140,6 +140,17 @@ $jobs_by_employer = $db->get("jobs");
                         <option value="">Vui lòng chọn</option>
                         <?php foreach ($salaries as $value) :?>
                         <option value="<?php echo $value['salary_id']?>" <?php if($job['salary'] == $value['salary_id']){ echo "selected";}?>><?php echo $value['salary_range']?></option>    
+                        <?php endforeach;?>
+                    </select>
+                </label>
+                
+                <!--Experience-->
+                <label>
+                    <span>Yêu cầu kinh nghiệm: </span>
+                    <select name="experience" required>
+                        <option value="">Vui lòng chọn</option>
+                        <?php foreach ($experience_list as $experience) :?>
+                        <option value="<?php echo $experience['experience_id']?>" <?php if($job['experience'] == $experience['experience_id']){ echo "selected";}?>><?php echo $experience['name']?></option>    
                         <?php endforeach;?>
                     </select>
                 </label>

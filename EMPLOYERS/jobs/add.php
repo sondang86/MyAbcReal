@@ -1,6 +1,6 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
-global $db, $categories, $job_types, $locations, $salaries;
+global $db, $categories, $job_types, $locations, $salaries,$experience_list;
 ?>
 <div class="fright">
     
@@ -87,8 +87,8 @@ elseif($website->GetParam("CHARGE_TYPE") == 2)
             "job_category" => filter_input(INPUT_POST, 'post-category'),
             "job_type" => filter_input(INPUT_POST, 'post-jobtypes'),
             "title" => filter_input(INPUT_POST, 'employer-post-title',FILTER_SANITIZE_STRING), 
-//            "message" => filter_input(INPUT_POST,'employer-post-details',FILTER_SANITIZE_STRING),
-            "message" => $_POST['employer-post-details'],
+            "message" => filter_input(INPUT_POST,'employer-post-details',FILTER_SANITIZE_STRING),
+            "experience" => filter_input(INPUT_POST,'experience',FILTER_SANITIZE_NUMBER_INT),
             "region" => filter_input(INPUT_POST,'post-locations'),
             "salary" => filter_input(INPUT_POST,'post-salary'),
             "date" => strtotime(filter_input(INPUT_POST,'employer-start-date')),
@@ -171,6 +171,17 @@ if($show_post_form) //Allow employers to post job if they're not reached limit s
                         <option value="">Vui lòng chọn</option>
                         <?php foreach ($salaries as $value) :?>
                         <option value="<?php echo $value['salary_id']?>"><?php echo $value['salary_range']?></option>    
+                        <?php endforeach;?>
+                    </select>
+                </label>
+                
+                <!--Experience-->
+                <label>
+                    <span>Yêu cầu kinh nghiệm: </span>
+                    <select name="experience" required>
+                        <option value="">Vui lòng chọn</option>
+                        <?php foreach ($experience_list as $experience) :?>
+                        <option value="<?php echo $experience['experience_id']?>"><?php echo $experience['name']?></option>    
                         <?php endforeach;?>
                     </select>
                 </label>
