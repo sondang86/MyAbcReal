@@ -4,13 +4,14 @@
 // Find out more about our products and services on:
 // http://www.netartmedia.net
 ?><?php
-if(!defined('IN_SCRIPT')) die("");
+if(!defined('IN_SCRIPT')) {die("");}
+global $db;
 ?>
 
 <h3 class="no-margin"><?php echo $M_CURRENT_SAVED;?></h3>
 <hr/>
 <br/>
-<div class="row">
+<section>
 <?php
 
 $RESULTS_PER_PAGE = $website->GetParam("RESULTS_PER_PAGE");
@@ -27,10 +28,10 @@ if(!isset($_COOKIE["saved_listings"])||$_COOKIE["saved_listings"]==""||$_COOKIE[
 
 if(!$skip_query)
 {
-	$SearchTable = $database->Query
+	$saved_jobs = $db->withTotalCount()->rawQuery
 	("
 		SELECT 
-		".$DBprefix."jobs.id,
+		".$DBprefix."jobs.id as job_id,
 		".$DBprefix."jobs.title,
 		".$DBprefix."jobs.date,
 		".$DBprefix."jobs.salary,
@@ -38,143 +39,70 @@ if(!$skip_query)
 		".$DBprefix."jobs.region,
 		".$DBprefix."jobs.message,
 		".$DBprefix."employers.company,
-		".$DBprefix."employers.logo
-		FROM ".$DBprefix."jobs,".$DBprefix."employers  
+		".$DBprefix."employers.logo,
+                ".$DBprefix."salary.salary_range,
+                ".$DBprefix."salary.salary_range_en,
+                ".$DBprefix."locations.City,
+                ".$DBprefix."locations.City_en
+		FROM ".$DBprefix."jobs,".$DBprefix."employers,".$DBprefix."locations,".$DBprefix."salary  
 		WHERE 
-		".$DBprefix."jobs.employer =  ".$DBprefix."employers.username
-		AND 
-		 ".$DBprefix."jobs.id in (".rtrim($_COOKIE["saved_listings"],",").")
+		".$DBprefix."jobs.employer =  ".$DBprefix."employers.username".
+                " AND ".$DBprefix."jobs.salary = ".$DBprefix."salary.salary_id".
+                " AND ".$DBprefix."jobs.region = ".$DBprefix."locations.id".
+                " AND ".$DBprefix."jobs.id in (".rtrim(filter_input(INPUT_COOKIE, 'saved_listings'),",").")
 	");
-	$iNResults = $database->num_rows($SearchTable);
 	
-}
-	
+}	
 
 
-if($skip_query || $iNResults == 0)
+if($skip_query || $db->totalCount == 0) // No saved jobs 
 {
 	echo "<br/><br/><i>".$M_STILL_NO_SAVED."</i><br/><br/><br/><br/><br/>";
 }
-else
-{
-
+else { //Show saved jobs 
+    
 	$iTotResults = 0;
-
-	if(!isset($_REQUEST["num"]))
-	{
-		$num = 0;
+	if(!isset($_REQUEST["num"])){
+            $num = 0;
 	}
-	else
-	{
-		$website->ms_i($_REQUEST["num"]);
-		$num = $_REQUEST["num"] - 1;
+	else{
+            $website->ms_i($_REQUEST["num"]);
+            $num = $_REQUEST["num"] - 1;
 	}
-		
-
-	$i_listings_counter = 0;
-
+	$i_listings_counter = 0;        
 	$_REQUEST["is_saved_page"]=true;
-
-	while($listing = $database->fetch_array($SearchTable))
-	{
-		
-		if($iTotResults>=$num*$RESULTS_PER_PAGE&&$iTotResults<($num+1)*$RESULTS_PER_PAGE)
-		{
-				
-			show_job($listing);
-			
-		}
-		$iTotResults++;
+        
+	foreach ($saved_jobs as $saved_job){		
+            if($iTotResults>=$num*$RESULTS_PER_PAGE&&$iTotResults<($num+1)*$RESULTS_PER_PAGE){?>
+                <div class="row">
+                    <section class="col-md-9">
+                        <h4><?php echo $saved_job['title']?></h4>
+                        <p>Lương: <?php echo $saved_job['salary_range']?></p>
+                        <p>Địa điểm: <?php echo $saved_job['City']?></p>
+                        <p>Thời gian đăng: <?php echo date('Y-m-d',$saved_job['date'])?></p>
+                        <p><?php echo $saved_job['applications']?> Đơn xin việc</p>
+                        <body>
+                            <p><?php echo $saved_job['message']?></p>
+                        </body>
+                        <footer>
+                            <a href="index.php?mod=apply&amp;posting_id=58&amp;lang=vn" class="job-details-link underline-link r-margin-15">Nộp hồ sơ</a>
+                            <a href="nghenghiep-tuyEn-sinh-vi��n-l�m-th��m-gAp-58.html" class="job-details-link underline-link">Chi tiết công việc</a>
+                        </footer>    
+                    </section>
+                    <figure class="col-md-3">
+                        <img src="#" title="Ảnh">
+                    </figure>
+                </div>
+                
+        <?php } 
+            $iTotResults++;
 	}
 	?>
 	
-	
-	<div class="clear"></div>	
-	<?php
 
-	$strSearchString = "";
-				
-	foreach($_GET as $key=>$value) 
-	{ 
-		if($key != "num"&&$key!="i_start")
-		{
-			$strSearchString .= $key."=".$value."&";
-		}
-	}
-	if(isset($_POST["mod"]))
-	$strSearchString .= "mod=".$_POST["mod"]."&";
 	
-	if(isset($_POST["search_by"]))
-	$strSearchString .= "search_by=".$_POST["search_by"]."&";
-
-
-	if(ceil($iTotResults/$RESULTS_PER_PAGE) > 1)
-	{
-		?>
-	
-		<ul class="pagination">
-		<?php
-		
-		$inCounter = 0;
-		
-		if(($num+1) != 1)
-		{
-			echo "<li><a class=\"pagination-link\" href=\"index.php?".$strSearchString."num=1\"><<</a></li>";
-			
-			echo "<li><a class=\"pagination-link\" href=\"index.php?".$strSearchString."num=".($num)."\"><</a></li>";
-		}
-		
-		$iStartNumber = ($num+1);
-		
-		if($iStartNumber > (ceil($iTotResults/$RESULTS_PER_PAGE) - 4))
-		{
-			$iStartNumber = (ceil($iTotResults/$RESULTS_PER_PAGE) - 4);
-		}
-		
-		if($iStartNumber>3&&($num+1)<(ceil($iTotResults/$RESULTS_PER_PAGE) - 2))
-		{
-			$iStartNumber=$iStartNumber-2;
-		}
-		
-		if($iStartNumber < 1)
-		{
-			$iStartNumber = 1;
-		}
-		
-		for($i= $iStartNumber ;$i<=ceil($iTotResults/$RESULTS_PER_PAGE);$i++)
-		{
-			if($inCounter>=5)
-			{
-				break;
-			}
-			
-			if($i == ($num+1))
-			{
-				echo "<li><a><b>".$i."</b></a></li>";
-			}
-			else
-			{
-				echo "<li><a class=\"pagination-link\" href=\"index.php?".$strSearchString."num=".$i."\">".$i."</a></li>";
-			}
-							
-			
-			$inCounter++;
-		}
-		
-		if(($num+1)<ceil($iTotResults/$RESULTS_PER_PAGE))
-		{
-			echo "<li><a class=\"pagination-link\" href=\"".($website->GetParam("SEO_URLS")==1?"http://".$DOMAIN_NAME."/":"")."index.php?".$strSearchString."num=".($num+2)."\">></a></li>";
-			
-			echo "<li><a class=\"pagination-link\" href=\"".($website->GetParam("SEO_URLS")==1?"http://".$DOMAIN_NAME."/":"")."index.php?".$strSearchString."num=".(ceil($iTotResults/$RESULTS_PER_PAGE))."\">>></a></li>";
-		}
-		?>	
-			</ul>
-		<?php	
-		
-	}
-}
-?>
-</div>
+<?php }?>
+</section>
 <?php
 $website->Title($M_SAVED_LISTINGS);
 $website->MetaDescription("");
