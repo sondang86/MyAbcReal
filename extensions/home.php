@@ -6,7 +6,10 @@
 // http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,$featured_jobs;
+global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,$featured_jobs,$SEO_setting;
+
+$segment = $website->getURL_segment($website->currentURL());
+
 //echo "<pre>";
 //print_r($featured_jobs);
 //echo "</pre>";
@@ -31,7 +34,11 @@ global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,
         <?php foreach ($featured_jobs as $featured_job) :?>
         <div class="row joblistArea">
             <div class="col-md-12 joblist">
+                <?php if($SEO_setting == 0){?>
                 <a href="index.php?mod=details&id=<?php echo $featured_job['job_id']?>&lang=vn">
+                <?php } else {?>    
+                <a href="chi-tiet-cong-viec/<?php echo $featured_job['job_id']?>/<?php echo $featured_job['SEO_title']?>">    
+                <?php }?>    
                     <section class="banner">
                         <img alt="SKP Business Consulting LLP" src="uploaded_images/<?php echo $featured_job['logo']?>.jpg" width="120" height="50">
                     </section>

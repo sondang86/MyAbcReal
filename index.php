@@ -40,7 +40,7 @@ $commonQueries = new CommonsQueries($db);
 //Common tables
 $categories = $db->get ('categories');
 
-$db->join('categories', 'jobsportal_categories_sub.main_category_id = jobsportal_categories.category_id', 'LEFT');
+$db->join('categories', $DBprefix."categories_sub.main_category_id =".$DBprefix."categories.category_id", 'LEFT');
 $categories_subs = $db->get('categories_sub');
 $job_types = $db->get ('job_types');
 $locations = $db->get ('locations');
@@ -49,8 +49,8 @@ $all_jobs = $db->get('jobs');
 $companies = $db->get('employers');
 
 
-$selected_columns = array(
-    $DBprefix."jobs.id as job_id",$DBprefix."jobs.job_category",$DBprefix."jobs.title",
+$featured_jobs_columns = array(
+    $DBprefix."jobs.id as job_id",$DBprefix."jobs.job_category",$DBprefix."jobs.title",$DBprefix."jobs.SEO_title",
     $DBprefix."jobs.message",$DBprefix."employers.company",$DBprefix."employers.logo",
     $DBprefix."categories.category_name_vi",$DBprefix."categories.category_name",
     $DBprefix."locations.City",$DBprefix."locations.City_en",
@@ -70,7 +70,11 @@ $db->where($DBprefix."jobs.status", "1");
 $db->where($DBprefix."jobs.expires", time(), ">");
 $db->where($DBprefix."jobs.featured", "1");
 $db->orderBy('RAND()');
-$featured_jobs = $db->get("jobs", array(0,10),$selected_columns);
+$featured_jobs = $db->get("jobs", array(0,10),$featured_jobs_columns);
+
+//Get SEO setting 
+$db->where('id', 99);
+$SEO_setting = $db->get('settings')[0]['value'];
 
 
 /// Loading the website default settings

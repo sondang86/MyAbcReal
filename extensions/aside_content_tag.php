@@ -86,7 +86,7 @@ $SearchTable = $db->withTotalCount()->rawQuery
                     {				
                         if(file_exists("thumbnails/".$value["logo"].".jpg"))
                         {
-                                echo "<a href=\"".$strLink."\"><img align=\"left\" src=\"thumbnails/".$value["logo"].".jpg\" width=\"50\" alt=\"".stripslashes(strip_tags($value["company"]))."\" class=\"img-shadow img-right-margin\"/></a>";
+                                echo "<a href=\"".$strLink."\"><img align=\"left\" src=\"/vieclambanthoigian.com.vn/thumbnails/".$value["logo"].".jpg\" width=\"50\" alt=\"".stripslashes(strip_tags($value["company"]))."\" class=\"img-shadow img-right-margin\"/></a>";
                         }
                     }
         ?>
@@ -167,7 +167,7 @@ else
                                     {	
                                         if(file_exists("thumbnails/".$value["logo"].".jpg"))
                                         {
-                                            echo "<a href=\"".$strLink."\"><img src=\"thumbnails/".$value["logo"].".jpg\" width=\"50\" alt=\"".stripslashes(strip_tags($value["company"]))."\" title='". $value["title"] . "' class=\"img-shadow img-right-margin\"/></a>";
+                                            echo "<a href=\"".$strLink."\"><img src=\"/vieclambanthoigian.com.vn/thumbnails/".$value["logo"].".jpg\" width=\"50\" alt=\"".stripslashes(strip_tags($value["company"]))."\" title='". $value["title"] . "' class=\"img-shadow img-right-margin\"/></a>";
                                         }
                                     }
                                 ?>

@@ -2271,5 +2271,21 @@ class SiteManager
             $last_words = $matches[0];
             return $last_words;
         }
+        
+        /**
+        * get segments of the URL   
+        * @param   var $url url of the page
+        * @param   var $segment segment part that you want to get (int value 1,2,3,4...)
+        */
+        function getURL_segment($url, $segment=""){
+            $parsed = parse_url($url);
+            $path = $parsed['path'];
+            $path_parts = explode('/', $path);
+            if(!empty($segment)){ //Get selected segment only
+                return $path_parts[$segment];
+            } else {
+                return $path_parts; //Get all
+            }
+        }
 }	
 ?>
