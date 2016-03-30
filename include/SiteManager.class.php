@@ -2287,5 +2287,37 @@ class SiteManager
                 return $path_parts; //Get all
             }
         }
+        
+        /**
+        * check SEO setting and output link accordingly
+        * @param   var $mod url of the page
+        * @param   var $segment segment part that you want to get (int value 1,2,3,4...)
+        */
+        function check_SEO_link($mod="featured")
+	{
+            global $DOMAIN_NAME;
+
+            //SEO disabled
+            if($this->GetParam("SEO_URLS")==0){   
+                switch ($mod) {
+                    case "featured":
+                        return "index.php?mod=search&featured=1&lang=vn";
+                        break;
+                    case "latest":
+                        return "index.php?mod=search&latest=1&lang=vn";
+                        break;
+                }                
+            } else { //SEO enabled
+                switch ($mod) {
+                    case "featured":
+                        return "http://$DOMAIN_NAME/viec-lam-noi-bat/";
+                        break;
+                    case "latest":
+                        return "http://$DOMAIN_NAME/viec-lam-moi-nhat/";
+                        break;
+                }
+            }                    
+	}
+        
 }	
 ?>

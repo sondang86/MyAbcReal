@@ -1,6 +1,6 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
-global $db, $website;?>
+global $db, $website, $SEO_setting;?>
 
 <!--Job by attribute-->
 <div class="gray-wrap">
@@ -123,6 +123,7 @@ else
 		".$DBprefix."jobs.id,
 		".$DBprefix."jobs.title,
 		".$DBprefix."jobs.message,
+                ".$DBprefix."jobs.SEO_title,
 		".$DBprefix."employers.company,
 		".$DBprefix."employers.logo
 		FROM ".$DBprefix."jobs,".$DBprefix."employers  
@@ -138,7 +139,7 @@ else
 		LIMIT 0,".$this->GetParam("NUMBER_OF_FEATURED_LISTINGS")."
 	");
 
-        
+//      print_r($SearchTable);
 	if($db->totalCount > 0)
 	{
 	?>
@@ -167,14 +168,23 @@ else
                                     {	
                                         if(file_exists("thumbnails/".$value["logo"].".jpg"))
                                         {
-                                            echo "<a href=\"".$strLink."\"><img src=\"/vieclambanthoigian.com.vn/thumbnails/".$value["logo"].".jpg\" width=\"50\" alt=\"".stripslashes(strip_tags($value["company"]))."\" title='". $value["title"] . "' class=\"img-shadow img-right-margin\"/></a>";
+                                            echo "<a href=\"http://$DOMAIN_NAME/chi-tiet-cong-viec/".$value['id']."/".$value['SEO_title']."\"><img src=\"/vieclambanthoigian.com.vn/thumbnails/".$value["logo"].".jpg\" width=\"50\" alt=\"".stripslashes(strip_tags($value["company"]))."\" title='". $value["title"] . "' class=\"img-shadow img-right-margin\"/></a>";
                                         }
                                     }
                                 ?>
                     <!--Content-->
-                    <h5 class="no-margin"><a href="<?php echo $strLink;?>" class="aside-link" title="<?php echo $value['title']?>">
-                                        <?php echo $website->limitCharacters(stripslashes(strip_tags($headline)), 50);?>
-                        </a></h5>
+                    <h5 class="no-margin">
+                        <?php if($SEO_setting == 0){?>
+                        <a href="http://<?php echo $DOMAIN_NAME;?>/index.php?mod=details&id=<?php echo $value['id']?>&lang=vn">
+                            <?php echo $website->limitCharacters(stripslashes(strip_tags($headline)), 50);?>
+                        </a>
+                        <?php } else {?>  
+                        <a href="http://<?php echo $DOMAIN_NAME;?>/chi-tiet-cong-viec/<?php echo $value['id']?>/<?php echo $value['SEO_title']?>" class="aside-link" title="<?php echo $value['title']?>">
+                            <?php echo $website->limitCharacters(stripslashes(strip_tags($headline)), 50);?>
+                        </a>
+                        <?php }?>
+                    </h5>
+                    
                     <span class="sub-text">
                                 <?php echo $this->text_words(stripslashes(strip_tags($value["message"])),10);?>
                     </span>
@@ -185,10 +195,14 @@ else
             
         </article>
     </div>
-    <div class="text-center"><a class="underline-link" href="<?php echo $this->mod_link((isset($is_featured)?"featured":"latest")."-jobs");?>"><?php echo $M_SEE_ALL;?></a></div>
+    <?php if($SEO_setting == 0){?>
+    <div class="text-center"><a class="underline-link" href="http://<?php echo $DOMAIN_NAME;?>/<?php echo $this->mod_link((isset($is_featured)?"featured":"latest")."-jobs");?>"><?php echo $M_SEE_ALL;?></a></div>
+    <?php } else {?>
+    <div class="text-center"><a class="underline-link" href="http://<?php echo $DOMAIN_NAME;?>/<?php echo $this->mod_link((isset($is_featured)?"featured":"latest")."-jobs");?>"><?php echo $M_SEE_ALL;?></a></div>
+    <?php }?>
     <br/>
 </div>
-		<?php
+<?php
 	}
 }
 ?>

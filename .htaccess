@@ -48,3 +48,6 @@ RewriteRule ^nha-tuyen-dung.html$ index.php?mod=employers_registration&lang=vn
 RewriteRule ^([^/\.]+).html$ index.php?page=$1 [L]
 
 RewriteRule ^chi-tiet-cong-viec/([0-9]+)/([A-Za-z0-9-]+)/?$ index.php?mod=details&id=$1
+
+RewriteRule ^viec-lam-noi-bat/?$ index.php?mod=search&featured=1&lang=vn
+RewriteRule ^viec-lam-moi-nhat/?$ index.php?mod=search&latest=1&lang=vn

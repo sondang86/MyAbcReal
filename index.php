@@ -72,9 +72,23 @@ $db->where($DBprefix."jobs.featured", "1");
 $db->orderBy('RAND()');
 $featured_jobs = $db->get("jobs", array(0,10),$featured_jobs_columns);
 
+//Pagination
+//$page = 4;
+// set page limit to 2 results per page. 20 by default
+//$db->pageLimit = 2;
+//$products = $db->arraybuilder()->paginate("jobs", $page);
+//echo "showing $page out of " . $db->totalPages;
+//echo "<pre>";
+//print_r($products);
+//echo "</pre>";
+
+
 //Get SEO setting 
 $db->where('id', 99);
 $SEO_setting = $db->get('settings')[0]['value'];
+
+//URL Site
+$URL_site = "http://localhost/vieclambanthoigian.com.vn/";
 
 
 /// Loading the website default settings

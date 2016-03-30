@@ -10,9 +10,6 @@ global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,
 
 $segment = $website->getURL_segment($website->currentURL());
 
-//echo "<pre>";
-//print_r($featured_jobs);
-//echo "</pre>";
 ?>
 <style>    
  

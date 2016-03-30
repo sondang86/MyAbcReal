@@ -5,7 +5,8 @@ if(!isset($_REQUEST["id"]))
 {
 	die("The job ID isn't set");
 }
-if ($SEO_setting == 0){
+
+if ($SEO_setting == "0"){
     $job=$_REQUEST["id"];
     $website->ms_i($job);
 } else {    
