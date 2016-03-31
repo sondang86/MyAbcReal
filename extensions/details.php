@@ -7,12 +7,13 @@ if(!isset($_REQUEST["id"]))
 }
 
 if ($SEO_setting == "0"){
-    $job=$_REQUEST["id"];
-    $website->ms_i($job);
+    $job=$_REQUEST["id"];    
 } else {    
-    $job = $website->getURL_segment($website->currentURL(),3);
-    $website->ms_i($job);
+    $job = $website->getURL_segment($website->currentURL(),3);    
 }
+
+$website->ms_i($job);
+
 
 $posting = $db->where('id', $job)->withTotalCount()->get('jobs');
 if(!$db->totalCount > 0) {
@@ -188,9 +189,11 @@ $strLink = "http://".$DOMAIN_NAME."/".$website->job_link($posting[0]["id"],$post
 			?>
 			</a>
 			<div class="clearfix underline-link"></div>
-			<a href="<?php echo $website->company_jobs_link($employer["id"],$employer["company"]);?>" class="sub-text underline-link"><?php echo $M_MORE_JOBS_FROM;?> <?php echo stripslashes($employer["company"]);?></a>
+			<a href="<?php // echo $website->company_jobs_link($employer["id"],$employer["company"]);?>" class="sub-text underline-link"><?php // echo $M_MORE_JOBS_FROM;?> <?php // echo stripslashes($employer["company"]);?></a>
+                        <a href="<?php echo $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $employer["id"]);?>" class="sub-text underline-link"><?php echo $M_MORE_JOBS_FROM;?> <?php echo stripslashes($employer["company"]);?></a>
 			<br/>
-			<a href="<?php echo $website->company_link($employer["id"],$employer["company"]);?>" class="sub-text underline-link"><?php echo $M_COMPANY_DETAILS;?></a>
+			<!--<a href="<?php // echo $website->company_link($employer["id"],$employer["company"]);?>" class="sub-text underline-link"><?php // echo $M_COMPANY_DETAILS;?></a>-->
+                        <a href="<?php echo $website->company_link($employer["id"],$employer["company"]);?>" class="sub-text underline-link"><?php echo $M_COMPANY_DETAILS;?></a>
 		</div>
 	</div>
 	

@@ -2290,8 +2290,11 @@ class SiteManager
         
         /**
         * check SEO setting and output link accordingly
-        * @param   var $mod url of the page
+        * @param   var $mod module of the page
         * @param   var $segment segment part that you want to get (int value 1,2,3,4...)
+        * @param   var $id filter by id
+        * @param   var $SEO_title SEO title url
+        * @param   var $lang define language
         */
         function check_SEO_link($mod="featured", $SEO_setting="1", $id=NULL, $SEO_title=NULL, $lang="vn"){
             global $DOMAIN_NAME;
@@ -2299,16 +2302,22 @@ class SiteManager
             if($SEO_setting =="0"){   
                 switch ($mod) {
                     case "featured":
-                        echo "index.php?mod=featured";
+                        echo "http://$DOMAIN_NAME/index.php?mod=featured";
                         break;
                     case "latest":
-                        echo "index.php?mod=latest";
+                        echo "http://$DOMAIN_NAME/index.php?mod=latest";
                         break;
                     case "apply_job":
-                        echo "index.php?mod=apply_job&posting_id=$id&lang=$lang";
+                        echo "http://$DOMAIN_NAME/index.php?mod=apply_job&posting_id=$id&lang=$lang";
                         break;
                     case "saved_jobs":
-                        echo "index.php?mod=saved&lang=$lang";
+                        echo "http://$DOMAIN_NAME/index.php?mod=saved&lang=$lang";
+                        break;
+                    case "jobs_by_companyId":
+                        echo "http://$DOMAIN_NAME/index.php?mod=job_by_company&company=$id&lang=vn";
+                        break;
+                    case "details":
+                        echo "http://$DOMAIN_NAME/index.php?mod=details&id=$id&lang=vn";
                         break;
                 }                
             } else { //SEO enabled
@@ -2324,6 +2333,12 @@ class SiteManager
                         break;
                     case "saved_jobs":
                         echo "http://$DOMAIN_NAME/viec-lam-da-luu/";
+                        break;
+                    case "jobs_by_companyId":
+                        echo "http://$DOMAIN_NAME/viec-lam-cung-cong-ty/$id/";
+                        break;
+                    case "details":
+                        echo "http://$DOMAIN_NAME/chi-tiet-cong-viec/$id/$SEO_title";
                         break;
                 }
             }                    

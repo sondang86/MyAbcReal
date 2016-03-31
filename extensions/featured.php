@@ -5,9 +5,28 @@ $website->Title("Việc làm nổi bật");
 $website->MetaDescription("abc");
 $website->MetaKeywords("def");
 
-//echo "<pre>";
-//print_r($website->check_SEO_link());
-//echo "</pre>";
+$featured_jobs_columns = array(
+    $DBprefix."jobs.id as job_id",$DBprefix."jobs.job_category",$DBprefix."jobs.title",$DBprefix."jobs.SEO_title",
+    $DBprefix."jobs.message",$DBprefix."employers.company",$DBprefix."employers.logo",
+    $DBprefix."categories.category_name_vi",$DBprefix."categories.category_name",
+    $DBprefix."locations.City",$DBprefix."locations.City_en",
+    $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",
+    $DBprefix."job_experience.name as experience_name",$DBprefix."job_experience.name_en as experience_name_en",
+    $DBprefix."salary.salary_range",$DBprefix."salary.salary_range_en"
+);
+
+$db->join("employers", $DBprefix."jobs.employer=".$DBprefix."employers.username", "LEFT");
+$db->join("categories", $DBprefix."jobs.job_category=".$DBprefix."categories.category_id", "LEFT");
+$db->join("locations", $DBprefix."jobs.region=".$DBprefix."locations.id", "LEFT");
+$db->join("job_types", $DBprefix."jobs.job_type=".$DBprefix."job_types.id", "LEFT");
+$db->join("job_experience", $DBprefix."jobs.experience=".$DBprefix."job_experience.experience_id", "LEFT");
+$db->join("salary", $DBprefix."jobs.salary=".$DBprefix."salary.salary_id", "LEFT");
+$db->where($DBprefix."jobs.active", "YES");
+$db->where($DBprefix."jobs.status", "1");
+$db->where($DBprefix."jobs.expires", time(), ">");
+$db->where($DBprefix."jobs.featured", "1");
+$db->orderBy('RAND()');
+$featured_jobs = $db->get("jobs", array(0,10),$featured_jobs_columns);
 ?>
 
 <div class="row">
