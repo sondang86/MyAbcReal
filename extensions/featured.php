@@ -5,9 +5,9 @@ $website->Title("Việc làm nổi bật");
 $website->MetaDescription("abc");
 $website->MetaKeywords("def");
 
-echo "<pre>";
-print_r($website->check_SEO_link());
-echo "</pre>";
+//echo "<pre>";
+//print_r($website->check_SEO_link());
+//echo "</pre>";
 ?>
 
 <div class="row">
@@ -36,8 +36,8 @@ echo "</pre>";
                     </article>
                     <nav>
                         <?php if($SEO_setting == 0){?>
-                        <span class="col-md-3 pull-right"><a href="index.php?mod=apply_job&posting_id=<?php echo $job['job_id']?>&lang=vn">Nộp hồ sơ</a></span>
-                        <span class="col-md-3 pull-right"><a href="index.php?mod=details&id=<?php echo $job['job_id']?>&lang=vn">Chi tiết công việc</a></span>
+                        <span class="col-md-3 pull-right"><a href="http://<?php echo $DOMAIN_NAME?>/index.php?mod=apply_job&posting_id=<?php echo $job['job_id']?>&lang=vn">Nộp hồ sơ</a></span>
+                        <span class="col-md-3 pull-right"><a href="http://<?php echo $DOMAIN_NAME?>/index.php?mod=details&id=<?php echo $job['job_id']?>&lang=vn">Chi tiết công việc</a></span>
                         <?php }else {?>
                         <span class="col-md-3 pull-right"><a href="http://<?php echo $DOMAIN_NAME?>/nop-ho-so/<?php echo $job['job_id']?>/<?php echo $job['SEO_title']?>">Nộp hồ sơ</a></span>
                         <span class="col-md-3 pull-right"><a href="http://<?php echo $DOMAIN_NAME?>/chi-tiet-cong-viec/<?php echo $job['job_id']?>/<?php echo $job['SEO_title']?>">Chi tiết công việc</a></span>

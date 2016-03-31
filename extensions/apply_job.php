@@ -6,15 +6,20 @@
 // http://www.netartmedia.net
 ?><?php 
 if(!defined('IN_SCRIPT')) die("");
-global $db;
-if(isset($_REQUEST["posting_id"]))
-{
-	$website->ms_i($_REQUEST["posting_id"]);
-	$posting_id = $_REQUEST["posting_id"];
-}
-else
-{
-	die("The job ID wasn't set!");
+global $db, $SEO_setting;
+
+//if(isset($_REQUEST["posting_id"])){
+//    $posting_id = $_REQUEST["posting_id"];
+//} else{
+//    die("The job ID wasn't set!");
+//}
+
+if ($SEO_setting == "0" && isset($_REQUEST["posting_id"])){
+    $posting_id=$_REQUEST["posting_id"];
+} elseif($SEO_setting == "1" && ($website->getURL_segment($website->currentURL(),3) !== NULL)) {    
+    $posting_id = $website->getURL_segment($website->currentURL(),3);
+} else {
+    die("The job ID wasn't set!");
 }
 $website->ms_i($posting_id);
 $arrPosting = $database->DataArray("jobs","id=".$posting_id);
@@ -138,7 +143,7 @@ if($show_page_form && isset($_COOKIE["AuthJ"]))
 	{	
 	?>
     
-    <form action="index.php" method="post">
+    <form method="post">
         <input type="hidden" name="ProceedApply_Update" value="1">
         <input type="hidden" name="mod" value="apply_job">
         <input type="hidden" name="posting_id" value="<?php echo $posting_id;?>">
@@ -222,65 +227,55 @@ if($show_page_form && isset($_COOKIE["AuthJ"]))
 				$hasFiles = false;
 				while($userFile = $database->fetch_array($userFiles))
 				{
-					$hasFiles = true;
-					echo "<tr>";	
-					
-					echo "
-						<td width=20>
-							<input type=checkbox ".(isset($Ids)&&in_array($userFile["file_id"], $Ids)?"checked":"")." name=Ids[] value=\"".$userFile["file_id"]."\">
-						</td>
-					";
-					
-					echo "
-						<td width=30>
-					";
+                                    $hasFiles = true;
+                                    echo "<tr>";	
+
+                                    echo "
+                                            <td width=20>
+                                                    <input type=checkbox ".(isset($Ids)&&in_array($userFile["file_id"], $Ids)?"checked":"")." name=Ids[] value=\"".$userFile["file_id"]."\">
+                                            </td>
+                                    ";
+
+                                    echo "
+                                            <td width=30>
+                                    ";
 							
-				if(strstr($userFile['file_name'],".pdf"))
-				{
-					echo '
-					<a href="file.php?id='.$userFile['file_id'].'" target=_blank>
-						<img src="JOBSEEKERS/images/pdf.gif" width="22" height="22" alt="" border="0">
-					</a>
-					';
-				}
-				else
-				if(strstr($userFile['file_name'],".doc"))
-				{
-					echo '
-					<a href="file.php?id='.$userFile['file_id'].'"  target=_blank>
-						<img src="JOBSEEKERS/images/doc.gif" width="22" height="22" alt="" border="0">
-					</a>
-					';
-				}
-				else
-				if(strstr($userFile['file_name'],".txt"))
-				{
-					echo '
-					<a href="file.php?id='.$userFile['file_id'].'"  target=_blank>
-						<img src="JOBSEEKERS/images/text.gif" width="17" height="22" alt="" border="0">
-					</a>
-					';
-				}
-				else
-				{
-					echo $M_UNKNOWN;				
-				}
-								
-					echo "	</td>
-					";
-					
-					echo "
-						<td  width=100>
-							".$userFile['file_name']."
-						</td>
-					";
-					
-					echo "
-						<td>
-							".$userFile["description"]."
-						</td>
-					";
-					echo "</tr>";	
+                                    if(strstr($userFile['file_name'],".pdf"))
+                                    {?>
+                                        <a href="file.php?id=<?php echo $userFile['file_id']?>" target=_blank>
+                                                <img src="http://<?php echo $DOMAIN_NAME?>/JOBSEEKERS/images/pdf.gif" width="22" height="22" alt="" border="0">
+                                        </a>
+                                <?php }
+                                    else
+                                    if(strstr($userFile['file_name'],".doc"))
+                                    {?>
+                                        <a href="file.php?id=<?php echo $userFile['file_id']?>"  target=_blank>
+                                                <img src="http://<?php echo $DOMAIN_NAME?>/JOBSEEKERS/images/doc.gif" width="22" height="22" alt="" border="0">
+                                        </a>
+                                    <?php }	elseif(strstr($userFile['file_name'],".txt")){ ?>
+
+                                        <a href="file.php?id=<?php echo $userFile['file_id']?>"  target=_blank>
+                                                <img src="http://<?php echo $DOMAIN_NAME?>/JOBSEEKERS/images/text.gif" width="17" height="22" alt="" border="0">
+                                        </a>					
+                                    <?php }
+                                    else{
+                                        echo $M_UNKNOWN;				
+                                    }								
+                                        echo "	</td>
+                                        ";
+
+                                        echo "
+                                                <td  width=100>
+                                                        ".$userFile['file_name']."
+                                                </td>
+                                        ";
+
+                                        echo "
+                                                <td>
+                                                        ".$userFile["description"]."
+                                                </td>
+                                        ";
+                                        echo "</tr>";	
 				}
 				?>
             
@@ -301,7 +296,7 @@ if($show_page_form && isset($_COOKIE["AuthJ"]))
         <table summary="" border="0">
             <tr>
                 <td>
-                    <img src="include/sec_image.php" width="150" height="30" >
+                    <img src="http://<?php echo $DOMAIN_NAME?>/include/sec_image.php" width="150" height="30" >
                 </td>
                 <td>
                     
@@ -342,7 +337,7 @@ if($show_page_form && isset($_COOKIE["AuthJ"]))
 	<?php
     }	
 } else {
-    echo "you must be jobseeker to apply this job";
+//    echo "you must be jobseeker to apply this job";
 }
 
 //elseif($show_page_form) 

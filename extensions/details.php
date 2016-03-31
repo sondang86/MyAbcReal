@@ -203,19 +203,9 @@ $strLink = "http://".$DOMAIN_NAME."/".$website->job_link($posting[0]["id"],$post
                 <div class="row">
                     <section class="col-md-12">
                         <div class="pull-right">
-                            <form action="index.php" method="get" >
-                                <input type="hidden" name="mod" value="apply_job"/>
-                                <input type="hidden" name="posting_id" value="<?php echo $posting[0]["id"];?>"/>
-                                        <?php
-                                        if($MULTI_LANGUAGE_SITE)
-                                        {
-                                        ?>
-                                <input type="hidden" name="lang" value="<?php echo $website->lang;?>"/>
-                                        <?php
-                                        }
-                                        ?>
+                            <a href="<?php echo $website->check_SEO_link("apply_job",$SEO_setting,$posting[0]["id"], $posting[0]['SEO_title'])?>">
                                 <input type="submit" class="btn btn-default custom-gradient btn-green" value=" <?php echo $APPLY_THIS_JOB_OFFER;?> ">
-                            </form>
+                            </a>
                         </div>
 
                         <script>
@@ -294,7 +284,7 @@ $strLink = "http://".$DOMAIN_NAME."/".$website->job_link($posting[0]["id"],$post
 	<div class="collapse email-collapse text-left">
 		<div class="container">		
 		<!--email job form-->
-			<form action="index.php"  style="margin-top:0px;margin-bottom:0px" method="post" onsubmit="return ValidateSendForm(this)">
+			<form action="<?php echo $website->check_SEO_link("apply_job",$SEO_setting,$posting[0]["id"])?>" style="margin-top:0px;margin-bottom:0px" method="post" onsubmit="return ValidateSendForm(this)">
 				<input type="hidden" name="mod" value="details"/>
 				<input type="hidden" name="ProceedSendFriend" value="1"/>
 				<input type="hidden" name="id" value="<?php echo $posting[0]["id"];?>"/>

@@ -50,9 +50,7 @@ $SearchTable = $db->withTotalCount()->rawQuery
 
             ORDER BY ".$DBprefix."courses.id DESC
             LIMIT 0,".$this->GetParam("NUMBER_OF_FEATURED_LISTINGS")."
-	");
-
-        
+	");        
 ?>
 
 <?php 	if($db->totalCount > 0)	{ ?>
@@ -195,12 +193,11 @@ else
             
         </article>
     </div>
-    <?php if($SEO_setting == 0){?>
-    <div class="text-center"><a class="underline-link" href="http://<?php echo $DOMAIN_NAME;?>/<?php echo $this->mod_link((isset($is_featured)?"featured":"latest")."-jobs");?>"><?php echo $M_SEE_ALL;?></a></div>
-    <?php } else {?>
-    <div class="text-center"><a class="underline-link" href="http://<?php echo $DOMAIN_NAME;?>/<?php echo $this->mod_link((isset($is_featured)?"featured":"latest")."-jobs");?>"><?php echo $M_SEE_ALL;?></a></div>
+    <?php if(isset($is_featured)){?>
+        <div class="text-center"><a class="underline-link" href="<?php $website->check_SEO_link("featured", $SEO_setting)?>"><?php echo $M_SEE_ALL;?></a></div>    
+    <?php }else {?>
+        <div class="text-center"><a class="underline-link" href="<?php $website->check_SEO_link("latest", $SEO_setting)?>"><?php echo $M_SEE_ALL;?></a></div>
     <?php }?>
-    <br/>
 </div>
 <?php
 	}

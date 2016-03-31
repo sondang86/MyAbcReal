@@ -3,13 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/extensions/details.php</file>
-            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/extensions/saved_backup.php</file>
-            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/extensions/saved.php</file>
-            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/index.php</file>
-            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/extensions/recruiters.php</file>
-            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/.htaccess</file>
+            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/extensions/home.php</file>
+            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/include/SiteManager.class.php</file>
             <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/include/functions.php</file>
+            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/template.htm</file>
+            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/index.php</file>
+            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/.htaccess</file>
+            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/extensions/details.php</file>
+            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/extensions/aside_content_tag.php</file>
+            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/ADMIN/include/page_functions.php</file>
         </group>
     </open-files>
 </project-private>

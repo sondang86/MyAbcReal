@@ -493,7 +493,7 @@ class SiteManager
             
 	function GenerateMenu()
 	{
-		global $page,$database,$website;
+		global $page,$database,$website, $DOMAIN_NAME;
 		$strResult="";
                     
 		$site_pages=$database->DataTable("pages","WHERE id>0 AND active_".$this->lang."=1 order by id");
@@ -504,7 +504,7 @@ class SiteManager
 			array_push($this->arrPages, array($row['id'], $row['parent_id'], $row["link_".$this->lang], $row["custom_link_".$this->lang], $row["only_bottom"]));
 		}
                     
-		$strLinkTemplate = '<li><a class="main-top-link" href="[LINK_HREF]">[LINK_TEXT]</a> </li>';
+		$strLinkTemplate = "<li><a class='main-top-link' href=http://$DOMAIN_NAME/[LINK_HREF]>[LINK_TEXT]</a> </li>";
                     
 		foreach($this->arrPages as $arrPage)
 		{
@@ -2293,27 +2293,37 @@ class SiteManager
         * @param   var $mod url of the page
         * @param   var $segment segment part that you want to get (int value 1,2,3,4...)
         */
-        function check_SEO_link($mod="featured")
-	{
+        function check_SEO_link($mod="featured", $SEO_setting="1", $id=NULL, $SEO_title=NULL, $lang="vn"){
             global $DOMAIN_NAME;
-
             //SEO disabled
-            if($this->GetParam("SEO_URLS")==0){   
+            if($SEO_setting =="0"){   
                 switch ($mod) {
                     case "featured":
-                        return "index.php?mod=search&featured=1&lang=vn";
+                        echo "index.php?mod=featured";
                         break;
                     case "latest":
-                        return "index.php?mod=search&latest=1&lang=vn";
+                        echo "index.php?mod=latest";
+                        break;
+                    case "apply_job":
+                        echo "index.php?mod=apply_job&posting_id=$id&lang=$lang";
+                        break;
+                    case "saved_jobs":
+                        echo "index.php?mod=saved&lang=$lang";
                         break;
                 }                
             } else { //SEO enabled
                 switch ($mod) {
                     case "featured":
-                        return "http://$DOMAIN_NAME/viec-lam-noi-bat/";
+                        echo "http://$DOMAIN_NAME/viec-lam-noi-bat/";
                         break;
                     case "latest":
-                        return "http://$DOMAIN_NAME/viec-lam-moi-nhat/";
+                        echo "http://$DOMAIN_NAME/viec-lam-moi-nhat/";
+                        break;
+                    case "apply_job":
+                        echo "http://$DOMAIN_NAME/nop-ho-so/$id/$SEO_title";
+                        break;
+                    case "saved_jobs":
+                        echo "http://$DOMAIN_NAME/viec-lam-da-luu/";
                         break;
                 }
             }                    
