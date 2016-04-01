@@ -4,17 +4,16 @@
 // Check http://www.netartmedia.net/jobsportal for demos and information
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries;
-
 if(isset($_REQUEST["id"])){
     $id=$_REQUEST["id"];
 } else {	
     die("The id was not set.");
 }
-//Sanitize
+
 $website->ms_i($id);
 
 $company = $database->DataArray("employers","id=".$id." ");
+
 $strLink = $website->company_link($company["id"],$company["company"]);
 
 $website->Title(stripslashes($company["company"])." - ".$M_USER_OPINIONS);
@@ -69,16 +68,82 @@ if(isset($_REQUEST["add_comment"]))
 }
 ?>
 
+<script>
+var post_review = false;
+function ShowPostForm()
+{
+	if(!post_review)
+	{
+		document.getElementById("post-review").style.display="block";
+		post_review = true;
+	}
+	else
+	{
+		document.getElementById("post-review").style.display="none";
+		post_review = false;
+	}
+}
+</script>
 
-<?php 
-    if($showCommentsForm){ 
-        if(!isset($_REQUEST["write"])) :
-        
+<?php
+if($showCommentsForm)
+{
+?>
+
+<?php
+if(!isset($_REQUEST["write"]))
+{
 ?>
 <a class="btn btn-primary no-decoration pull-right" href="javascript:ShowPostForm()"><?php echo $M_POST_REVIEW;?></a>
 <div class="clear"></div>
 
-<?php endif;?>
+<?php
+}
+?>
+
+<script>
+function ValidateForm(x)
+{
+
+	if(x.author.value==""){
+		alert("<?php echo $M_PLEASE_ENTER_NAME;?>");
+		x.author.focus();
+		return false;
+	}
+	
+	
+	if(x.email.value=="")
+	{
+		alert("<?php echo $M_PLEASE_ENTER_EMAIL;?>");
+		x.email.focus();
+		return false;
+	}
+	
+	if(x.answer2.value=="")
+	{
+		alert("<?php echo $M_PLEASE_ENTER_ANSWER;?>");
+		x.answer2.focus();
+		return false;
+	}
+	
+	if(x.title.value=="")
+	{
+		alert("<?php echo $M_PLEASE_ENTER_THE_TITLE;?>");
+		x.title.focus();
+		return false;
+	}
+	
+	if(x.comment.value=="")
+	{
+		alert("<?php echo $M_PLEASE_ENTER_COMMENTS;?>");
+		x.comment.focus();
+		return false;
+	}
+	
+	
+	return true;
+}
+</script>
 
 <div id="post-review" <?php if(!isset($_REQUEST["write"])&&$strErrorSecCode=="") echo 'style="display:none"';?>>
 	

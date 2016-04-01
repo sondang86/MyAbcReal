@@ -128,7 +128,7 @@
         }
         
         /**
-        *  check id parameter is exists or not
+        *  check id is exists or not
         * 
         *  @param var $type $_GET type to check
         *  @param var $SEO_setting setting of SEO URL (0 or 1)
@@ -137,18 +137,18 @@
         
         public function check_present_id($type, $SEO_setting="0", $segment="3"){
             global $website;
-            
-            //Validate first
-           
-            if(!isset($_GET[$type])){
-                die("The $type ID isn't set");
-            }
-            $website->ms_i($_GET[$type]); 
-                
-            //Get id number
             if ($SEO_setting == "0"){// SEO is disabled
-                $value = $_GET[$type];    
-            } else {    
+                //Make sure ID not empty
+                if (!isset($_GET[$type])){
+                    die("the ID wasn't set yet");
+                } else {
+                    //Sanitize data
+                    $filted_type = filter_input(INPUT_GET, $type, FILTER_SANITIZE_NUMBER_INT);
+                    $website->ms_i($filted_type); 
+
+                    $value = $filted_type;    
+                }
+            } else { //SEO enabled   
                 $value = $website->getURL_segment($website->currentURL(),$segment);    
             }
             

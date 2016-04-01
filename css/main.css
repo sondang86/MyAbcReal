@@ -2488,6 +2488,39 @@ div.upload input:hover {
         margin-top: 15px;
     }
     
+    /*contact form*/
+    .tabbable {
+        margin-top: 25px;
+    }
+    
+    .contactForm fieldset {
+        margin: 10px 0 25px 0;
+    }
+    
+    .contactForm fieldset label{
+        width: 100%;
+        text-align: center;
+    }
+    
+    .contactForm fieldset input[type="submit"] {
+        background: #FFCF0B;
+    }
+    
+    .contactForm fieldset input{
+        width: 100%;
+        border-radius: 5px;        
+    }
+    
+    .contactForm fieldset textarea{
+        width: 100%;
+        min-height: 300px;
+        border-radius: 5px;
+    }
+    
+    .companyTitle h2{
+        margin-top: 0;
+    }
+    
 }
 
 /* D?nh cho m?y t?nh b?ng chi?u d?c */
@@ -2647,7 +2680,35 @@ div.upload input:hover {
         background-color: rgba(232, 232, 232, 0.52);
         padding: 5px;
         margin: 10px 0;        
-    }    
+    }
+
+    /*contact form*/
+    .contactForm fieldset {
+        margin: 10px 0 25px 0;
+    }
+    
+    .contactForm fieldset label{
+        width: 20%;
+        float: left;
+    }
+    
+    .contactForm fieldset input[type="submit"] {
+        background: #FFCF0B;
+    }
+    
+    .contactForm fieldset input{
+        width: 40%;
+        border: solid 1px #cfcfcf;
+        height: 35px;
+        line-height: 19px;
+        width: 296px;
+        color: #a0a0a0;        
+    }
+    
+    .contactForm fieldset textarea{
+        width: 75%;
+        min-height: 300px;
+    }
 }
 
 /* D?nh cho m?y t?nh b?ng chi?u ngang */

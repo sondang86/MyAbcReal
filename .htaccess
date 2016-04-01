@@ -44,6 +44,8 @@ RewriteRule ^mod-([^/\.]+).html$ index.php?mod=$1 [L]
 
 
 #Start modify from here
+#ErrorDocument 404 http://localhost/vieclambanthoigian.com.vn/404.php
+
 RewriteRule ^nguoi-tim-viec.html$ index.php?mod=jobseekers&lang=vn
 RewriteRule ^nha-tuyen-dung.html$ index.php?mod=employers_registration&lang=vn
 
@@ -56,3 +58,4 @@ RewriteRule ^nop-ho-so/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?mod=apply_job&postin
 RewriteRule ^viec-lam-da-luu/?$ index.php?mod=saved&lang=vn
 RewriteRule ^viec-lam-cung-cong-ty/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?mod=job_by_company&company=$1&lang=vn
 RewriteRule ^thong-tin-cong-ty/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?mod=company&id=$1&lang=vn
+RewriteRule ^danh-gia-cong-ty/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?write=1&mod=reviews&id=$1&lang=vn

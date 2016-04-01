@@ -2324,6 +2324,9 @@ class SiteManager
                     case "companyInfo":
                         echo "http://$DOMAIN_NAME/index.php?mod=company&id=$id&lang=vn";
                         break;
+                    case "reviews":
+                        echo "http://$DOMAIN_NAME/index.php?write=1&mod=reviews&id=$id&lang=vn";
+                        break;
                 }                
             } else { //SEO enabled
                 switch ($mod) {
@@ -2347,6 +2350,9 @@ class SiteManager
                         break;
                     case "companyInfo":
                         echo "http://$DOMAIN_NAME/thong-tin-cong-ty/$id/$SEO_title";
+                        break;
+                    case "reviews":
+                        echo "http://$DOMAIN_NAME/danh-gia-cong-ty/$id/$SEO_title";
                         break;
                 }
             }                    

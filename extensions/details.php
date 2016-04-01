@@ -176,7 +176,7 @@ $strLink = "http://".$DOMAIN_NAME."/".$website->job_link($posting[0]["id"],$post
 				?>
 		</div>
 		<div class="col-md-4 text-center">
-			<a href="<?php echo $website->company_link($employer["id"],$employer["company"]);?>">
+			<a href="<?php echo $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $employer["id"], $website->seoURL($employer["company"]));?>">
 			<?php	
 			if($employer["logo"]!=""&&file_exists('thumbnails/'.$employer["logo"].'.jpg'))
 			{
