@@ -8,14 +8,17 @@ $website->MetaKeywords("def");
 $employerId = $commonQueries->check_present_id("company", $SEO_setting);
 
 $jobs_by_employerId = $commonQueries->jobs_by_employerId($employerId);
+
+//echo "<pre>";
 //print_r($jobs_by_employerId);
+//echo"</pre>";
 ?>
 
 <div class="row">
     <!--TITLE-->
     <section class="col-md-12">
         <label>Tên công ty: </label>
-        <label>Việc làm nổi bật</label>
+        <label><?php echo $jobs_by_employerId[0]['company']?></label>
     </section>
     
     <!--LIST JOBS-->
@@ -27,8 +30,8 @@ $jobs_by_employerId = $commonQueries->jobs_by_employerId($employerId);
                     <section class="row">
                         <figure class="col-md-3">
                             <img src="http://<?php echo $DOMAIN_NAME?>/uploaded_images/<?php echo $job['logo']?>.jpg">
-                            <p>Việc làm khác từ TEK</p>
-                            <p>Thông tin công ty</p>
+                            <!--<p><a href="<?php echo $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $job["employer_id"],$website->seoURL($job["company"]));?>" class="sub-text underline-link"><?php echo $M_MORE_JOBS_FROM;?> <?php echo stripslashes($job["company"]);?></a></p>-->
+                            <p><a href="<?php echo $website->check_SEO_link("companyInfo", $SEO_setting, $job["employer_id"],$website->seoURL($job['company']));?>" class="sub-text underline-link"><?php echo $M_COMPANY_DETAILS;?></a></p>
                         </figure>
                         <article class="col-md-9">
                             <h5><strong>Tiêu đề công việc:</strong> <?php echo $job['title']?></h5>
@@ -40,8 +43,8 @@ $jobs_by_employerId = $commonQueries->jobs_by_employerId($employerId);
                             <main><?php echo $website->limitCharacters(nl2br($job['message']), 200)?></main>
                         </article>
                         <nav>                            
-                            <span class="col-md-3 pull-right"><a href="<?php $website->check_SEO_link("details",$SEO_setting,$job['job_id'],$job['SEO_title']);?>">Chi tiết công việc</a></span> 
-                            <span class="col-md-3 pull-right"><a href="<?php $website->check_SEO_link("apply_job",$SEO_setting,$job['job_id']);?>">Nộp hồ sơ</a></span>                                                       
+                            <span class="col-md-3 pull-right"><a href="<?php $website->check_SEO_link("details", $SEO_setting, $job['job_id'], $job['SEO_title']);?>">Chi tiết công việc</a></span> 
+                            <span class="col-md-3 pull-right"><a href="<?php $website->check_SEO_link("apply_job", $SEO_setting, $job['job_id'], $website->seoURL($job['SEO_title']));?>">Nộp hồ sơ</a></span>                                                       
                         </nav>
                     </section>    
                 </div>

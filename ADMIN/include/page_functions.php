@@ -1316,7 +1316,7 @@ function particularCases($columnName,$myArray)
 	}
 	else	
 	if($columnName=="ShowFlag"){
-				return "<td><img src=\"../images/flags/".$myArray["code"].".gif\" /></td>";
+				return "<td><img src=\"http://$DOMAIN_NAME/images/flags/".$myArray["code"].".gif\" /></td>";
 	}
 	else	
 	if($columnName=="ShowSpecialLanguage"){

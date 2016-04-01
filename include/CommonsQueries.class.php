@@ -96,7 +96,7 @@
         * 
         *  @param var $id id or name of the selected column
         */
-        public function jobs_by_employerId($id="1") {
+        public function jobs_by_employerId($id="1", $limit=NULL) {
             global $DBprefix;
             $selected_columns = array(
                 $DBprefix."jobs.id as job_id",$DBprefix."jobs.employer",$DBprefix."jobs.job_category",
@@ -107,7 +107,8 @@
                 $DBprefix."categories.category_name_vi",$DBprefix."categories.category_name",
                 $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",
                 $DBprefix."salary.salary_range",$DBprefix."salary.salary_range_en",
-                $DBprefix."employers.id as employer_id",$DBprefix."employers.username as employer_username",$DBprefix."employers.logo"
+                $DBprefix."employers.id as employer_id",$DBprefix."employers.username as employer_username",
+                $DBprefix."employers.logo",$DBprefix."employers.company"
             );
 
             $this->_db->join("categories", $DBprefix."jobs.job_category=".$DBprefix."categories.category_id", "LEFT");
@@ -117,7 +118,7 @@
             $this->_db->join("employers", $DBprefix."jobs.employer=".$DBprefix."employers.username", "LEFT");
             $this->_db->where ($DBprefix."employers.id", "$id");
             
-            $data = $this->_db->withTotalCount()->get("jobs", NULL, $selected_columns);
+            $data = $this->_db->withTotalCount()->get("jobs", $limit, $selected_columns);
             
             if($this->_db->totalCount > 0){
                 return $data;

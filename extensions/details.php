@@ -189,11 +189,9 @@ $strLink = "http://".$DOMAIN_NAME."/".$website->job_link($posting[0]["id"],$post
 			?>
 			</a>
 			<div class="clearfix underline-link"></div>
-			<a href="<?php // echo $website->company_jobs_link($employer["id"],$employer["company"]);?>" class="sub-text underline-link"><?php // echo $M_MORE_JOBS_FROM;?> <?php // echo stripslashes($employer["company"]);?></a>
-                        <a href="<?php echo $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $employer["id"]);?>" class="sub-text underline-link"><?php echo $M_MORE_JOBS_FROM;?> <?php echo stripslashes($employer["company"]);?></a>
+                        <a href="<?php echo $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $employer["id"], $website->seoURL($employer["company"]));?>" class="sub-text underline-link"><?php echo $M_MORE_JOBS_FROM;?> <?php echo stripslashes($employer["company"]);?></a>
 			<br/>
-			<!--<a href="<?php // echo $website->company_link($employer["id"],$employer["company"]);?>" class="sub-text underline-link"><?php // echo $M_COMPANY_DETAILS;?></a>-->
-                        <a href="<?php echo $website->company_link($employer["id"],$employer["company"]);?>" class="sub-text underline-link"><?php echo $M_COMPANY_DETAILS;?></a>
+                        <a href="<?php echo $website->check_SEO_link("companyInfo", $SEO_setting, $employer["id"], $website->seoURL($employer["company"]));?>" class="sub-text underline-link"><?php echo $M_COMPANY_DETAILS;?></a>
 		</div>
 	</div>
 	

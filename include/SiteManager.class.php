@@ -438,9 +438,9 @@ class SiteManager
 	}
             
 	function LanguagesMenu($page)
-	{
-            
-		global $lang,$database,$website,$_REQUEST;
+	{       
+                
+		global $lang,$database,$website,$_REQUEST, $DOMAIN_NAME;
 		$strResult="";
                     
                     
@@ -467,7 +467,7 @@ class SiteManager
                                     
 				$strResult.=
 				"
-					<a href=\"".$str_link."\"><img alt=\"".stripslashes($arrLanguages["name"])."\"  title=\"".stripslashes($arrLanguages["name"])."\" src=\"images/flags/".strtoupper($arrLanguages["code"]).".gif\" width=\"21\" height=\"14\"/></a>
+					<a href=\"".$str_link."\"><img alt=\"".stripslashes($arrLanguages["name"])."\"  title=\"".stripslashes($arrLanguages["name"])."\" src=\"http://$DOMAIN_NAME/images/flags/".strtoupper($arrLanguages["code"]).".gif\" width=\"21\" height=\"14\"/></a>
 				";	
 			}
                             
@@ -2204,6 +2204,8 @@ class SiteManager
         *
         */
         function seoUrl($string) {
+            //Strip Vietnamese special characters
+            $string = $this->stripVN($string);            
             //Lower case everything
             $string = strtolower($string);
             //Make alphanumeric (removes all other characters)
@@ -2291,7 +2293,7 @@ class SiteManager
         /**
         * check SEO setting and output link accordingly
         * @param   var $mod module of the page
-        * @param   var $segment segment part that you want to get (int value 1,2,3,4...)
+        * @param   var $SEO_setting input whether SEO setting is enabled(1) or disabled(0)
         * @param   var $id filter by id
         * @param   var $SEO_title SEO title url
         * @param   var $lang define language
@@ -2305,7 +2307,7 @@ class SiteManager
                         echo "http://$DOMAIN_NAME/index.php?mod=featured";
                         break;
                     case "latest":
-                        echo "http://$DOMAIN_NAME/index.php?mod=latest";
+                        echo "http://$DOMAIN_NAME/index.php?mod=latest_jobs";
                         break;
                     case "apply_job":
                         echo "http://$DOMAIN_NAME/index.php?mod=apply_job&posting_id=$id&lang=$lang";
@@ -2318,6 +2320,9 @@ class SiteManager
                         break;
                     case "details":
                         echo "http://$DOMAIN_NAME/index.php?mod=details&id=$id&lang=vn";
+                        break;
+                    case "companyInfo":
+                        echo "http://$DOMAIN_NAME/index.php?mod=company&id=$id&lang=vn";
                         break;
                 }                
             } else { //SEO enabled
@@ -2335,10 +2340,13 @@ class SiteManager
                         echo "http://$DOMAIN_NAME/viec-lam-da-luu/";
                         break;
                     case "jobs_by_companyId":
-                        echo "http://$DOMAIN_NAME/viec-lam-cung-cong-ty/$id/";
+                        echo "http://$DOMAIN_NAME/viec-lam-cung-cong-ty/$id/$SEO_title";
                         break;
                     case "details":
                         echo "http://$DOMAIN_NAME/chi-tiet-cong-viec/$id/$SEO_title";
+                        break;
+                    case "companyInfo":
+                        echo "http://$DOMAIN_NAME/thong-tin-cong-ty/$id/$SEO_title";
                         break;
                 }
             }                    
