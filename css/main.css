@@ -2701,8 +2701,13 @@ div.upload input:hover {
         border: solid 1px #cfcfcf;
         height: 35px;
         line-height: 19px;
-        width: 296px;
+        /*width: 296px;*/
         color: #a0a0a0;        
+    }
+    
+    .contactForm fieldset input[type="checkbox"]{
+        width: 20px;
+        height: 15px;
     }
     
     .contactForm fieldset textarea{

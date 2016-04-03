@@ -160,9 +160,7 @@ if(isset($_REQUEST["add_comment"]))
 			';
 								
 		
-			if($website->GetParam("USE_CAPTCHA_IMAGES")==1)
-			{
-			?>
+			if($website->GetParam("USE_CAPTCHA_IMAGES")==1){ ?>
 			<li>
 				<label for="captcha_code">
 				<img src="include/sec_image.php" width="100" height="30"/>
