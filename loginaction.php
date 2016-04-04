@@ -54,14 +54,14 @@ else
 	else 
 	{
 	
-		$strSelect="select username,password from ".$DBprefix."jobseekers where username='".$database->escape_string($Email)."' AND active=1";
+		$strSelect="select username,password,id from ".$DBprefix."jobseekers where username='".$database->escape_string($Email)."' AND active=1";
 	
 		$LoginResult=$database->Query($strSelect);
 		$LoginInfo = $database->fetch_array($LoginResult);
 
 		if($database->num_rows($LoginResult)>0&&$LoginInfo["password"]==$Password) 
 		{
-			$strCookie=$LoginInfo["username"]."~".md5($LoginInfo["password"])."~".(time()+LOGIN_EXPIRE_AFTER);
+			$strCookie=$LoginInfo["username"]."~".md5($LoginInfo["password"])."~".(time()+LOGIN_EXPIRE_AFTER) . "~" . $LoginInfo["id"];
 
 			setcookie("AuthJ",$strCookie);	
 			

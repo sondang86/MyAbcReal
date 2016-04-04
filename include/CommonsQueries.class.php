@@ -154,4 +154,20 @@
             
             return $value;
        }
+       
+       /**
+        *  Convert True or False to integer
+        * 
+        *  @param var $data data input is either string TRUE or FALSE
+        *  
+        */
+        
+        public function convert_TrueFalse($data){
+            if($data == true){
+                $data = 1;
+            } else {
+                $data = 0;
+            }
+            return $data;
+        }
     }

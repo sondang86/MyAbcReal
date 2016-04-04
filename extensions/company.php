@@ -2,13 +2,17 @@
     if(!defined('IN_SCRIPT')) die("");
     global $db, $commonQueries, $SEO_setting;
     $company_id = $commonQueries->check_present_id("id",$SEO_setting);
-    $company_jobs = $commonQueries->jobs_by_employerId(4, array(0,5));
+    $company_jobs = $commonQueries->jobs_by_employerId($company_id, array(0,5));
     $reviews = $db->rawQuery("SELECT count(id) as number,avg(vote) as vote FROM ".$DBprefix."company_reviews WHERE company_id=3");    
-    $db->where("id", 3);
-    $company_info = $db->get("employers");
+    $db->where("id", $company_id);
+    $company_info = $db->get("employers");    
     
-//    print_r($company_jobs);
-    
+    if(!empty($_COOKIE["AuthJ"])){
+        $jobseeker_data = explode("~",$_COOKIE["AuthJ"]);
+        $jobseeker_email = $jobseeker_data[0];
+        $jobseeker_id = $jobseeker_data[3];
+    }
+
 
 ?>
 <div class="page-wrap">
@@ -93,8 +97,36 @@
                 <link href="/vieclambanthoigian.com.vn/css/fontawesome-stars.css" rel="stylesheet" type="text/css"/>
                 <script src="/vieclambanthoigian.com.vn/js/jquery.barrating.min.js" type="text/javascript"></script>
                 <script type="text/javascript">
+                    $(document).ready(function(){
+                        $("#reviewSubmit").on('click', function(event) {
+                            var anonymous = $("#anonymous").prop('checked'); 
+                            var jobseeker_email = $("#jobseeker-email").attr("value");
+                            var jobseeker_id = <?php echo $jobseeker_id;?>;
+                            var company_id = <?php echo $company_id;?>
+                            //reviewSubmit button clicked, processing data
+                            $.ajax({
+                                type: "POST",
+                                url: "http://<?php echo $DOMAIN_NAME?>/extensions/handleReview.php",
+                                data: {
+                                    rating: $(".br-current-rating").text(),
+                                    title: $("#review-title").val(),
+                                    review: $("#review-content").val(),
+                                    anonymous: anonymous,
+                                    jobseeker_email: jobseeker_email,
+                                    jobseeker_id: jobseeker_id,
+                                    company_id: company_id
+                                },
+                                success: function() {
+                                    alert('success');
+                                }
+                            });
+                            event.preventDefault();
+                        });
+                    });
+                    
+//                    Bar rating stars
                     $(function() {
-                       $('#example').barrating({
+                       $('#star-rating').barrating({
                          theme: 'fontawesome-stars',
                          initialRating: 3, //Default value
                          showSelectedRating: true,
@@ -102,54 +134,48 @@
                             if (typeof(event) !== 'undefined') {
                               // rating was selected by a user
                               var value = $('.br-current-rating').text();
-                              alert(value);                              
+//                              alert(value);                              
                             } 
                           }                         
                        });
-                    });
-                    
-//                    $.ajax({
-//                        type: "POST",
-//                        url: "send_prv_msg.php",
-//                        data: {
-//                            rating: $(".br-current-rating").val(),
-//                            review: $("#review-content").val(),
-//                            anonymous: $("#anonymous").val()
-//                        },
-//                        success: function() {
-//                            alert('success');
-//                        }
-//                    });
-
+                    });                    
                  </script>
                 <div id="danh-gia" class="tab-pane fade">
                     <?php // if($dasd){?>
-                    <form action="dasdsa" method="post">
+                    <!--<form action="dasdsa" method="post">-->
                         <section class="row contactForm">
                             <fieldset class="col-md-12">
                                 <label>Đánh giá: </label>
-                                <select id="example">
+                                <select id="star-rating">
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
                                     <option value="4">4</option>
                                     <option value="5">5</option>
                                 </select>
-                            </fieldset>                            
+                            </fieldset>
+                            <fieldset class="col-md-12">
+                                <label>Email: </label>
+                                <input type="text" name="email" id="jobseeker-email" value="<?php echo $jobseeker_email;?>" disabled>
+                            </fieldset>
+                            <fieldset class="col-md-12">
+                                <label>Tiêu đề: </label>
+                                <input type="text" name="title" id="review-title">
+                            </fieldset>
                             <fieldset class="col-md-12">
                                 <label>Review của bạn về công ty (tối thiểu 30 ký tự): (*)</label>
                                 <textarea name="review-content" id="review-content" minlength="30"></textarea>
                             </fieldset>
                             <fieldset class="col-md-12">
                                 <label>Ẩn danh</label>
-                                <input type="checkbox" name="anonymous" id="anonymous" checked>
+                                <input type="checkbox" name="anonymous" id="anonymous" checked="checked">
                             </fieldset>
                             <fieldset class="col-md-12">
                                 <label></label>
-                                <input type="submit" name="reviewSubmit" value="Gửi">
+                                <input type="submit" name="reviewSubmit" id="reviewSubmit" value="Gửi">
                             </fieldset>
                         </section>                        
-                    </form>
+                    <!--</form>-->
                     <?php // } else {?>
                     <!--<h4>Bạn phải đăng nhập mới thực hiện được chức năng này</h4>-->
                     <?php // }?>
