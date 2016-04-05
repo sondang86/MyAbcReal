@@ -6,7 +6,8 @@
     $company_jobs = $commonQueries->jobs_by_employerId($company_id, array(0,5)); //get 5 jobs only
     $db->where("id", $company_id);
     $company_info = $db->get("employers");    
-        
+    
+    //if user is logged in, store data
     if(!empty($_COOKIE["AuthJ"])){
         $jobseeker_data = explode("~",$_COOKIE["AuthJ"]);
         $jobseeker_email = $jobseeker_data[0];
@@ -14,16 +15,19 @@
     }
         
     $reviews = $db->rawQuery("SELECT count(id) as number,avg(vote) as vote FROM ".$DBprefix."company_reviews WHERE company_id=$company_id");    
-//    print_r($reviews);
     //Check if user has already reviewed
     $user_review = $db->where('jobseeker_id', $jobseeker_id)->withTotalCount()->get('company_reviews');
+    
     if ($db->totalCount > 0) {
         $user_reviewed = TRUE;
+        $user_review_totalCount = $db->totalCount;
     } else {
         $user_reviewed = FALSE;
     }
-//    
-//    print_r($user_review);
+    //Retrieve company reviews
+    $company_reviews = $db->withTotalCount()->where("company_id", $company_id)->get("company_reviews");
+    $company_reviews_totalCount = $db->totalCount;
+
     
 ?>
 <div class="page-wrap">
@@ -31,7 +35,7 @@
         <section class="col-md-8 companyTitle">
             <h2>Prudential</h2>
             <span><?php echo $website->show_stars($reviews[0]['vote']);?></span>
-            <span>(<a href="danhgia-prudential-3.html">0 Nhận xét</a>)</span>        
+            <span>(<a href="#reviews"><?php echo $company_reviews_totalCount;?> Nhận xét</a>)</span>        
         </section>        
         <figure class="col-md-4">
             <img src="http://localhost/vieclambanthoigian.com.vn/uploaded_images/90945453.jpg" width="300" class="img-responsive" alt="Prudential">
@@ -232,79 +236,125 @@
             border: 5px solid #ccc;
             border-radius: 3px;
             height: auto;
-            margin: 20px 10px;
+            margin: 4px 0px;
             max-width: 100%;
             padding: 5px;
-            position: relative;            
-          }
-          
-          .list-reviews {
-              position: relative;
-          }
-          
-          .tip {
-            width: 0px;
-            height: 0px;
-            position: absolute;
-            background: transparent;
-            border: 10px solid #ccc;
-          }
-
-          .tip-up {
-            left: 15px;
-            top: -25px;
-            border-right-color: transparent;
-            border-left-color: transparent;
-            border-top-color: transparent;
-          }
-          
-          .message p {
+            position: relative;  
+            margin-bottom: 25px;
+        }
+        
+        .message p {
             min-height: 30px;
             border-radius: 3px;
             font-family: Arial;
             font-size: 14px;
             line-height: 1.5;
             color: #797979;
-          }
+        }
+            
+        .list-reviews {
+            /*position: relative;*/
+        }
+            
+        .tip {
+            width: 0px;
+            height: 0px;
+            position: absolute;
+            background: transparent;
+            border: 10px solid #ccc;
+        }
+            
+        .tip-up {
+            left: 15px;
+            top: -25px;
+            border-right-color: transparent;
+            border-left-color: transparent;
+            border-top-color: transparent;
+        }
+            
+        
+            
+        .review-user img{
+            float: left;
+        }
+            
+        .satisfaction-rating {
+            text-align: right;
+        }
+            
+        .review-user p{
+            padding-left: 5px;
+            display: inline-block;
+            width: 80%;
+            word-break: break-all;
+        }
+        
+        .list-reviews {
+            /*float: left;*/
+            width: 100%;
+        }
+        /* Underline Reveal effect*/
+        .hvr-underline-reveal {
+            display: inline-block;
+            vertical-align: middle;
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+            box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -moz-osx-font-smoothing: grayscale;
+            position: relative;
+            overflow: hidden;
+        }
+        .hvr-underline-reveal:before {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #2098d1;
+            height: 4px;
+            -webkit-transform: translateY(4px);
+            transform: translateY(4px);
+            -webkit-transition-property: transform;
+            transition-property: transform;
+            -webkit-transition-duration: 0.3s;
+            transition-duration: 0.3s;
+            -webkit-transition-timing-function: ease-out;
+            transition-timing-function: ease-out;
+        }
+        .hvr-underline-reveal:hover:before, .hvr-underline-reveal:focus:before, .hvr-underline-reveal:active:before {
+            -webkit-transform: translateY(0);
+            transform: translateY(0);
+        }
     </style>
+
     <!--List reviews-->
-    <div class="row list-reviews">
-        <section class="col-md-12">
-            <span><img src="http://www.prometheanworld.me/img/default/userAvatar.png" height="50" width="50"></span>
-            <span>Lee of Exeter, NH on March 31, 2016</span>
-            <span>Satisfaction Rating</span>
-            <span><?php echo $website->show_stars($reviews[0]['vote']);?></span>
-        </section>
-        <section class="col-md-12 message">
+    <h4 id="reviews">Đánh giá: </h4>    
+    <?php if($company_reviews_totalCount !== "0"){
+        foreach ($company_reviews as $company_review) :
+    ?>
+    <div class="list-reviews hvr-underline-reveal">        
+        <form class="row">
+            <section class="col-md-8 col-xs-12 review-user">
+                <img src="http://www.prometheanworld.me/img/default/userAvatar.png" height="50" width="50">
+                <p>Lee of Exeter vào <?php echo date("M d, Y",$company_review['date'])?></p>
+                <p><label><?php echo $company_review['title']?></label> :</p>
+            </section>
+            <section class="col-md-4 col-xs-12 satisfaction-rating">
+                <p>Độ hài lòng:</p>
+                <p><?php echo $website->show_stars($company_review['vote']);?></p>
+            </section>
+        </form>
+
+        <form class="row message">
             <span class="tip tip-up"></span>
-            <p>DO NOT purchase this list. I signed up for her list during a remodel 3 years ago. I found only amateur and unprofessional workers, despite "good reviews". I agree with many of the other reviews. Once signed up, it is extremely hard to be removed, if not impossible. I paid for a one-time, temporary subscription thru PayPal. 3 YEARS LATER, they are still charging my account! I have contacted them countless times over the past 3 years to be removed from their list (emails, paper mail and payment). They just ignore me and keep charging! I have never had such a hard time with such basic communication with a company. STAY AWAY from this money hungry company.</p>
-        </section>
+            <p class="col-md-12"><?php echo $company_review['html']?></p>
+        </form>
     </div>
-    
-    <div class="row list-reviews">
-        <section class="col-md-12">
-            <span><img src="http://www.prometheanworld.me/img/default/userAvatar.png" height="50" width="50"></span>
-            <span>Lee of Exeter, NH on March 31, 2016</span>
-            <span>Satisfaction Rating</span>
-            <span><?php echo $website->show_stars($reviews[0]['vote']);?></span>
-        </section>
-        <section class="col-md-12 message">
-            <span class="tip tip-up"></span>
-            <p>DO NOT purchase this list. I signed up for her list during a remodel 3 years ago. I found only amateur and unprofessional workers, despite "good reviews". I agree with many of the other reviews. Once signed up, it is extremely hard to be removed, if not impossible. I paid for a one-time, temporary subscription thru PayPal. 3 YEARS LATER, they are still charging my account! I have contacted them countless times over the past 3 years to be removed from their list (emails, paper mail and payment). They just ignore me and keep charging! I have never had such a hard time with such basic communication with a company. STAY AWAY from this money hungry company.</p>
-        </section>
-    </div>
-    
-    <div class="row list-reviews">
-        <section class="col-md-12">
-            <span><img src="http://www.prometheanworld.me/img/default/userAvatar.png" height="50" width="50"></span>
-            <span>Lee of Exeter, NH on March 31, 2016</span>
-            <span>Satisfaction Rating</span>
-            <span><?php echo $website->show_stars($reviews[0]['vote']);?></span>
-        </section>
-        <section class="col-md-12 message">
-            <span class="tip tip-up"></span>
-            <p>DO NOT purchase this list. I signed up for her list during a remodel 3 years ago. I found only amateur and unprofessional workers, despite "good reviews". I agree with many of the other reviews. Once signed up, it is extremely hard to be removed, if not impossible. I paid for a one-time, temporary subscription thru PayPal. 3 YEARS LATER, they are still charging my account! I have contacted them countless times over the past 3 years to be removed from their list (emails, paper mail and payment). They just ignore me and keep charging! I have never had such a hard time with such basic communication with a company. STAY AWAY from this money hungry company.</p>
-        </section>
-    </div>
-    
+    <?php endforeach; 
+        } else {//No records?> 
+        <h4>Hiện chưa có đánh giá nào về công ty này</h4>  
+    <?php }?>
 </div>
