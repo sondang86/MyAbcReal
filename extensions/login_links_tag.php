@@ -16,14 +16,14 @@ if($MULTI_LANGUAGE_SITE)
 if(isset($_COOKIE["AuthJ"])&&$_COOKIE["AuthJ"]!="")
 {
 	?>
-	<li><a class="btn btn-primary custom-back-color" href="JOBSEEKERS/index.php<?php if($MULTI_LANGUAGE_SITE) echo "?lng=".$this->lang;?>"><span class="btn-main-login"><?php echo $M_MY_SPACE;?></span></a></li>
+	<li><a class="btn btn-primary custom-back-color" href="http://<?php echo $DOMAIN_NAME;?>/JOBSEEKERS/index.php<?php if($MULTI_LANGUAGE_SITE) echo "?lng=".$this->lang;?>"><span class="btn-main-login"><?php echo $M_MY_SPACE;?></span></a></li>
 	<?php
 }
 else
 if(isset($_COOKIE["AuthE"])&&$_COOKIE["AuthE"]!="")
 {
 	?>
-	<li><a class="login-trigger btn btn-primary custom-back-color" href="EMPLOYERS/index.php<?php if($MULTI_LANGUAGE_SITE) echo "?lng=".$this->lang;?>"><span class="btn-main-login"><?php echo $M_MY_SPACE;?></span></a></li>
+	<li><a class="login-trigger btn btn-primary custom-back-color" href="http://<?php echo $DOMAIN_NAME;?>/EMPLOYERS/index.php<?php if($MULTI_LANGUAGE_SITE) echo "?lng=".$this->lang;?>"><span class="btn-main-login"><?php echo $M_MY_SPACE;?></span></a></li>
 	<?php
 }
 else

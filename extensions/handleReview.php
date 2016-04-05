@@ -27,6 +27,8 @@ if (isset($_POST['review']) && isset($_POST['rating']) && isset($_POST['anonymou
     } else { //insert data to db
         $data = Array (
             "date" => time(),
+            "company_id" => $_POST['company_id'],
+            "title" => $_POST['title'],
             "jobseeker_id" => $_POST['jobseeker_id'],
             "html" => $_POST['review'],
             "email" => $_POST['jobseeker_email'],

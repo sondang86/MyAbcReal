@@ -5,6 +5,7 @@
 // http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
+global $DOMAIN_NAME;
 ?>
 <br/>
 <div class="page-wrap">
@@ -157,7 +158,7 @@ if(!defined('IN_SCRIPT')) die("");
 				
 			?>
 			
-			<form class="no-margin" action="loginaction.php" method="post" onsubmit="return ValidateLoginForm(this)">
+			<form class="no-margin" action="http://<?php echo $DOMAIN_NAME?>/loginaction.php" method="post" onsubmit="return ValidateLoginForm(this)">
 			<input type="hidden" name="mod" value="login"/>
 			<table>
 			<?php
