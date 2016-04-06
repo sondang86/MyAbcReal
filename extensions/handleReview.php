@@ -19,9 +19,10 @@ $commonQueries = new CommonsQueries($db);
 //Make sure 4 options are not empty for review submit
 if (isset($_POST['review']) && isset($_POST['rating']) && isset($_POST['anonymous']) && isset($_POST['jobseeker_id'])){
     
-    $dataaa = $db->where("jobseeker_id", filter_input(INPUT_POST, 'jobseeker_id', FILTER_SANITIZE_NUMBER_INT))->withTotalCount()->get("company_reviews");
+    $dataaa =   $db->where('company_id', filter_input(INPUT_POST, 'company_id', FILTER_SANITIZE_NUMBER_INT))
+                ->where("jobseeker_id", filter_input(INPUT_POST, 'jobseeker_id', FILTER_SANITIZE_NUMBER_INT))->withTotalCount()->get("company_reviews");
     if ($db->totalCount > 0){//user already reviewed
-        echo "you are already reviewed";        
+        echo "already reviewed";        
     } else { //insert data to db, always remember to sanitize before insert
         $data = Array (
             "date" => time(),
@@ -45,7 +46,7 @@ if (isset($_POST['review']) && isset($_POST['rating']) && isset($_POST['anonymou
 //Contact form handle, make sure 3 required fields is set
 elseif (isset($_POST['title']) && isset($_POST['content']) && isset($_POST['email'])){
     //Send mail notification to employer
-    
+    mail(filter_input(INPUT_POST, 'employer_email', FILTER_SANITIZE_EMAIL), filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING),filter_input(INPUT_POST, 'content', FILTER_SANITIZE_STRING));    
 } 
 //Missing required fields
 else { 

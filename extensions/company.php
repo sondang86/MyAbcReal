@@ -12,20 +12,21 @@
         $jobseeker_data = explode("~",$_COOKIE["AuthJ"]);
         $jobseeker_email = $jobseeker_data[0];
         $jobseeker_id = $jobseeker_data[3];
-        $user_review = $db->where('jobseeker_id', $jobseeker_id)->withTotalCount()->get('company_reviews');
+        $user_review = $db->where('company_id', $company_id)->where('jobseeker_id', $jobseeker_id)->withTotalCount()->get('company_reviews');
+        
+        //Check if user has already reviewed
+        if ($db->totalCount > 0) {
+            $user_reviewed = TRUE;
+            $user_review_totalCount = $db->totalCount;
+        } else {
+            $user_reviewed = FALSE;
+        }
     }
         
     $reviews = $db->rawQuery("SELECT count(id) as number,avg(vote) as vote FROM ".$DBprefix."company_reviews WHERE company_id=$company_id");    
-    //Check if user has already reviewed
-    $user_review = $db->where('company_id', $company_id)->where('jobseeker_id', $jobseeker_id)->withTotalCount()->get('company_reviews');
+
         
-    //Check if user has already reviewed
-    if ($db->totalCount > 0) {
-        $user_reviewed = TRUE;
-        $user_review_totalCount = $db->totalCount;
-    } else {
-        $user_reviewed = FALSE;
-    }
+    
     //Retrieve company reviews
     $company_reviews = $db->withTotalCount()->where("company_id", $company_id)->get("company_reviews");
     $company_reviews_totalCount = $db->totalCount;
@@ -116,9 +117,14 @@
                                     jobseeker_id: jobseeker_id,
                                     company_id: company_id
                                 },
-                                success: function() { //show thanks message
-                                    $("#reviewForm").hide("1");
-                                    $("#reviewed").show("1");
+                                success: function(response) { 
+                                    if (response == 'already reviewed'){
+                                        $("#reviewForm").hide("1");
+                                        $("#alreadyReviewed").show("1");
+                                    } else { //show thanks message
+                                        $("#reviewForm").hide("1");
+                                        $("#reviewed").show("1");
+                                    }
                                 }
                             });
                             event.preventDefault();
@@ -179,7 +185,10 @@
                         
                     <section id="reviewed" style="display:none">
                         <h4>Cảm ơn bạn đã viết đánh giá.</h4>
-                    </section>    
+                    </section> 
+                    <section id="alreadyReviewed" style="display:none">
+                        <h4>Bạn đã đánh giá rồi.</h4>
+                    </section>
                 </div>
                  <?php } //User already reviewed
                         elseif(!empty($_COOKIE["AuthJ"]) && ($user_reviewed == TRUE)){ 
@@ -211,18 +220,19 @@
                     $(document).ready(function(){
                         //Contact form submit
                         $("#contactSubmit").on('click', function(event){
-                            alert("clicked");
+                            var employer_email = "<?php echo $company_info[0]['username']?>";
                             //Send data process
                             $.ajax({
                                 type: "POST",
                                     url: "http://<?php echo $DOMAIN_NAME?>/extensions/handleReview.php",
                                     data: {
-                                    title: $("#contactTitle").val(),
+                                        title: $("#contactTitle").val(),
                                         content: $("#contactContent").val(),
-                                        email: $("#contactEmail").val()
+                                        email: $("#contactEmail").val(),
+                                        employer_email: employer_email
                                 },
                                 success: function() { //show thanks message
-                                    $(".contactForm").hide("1");
+                                    $("#contactForm").hide("1");
                                     $("#reviewed").show("1");
                                 }
                             });
@@ -231,7 +241,7 @@
                     });
                 </script>
                 <div id="lien-he" class="tab-pane fade">
-                    <section class="row contactForm">
+                    <section class="row contactForm" id="contactForm">
                         <fieldset class="col-md-12">
                             <label>Tiêu đề (*)</label>
                             <input type="text" name="contactTitle" id="contactTitle" required>
