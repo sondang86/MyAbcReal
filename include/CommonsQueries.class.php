@@ -92,9 +92,10 @@
         
         
         /**
-        *  Find jobs by employer id
+        *  Find jobs by employer id, default find by employer Id 1
         * 
         *  @param var $id id or name of the selected column
+        *  @param var $limit limit the number of records to be appear
         */
         public function jobs_by_employerId($id="1", $limit=NULL) {
             global $DBprefix;
@@ -116,7 +117,11 @@
             $this->_db->join("salary", $DBprefix."jobs.salary=".$DBprefix."salary.salary_id", "LEFT");
             $this->_db->join("locations", $DBprefix."jobs.region=".$DBprefix."locations.id", "LEFT");
             $this->_db->join("employers", $DBprefix."jobs.employer=".$DBprefix."employers.username", "LEFT");
-            $this->_db->where ($DBprefix."employers.id", "$id");
+            
+            //Find jobs by id
+            if(!empty($id)){
+                $this->_db->where ($DBprefix."employers.id", "$id");
+            }
             
             $data = $this->_db->withTotalCount()->get("jobs", $limit, $selected_columns);
             
@@ -125,7 +130,8 @@
             } else {
                 return FALSE;
             }
-        }
+        }        
+        
         
         /**
         *  check id is exists or not

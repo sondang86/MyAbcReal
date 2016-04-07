@@ -167,25 +167,18 @@ $segment = $website->getURL_segment($website->currentURL());
             <?php foreach ($categories as $catkey => $category) :?>
             <span class="col-md-4 main-category">
                 <!--MAIN CATEGORIES-->
-                <p><a href="index.php?mod=category&id=<?php echo $category['category_id']?>&lang=vn"><?php echo $category['category_name_vi']?></a>(<?php echo $commonQueries->countRecords("job_category", $category['category_id'], "jobs")->count?>)</p>
-                
-                <!--LIST SUB CATEGORIES-->
-                <?php // foreach ($categories_subs as $subkey => $category_subs) :
-//                        if ($category_subs['main_category_id'] == $category['category_id']){
-//                            echo "<small><a href='#'><em><small>". $category_subs['sub_category_name_vn'] . "</small></em></a></small>";
-//                        }
-                ?>                    
-                <?php // endforeach;?>
+                <p><a href="<?php $website->check_SEO_link("jobs_by_category",$SEO_setting, $category['category_id'], $website->seoUrl($category['category_name_vi']))?>"><?php echo $category['category_name_vi']?></a>(<?php echo $commonQueries->countRecords("job_category", $category['category_id'], "jobs")->count?>)</p>
             </span>
             <?php endforeach;?>
         </div>
     </div>    
+    
     <!--BY LOCATIONS-->
     <div id="by_location" class="tab-pane fade padding-5">
         <div class="row same_height">
             <?php foreach ($locations as $location) :?>
             <span class="col-md-3 main-category">
-                <a href="index.php?mod=location&id=<?php echo $location['id']?>&lang=vn" class="main_category_link"><?php echo $location['City']?></a>
+                <a href="<?php $website->check_SEO_link("jobs_by_location",$SEO_setting, $location['id'], $website->seoUrl($location['City']))?>" class="main_category_link"><?php echo $location['City']?></a>
             </span>
             <?php endforeach;?>
         </div>
@@ -196,7 +189,7 @@ $segment = $website->getURL_segment($website->currentURL());
         <div class="row same_height">
             <?php foreach ($companies as $company) :?>
             <span class="col-md-3 main-category">
-                <a href="index.php?mod=company&id=<?php echo $company['id']?>&lang=vn"><?php echo $company['company']?></a>
+                <a href="<?php $website->check_SEO_link("jobs_by_companyId",$SEO_setting, $company['id'], $website->seoUrl($company['company']))?>"><?php echo $company['company']?></a>
             </span>
             <?php endforeach;?>
         </div>

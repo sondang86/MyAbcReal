@@ -2318,6 +2318,12 @@ class SiteManager
                     case "jobs_by_companyId":
                         echo "http://$DOMAIN_NAME/index.php?mod=job_by_company&company=$id&lang=vn";
                         break;
+                    case "jobs_by_category":
+                        echo "http://$DOMAIN_NAME/index.php?mod=category&id=$id&lang=vn";
+                        break;
+                    case "jobs_by_location":
+                        echo "http://$DOMAIN_NAME/index.php?mod=location&id=$id&lang=vn";
+                        break;
                     case "details":
                         echo "http://$DOMAIN_NAME/index.php?mod=details&id=$id&lang=vn";
                         break;
@@ -2344,6 +2350,12 @@ class SiteManager
                         break;
                     case "jobs_by_companyId":
                         echo "http://$DOMAIN_NAME/viec-lam-cung-cong-ty/$id/$SEO_title";
+                        break;
+                    case "jobs_by_category":
+                        echo "http://$DOMAIN_NAME/viec-lam-theo-nganh/$id/$SEO_title";
+                        break;
+                    case "jobs_by_location":
+                        echo "http://$DOMAIN_NAME/viec-lam-theo-dia-diem/$id/$SEO_title";
                         break;
                     case "details":
                         echo "http://$DOMAIN_NAME/chi-tiet-cong-viec/$id/$SEO_title";
