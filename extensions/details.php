@@ -77,10 +77,10 @@ $strLink = "http://".$DOMAIN_NAME."/".$website->job_link($posting[0]["id"],$post
 			
 	?>
 	
-	<a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&title=<?php echo urlencode(strip_tags(stripslashes(strip_tags($posting[0]["title"]))));?>&url=<?php echo $strLink;?>" target="_blank"><img src="/vieclambanthoigian.com.vn/images/linkedin.gif" width="18" height="18" class="pull-right" alt=""/></a>
-	<a rel="nofollow" href="http://plus.google.com/share?url=<?php echo $strLink;?>" target="_blank"><img src="/vieclambanthoigian.com.vn/images/googleplus.gif" width="18" height="18" class="pull-right r-margin-7" alt=""/></a>
-	<a rel="nofollow" href="http://www.twitter.com/intent/tweet?text=<?php echo urlencode(strip_tags(stripslashes(strip_tags($posting[0]["title"]))));?>&url=<?php echo $strLink;?>" target="_blank"><img src="/vieclambanthoigian.com.vn/images/twitter.gif" width="18" height="18" class="pull-right  r-margin-7" alt=""/></a>
-	<a rel="nofollow" href="http://www.facebook.com/sharer.php?u=<?php echo $strLink;?>" target="_blank"><img src="/vieclambanthoigian.com.vn/images/facebook.gif" width="18" height="18" alt="" class="pull-right r-margin-7"/></a>
+	<a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&title=<?php echo urlencode(strip_tags(stripslashes(strip_tags($posting[0]["title"]))));?>&url=<?php echo $strLink;?>" target="_blank"><img src="http://<?php echo $DOMAIN_NAME?>/images/linkedin.gif" width="18" height="18" class="pull-right" alt=""/></a>
+	<a rel="nofollow" href="http://plus.google.com/share?url=<?php echo $strLink;?>" target="_blank"><img src="http://<?php echo $DOMAIN_NAME?>/images/googleplus.gif" width="18" height="18" class="pull-right r-margin-7" alt=""/></a>
+	<a rel="nofollow" href="http://www.twitter.com/intent/tweet?text=<?php echo urlencode(strip_tags(stripslashes(strip_tags($posting[0]["title"]))));?>&url=<?php echo $strLink;?>" target="_blank"><img src="http://<?php echo $DOMAIN_NAME?>/images/twitter.gif" width="18" height="18" class="pull-right  r-margin-7" alt=""/></a>
+	<a rel="nofollow" href="http://www.facebook.com/sharer.php?u=<?php echo $strLink;?>" target="_blank"><img src="http://<?php echo $DOMAIN_NAME?>/images/facebook.gif" width="18" height="18" alt="" class="pull-right r-margin-7"/></a>
 	 
 	 
 	<h2 class="no-margin"><?php echo stripslashes(strip_tags($posting[0]["title"]));?></h2>
@@ -178,10 +178,9 @@ $strLink = "http://".$DOMAIN_NAME."/".$website->job_link($posting[0]["id"],$post
 		<div class="col-md-4 text-center">
 			<a href="<?php echo $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $employer["id"], $website->seoURL($employer["company"]));?>">
 			<?php	
-			if($employer["logo"]!=""&&file_exists('thumbnails/'.$employer["logo"].'.jpg'))
-			{
-				echo '<img class="logo-border img-responsive" src="/vieclambanthoigian.com.vn/thumbnails/'.$employer["logo"].'.jpg" alt="'.$employer["company"].'"/>';
-			}
+			if($employer["logo"]!=""&&file_exists('thumbnails/'.$employer["logo"].'.jpg')){?>
+				<img class="logo-border img-responsive" src="http://<?php echo $DOMAIN_NAME;?>/thumbnails/<?php echo $employer["logo"]?>.jpg" alt="<?php echo $employer["company"]?>"/>
+			<?php }
 			else
 			{
 				echo '<div class="company-wrap">'.$employer["company"].'</div>';
@@ -253,11 +252,11 @@ $strLink = "http://".$DOMAIN_NAME."/".$website->job_link($posting[0]["id"],$post
 
 
 
-                        <img src="/vieclambanthoigian.com.vn/images/email-small-icon.png"/>
+                        <img src="http://<?php echo $DOMAIN_NAME?>/images/email-small-icon.png"/>
                         <a  href="#" class="small-link gray-link" data-toggle="collapse" data-target=".email-collapse"><?php echo $M_EMAIL_JOB;?></a>
 
 
-                        <img class="l-margin-20" src="/vieclambanthoigian.com.vn/images/save-small-icon.png" height="12"/>
+                        <img class="l-margin-20" src="http://<?php echo $DOMAIN_NAME?>/images/save-small-icon.png" height="12"/>
                         <?php
                         if(isset($_REQUEST["is_saved_page"]))
                         {
@@ -316,7 +315,7 @@ $strLink = "http://".$DOMAIN_NAME."/".$website->job_link($posting[0]["id"],$post
 				?>
 								
 							
-					<img src="/vieclambanthoigian.com.vn/include/sec_image.php" width="150" height="30" />
+					<img src="http://<?php echo $DOMAIN_NAME?>/include/sec_image.php" width="150" height="30" />
 				
 				
 					<?php echo $M_CODE;?>:

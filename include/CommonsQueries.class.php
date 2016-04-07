@@ -130,8 +130,37 @@
             } else {
                 return FALSE;
             }
-        }        
-        
+        }
+
+        /**
+        *  Find jobs by category or location or another types
+        * 
+        *  @param var $type id or name of the selected column
+        *  @param var $limit limit the number of records to be appear
+        */
+        public function jobs_by_type($type="job_category", $limit=NULL) {
+            //Find jobs based on specific category
+            $jobsInfo_columns = Array (
+                "jobsportal_jobs.id as job_id","jobsportal_jobs.date", "jobsportal_jobs.employer", //
+                "jobsportal_jobs.job_category", "jobsportal_jobs.region", "jobsportal_jobs.title", "jobsportal_jobs.expires", //
+                "jobsportal_jobs.message", "jobsportal_jobs.job_type", "jobsportal_jobs.salary","jobsportal_jobs.applications", // Main table
+                "jobsportal_categories.category_name_vi","jobsportal_categories.category_id", //Categories table
+                "jobsportal_salary.salary_id","jobsportal_salary.salary_range", //Salary table
+                "jobsportal_locations.City","jobsportal_locations.id as location_id", //Locations table
+                "jobsportal_employers.id as employer_id","jobsportal_employers.company as company","jobsportal_employers.logo as company_logo" //Employer table
+                );
+            $this->_db->join('categories', "jobsportal_jobs.job_category = jobsportal_categories.category_id", "LEFT");
+            $this->_db->join('salary', "jobsportal_jobs.salary = jobsportal_salary.salary_id", "LEFT");
+            $this->_db->join('locations', "jobsportal_jobs.region = jobsportal_locations.id", "LEFT");
+            $this->_db->join('employers', "jobsportal_jobs.employer = jobsportal_employers.username", "LEFT");
+            $this->_db->where($type, filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT));
+            $jobs_list = $this->_db->withTotalCount()->get('jobs', NULL, $jobsInfo_columns);
+            if ($this->_db->totalCount > 0){
+                return $jobs_list;
+            } else {
+                return FALSE;
+            }
+        }
         
         /**
         *  check id is exists or not

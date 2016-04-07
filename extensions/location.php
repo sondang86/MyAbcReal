@@ -1,6 +1,6 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
-global $db;
+global $db, $SEO_setting, $commonQueries;
 $website->Title("Việc làm theo công ty");
 $website->MetaDescription("abc");
 $website->MetaKeywords("def");
@@ -9,20 +9,9 @@ if (isset($_GET['id'])){
     $website->ms_i($_GET['id']); 
     
     //Find jobs based on specific category
-    $jobsInfo_columns = Array (
-        "jobsportal_jobs.id as job_id","jobsportal_jobs.date", "jobsportal_jobs.employer", //
-        "jobsportal_jobs.job_category", "jobsportal_jobs.region", "jobsportal_jobs.title", "jobsportal_jobs.expires", //
-        "jobsportal_jobs.message", "jobsportal_jobs.job_type", "jobsportal_jobs.salary","jobsportal_jobs.applications", // Main table
-        "jobsportal_categories.category_name_vi","jobsportal_categories.category_id", //Categories table
-        "jobsportal_salary.salary_id","jobsportal_salary.salary_range", //Salary table
-        "jobsportal_locations.City","jobsportal_locations.id as location_id" //Locations table
-        );
-    $db->join('categories', "jobsportal_jobs.job_category = jobsportal_categories.category_id", "LEFT");
-    $db->join('salary', "jobsportal_jobs.salary = jobsportal_salary.salary_id", "LEFT");
-    $db->join('locations', "jobsportal_jobs.region = jobsportal_locations.id", "LEFT");
-    $db->where('region', filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT));
-    $jobs_list = $db->withTotalCount()->get('jobs', NULL, $jobsInfo_columns);
-    if ($db->totalCount > 0){ //List found records
+    
+    $jobs_list = $commonQueries->jobs_by_type("region");
+    if ($jobs_list !== FALSE){ //Found records
 ?>
 
 <div class="row">
@@ -36,9 +25,9 @@ if (isset($_GET['id'])){
             <div class="col-md-12 category-details">
                 <section class="row">
                     <figure class="col-md-3">
-                        <img src="#">
-                        <p>Việc làm khác từ TEK</p>
-                        <p>Thông tin công ty</p>
+                        <img src="http://<?php echo $DOMAIN_NAME?>/uploaded_images/<?php echo $job['company_logo']?>.jpg">
+                        <p><a href="<?php echo $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $job["employer_id"], $website->seoURL($job["company"]));?>">Việc làm khác từ <?php echo $job["company"]?></a></p>
+                        <p><a href="<?php echo $website->check_SEO_link("companyInfo", $SEO_setting, $job["employer_id"], $website->seoURL($job["company"]));?>">Thông tin công ty</a></p>
                     </figure>
                     <article class="col-md-9">
                         <h5><strong>Tiêu đề công việc:</strong> <?php echo $job['title']?></h5>
