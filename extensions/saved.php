@@ -1,11 +1,6 @@
 <?php
-// Jobs Portal, http://www.netartmedia.net/jobsportal
-// A software product of NetArt Media, All Rights Reserved
-// Find out more about our products and services on:
-// http://www.netartmedia.net
-?><?php
 if(!defined('IN_SCRIPT')) {die("");}
-global $db;
+global $db, $SEO_setting;
 ?>
 
 <h3 class="no-margin"><?php echo $M_CURRENT_SAVED;?></h3>
@@ -30,26 +25,20 @@ if(!$skip_query)
 {
 	$saved_jobs = $db->withTotalCount()->rawQuery
 	("
-		SELECT 
-		".$DBprefix."jobs.id as job_id,
-		".$DBprefix."jobs.title,
-		".$DBprefix."jobs.date,
-		".$DBprefix."jobs.salary,
-		".$DBprefix."jobs.applications,
-		".$DBprefix."jobs.region,
-		".$DBprefix."jobs.message,
-		".$DBprefix."employers.company,
-		".$DBprefix."employers.logo,
-                ".$DBprefix."salary.salary_range,
-                ".$DBprefix."salary.salary_range_en,
-                ".$DBprefix."locations.City,
-                ".$DBprefix."locations.City_en
-		FROM ".$DBprefix."jobs,".$DBprefix."employers,".$DBprefix."locations,".$DBprefix."salary  
-		WHERE 
-		".$DBprefix."jobs.employer =  ".$DBprefix."employers.username".
-                " AND ".$DBprefix."jobs.salary = ".$DBprefix."salary.salary_id".
-                " AND ".$DBprefix."jobs.region = ".$DBprefix."locations.id".
-                " AND ".$DBprefix."jobs.id in (".rtrim(filter_input(INPUT_COOKIE, 'saved_listings'),",").")
+            SELECT 
+            ".$DBprefix."jobs.id as job_id,".$DBprefix."jobs.SEO_title,
+            ".$DBprefix."jobs.title,".$DBprefix."jobs.date,
+            ".$DBprefix."jobs.salary,".$DBprefix."jobs.applications,
+            ".$DBprefix."jobs.region,".$DBprefix."jobs.message,
+            ".$DBprefix."employers.company,".$DBprefix."employers.logo,
+            ".$DBprefix."salary.salary_range,".$DBprefix."salary.salary_range_en,
+            ".$DBprefix."locations.City,".$DBprefix."locations.City_en
+            FROM ".$DBprefix."jobs,".$DBprefix."employers,".$DBprefix."locations,".$DBprefix."salary  
+            WHERE 
+            ".$DBprefix."jobs.employer =  ".$DBprefix."employers.username".
+            " AND ".$DBprefix."jobs.salary = ".$DBprefix."salary.salary_id".
+            " AND ".$DBprefix."jobs.region = ".$DBprefix."locations.id".
+            " AND ".$DBprefix."jobs.id in (".rtrim(filter_input(INPUT_COOKIE, 'saved_listings'),",").")
 	");
 	
 }	
@@ -74,7 +63,7 @@ else { //Show saved jobs
         
 	foreach ($saved_jobs as $saved_job){		
             if($iTotResults>=$num*$RESULTS_PER_PAGE&&$iTotResults<($num+1)*$RESULTS_PER_PAGE){?>
-                <div class="row">
+                <div class="row category-details">
                     <section class="col-md-9">
                         <h4><?php echo $saved_job['title']?></h4>
                         <p>Lương: <?php echo $saved_job['salary_range']?></p>
@@ -85,12 +74,13 @@ else { //Show saved jobs
                             <p><?php echo $saved_job['message']?></p>
                         </body>
                         <footer>
-                            <a href="index.php?mod=apply&amp;posting_id=58&amp;lang=vn" class="job-details-link underline-link r-margin-15">Nộp hồ sơ</a>
-                            <a href="nghenghiep-tuyEn-sinh-vi��n-l�m-th��m-gAp-58.html" class="job-details-link underline-link">Chi tiết công việc</a>
+                            <a href="<?php echo $website->check_SEO_link("apply_job", $SEO_setting, $saved_job["job_id"], $saved_job["SEO_title"]);?>" class="job-details-link underline-link r-margin-15">Nộp hồ sơ</a>
+                            <a href="<?php echo $website->check_SEO_link("details", $SEO_setting, $saved_job["job_id"], $saved_job["SEO_title"]);?>" class="job-details-link underline-link">Chi tiết công việc</a>
                         </footer>    
                     </section>
                     <figure class="col-md-3">
-                        <img src="#" title="Ảnh">
+                        <p><a href="javascript:DeleteSavedListing(<?php echo $saved_job['job_id']?>)" id="save_<?php echo $saved_job['job_id']?>">Xóa bỏ</a></p>
+                        <img src="http://<?php echo $DOMAIN_NAME?>/uploaded_images/<?php echo $saved_job['logo']?>.jpg" width="200" height="150" title="Ảnh">
                     </figure>
                 </div>
                 

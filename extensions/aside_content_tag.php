@@ -118,7 +118,7 @@ else
 	$SearchTable = $db->withTotalCount()->rawQuery
 	("
 		SELECT 
-		".$DBprefix."jobs.id,
+		".$DBprefix."jobs.id,".$DBprefix."jobs.date,
 		".$DBprefix."jobs.title,
 		".$DBprefix."jobs.message,
                 ".$DBprefix."jobs.SEO_title,

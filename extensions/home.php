@@ -10,7 +10,8 @@ global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,
 
 
 $featured_jobs_columns = array(
-    $DBprefix."jobs.id as job_id",$DBprefix."jobs.job_category",$DBprefix."jobs.title",$DBprefix."jobs.SEO_title",
+    $DBprefix."jobs.id as job_id",$DBprefix."jobs.job_category",
+    $DBprefix."jobs.title",$DBprefix."jobs.SEO_title",$DBprefix."jobs.date",
     $DBprefix."jobs.message",$DBprefix."employers.company",$DBprefix."employers.logo",
     $DBprefix."categories.category_name_vi",$DBprefix."categories.category_name",
     $DBprefix."locations.City",$DBprefix."locations.City_en",
@@ -103,8 +104,8 @@ $segment = $website->getURL_segment($website->currentURL());
                     <span class="salary"><em></em>  Not disclosed </span> 
                 </section>
                 <section class="col-md-6 col-xs-6 rec_details">
-                    <span> Posted  by   <a title="Job Posted by  HR " class="rec_name">  HR  </a>   , </span> 
-                    <span>Just Now</span>
+                    <span> Đăng bởi   <a title="việc làm đăng bởi  <?php echo $featured_job['company']?> " class="rec_name">  <?php echo $featured_job['company']?>  </a></span> 
+                    <span><i class="fa fa-clock-o"></i> <?php echo $commonQueries->time_ago($featured_job['date']);?></span>
                 </section>
             </div>    
         </div>
