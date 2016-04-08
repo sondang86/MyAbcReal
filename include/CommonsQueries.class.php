@@ -206,9 +206,14 @@
             return $data;
         }
         
-        
-        public function time_ago($time){
-           $periods = array("second", "minute", "hour", "day", "week", "month", "year", "decade");
+        /**
+        *  calculate and output time ago result
+        * 
+        *  @param var $time input time in Unix timestamp, the calculation is current time - $time
+        *  @param var $lang time language array s/m/h/d/w/m/y/decade
+        */
+        public function time_ago($time, $lang=array("giây", "phút", "giờ", "ngày", "tuần", "tháng", "năm", "thập kỷ")){
+           $periods = $lang;
            $lengths = array("60","60","24","7","4.35","12","10");
 
            $now = time();
@@ -223,9 +228,9 @@
            $difference = round($difference);
 
            if($difference != 1) {
-               $periods[$j].= "s";
+               $periods[$j].= "";
            }
 
-           return "$difference $periods[$j] ago ";
+           return "$difference $periods[$j] trước ";
         }
     }

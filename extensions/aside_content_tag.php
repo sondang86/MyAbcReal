@@ -1,6 +1,7 @@
 <?php
-if(!defined('IN_SCRIPT')) die("");
-global $db, $website, $SEO_setting;?>
+    if(!defined('IN_SCRIPT')) die("");
+    global $db, $website, $SEO_setting, $commonQueries;
+?>
 
 <!--Job by attribute-->
 <div class="gray-wrap">
@@ -89,12 +90,12 @@ $SearchTable = $db->withTotalCount()->rawQuery
                     }
         ?>
     
-    <h5 class="no-margin"><a href="<?php echo $strLink;?>" class="aside-link">
-				<?php echo stripslashes(strip_tags($headline));?>
-        </a></h5>
+    <h5 class="no-margin">
+        <a href="<?php echo $strLink;?>" class="aside-link"><?php echo stripslashes(strip_tags($headline));?></a>
+    </h5>
     <span class="sub-text">
 			<?php echo $this->text_words(stripslashes(strip_tags($value["message"])),10);?>
-    </span>
+    </span>    
     
     <hr class="top-bottom-margin"/>
     
@@ -171,21 +172,21 @@ else
                                     }
                                 ?>
                     <!--Content-->
-                    <h5 class="no-margin">
+                    <h5 class="no-margin">                        
                         <?php if($SEO_setting == 0){?>
                         <a href="http://<?php echo $DOMAIN_NAME;?>/index.php?mod=details&id=<?php echo $value['id']?>&lang=vn">
-                            <?php echo $website->limitCharacters(stripslashes(strip_tags($headline)), 50);?>
+                            <?php echo $website->limitCharacters(stripslashes(strip_tags($headline)), 40);?>
                         </a>
                         <?php } else {?>  
                         <a href="http://<?php echo $DOMAIN_NAME;?>/chi-tiet-cong-viec/<?php echo $value['id']?>/<?php echo $value['SEO_title']?>" class="aside-link" title="<?php echo $value['title']?>">
                             <?php echo $website->limitCharacters(stripslashes(strip_tags($headline)), 50);?>
                         </a>
                         <?php }?>
-                    </h5>
-                    
-                    <span class="sub-text">
-                                <?php echo $this->text_words(stripslashes(strip_tags($value["message"])),10);?>
-                    </span>
+                        <p class="sub-text">
+                            <?php echo $this->text_words(stripslashes(strip_tags($value["message"])),30);?>
+                        </p>
+                        <p class="sub-text"><strong><?php echo $commonQueries->time_ago($value['date']);?></strong></p>
+                    </h5>               
                     <hr class="top-bottom-margin"/>
                 </div>    
             </div>

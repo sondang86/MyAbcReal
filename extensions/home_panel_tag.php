@@ -88,8 +88,6 @@ if(
             <main class="search-form-wrap col-md-<?php if ($guest==TRUE){echo "9";}else{echo "12";}?>">
                 <form name="home_form" id="home_form" action="index.php"  style="margin-top:0px;margin-bottom:0px;margin-left:0px;margin-right:0px" method="GET"> 
                     <input type="hidden" name="mod" value="search">
-                    <input type="hidden" name="search" value="1">
-                    <input type="hidden" name="advanced" id="advanced_s" value="0">
                     
                     <div class="text-center">
                         <h4 class="bottom-margin-5"><?php echo $M_SEARCH_FOR_JOBS;?></h4>
@@ -104,7 +102,6 @@ if(
                     <!--JOB CATEGORY-->
                     <div class="col-md-3 form-group group-2">
                         <span id="label_category" class="main-search-label"><br/></span>                    
-                        <input type="hidden" name="field_category" id="field_category" value=""/>
                         <select name="category" id="category" class="input-job">
                             <option value="-1"><?php echo $M_CATEGORY;?></option>
                         <?php foreach ($categories as $category) :?>
@@ -123,7 +120,6 @@ if(
                     <!--LOCATIONS-->
                     <div class="col-md-3 form-group group-3">
                         <span id="label_location" class="main-search-label"><br/></span>                    
-                        <input type="hidden" name="field_location" id="field_location" value=""/>
                         <select class="input-location" name="location" id="location"  onchange="dropDownChange(this,'location')">
                             <option value=""><?php echo $M_REGION;?></option>	
                         <?php foreach ($locations as $location) :?>

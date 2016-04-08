@@ -10,11 +10,12 @@ if(isset($_POST["Export"])) ob_start();
 include("../config.php");
 if(!$DEBUG_MODE) error_reporting(0);
     
+//auto load classes when call
 function __autoload($classname) {
     $filename = "../include/". $classname .".class.php";
     include($filename);
 }
-    
+   
 $db = new MysqliDb (Array (
         'host' => $DBHost,
         'username' => $DBUser, 

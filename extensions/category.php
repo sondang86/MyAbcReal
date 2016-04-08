@@ -13,8 +13,7 @@ if (isset($_GET['id'])){
     $jobs_list = $commonQueries->jobs_by_type("job_category");
 
     
-    if ($jobs_list !== FALSE){ //Found records
-        
+    if ($jobs_list !== FALSE){ //Found records      
     
 ?>
 

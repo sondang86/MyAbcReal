@@ -23,7 +23,7 @@ else
 		$Step--;
 	}
 }
-
+echo date("Y m d h:i:s", 1460172998)
 ?>
 
 
@@ -80,7 +80,7 @@ elseif($website->GetParam("CHARGE_TYPE") == 2)
 
 <?php
     if(isset($_POST['submit'])){
-//        print_r($_POST['employer-post-details']);die;
+//        print_r(strtotime($_POST['employer-start-date'] . " " . date("h:i:s")));die;
         //Insert data to database
         $data = Array( 
             "employer" => "$AuthUserName",
@@ -91,8 +91,8 @@ elseif($website->GetParam("CHARGE_TYPE") == 2)
             "experience" => filter_input(INPUT_POST,'experience',FILTER_SANITIZE_NUMBER_INT),
             "region" => filter_input(INPUT_POST,'post-locations'),
             "salary" => filter_input(INPUT_POST,'post-salary'),
-            "date" => strtotime(filter_input(INPUT_POST,'employer-start-date')),
-            "expires" => (strtotime(filter_input(INPUT_POST,'employer-start-date')) + 21*86400), //21 days limitation
+            "date" => strtotime(filter_input(INPUT_POST,'employer-start-date'). " " . date("G:i:s")),
+            "expires" => (strtotime(filter_input(INPUT_POST,'employer-start-date')) + (21*86400)), //21 days limitation
             "status" => filter_input(INPUT_POST,'post-active'),
             "SEO_title" => $db->secure_input($website->seoURL($website->stripVN(filter_input(INPUT_POST,'employer-post-title'))))
          );

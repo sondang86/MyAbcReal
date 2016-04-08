@@ -61,3 +61,5 @@ RewriteRule ^thong-tin-cong-ty/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?mod=company&
 RewriteRule ^danh-gia-cong-ty/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?write=1&mod=reviews&id=$1&lang=vn
 RewriteRule ^viec-lam-theo-nganh/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?mod=category&id=$1&lang=vn
 RewriteRule ^viec-lam-theo-dia-diem/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?mod=location&id=$1&lang=vn
+#Search URL
+RewriteRule ^tim-kiem?(.*)?$ index.php?mod=search [QSA]
