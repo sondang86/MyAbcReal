@@ -2296,7 +2296,7 @@ class SiteManager
         * @param   var $SEO_setting input whether SEO setting is enabled(1) or disabled(0)
         * @param   var $id filter by id
         * @param   var $SEO_title SEO title url
-        * @param   var $lang define language
+        * @param   var $lang define the language
         */
         function check_SEO_link($mod="featured", $SEO_setting="1", $id=NULL, $SEO_title=NULL, $lang="vn"){
             global $DOMAIN_NAME;
@@ -2333,6 +2333,9 @@ class SiteManager
                     case "reviews":
                         echo "http://$DOMAIN_NAME/index.php?write=1&mod=reviews&id=$id&lang=vn";
                         break;
+                    case "search":
+                        echo "http://$DOMAIN_NAME/index.php?mod=search";
+                        break;
                 }                
             } else { //SEO enabled
                 switch ($mod) {
@@ -2365,6 +2368,9 @@ class SiteManager
                         break;
                     case "reviews":
                         echo "http://$DOMAIN_NAME/danh-gia-cong-ty/$id/$SEO_title";
+                        break;
+                    case "search":
+                        echo "http://$DOMAIN_NAME/tim-kiem/";
                         break;
                 }
             }                    

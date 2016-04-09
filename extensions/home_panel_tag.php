@@ -86,9 +86,10 @@ if(
         <!--SEARCH FORM-->
         <div class="row">
             <main class="search-form-wrap col-md-<?php if ($guest==TRUE){echo "9";}else{echo "12";}?>">
-                <form name="home_form" id="home_form" action="index.php"  style="margin-top:0px;margin-bottom:0px;margin-left:0px;margin-right:0px" method="GET"> 
+                <form name="home_form" id="home_form" action="<?php $website->check_SEO_link('search', $SEO_setting);?>"  style="margin-top:0px;margin-bottom:0px;margin-left:0px;margin-right:0px" method="GET"> 
+                    <?php if($SEO_setting == 0): //show search module if SEO disabled?>
                     <input type="hidden" name="mod" value="search">
-                    
+                    <?php endif;?>
                     <div class="text-center">
                         <h4 class="bottom-margin-5"><?php echo $M_SEARCH_FOR_JOBS;?></h4>
                     </div>
@@ -96,26 +97,19 @@ if(
                     <!--JOB TITLE-->
                     <div class="col-md-4 form-group group-1">
                         <span class="main-search-label"><br/></span>                    
-                        <input type="text" name="job_title" class="input-job" placeholder="<?php echo $M_KEYWORD;?>">
+                        <input type="text" name="q" class="input-job" placeholder="<?php echo $M_KEYWORD;?>">
                     </div>
 
                     <!--JOB CATEGORY-->
                     <div class="col-md-3 form-group group-2">
                         <span id="label_category" class="main-search-label"><br/></span>                    
                         <select name="category" id="category" class="input-job">
-                            <option value="-1"><?php echo $M_CATEGORY;?></option>
+                            <option value=""><?php echo $M_CATEGORY;?></option>
                         <?php foreach ($categories as $category) :?>
                             <option value="<?php echo $category['category_id']?>"><?php echo $category['category_name_vi']?></option>    
                         <?php endforeach;?>
                         </select>
                     </div>
-
-                    <!--MIN SALARY-->
-<!--                <div class="col-md-3 form-group group-3">
-                        <span class="main-search-label"><br/></span>
-
-                        <input type="text" name="min_salary" onkeypress='return event.charCode >= 48 && event.charCode <= 57' class="input-job" placeholder="<?php echo $M_MINIMUM_SALARY;?>">
-                    </div>-->
 
                     <!--LOCATIONS-->
                     <div class="col-md-3 form-group group-3">

@@ -118,7 +118,7 @@
             $this->_db->join("locations", $DBprefix."jobs.region=".$DBprefix."locations.id", "LEFT");
             $this->_db->join("employers", $DBprefix."jobs.employer=".$DBprefix."employers.username", "LEFT");
             
-            //Find jobs by id
+            //Find jobs by id if id not empty
             if(!empty($id)){
                 $this->_db->where ($DBprefix."employers.id", "$id");
             }
@@ -139,15 +139,16 @@
         *  @param var $limit limit the number of records to be appear
         */
         public function jobs_by_type($type="job_category", $limit=NULL) {
+            global $DBprefix;
             //Find jobs based on specific category
             $jobsInfo_columns = Array (
-                "jobsportal_jobs.id as job_id","jobsportal_jobs.date", "jobsportal_jobs.employer", //
-                "jobsportal_jobs.job_category", "jobsportal_jobs.region", "jobsportal_jobs.title", "jobsportal_jobs.expires", //
-                "jobsportal_jobs.message", "jobsportal_jobs.job_type", "jobsportal_jobs.salary","jobsportal_jobs.applications", // Main table
-                "jobsportal_categories.category_name_vi","jobsportal_categories.category_id", //Categories table
-                "jobsportal_salary.salary_id","jobsportal_salary.salary_range", //Salary table
-                "jobsportal_locations.City","jobsportal_locations.id as location_id", //Locations table
-                "jobsportal_employers.id as employer_id","jobsportal_employers.company as company","jobsportal_employers.logo as company_logo" //Employer table
+                $DBprefix."jobs.id as job_id",$DBprefix."jobs.date", $DBprefix."jobs.employer", 
+                $DBprefix."jobs.job_category", $DBprefix."jobs.region", $DBprefix."jobs.title", $DBprefix."jobs.expires", //
+                $DBprefix."jobs.message", $DBprefix."jobs.job_type", $DBprefix."jobs.salary","jobsportal_jobs.applications", // Main table
+                $DBprefix."categories.category_name_vi",$DBprefix."categories.category_id", //Categories table
+                $DBprefix."salary.salary_id",$DBprefix."salary.salary_range", //Salary table
+                $DBprefix."locations.City",$DBprefix."locations.id as location_id", //Locations table
+                $DBprefix."employers.id as employer_id",$DBprefix."employers.company as company",$DBprefix."employers.logo as company_logo" //Employer table
                 );
             $this->_db->join('categories', "jobsportal_jobs.job_category = jobsportal_categories.category_id", "LEFT");
             $this->_db->join('salary', "jobsportal_jobs.salary = jobsportal_salary.salary_id", "LEFT");
@@ -161,6 +162,59 @@
                 return FALSE;
             }
         }
+        
+        /**
+        *  Search jobs function
+        * 
+        *  @param var $type id or name of the selected column
+        *  @param var $limit limit the number of records to be appear
+        */
+        public function jobs_by_keywords($queryString="",$category="",$location="", $limit=NULL){
+            global $DBprefix;
+            $jobsInfo_columns = Array (
+                $DBprefix."jobs.id as job_id",$DBprefix."jobs.date", $DBprefix."jobs.employer",
+                $DBprefix."jobs.SEO_title",$DBprefix."jobs.job_category", 
+                $DBprefix."jobs.region",$DBprefix."jobs.featured",
+                $DBprefix."jobs.title", $DBprefix."jobs.expires", //
+                $DBprefix."jobs.message", $DBprefix."jobs.job_type", 
+                $DBprefix."jobs.salary",$DBprefix."jobs.applications", // Main table
+                $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",
+                $DBprefix."categories.category_name_vi",$DBprefix."categories.category_id", //Categories table
+                $DBprefix."salary.salary_id",$DBprefix."salary.salary_range", //Salary table
+                $DBprefix."locations.City",$DBprefix."locations.id as location_id", //Locations table
+                $DBprefix."employers.id as employer_id",$DBprefix."employers.company as company",$DBprefix."employers.logo as company_logo" //Employer table
+            );
+            $this->_db->join('categories', $DBprefix."jobs.job_category =".$DBprefix."categories.category_id", "LEFT");
+            $this->_db->join('salary', $DBprefix."jobs.salary = ".$DBprefix."salary.salary_id", "LEFT");
+            $this->_db->join('job_types', $DBprefix."jobs.job_type = ".$DBprefix."job_types.id", "LEFT");
+            $this->_db->join('locations', $DBprefix."jobs.region = ".$DBprefix."locations.id", "LEFT");
+            $this->_db->join('employers', $DBprefix."jobs.employer = ".$DBprefix."employers.username", "LEFT");
+            
+            //Check conditions
+            if(!empty($queryString)){
+                $this->_db->where("title LIKE '%" . $queryString ."%'");
+            }
+            if(!empty($category)){
+                $this->_db->where("job_category", $category);
+            }                        
+            if(!empty($location)){
+                $this->_db->where("region", $location);
+            }
+            
+            //Order by featured first
+            $this->_db->orderBy("featured", "DESC");
+            $this->_db->orderBy("date", "DESC");
+            $jobs_list['data'] = $this->_db->withTotalCount()->get("jobs", NULL, $jobsInfo_columns);
+            $jobs_list['totalCount'] = $this->_db->totalCount;
+            
+            
+            if ($this->_db->totalCount > 0){
+                return $jobs_list;
+            } else {
+                return FALSE;
+            }
+        }
+        
         
         /**
         *  check id is exists or not
