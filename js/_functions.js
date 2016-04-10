@@ -224,3 +224,27 @@ function GoBack()
 	history.back();
 }
 
+function saveJob(id){
+    var idtin   = $(id).attr('data-jobid');
+    var idnganh = $(id).attr('data-category');
+//    var type    = $(id).attr('type');
+//    if(type === null || type === 'undefined') type = 'tintuyendung';
+    var url_ajax = 'index.php?mod=save?id='+idtin+'&nganh='+idnganh;
+    $.ajax({
+        url:url_ajax,
+        cache: false,
+        type : "post",
+        data: {
+            jobid: idtin,
+            category: idnganh
+        },
+        success:function(response){
+        alert("ok");
+        if (response === 'DONE') {
+            $("[data-idtin='"+idtin+"']").each(function (){
+                $(this).toggleClass('active');
+                var star = $(this).find('.icon-star-line').toggleClass('active');
+            });
+        };
+    }});
+}

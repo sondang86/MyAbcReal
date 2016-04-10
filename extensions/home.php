@@ -13,8 +13,8 @@ $featured_jobs_columns = array(
     $DBprefix."jobs.id as job_id",$DBprefix."jobs.job_category",
     $DBprefix."jobs.title",$DBprefix."jobs.SEO_title",$DBprefix."jobs.date",
     $DBprefix."jobs.message",$DBprefix."employers.company",$DBprefix."employers.logo",
-    $DBprefix."categories.category_name_vi",$DBprefix."categories.category_name",
-    $DBprefix."locations.City",$DBprefix."locations.City_en",
+    $DBprefix."categories.category_name_vi",$DBprefix."categories.category_name",$DBprefix."categories.id as category_id",
+    $DBprefix."locations.City",$DBprefix."locations.City_en",$DBprefix."locations.id as location_id",
     $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",
     $DBprefix."job_experience.name as experience_name",$DBprefix."job_experience.name_en as experience_name_en",
     $DBprefix."salary.salary_range",$DBprefix."salary.salary_range_en"
@@ -98,8 +98,9 @@ $segment = $website->getURL_segment($website->currentURL());
             </div>
             <div class="col-md-12 more-details">           
                 <section class="col-md-6 col-xs-6 other_details">
-                    <span title=" Save this job " class="action savejob fav  favReady" jid="280316900272">
-                        <a href="javascript:SaveListing('<?php echo $featured_job["job_id"]?>')" id="save_<?php echo $featured_job["job_id"]?>" title="Lưu việc làm này"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
+                    <span title=" Save this job " class="action savejob fav  favReady">
+<!--                        <a href="javascript:SaveListing('<?php // echo $featured_job["job_id"]?>')" id="save_<?php // echo $featured_job["job_id"]?>" title="Lưu việc làm này"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>-->
+                        <a data-jobid="<?php echo $featured_job["job_id"]?>" data-category="<?php echo $featured_job["category_id"]?>" title="Lưu việc làm này" id="savethisJob" onclick="javascript:saveJob(this)"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
                     </span> 
                     <span class="salary"><em></em>  Not disclosed </span> 
                 </section>

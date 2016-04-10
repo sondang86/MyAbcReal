@@ -3,6 +3,13 @@ if(!defined('IN_SCRIPT')) {die("");}
 global $db, $SEO_setting;
 ?>
 
+<script>
+    Cookies.set("<?php echo $SEO_setting;?>", 23232);
+</script>
+
+<?php
+print_r($_COOKIE);
+?>
 <h3 class="no-margin"><?php echo $M_CURRENT_SAVED;?></h3>
 <hr/>
 <br/>
@@ -13,8 +20,6 @@ $RESULTS_PER_PAGE = $website->GetParam("RESULTS_PER_PAGE");
 $NUMBER_OF_CATEGORIES_PER_ROW = $website->GetParam("NUMBER_OF_CATEGORIES_PER_ROW");
 
 $skip_query=false;
-
-
 
 if(!isset($_COOKIE["saved_listings"])||$_COOKIE["saved_listings"]==""||$_COOKIE["saved_listings"]==",")
 {
@@ -40,7 +45,7 @@ if(!$skip_query)
             " AND ".$DBprefix."jobs.region = ".$DBprefix."locations.id".
             " AND ".$DBprefix."jobs.id in (".rtrim(filter_input(INPUT_COOKIE, 'saved_listings'),",").")
 	");
-	
+
 }	
 
 
