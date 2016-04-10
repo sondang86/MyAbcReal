@@ -63,3 +63,6 @@ RewriteRule ^viec-lam-theo-nganh/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?mod=catego
 RewriteRule ^viec-lam-theo-dia-diem/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?mod=location&id=$1&lang=vn
 #Search URL
 RewriteRule ^tim-kiem/?(.*)?$ index.php?mod=search [QSA]
+
+#save URL
+RewriteRule ^luu-viec-lam/?$ index.php?mod=save 

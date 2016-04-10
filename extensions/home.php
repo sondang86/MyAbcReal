@@ -36,9 +36,18 @@ $featured_jobs = $db->get("jobs", array(0,10),$featured_jobs_columns);
 $segment = $website->getURL_segment($website->currentURL());
 
 ?>
-<style>    
- 
-</style>
+            
+<script>
+    $(document).ready(function(){
+        //Change save job status to saved
+        $(".savethisJob").on('click', function(e){
+            $(this).removeAttr("onclick").removeAttr("href"); //Prevent duplicate records
+            $(this).html('<i class="fa fa-check"></i>Đã lưu việc này');
+            e.preventDefault();
+        });
+    });
+    
+</script>
 <section class="row stats top-title">
     <header class="col-md-12">
         <h4>Việc làm nổi bật: </h4>
@@ -96,11 +105,12 @@ $segment = $website->getURL_segment($website->currentURL());
                     <i class="fa fa-star"></i>
                 </span> 
             </div>
+
             <div class="col-md-12 more-details">           
                 <section class="col-md-6 col-xs-6 other_details">
                     <span title=" Save this job " class="action savejob fav  favReady">
 <!--                        <a href="javascript:SaveListing('<?php // echo $featured_job["job_id"]?>')" id="save_<?php // echo $featured_job["job_id"]?>" title="Lưu việc làm này"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>-->
-                        <a data-jobid="<?php echo $featured_job["job_id"]?>" data-category="<?php echo $featured_job["category_id"]?>" title="Lưu việc làm này" id="savethisJob" onclick="javascript:saveJob(this)"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
+                        <a href="#" data-jobid="<?php echo $featured_job["job_id"]?>" data-category="<?php echo $featured_job["category_id"]?>" title="Lưu việc làm này" class="savethisJob" id="<?php echo $featured_job["job_id"]?>" onclick="javascript:saveJob(this)"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
                     </span> 
                     <span class="salary"><em></em>  Not disclosed </span> 
                 </section>

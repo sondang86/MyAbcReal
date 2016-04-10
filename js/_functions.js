@@ -225,26 +225,25 @@ function GoBack()
 }
 
 function saveJob(id){
-    var idtin   = $(id).attr('data-jobid');
-    var idnganh = $(id).attr('data-category');
+    var jobid   = $(id).attr('data-jobid');
+    var category = $(id).attr('data-category');
 //    var type    = $(id).attr('type');
 //    if(type === null || type === 'undefined') type = 'tintuyendung';
-    var url_ajax = 'index.php?mod=save?id='+idtin+'&nganh='+idnganh;
+    var url_ajax = 'luu-viec-lam';
     $.ajax({
         url:url_ajax,
         cache: false,
         type : "post",
+        dataType: "json",
         data: {
-            jobid: idtin,
-            category: idnganh
+            jobid: jobid,
+            category: category
         },
         success:function(response){
-        alert("ok");
-        if (response === 'DONE') {
-            $("[data-idtin='"+idtin+"']").each(function (){
-                $(this).toggleClass('active');
-                var star = $(this).find('.icon-star-line').toggleClass('active');
-            });
-        };
-    }});
+            if (response == "DONE") {
+                console.log("Done!!");
+            } else {
+                alert("not done!");
+            };
+        }});
 }
