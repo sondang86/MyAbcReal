@@ -9,6 +9,10 @@ if(!defined('IN_SCRIPT')) die("");
 global $SEO_setting;
 $link_suffix="";
 
+$tesst = filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP);
+
+print_r($tesst);
+
 if($MULTI_LANGUAGE_SITE)
 {
 	$link_suffix="lang=".$this->lang;
