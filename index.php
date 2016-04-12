@@ -113,5 +113,13 @@ $website->Statistics();
         // Un-disable form fields when page loads, in case they click back after submission
         $( "#home_form" ).find( ":input" ).prop( "disabled", false );
         
+
+        //Change save job status to saved
+        $(".savethisJob").on('click', function(e){
+            $(this).removeAttr("onclick").removeAttr("href"); //Prevent duplicate records
+            $(this).html('<i class="fa fa-check"></i>Đã lưu việc này');
+            e.preventDefault();
+        });
+
     });
 </script>

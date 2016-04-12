@@ -3,15 +3,17 @@
     global $db,$companies, $commonQueries, $SEO_setting;    
     $jobs_by_employers = $commonQueries->jobs_by_employerId(NULL);
     
-    $jobs_by_employer = array();
-    foreach ($jobs_by_employers as $key => $value) {
-        $jobs_by_employer[] = array(
-            $value['company'] => $value['title'],
-            'job_id' => $value['job_id'],
-            'SEO_title' => $value['SEO_title']
-        );
-    }
-
+    if ($jobs_by_employers !== FALSE){
+        //get jobs by each employer
+        $jobs_by_employer = array();
+        foreach ($jobs_by_employers as $key => $value) {
+            $jobs_by_employer[] = array(
+                $value['company'] => $value['title'],
+                'job_id' => $value['job_id'],
+                'SEO_title' => $value['SEO_title']
+            );
+        }
+    } 
 ?>
 <?php foreach ($companies as $company):
     //Count total jobs of employer
@@ -48,6 +50,7 @@
         <!--LATEST JOBS-->
         <section class="col-md-5 col-xs-12 min-height-150 recruiterNewestJobs">
             <strong><p>Việc làm mới nhất</p></strong>
+            <?php if($db->totalCount > 0){?>
             <ul class="padding-left-15 top-bottom-margin">
                 <?php foreach($jobs_by_employer as $key => $job):?>
                     <?php if(!empty($job[$company['company']])):?>
@@ -58,8 +61,11 @@
                     </li>
                     <?php endif;?>
                 <?php endforeach;?>
-            </ul>                        
+            </ul>
             <p><a href="<?php $website->check_SEO_link("jobs_by_companyId",$SEO_setting, $company['id'], $website->seoUrl($company['company']))?>" class="small-font underline-link">Xem toàn bộ</a></p>                        
+            <?php } else {?>
+                <h5>Không tìm thấy việc nào của nhà tuyển dụng này</h5>
+            <?php }?>            
         </section>            
     </div>
 </div>

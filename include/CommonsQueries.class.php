@@ -294,9 +294,9 @@
         *  Calculate Real Differences Between Two Dates or Timestamps
         *  Time format is UNIX timestamp or PHP strtotime compatible strings
         *  @param var $time1 input current time in Unix timestamp or strtotime 
-        *  @param var $lang time language array s/m/h/d/w/m/y/decade
+        *  @param var $time2 time language array s/m/h/d/w/m/y/decade
         */
-        function dateDiff($time1, $time2, $precision = 6) {
+        function timeCalculation($time1, $time2, $precision = 6) {
           // If not numeric then convert texts to unix timestamps
           if (!is_int($time1)) {
             $time1 = strtotime($time1);
@@ -359,5 +359,52 @@
 
           // Return string with times
           return implode(", ", $times);
+        }
+        
+        
+        /**
+        *  Get saved jobs in the last xxx days
+        *  @param var $day the last days range where you want to retrieve
+        */
+        public function getSavedJobs($day="1") {
+            global $DBprefix;
+            $jobsInfo_columns = Array (
+                $DBprefix."jobs.id as job_id",$DBprefix."jobs.date", $DBprefix."jobs.employer",
+                $DBprefix."jobs.SEO_title",$DBprefix."jobs.job_category", 
+                $DBprefix."jobs.region",$DBprefix."jobs.featured",
+                $DBprefix."jobs.title", $DBprefix."jobs.expires", //
+                $DBprefix."jobs.message", $DBprefix."jobs.job_type", 
+                $DBprefix."jobs.salary",$DBprefix."jobs.applications", // Main table
+                $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",
+                $DBprefix."categories.category_name_vi",$DBprefix."categories.category_id", //Categories table
+                $DBprefix."salary.salary_id",$DBprefix."salary.salary_range", //Salary table
+                $DBprefix."locations.City",$DBprefix."locations.id as location_id", //Locations table
+                $DBprefix."employers.id as employer_id",$DBprefix."employers.company as company",$DBprefix."employers.logo as company_logo", //Employer table
+                $DBprefix."saved_jobs.job_id as saved_jobId",$DBprefix."saved_jobs.user_type as saved_job_userType",$DBprefix."saved_jobs.date as saved_jobDate" //saved jobs table
+            );
+            
+            $this->_db->join('categories', $DBprefix."jobs.job_category =".$DBprefix."categories.category_id", "LEFT");
+            $this->_db->join('salary', $DBprefix."jobs.salary = ".$DBprefix."salary.salary_id", "LEFT");
+            $this->_db->join('job_types', $DBprefix."jobs.job_type = ".$DBprefix."job_types.id", "LEFT");
+            $this->_db->join('locations', $DBprefix."jobs.region = ".$DBprefix."locations.id", "LEFT");
+            $this->_db->join('employers', $DBprefix."jobs.employer = ".$DBprefix."employers.username", "LEFT");
+            $this->_db->join('saved_jobs', $DBprefix."jobs.id = ".$DBprefix."saved_jobs.job_id", "LEFT");
+            
+            //Get user saved jobs in the last 1 days
+            //http://dba.stackexchange.com/questions/97211/get-rows-where-lastlogintimestamp-is-in-last-7-days
+            $data['saved_jobs'] = $this->_db->where($DBprefix."saved_jobs.date >= CAST(UNIX_TIMESTAMP(NOW() - INTERVAL $day DAY) AS CHAR(10))")//http://dba.stackexchange.com/questions/97211/get-rows-where-lastlogintimestamp-is-in-last-7-days
+            ->where("user_uniqueId",filter_input(INPUT_COOKIE,'userId', FILTER_SANITIZE_STRING))
+            ->where("IPAddress", filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP))
+            ->withTotalCount()->get("jobs", NULL, $jobsInfo_columns);
+            
+            //Total records found
+            $data['totalCount'] = $this->_db->totalCount;
+            
+            if ($this->_db->totalCount > 0) {
+                return $data;
+            } else {
+                return FALSE; //No records found
+            }
+            
         }
     }

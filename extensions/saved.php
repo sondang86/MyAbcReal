@@ -1,106 +1,45 @@
 <?php
 if(!defined('IN_SCRIPT')) {die("");}
-global $db, $SEO_setting;
-?>
-
-<script>
-    Cookies.set("<?php echo $SEO_setting;?>", 23232);
-</script>
-
-<?php
-print_r($_COOKIE);
-?>
-<h3 class="no-margin"><?php echo $M_CURRENT_SAVED;?></h3>
-<hr/>
-<br/>
-<section>
-<?php
-
-$RESULTS_PER_PAGE = $website->GetParam("RESULTS_PER_PAGE");
-$NUMBER_OF_CATEGORIES_PER_ROW = $website->GetParam("NUMBER_OF_CATEGORIES_PER_ROW");
-
-$skip_query=false;
-
-if(!isset($_COOKIE["saved_listings"])||$_COOKIE["saved_listings"]==""||$_COOKIE["saved_listings"]==",")
-{
-	$skip_query=true;
-}
-
-if(!$skip_query)
-{
-	$saved_jobs = $db->withTotalCount()->rawQuery
-	("
-            SELECT 
-            ".$DBprefix."jobs.id as job_id,".$DBprefix."jobs.SEO_title,
-            ".$DBprefix."jobs.title,".$DBprefix."jobs.date,
-            ".$DBprefix."jobs.salary,".$DBprefix."jobs.applications,
-            ".$DBprefix."jobs.region,".$DBprefix."jobs.message,
-            ".$DBprefix."employers.company,".$DBprefix."employers.logo,
-            ".$DBprefix."salary.salary_range,".$DBprefix."salary.salary_range_en,
-            ".$DBprefix."locations.City,".$DBprefix."locations.City_en
-            FROM ".$DBprefix."jobs,".$DBprefix."employers,".$DBprefix."locations,".$DBprefix."salary  
-            WHERE 
-            ".$DBprefix."jobs.employer =  ".$DBprefix."employers.username".
-            " AND ".$DBprefix."jobs.salary = ".$DBprefix."salary.salary_id".
-            " AND ".$DBprefix."jobs.region = ".$DBprefix."locations.id".
-            " AND ".$DBprefix."jobs.id in (".rtrim(filter_input(INPUT_COOKIE, 'saved_listings'),",").")
-	");
-
-}	
-
-
-if($skip_query || $db->totalCount == 0) // No saved jobs 
-{
-	echo "<br/><br/><i>".$M_STILL_NO_SAVED."</i><br/><br/><br/><br/><br/>";
-}
-else { //Show saved jobs 
-    
-	$iTotResults = 0;
-	if(!isset($_REQUEST["num"])){
-            $num = 0;
-	}
-	else{
-            $website->ms_i($_REQUEST["num"]);
-            $num = $_REQUEST["num"] - 1;
-	}
-	$i_listings_counter = 0;        
-	$_REQUEST["is_saved_page"]=true;
-        
-	foreach ($saved_jobs as $saved_job){		
-            if($iTotResults>=$num*$RESULTS_PER_PAGE&&$iTotResults<($num+1)*$RESULTS_PER_PAGE){?>
-                <div class="row category-details">
-                    <section class="col-md-9">
-                        <h4><?php echo $saved_job['title']?></h4>
-                        <p>Lương: <?php echo $saved_job['salary_range']?></p>
-                        <p>Địa điểm: <?php echo $saved_job['City']?></p>
-                        <p>Thời gian đăng: <?php echo date('Y-m-d',$saved_job['date'])?></p>
-                        <p><?php echo $saved_job['applications']?> Đơn xin việc</p>
-                        <body>
-                            <p><?php echo $saved_job['message']?></p>
-                        </body>
-                        <footer>
-                            <a href="<?php echo $website->check_SEO_link("apply_job", $SEO_setting, $saved_job["job_id"], $saved_job["SEO_title"]);?>" class="job-details-link underline-link r-margin-15">Nộp hồ sơ</a>
-                            <a href="<?php echo $website->check_SEO_link("details", $SEO_setting, $saved_job["job_id"], $saved_job["SEO_title"]);?>" class="job-details-link underline-link">Chi tiết công việc</a>
-                        </footer>    
-                    </section>
-                    <figure class="col-md-3">
-                        <p><a href="javascript:DeleteSavedListing(<?php echo $saved_job['job_id']?>)" id="save_<?php echo $saved_job['job_id']?>">Xóa bỏ</a></p>
-                        <img src="http://<?php echo $DOMAIN_NAME?>/uploaded_images/<?php echo $saved_job['logo']?>.jpg" width="200" height="150" title="Ảnh">
-                    </figure>
-                </div>
-                
-        <?php } 
-            $iTotResults++;
-	}
-	?>
-	
-
-	
-<?php }?>
-</section>
-<?php
-$website->Title($M_SAVED_LISTINGS);
+global $db, $SEO_setting, $commonQueries;
+$website->Title("$M_SAVED_LISTINGS");
 $website->MetaDescription("");
 $website->MetaKeywords("");
+$saved_jobs = $commonQueries->getSavedJobs(1);
 
 ?>
+
+<h3 class="no-margin"><?php echo $M_CURRENT_SAVED;?></h3>
+<?php if($saved_jobs !== FALSE){ ?>
+
+<div class="row">   
+    <!--LIST JOBS-->
+        <?php foreach ($saved_jobs['saved_jobs'] as $job) :?>
+            <div class="col-md-12 category-details">
+                <section class="row">
+                    <figure class="col-md-3">
+                        <img src="http://<?php echo $DOMAIN_NAME?>/uploaded_images/<?php echo $job['company_logo']?>.jpg">
+                        <p><a href="<?php echo $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $job["employer_id"], $website->seoURL($job["company"]));?>">Việc làm khác từ <?php echo $job["company"]?></a></p>
+                        <p><a href="<?php echo $website->check_SEO_link("companyInfo", $SEO_setting, $job["employer_id"], $website->seoURL($job["company"]));?>">Thông tin công ty</a></p>
+                    </figure>
+                    <article class="col-md-9">
+                        <h5><strong>Tiêu đề công việc:</strong> <?php echo $job['title']?></h5>
+                        <p><label>Mức lương (USD):</label> <?php echo $job['salary_range']?></p>
+                        <p><label>Nơi làm việc:</label> <?php echo $job['City']?></p>
+                        <p><label>Ngày đăng:</label> <?php echo date('Y-m-d',$job['date'])?></p>
+                        <p><label>Ngày hết hạn:</label> <?php echo date('Y-m-d',$job['expires'])?></p>
+                        <p><label>Ứng viên đã ứng tuyển:</label> <?php echo $job['applications']?></p>
+                        <main><?php echo $website->limitCharacters(nl2br($job['message']), 200)?></main>
+                    </article>
+                    <nav>
+                        <span class="col-md-2 pull-right"><a href="<?php echo $website->check_SEO_link("apply_job", $SEO_setting, $job["job_id"], $website->seoURL($job["title"]));?>">Nộp hồ sơ</a></span>
+                        <span class="col-md-2 pull-right"><a href="<?php echo $website->check_SEO_link("details", $SEO_setting, $job["job_id"], $website->seoURL($job["title"]));?>">Chi tiết công việc</a></span>
+                        <span class="col-md-2 pull-right"><a href="<?php echo $website->check_SEO_link("details", $SEO_setting, $job["job_id"], $website->seoURL($job["title"]));?>">Chi tiết công việc</a></span>
+                    </nav>
+                </section>    
+            </div>
+        <?php endforeach;?>
+</div>
+
+<?php } else {?>
+        <h4>Hiện bạn chưa lưu việc làm nào</h4>
+<?php } ?>

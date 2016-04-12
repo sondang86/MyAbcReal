@@ -17,7 +17,8 @@ $featured_jobs_columns = array(
     $DBprefix."locations.City",$DBprefix."locations.City_en",$DBprefix."locations.id as location_id",
     $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",
     $DBprefix."job_experience.name as experience_name",$DBprefix."job_experience.name_en as experience_name_en",
-    $DBprefix."salary.salary_range",$DBprefix."salary.salary_range_en"
+    $DBprefix."salary.salary_range",$DBprefix."salary.salary_range_en",
+    $DBprefix."saved_jobs.job_id as saved_jobId",$DBprefix."saved_jobs.user_type as saved_job_userType",$DBprefix."saved_jobs.date as saved_jobDate" //saved jobs table
 );
 
 $db->join("employers", $DBprefix."jobs.employer=".$DBprefix."employers.username", "LEFT");
@@ -26,6 +27,8 @@ $db->join("locations", $DBprefix."jobs.region=".$DBprefix."locations.id", "LEFT"
 $db->join("job_types", $DBprefix."jobs.job_type=".$DBprefix."job_types.id", "LEFT");
 $db->join("job_experience", $DBprefix."jobs.experience=".$DBprefix."job_experience.experience_id", "LEFT");
 $db->join("salary", $DBprefix."jobs.salary=".$DBprefix."salary.salary_id", "LEFT");
+$db->join('saved_jobs', $DBprefix."jobs.id = ".$DBprefix."saved_jobs.job_id", "LEFT");
+
 $db->where($DBprefix."jobs.active", "YES");
 $db->where($DBprefix."jobs.status", "1");
 $db->where($DBprefix."jobs.expires", time(), ">");
@@ -36,18 +39,7 @@ $featured_jobs = $db->get("jobs", array(0,10),$featured_jobs_columns);
 $segment = $website->getURL_segment($website->currentURL());
 
 ?>
-            
-<script>
-    $(document).ready(function(){
-        //Change save job status to saved
-        $(".savethisJob").on('click', function(e){
-            $(this).removeAttr("onclick").removeAttr("href"); //Prevent duplicate records
-            $(this).html('<i class="fa fa-check"></i>Đã lưu việc này');
-            e.preventDefault();
-        });
-    });
-    
-</script>
+
 <section class="row stats top-title">
     <header class="col-md-12">
         <h4>Việc làm nổi bật: </h4>
@@ -106,11 +98,15 @@ $segment = $website->getURL_segment($website->currentURL());
                 </span> 
             </div>
 
+            <!--SAVE JOB-->
             <div class="col-md-12 more-details">           
                 <section class="col-md-6 col-xs-6 other_details">
                     <span title=" Save this job " class="action savejob fav  favReady">
-<!--                        <a href="javascript:SaveListing('<?php // echo $featured_job["job_id"]?>')" id="save_<?php // echo $featured_job["job_id"]?>" title="Lưu việc làm này"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>-->
+                    <?php if($featured_job['saved_jobId'] == $featured_job['job_id']){ //Show save job button?>                    
                         <a href="#" data-jobid="<?php echo $featured_job["job_id"]?>" data-category="<?php echo $featured_job["category_id"]?>" title="Lưu việc làm này" class="savethisJob" id="<?php echo $featured_job["job_id"]?>" onclick="javascript:saveJob(this)"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
+                    <?php } else { // Show saved information?>
+                        <a href="#" title="Đã lưu" class="savethisJob" id="<?php echo $featured_job["job_id"]?>"><i class="fa fa-check"></i>Đã lưu việc này</a>
+                    <?php }?>
                     </span> 
                     <span class="salary"><em></em>  Not disclosed </span> 
                 </section>

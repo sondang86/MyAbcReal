@@ -1,7 +1,6 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
-global $db;
-    
+global $db;    
     
 if (isset($_POST['jobid'])){
     //Check and sanitize userId cookie first
@@ -27,8 +26,7 @@ if (isset($_POST['jobid'])){
         $user_uniqueId = uniqid();
             
     }
-        
-        
+                
     //Prepare and insert data to db
     $data = Array (
         "user_type" => "1",
@@ -40,7 +38,7 @@ if (isset($_POST['jobid'])){
     $id = $db->insert ('saved_jobs', $data);   
         
     if($id){ //Success
-        //retrieve and save user unique Id to cookie
+        //save user unique Id to cookie
         $user_info = $db->where('id', $id)->getOne("saved_jobs", NULL, array("user_uniqueId", "IPAddress"));
         setcookie("userId", $user_info['user_uniqueId'],time()+86400); //Expires in 1 day
         echo json_encode("DONE");
