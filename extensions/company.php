@@ -80,6 +80,7 @@
                 <div id="viec-lam" class="tab-pane fade">
                     <section class="row same_height">
                         <form class="col-md-12">
+                            <?php if($company_jobs !== FALSE) { //Found jobs?>
                             <h4>Danh sách việc làm: </h4>
                             <section>
                                 <ul>
@@ -89,6 +90,10 @@
                                 </ul>
                             </section>
                             <p><a href="<?php $website->check_SEO_link("jobs_by_companyId",$SEO_setting,$company_id, $website->seoUrl($company_job['company']))?>">Xem toàn bộ</a></p>
+                            
+                            <?php } else { //Not found any jobs?>
+                            <h4>Chưa có việc làm nào</h4>                                
+                            <?php }?>
                         </form>
                     </section>                        
                 </div>
@@ -221,7 +226,7 @@
                         //Contact form submit
                         $("#contactSubmit").on('click', function(event){
                             var employer_email = "<?php echo $company_info[0]['username']?>";
-                            //Send data process
+                            //Send data to process
                             $.ajax({
                                 type: "POST",
                                     url: "http://<?php echo $DOMAIN_NAME?>/extensions/handleReview.php",

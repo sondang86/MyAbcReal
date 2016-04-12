@@ -2,7 +2,8 @@
 if(!defined('IN_SCRIPT')) die("");
 global $db;    
     
-if (isset($_POST['jobid'])){
+//Save selected job
+if (isset($_POST['requestType']) && $_POST['requestType'] == "save"){
     //Check and sanitize userId cookie first
     if (!empty($_COOKIE['userId'])){ 
         $userId_Cookie = filter_input(INPUT_COOKIE,'userId', FILTER_SANITIZE_STRING);
@@ -38,10 +39,22 @@ if (isset($_POST['jobid'])){
     $id = $db->insert ('saved_jobs', $data);   
         
     if($id){ //Success
-        //save user unique Id to cookie
+        //store user unique Id to cookie
         $user_info = $db->where('id', $id)->getOne("saved_jobs", NULL, array("user_uniqueId", "IPAddress"));
         setcookie("userId", $user_info['user_uniqueId'],time()+86400); //Expires in 1 day
         echo json_encode("DONE");
+    }
+}
+
+//Remove selected job
+if (isset($_POST['requestType']) && $_POST['requestType'] == "remove"){
+    $db->where('job_id', filter_input(INPUT_POST, 'jobid', FILTER_SANITIZE_NUMBER_INT));
+    $db->where('user_uniqueId', filter_input(INPUT_POST, 'user_uniqueId', FILTER_SANITIZE_STRING));
+    
+    if($db->delete('saved_jobs')) {
+        echo 'successfully deleted';    
+    } else {
+        echo "problem while deleting job";        
     }
 }
     

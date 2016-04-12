@@ -9,6 +9,7 @@ if(!defined('IN_SCRIPT')) die("");
 global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,$SEO_setting;
 
 
+
 $featured_jobs_columns = array(
     $DBprefix."jobs.id as job_id",$DBprefix."jobs.job_category",
     $DBprefix."jobs.title",$DBprefix."jobs.SEO_title",$DBprefix."jobs.date",
@@ -18,7 +19,8 @@ $featured_jobs_columns = array(
     $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",
     $DBprefix."job_experience.name as experience_name",$DBprefix."job_experience.name_en as experience_name_en",
     $DBprefix."salary.salary_range",$DBprefix."salary.salary_range_en",
-    $DBprefix."saved_jobs.job_id as saved_jobId",$DBprefix."saved_jobs.user_type as saved_job_userType",$DBprefix."saved_jobs.date as saved_jobDate" //saved jobs table
+    $DBprefix."saved_jobs.job_id as saved_jobId",$DBprefix."saved_jobs.user_type as saved_job_userType",
+    $DBprefix."saved_jobs.date as saved_jobDate", $DBprefix."saved_jobs.user_uniqueId as user_uniqueId"//saved jobs table
 );
 
 $db->join("employers", $DBprefix."jobs.employer=".$DBprefix."employers.username", "LEFT");
@@ -35,6 +37,9 @@ $db->where($DBprefix."jobs.expires", time(), ">");
 $db->where($DBprefix."jobs.featured", "1");
 $db->orderBy('RAND()');
 $featured_jobs = $db->get("jobs", array(0,10),$featured_jobs_columns);
+
+//Set default user ID if their cookie empty
+if (empty($_COOKIE['userId'])){setcookie('userId', "null");}
 
 $segment = $website->getURL_segment($website->currentURL());
 
@@ -102,10 +107,15 @@ $segment = $website->getURL_segment($website->currentURL());
             <div class="col-md-12 more-details">           
                 <section class="col-md-6 col-xs-6 other_details">
                     <span title=" Save this job " class="action savejob fav  favReady">
-                    <?php if($featured_job['saved_jobId'] == $featured_job['job_id']){ //Show save job button?>                    
-                        <a href="#" data-jobid="<?php echo $featured_job["job_id"]?>" data-category="<?php echo $featured_job["category_id"]?>" title="Lưu việc làm này" class="savethisJob" id="<?php echo $featured_job["job_id"]?>" onclick="javascript:saveJob(this)"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
-                    <?php } else { // Show saved information?>
+                        
+                    <?php if($featured_job['saved_jobId'] !== $featured_job['job_id'] || $_COOKIE['userId'] !== $featured_job['user_uniqueId']){ //Show save job button?>                    
+                        
+                        <a href="#" data-category="<?php echo $featured_job["category_id"]?>"  data-jobid="<?php echo $featured_job["job_id"]?>" title="Lưu việc làm này" class="savethisJob" id="<?php echo $featured_job["job_id"]?>" onclick="javascript:saveJob(this)"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
+                        
+                    <?php } else { // Show saved ?>
+                        
                         <a href="#" title="Đã lưu" class="savethisJob" id="<?php echo $featured_job["job_id"]?>"><i class="fa fa-check"></i>Đã lưu việc này</a>
+                        
                     <?php }?>
                     </span> 
                     <span class="salary"><em></em>  Not disclosed </span> 
@@ -135,19 +145,19 @@ $segment = $website->getURL_segment($website->currentURL());
     </header>    
     <main>
         <div class="col-xs-3 counter">
-            <p class="counter-value">150</p>
+            <p class="counter-value"><?php echo $commonQueries->countAllRecords("jobseeker_resumes", array('id'))?></p>
             <p><strong>Hồ sơ</strong></p>
         </div>
         <div class="col-xs-3 counter">
-            <p class="counter-value">1500</p>
+            <p class="counter-value"><?php echo $commonQueries->countAllRecords("jobs", array('id'))?></p>
             <p><strong>Việc đã đăng</strong></p>
         </div>
         <div class="col-xs-3 counter">
-            <p class="counter-value">15</p>
+            <p class="counter-value"><?php echo $commonQueries->countAllRecords("employers", array('id'))?></p>
             <p><strong>Nhà tuyển dụng</strong></p>
         </div>
         <div class="col-xs-3 counter">
-            <p class="counter-value">255</p>
+            <p class="counter-value"><?php echo ($commonQueries->countAllRecords("jobseekers", array('id')))?></p>
             <p><strong>Thành viên đã đăng ký</strong></p>
         </div>
     </main>

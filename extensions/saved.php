@@ -5,7 +5,6 @@ $website->Title("$M_SAVED_LISTINGS");
 $website->MetaDescription("");
 $website->MetaKeywords("");
 $saved_jobs = $commonQueries->getSavedJobs(1);
-
 ?>
 
 <h3 class="no-margin"><?php echo $M_CURRENT_SAVED;?></h3>
@@ -31,8 +30,8 @@ $saved_jobs = $commonQueries->getSavedJobs(1);
                         <main><?php echo $website->limitCharacters(nl2br($job['message']), 200)?></main>
                     </article>
                     <nav>
+                        <span class="col-md-2 pull-right"><a href="#" data-user_uniqueId="<?php echo $job['user_uniqueId']?>"  data-jobid="<?php echo $job["job_id"]?>" class="removethisJob" id="<?php echo $job["job_id"]?>" onclick="javascript:removeJob(this)">Xóa việc làm này</a></span>
                         <span class="col-md-2 pull-right"><a href="<?php echo $website->check_SEO_link("apply_job", $SEO_setting, $job["job_id"], $website->seoURL($job["title"]));?>">Nộp hồ sơ</a></span>
-                        <span class="col-md-2 pull-right"><a href="<?php echo $website->check_SEO_link("details", $SEO_setting, $job["job_id"], $website->seoURL($job["title"]));?>">Chi tiết công việc</a></span>
                         <span class="col-md-2 pull-right"><a href="<?php echo $website->check_SEO_link("details", $SEO_setting, $job["job_id"], $website->seoURL($job["title"]));?>">Chi tiết công việc</a></span>
                     </nav>
                 </section>    

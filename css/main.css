@@ -808,6 +808,7 @@ form#main ol li
 .job-details-info
 {
     width:100%;
+    float: left;
     background:#f4f9ff;
     border-top:3px solid #47a5f4;
     border-bottom:1px solid #47a5f4;
@@ -2293,6 +2294,10 @@ div.upload input:hover {
     padding-left: 30px;
 }
 
+.category-details section nav {
+    text-align: right;
+}
+
 /*content tabs/navs style*/
 
 .nav-tabs li a {
@@ -2551,6 +2556,18 @@ div.upload input:hover {
     border-radius: 5px;
     float: right;
     padding: 10px;
+}
+
+
+/*Job details*/
+.social-share ul {
+    text-align: right;
+}
+
+.social-share ul li{
+    list-style-type: none;
+    display: inline-block;
+
 }
 
 /* D?nh cho ?i?n tho?i */

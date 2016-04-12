@@ -5,6 +5,7 @@
     */
     class CommonsQueries {
         private $_db;
+        private $_dbPrefix;
         
         public function __construct(MysqliDb $db) {
             $this->_db = $db;
@@ -380,7 +381,8 @@
                 $DBprefix."salary.salary_id",$DBprefix."salary.salary_range", //Salary table
                 $DBprefix."locations.City",$DBprefix."locations.id as location_id", //Locations table
                 $DBprefix."employers.id as employer_id",$DBprefix."employers.company as company",$DBprefix."employers.logo as company_logo", //Employer table
-                $DBprefix."saved_jobs.job_id as saved_jobId",$DBprefix."saved_jobs.user_type as saved_job_userType",$DBprefix."saved_jobs.date as saved_jobDate" //saved jobs table
+                $DBprefix."saved_jobs.job_id as saved_jobId",$DBprefix."saved_jobs.user_type as saved_job_userType",
+                $DBprefix."saved_jobs.date as saved_jobDate",$DBprefix."saved_jobs.user_uniqueId as user_uniqueId" //saved jobs table
             );
             
             $this->_db->join('categories', $DBprefix."jobs.job_category =".$DBprefix."categories.category_id", "LEFT");
@@ -404,7 +406,16 @@
                 return $data;
             } else {
                 return FALSE; //No records found
-            }
-            
+            }            
+        }
+        
+        /**
+        *  Count total records present in table
+        *  @param var $table table where retrieve data
+        *  @param var $columns columns to be selected
+        */
+        public function countAllRecords($table="jobs", $columns=array("id")){
+            $this->_db->withTotalCount()->get($table, NULL, $columns);
+            return $this->_db->totalCount;
         }
     }

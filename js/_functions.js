@@ -227,8 +227,7 @@ function GoBack()
 function saveJob(id){
     var jobid   = $(id).attr('data-jobid');
     var category = $(id).attr('data-category');
-//    var type    = $(id).attr('type');
-//    if(type === null || type === 'undefined') type = 'tintuyendung';
+    var requestType = "save";
     var url_ajax = 'luu-viec-lam';
     $.ajax({
         url:url_ajax,
@@ -236,11 +235,38 @@ function saveJob(id){
         type : "post",
         dataType: "json",
         data: {
+            requestType: requestType,
             jobid: jobid,
             category: category
         },
         success:function(response){
             if (response == "DONE") {
+                console.log("Done!!");
+            } else {
+                alert("not done!");
+            };
+        }});
+}
+
+function removeJob(id){
+    var jobid   = $(id).attr('data-jobid');
+    var category = $(id).attr('data-category');
+    var user_uniqueId = $(id).attr('data-user_uniqueId');
+    var requestType = "remove";
+    var url_ajax = '../luu-viec-lam';
+    $.ajax({
+        url:url_ajax,
+        cache: false,
+        type : "post",
+        dataType: "json",
+        data: {
+            user_uniqueId: user_uniqueId,
+            requestType: requestType,
+            jobid: jobid,
+            category: category
+        },
+        success:function(response){
+            if (response == "REMOVED") {
                 console.log("Done!!");
             } else {
                 alert("not done!");

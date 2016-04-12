@@ -120,6 +120,13 @@ $website->Statistics();
             $(this).html('<i class="fa fa-check"></i>Đã lưu việc này');
             e.preventDefault();
         });
+        
+        //change status to Removed
+        $(".removethisJob").on('click', function(e){
+            $(this).removeAttr("onclick").removeAttr("href"); //Prevent duplicate records
+            $(this).html('<i class="fa fa-check"></i>Đã xóa việc này');
+            e.preventDefault();
+        });
 
     });
 </script>
