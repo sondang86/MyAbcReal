@@ -48,9 +48,9 @@
         </section>
         
         <!--LATEST JOBS-->
+        <?php if($db->totalCount > 0){ //Found jobs?>
         <section class="col-md-5 col-xs-12 min-height-150 recruiterNewestJobs">
-            <strong><p>Việc làm mới nhất</p></strong>
-            <?php if($db->totalCount > 0){?>
+            <strong><p>Việc làm mới nhất</p></strong>            
             <ul class="padding-left-15 top-bottom-margin">
                 <?php foreach($jobs_by_employer as $key => $job):?>
                     <?php if(!empty($job[$company['company']])):?>
@@ -62,11 +62,9 @@
                     <?php endif;?>
                 <?php endforeach;?>
             </ul>
-            <p><a href="<?php $website->check_SEO_link("jobs_by_companyId",$SEO_setting, $company['id'], $website->seoUrl($company['company']))?>" class="small-font underline-link">Xem toàn bộ</a></p>                        
-            <?php } else {?>
-                <h5>Không tìm thấy việc nào của nhà tuyển dụng này</h5>
-            <?php }?>            
-        </section>            
+            <p><a href="<?php $website->check_SEO_link("jobs_by_companyId",$SEO_setting, $company['id'], $website->seoUrl($company['company']))?>" class="small-font underline-link">Xem toàn bộ</a></p>                                                            
+        </section>
+        <?php }?>  
     </div>
 </div>
 <?php endforeach;?>
