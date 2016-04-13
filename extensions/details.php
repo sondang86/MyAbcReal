@@ -1,6 +1,11 @@
-    
-<a id="go_back_button" class="btn btn-default btn-xs pull-right no-decoration margin-bottom-5" href="javascript:GoBack()">Quay lại</a>
-    
+<?php
+    if(!defined('IN_SCRIPT')) die("");
+    global $db,$categories, $categories_subs,$commonQueries,  $SEO_setting;
+    $job_id = $commonQueries->check_present_id($_GET, $SEO_setting, 3);
+    $job_details = $commonQueries->job_by_id("jobs", "id", $job_id, NULL, array('id', 'date'));
+
+?>    
+<a id="go_back_button" class="btn btn-default btn-xs pull-right no-decoration margin-bottom-5" href="javascript:GoBack()">Quay lại</a>    
 <article class="job-details-wrap">
     <!--JOB's TITLE-->
     <div class="row">

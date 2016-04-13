@@ -10,7 +10,7 @@ if (isset($_POST['requestType']) && $_POST['requestType'] == "save"){
     } else {
         $userId_Cookie = "";
     }
-        
+  
     //Retrieve user unique Id and their IP address
     $userAddress = $db->where('IPAddress', filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP))
                 ->where("user_uniqueId", $userId_Cookie)
@@ -27,14 +27,15 @@ if (isset($_POST['requestType']) && $_POST['requestType'] == "save"){
         $user_uniqueId = uniqid();
             
     }
-                
+          
     //Prepare and insert data to db
     $data = Array (
         "user_type" => "1",
         "job_id" => filter_input(INPUT_POST,'jobid', FILTER_SANITIZE_NUMBER_INT),
         "date" => strtotime("now"),
         "user_uniqueId" => $user_uniqueId,
-        "IPAddress" => filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP)
+        "IPAddress" => filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP),
+        "browser" => filter_input(INPUT_POST,'browser', FILTER_SANITIZE_STRING),
     );
     $id = $db->insert ('saved_jobs', $data);   
         
@@ -43,6 +44,8 @@ if (isset($_POST['requestType']) && $_POST['requestType'] == "save"){
         $user_info = $db->where('id', $id)->getOne("saved_jobs", NULL, array("user_uniqueId", "IPAddress"));
         setcookie("userId", $user_info['user_uniqueId'],time()+86400); //Expires in 1 day
         echo json_encode("DONE");
+    } else {
+        echo "problem";
     }
 }
 

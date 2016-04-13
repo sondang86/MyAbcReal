@@ -6,9 +6,15 @@
 // http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,$SEO_setting;
+global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,$SEO_setting, $Browser_detection;
+//echo $Browser_detection->getName();
 
-
+//Set default user ID if their cookie empty
+if (empty($_COOKIE['userId'])){
+    $userId_cookie = setcookie('userId', "null");
+} else {
+    $userId_cookie = $_COOKIE['userId'];
+}
 
 $featured_jobs_columns = array(
     $DBprefix."jobs.id as job_id",$DBprefix."jobs.job_category",
@@ -19,8 +25,9 @@ $featured_jobs_columns = array(
     $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",
     $DBprefix."job_experience.name as experience_name",$DBprefix."job_experience.name_en as experience_name_en",
     $DBprefix."salary.salary_range",$DBprefix."salary.salary_range_en",
-    $DBprefix."saved_jobs.job_id as saved_jobId",$DBprefix."saved_jobs.user_type as saved_job_userType",
-    $DBprefix."saved_jobs.date as saved_jobDate", $DBprefix."saved_jobs.user_uniqueId as user_uniqueId"//saved jobs table
+    $DBprefix."saved_jobs.user_type as saved_job_userType",$DBprefix."saved_jobs.date as saved_jobDate",
+    $DBprefix."saved_jobs.browser", $DBprefix."saved_jobs.IPAddress",  
+    $DBprefix."saved_jobs.user_uniqueId as user_uniqueId",$DBprefix."saved_jobs.job_id as saved_jobId"//saved jobs table
 );
 
 $db->join("employers", $DBprefix."jobs.employer=".$DBprefix."employers.username", "LEFT");
@@ -35,11 +42,26 @@ $db->where($DBprefix."jobs.active", "YES");
 $db->where($DBprefix."jobs.status", "1");
 $db->where($DBprefix."jobs.expires", time(), ">");
 $db->where($DBprefix."jobs.featured", "1");
+//$db->where($DBprefix."saved_jobs.browser", $Browser_detection->getName());
+
 $db->orderBy('RAND()');
+//$db->groupBy ("job_id");
 $featured_jobs = $db->get("jobs", array(0,10),$featured_jobs_columns);
 
-//Set default user ID if their cookie empty
-if (empty($_COOKIE['userId'])){setcookie('userId', "null");}
+//Get saved jobs by unique user Id + IP Address + Browser version
+$db->where("user_uniqueId",$userId_cookie);
+$db->where("IPAddress",filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP));
+$db->where("browser",$Browser_detection->getName());
+$saved_jobs = $db->get('saved_jobs', NULL, "job_id");
+
+echo "<pre>";
+print_r($featured_jobs);
+echo "</pre>";
+
+$saved_jobs_new = array();
+foreach ($saved_jobs as $saved_job) {
+    $saved_jobs_new[$saved_job['job_id']] = 'job_id';
+}
 
 $segment = $website->getURL_segment($website->currentURL());
 
@@ -59,14 +81,10 @@ $segment = $website->getURL_segment($website->currentURL());
 <section class="tab-content">        
     <!--BY FEATURED-->
     <div id="by_featured" class="tab-pane fade in active">
-        <?php foreach ($featured_jobs as $featured_job) :?>
+        <?php foreach ($featured_jobs as $key => $featured_job) :?>
         <div class="row joblistArea">
             <div class="col-md-12 joblist">
-                <?php if($SEO_setting == 0){?>
-                <a href="index.php?mod=details&id=<?php echo $featured_job['job_id']?>&lang=vn">
-                <?php } else {?>    
-                <a href="chi-tiet-cong-viec/<?php echo $featured_job['job_id']?>/<?php echo $featured_job['SEO_title']?>">    
-                <?php }?>    
+                <a href="<?php $website->check_SEO_link("details", $SEO_setting, $featured_job['job_id'],$featured_job['SEO_title']);?>">
                     <section class="banner">
                         <img alt="SKP Business Consulting LLP" src="uploaded_images/<?php echo $featured_job['logo']?>.jpg" width="120" height="50">
                     </section>
@@ -102,20 +120,20 @@ $segment = $website->getURL_segment($website->currentURL());
                     <i class="fa fa-star"></i>
                 </span> 
             </div>
-
+            
             <!--SAVE JOB-->
             <div class="col-md-12 more-details">           
                 <section class="col-md-6 col-xs-6 other_details">
                     <span title=" Save this job " class="action savejob fav  favReady">
-                        
+
                     <?php if($featured_job['saved_jobId'] !== $featured_job['job_id'] || $_COOKIE['userId'] !== $featured_job['user_uniqueId']){ //Show save job button?>                    
                         
-                        <a href="#" data-category="<?php echo $featured_job["category_id"]?>"  data-jobid="<?php echo $featured_job["job_id"]?>" title="Lưu việc làm này" class="savethisJob" id="<?php echo $featured_job["job_id"]?>" onclick="javascript:saveJob(this)"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
+                        <a href="#" data-browser="<?php echo $Browser_detection->getName();?>" data-category="<?php echo $featured_job["category_id"]?>"  data-jobid="<?php echo $featured_job["job_id"]?>" title="Lưu việc làm này" class="savethisJob" id="<?php echo $featured_job["job_id"]?>" onclick="javascript:saveJob(this)"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
                         
                     <?php } else { // Show saved ?>
                         
-                        <a href="#" title="Đã lưu" class="savethisJob" id="<?php echo $featured_job["job_id"]?>"><i class="fa fa-check"></i>Đã lưu việc này</a>
-                        
+                        <a href="#" title="Đã lưu" class="savethisJob" id="<?php echo $featured_job["job_id"]?>"><i class="fa fa-check"></i>Đã lưu việc này</a>                    
+                                            
                     <?php }?>
                     </span> 
                     <span class="salary"><em></em>  Not disclosed </span> 

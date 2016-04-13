@@ -80,14 +80,16 @@
         /**
         *  Find jobs by id
         *  @param var $table table name
-        *  @param var $column specific column in table
+        *  @param var $where specific where condition
         *  @param var $id id or name of the selected column
+        *  @param var $limit limit records to be selected, default is NULL
+        *  @param var $column specific columns to be selected
         */
-        public function job_by_id($table="jobs",$column="employer", $id="1") {
-            if (!empty($column)){
-                $this->_db->where ($column, $id);
+        public function job_by_id($table="jobs",$where="employer", $id="1",$limit=NULL, $columns="") {
+            if (!empty($where)){
+                $this->_db->where ($where, $id);
             }
-            $data = ((object)$this->_db->get($table));
+            $data = ((object)$this->_db->get($table,$limit,$columns));
             return $data;
         }
         

@@ -28,6 +28,10 @@ $db = new MysqliDb (Array (
         
 /// Initialization of the site manager and database objects
 $database = new Database();
+
+//Browser detection
+$Browser_detection = new BrowserDetection();
+
     
 /// Connect to the website database
 $database->Connect($DBHost, $DBUser,$DBPass );

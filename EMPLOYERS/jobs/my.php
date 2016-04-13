@@ -29,16 +29,7 @@ if (isset($_POST['delete']) && !empty($_POST['post'])){
                     "",
                     "green"
                 );
-
-//                echo LinkTile
-//                (
-//                    "jobs",
-//                    "my_export",
-//                    $M_EXPORT_OR_IMPORT,
-//                    "",
-//                    "lila"
-//                );
-            ?>
+    ?>
     </div>
 </div>         
 <div class="clear"></div>

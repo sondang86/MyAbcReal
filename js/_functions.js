@@ -227,6 +227,7 @@ function GoBack()
 function saveJob(id){
     var jobid   = $(id).attr('data-jobid');
     var category = $(id).attr('data-category');
+    var browser = $(id).attr('data-browser');
     var requestType = "save";
     var url_ajax = 'luu-viec-lam';
     $.ajax({
@@ -237,7 +238,8 @@ function saveJob(id){
         data: {
             requestType: requestType,
             jobid: jobid,
-            category: category
+            category: category,
+            browser : browser
         },
         success:function(response){
             if (response == "DONE") {
