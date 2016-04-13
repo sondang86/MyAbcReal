@@ -51,6 +51,13 @@ $locations = $db->get ('locations');
 $salaries = $db->get ('salary');
 $all_jobs = $db->get('jobs');
 $companies = $db->get('employers');
+
+//Set default user ID if their cookie empty
+if (empty($_COOKIE['userId'])){
+    $userId_cookie = setcookie('userId', "null");
+} else {
+    $userId_cookie = filter_input(INPUT_COOKIE,'userId', FILTER_SANITIZE_STRING);
+}
     
     
 //Get SEO setting 
@@ -98,7 +105,7 @@ else
 /// Rendering the final html of the website
 $website->Render();
     
-/// Inserrting the statistics information in the database
+/// Inserting the statistics information in the database
 $website->Statistics();
     
 ?>

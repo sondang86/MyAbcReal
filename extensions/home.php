@@ -6,15 +6,8 @@
 // http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,$SEO_setting, $Browser_detection;
+global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,$SEO_setting, $Browser_detection, $userId_cookie;
 //echo $Browser_detection->getName();
-
-//Set default user ID if their cookie empty
-if (empty($_COOKIE['userId'])){
-    $userId_cookie = setcookie('userId', "null");
-} else {
-    $userId_cookie = $_COOKIE['userId'];
-}
 
 $featured_jobs_columns = array(
     $DBprefix."jobs.id as job_id",$DBprefix."jobs.job_category",
@@ -36,32 +29,19 @@ $db->join("locations", $DBprefix."jobs.region=".$DBprefix."locations.id", "LEFT"
 $db->join("job_types", $DBprefix."jobs.job_type=".$DBprefix."job_types.id", "LEFT");
 $db->join("job_experience", $DBprefix."jobs.experience=".$DBprefix."job_experience.experience_id", "LEFT");
 $db->join("salary", $DBprefix."jobs.salary=".$DBprefix."salary.salary_id", "LEFT");
-$db->join('saved_jobs', $DBprefix."jobs.id = ".$DBprefix."saved_jobs.job_id", "LEFT");
+$db->join('saved_jobs', $DBprefix."jobs.id = ".$DBprefix."saved_jobs.job_id AND "
+        .$DBprefix."saved_jobs.user_uniqueId = '$userId_cookie' AND "
+        .$DBprefix."saved_jobs.IPAddress = '".filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP)."' ", "LEFT");
 
 $db->where($DBprefix."jobs.active", "YES");
 $db->where($DBprefix."jobs.status", "1");
 $db->where($DBprefix."jobs.expires", time(), ">");
 $db->where($DBprefix."jobs.featured", "1");
-//$db->where($DBprefix."saved_jobs.browser", $Browser_detection->getName());
 
 $db->orderBy('RAND()');
 //$db->groupBy ("job_id");
+
 $featured_jobs = $db->get("jobs", array(0,10),$featured_jobs_columns);
-
-//Get saved jobs by unique user Id + IP Address + Browser version
-$db->where("user_uniqueId",$userId_cookie);
-$db->where("IPAddress",filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP));
-$db->where("browser",$Browser_detection->getName());
-$saved_jobs = $db->get('saved_jobs', NULL, "job_id");
-
-echo "<pre>";
-print_r($featured_jobs);
-echo "</pre>";
-
-$saved_jobs_new = array();
-foreach ($saved_jobs as $saved_job) {
-    $saved_jobs_new[$saved_job['job_id']] = 'job_id';
-}
 
 $segment = $website->getURL_segment($website->currentURL());
 
@@ -86,7 +66,7 @@ $segment = $website->getURL_segment($website->currentURL());
             <div class="col-md-12 joblist">
                 <a href="<?php $website->check_SEO_link("details", $SEO_setting, $featured_job['job_id'],$featured_job['SEO_title']);?>">
                     <section class="banner">
-                        <img alt="SKP Business Consulting LLP" src="uploaded_images/<?php echo $featured_job['logo']?>.jpg" width="120" height="50">
+                        <img alt="SKP Business Consulting LLP" src="http://<?php echo $DOMAIN_NAME;?>/uploaded_images/<?php echo $featured_job['logo']?>.jpg" width="120" height="50">
                     </section>
                     <p title="<?php echo $featured_job['title']?>" class="desig"><?php echo $featured_job['title']?></p>
                     <p class="company">
@@ -126,7 +106,7 @@ $segment = $website->getURL_segment($website->currentURL());
                 <section class="col-md-6 col-xs-6 other_details">
                     <span title=" Save this job " class="action savejob fav  favReady">
 
-                    <?php if($featured_job['saved_jobId'] !== $featured_job['job_id'] || $_COOKIE['userId'] !== $featured_job['user_uniqueId']){ //Show save job button?>                    
+                    <?php if($featured_job['saved_jobId'] !== $featured_job['job_id'] || $userId_cookie !== $featured_job['user_uniqueId']){ //Show save job button?>                    
                         
                         <a href="#" data-browser="<?php echo $Browser_detection->getName();?>" data-category="<?php echo $featured_job["category_id"]?>"  data-jobid="<?php echo $featured_job["job_id"]?>" title="Lưu việc làm này" class="savethisJob" id="<?php echo $featured_job["job_id"]?>" onclick="javascript:saveJob(this)"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
                         

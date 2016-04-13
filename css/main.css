@@ -2570,6 +2570,20 @@ div.upload input:hover {
 
 }
 
+.job-details-aside {
+    text-align: center;
+    padding: 0 15px;
+}
+
+.job-details-aside a {
+    display: block;
+    margin-bottom: 15px;
+}
+
+.job-details-article p{
+    margin-top: 15px;
+}
+
 /* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {
     .jobseeker-info li{

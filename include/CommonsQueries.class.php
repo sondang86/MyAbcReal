@@ -420,4 +420,52 @@
             $this->_db->withTotalCount()->get($table, NULL, $columns);
             return $this->_db->totalCount;
         }
-    }
+        
+        /**
+        *  Find job by id and all of details information
+        * 
+        *  @param var $id job's id
+        *  
+        */
+        
+       public function jobDetails($id, $userId_cookie){
+           global $DBprefix;
+           $columns = array(
+                $DBprefix."jobs.id as job_id",$DBprefix."jobs.job_category",
+                $DBprefix."jobs.applications",$DBprefix."jobs.employer",
+                $DBprefix."jobs.title",$DBprefix."jobs.SEO_title",$DBprefix."jobs.date as date",
+                $DBprefix."jobs.message",$DBprefix."employers.company",$DBprefix."employers.logo",$DBprefix."employers.id as employer_id",
+                $DBprefix."categories.category_name_vi",$DBprefix."categories.category_name",$DBprefix."categories.id as category_id",
+                $DBprefix."locations.City",$DBprefix."locations.City_en",$DBprefix."locations.id as location_id",
+                $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",
+                $DBprefix."job_experience.name as experience_name",$DBprefix."job_experience.name_en as experience_name_en",
+                $DBprefix."salary.salary_range",$DBprefix."salary.salary_range_en",
+                $DBprefix."saved_jobs.user_type as saved_job_userType",$DBprefix."saved_jobs.date as saved_jobDate",
+                $DBprefix."saved_jobs.browser", $DBprefix."saved_jobs.IPAddress",  
+                $DBprefix."saved_jobs.user_uniqueId as user_uniqueId",$DBprefix."saved_jobs.job_id as saved_jobId"//saved jobs table
+            );
+
+            $this->_db->join("employers", $DBprefix."jobs.employer=".$DBprefix."employers.username", "LEFT");
+            $this->_db->join("categories", $DBprefix."jobs.job_category=".$DBprefix."categories.category_id", "LEFT");
+            $this->_db->join("locations", $DBprefix."jobs.region=".$DBprefix."locations.id", "LEFT");
+            $this->_db->join("job_types", $DBprefix."jobs.job_type=".$DBprefix."job_types.id", "LEFT");
+            $this->_db->join("job_experience", $DBprefix."jobs.experience=".$DBprefix."job_experience.experience_id", "LEFT");
+            $this->_db->join("salary", $DBprefix."jobs.salary=".$DBprefix."salary.salary_id", "LEFT");
+            $this->_db->join('saved_jobs', $DBprefix."jobs.id = ".$DBprefix."saved_jobs.job_id AND "
+                    .$DBprefix."saved_jobs.user_uniqueId = '$userId_cookie' AND "
+                    .$DBprefix."saved_jobs.IPAddress = '".filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP)."' ", "LEFT");
+
+            $this->_db->where($DBprefix."jobs.id", $id);
+            $this->_db->where($DBprefix."jobs.status", "1");
+
+
+            $job_details = $this->_db->withTotalCount()->get("jobs", NULL,$columns);
+            
+            
+            if ($this->_db->totalCount > 0) {
+                return $job_details[0];
+            } else {
+                return FALSE;
+            }
+           }
+        }
