@@ -139,5 +139,12 @@ $website->Statistics();
             e.preventDefault();
         });
 
+        $('.bxslider').bxSlider({
+            slideWidth: 150,
+            minSlides: 2,
+            maxSlides: 8,
+            slideMargin: 30
+        });
+
     });
 </script>

@@ -2419,6 +2419,14 @@ div.upload input:hover {
 }
 
 /*Company info style*/
+
+.companyLogo figure img{
+    max-height: 100px;
+    height: 100%;
+    margin: auto;
+    vertical-align: middle;
+}
+
 .message {
     background-color: #dadada;
     border: 5px solid #ccc;

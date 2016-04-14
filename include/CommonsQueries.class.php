@@ -172,7 +172,7 @@
         *  @param var $type id or name of the selected column
         *  @param var $limit limit the number of records to be appear
         */
-        public function jobs_by_keywords($queryString="",$category="",$location="", $limit=NULL){
+        public function jobs_by_keywords($queryString="",$category="",$location="", $limit=NULL, $userId_cookie=""){
             global $DBprefix;
             $jobsInfo_columns = Array (
                 $DBprefix."jobs.id as job_id",$DBprefix."jobs.date", $DBprefix."jobs.employer",
@@ -185,13 +185,19 @@
                 $DBprefix."categories.category_name_vi",$DBprefix."categories.category_id", //Categories table
                 $DBprefix."salary.salary_id",$DBprefix."salary.salary_range", //Salary table
                 $DBprefix."locations.City",$DBprefix."locations.id as location_id", //Locations table
-                $DBprefix."employers.id as employer_id",$DBprefix."employers.company as company",$DBprefix."employers.logo as company_logo" //Employer table
+                $DBprefix."employers.id as employer_id",$DBprefix."employers.company as company",$DBprefix."employers.logo as company_logo", //Employer table
+                $DBprefix."saved_jobs.user_type as saved_job_userType",$DBprefix."saved_jobs.date as saved_jobDate",
+                $DBprefix."saved_jobs.browser", $DBprefix."saved_jobs.IPAddress",  
+                $DBprefix."saved_jobs.user_uniqueId as user_uniqueId",$DBprefix."saved_jobs.job_id as saved_jobId"//saved jobs table
             );
             $this->_db->join('categories', $DBprefix."jobs.job_category =".$DBprefix."categories.category_id", "LEFT");
             $this->_db->join('salary', $DBprefix."jobs.salary = ".$DBprefix."salary.salary_id", "LEFT");
             $this->_db->join('job_types', $DBprefix."jobs.job_type = ".$DBprefix."job_types.id", "LEFT");
             $this->_db->join('locations', $DBprefix."jobs.region = ".$DBprefix."locations.id", "LEFT");
             $this->_db->join('employers', $DBprefix."jobs.employer = ".$DBprefix."employers.username", "LEFT");
+            $this->_db->join('saved_jobs', $DBprefix."jobs.id = ".$DBprefix."saved_jobs.job_id AND "
+                    .$DBprefix."saved_jobs.user_uniqueId = '$userId_cookie' AND "
+                    .$DBprefix."saved_jobs.IPAddress = '".filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP)."' ", "LEFT");
             
             //Check conditions
             if(!empty($queryString)){

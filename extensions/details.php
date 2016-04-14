@@ -1,12 +1,9 @@
 <?php
     if(!defined('IN_SCRIPT')) die("");
-    global $db,$categories, $categories_subs,$commonQueries,  $SEO_setting, $userId_cookie;
+    global $db,$categories, $categories_subs,$commonQueries,  $SEO_setting, $userId_cookie,$Browser_detection;
     $job_id = $commonQueries->check_present_id($_GET, $SEO_setting, 3);
     $job_details = $commonQueries->jobDetails($job_id, $userId_cookie);
     
-//    echo "<pre>";
-//    print_r($job_details);
-//    echo "</pre>";
 ?>    
 <a id="go_back_button" class="btn btn-default btn-xs pull-right no-decoration margin-bottom-5" href="javascript:GoBack()">Quay lại</a>    
 <article class="job-details-wrap">
@@ -59,13 +56,22 @@
         </aside>
     </section>
         
+    
     <!--JOB APPLY NAV-->
     <footer class="row top-bottom-margin">
         <figure class="col-md-12">            
-            <img src="http://localhost/vieclambanthoigian.com.vn/images/email-small-icon.png">
-            <a href="#" class="small-link gray-link" data-toggle="collapse" data-target=".email-collapse">Gửi email</a>
-             
-            <img class="l-margin-20" src="http://localhost/vieclambanthoigian.com.vn/images/save-small-icon.png" height="12"><a class="small-link gray-link" href="#" id=""> Lưu việc làm này</a>  
+           
+            <a href="#" title="Email công việc này" class="emailthisJob" id="<?php echo $job_details["job_id"]?>"><i class="fa fa-inbox" aria-hidden="true"></i>Gửi email</a> 
+            
+            <?php if(($job_details['saved_jobId'] !== $job_details['job_id']) || ($userId_cookie !== $job_details['user_uniqueId']) || ($job_details['IPAddress'] !== filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP))){ //Show save job button?>                    
+                        
+                <a href="#" data-browser="<?php echo $Browser_detection->getName();?>" data-category="<?php echo $job_details["category_id"]?>"  data-jobid="<?php echo $job_details["job_id"]?>" title="Lưu việc làm này" class="savethisJob" id="<?php echo $job_details["job_id"]?>" onclick="javascript:saveJob(this, sitePath)"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
+
+            <?php } else { // Show saved ?>
+
+                <a href="#" title="Đã lưu" class="savethisJob" id="<?php echo $job_details["job_id"]?>"><i class="fa fa-check"></i>Đã lưu việc này</a>                    
+
+            <?php }?> 
             
         </figure>
     </footer>

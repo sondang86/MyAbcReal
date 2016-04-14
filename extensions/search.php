@@ -1,17 +1,16 @@
 <?php
     if(!defined('IN_SCRIPT')) die("");
-    global $db, $DOMAIN_NAME, $website, $categories, $locations, $SEO_setting,$commonQueries;
+    global $db, $DOMAIN_NAME, $website, $categories, $locations, $SEO_setting,$commonQueries, $userId_cookie, $Browser_detection;
 
-    //Perform search
-    
+    //Perform search    
     if (isset($_GET['q'])){$queryString = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING);} else {$queryString = "";}    
     //Search with category option
     if(isset($_GET['category'])){ $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_NUMBER_INT);} else {$category="";}
     //Search with location option
     if(isset($_GET['location'])){ $location = filter_input(INPUT_GET, 'location', FILTER_SANITIZE_NUMBER_INT);} else {$location="";} 
-    print_r($location);
-    $jobs_found = $commonQueries->jobs_by_keywords($queryString,$category,$location);
 
+    //List jobs
+    $jobs_found = $commonQueries->jobs_by_keywords($queryString,$category,$location, NULL,$userId_cookie);
 ?>
 <!--SEARCH BAR-->
 <main class="col-md-12 search-form-wrap">
@@ -114,7 +113,17 @@
         <footer class="col-md-12 more-details">           
             <section class="col-md-6 col-xs-6 other_details">
                 <span title=" Save this job " class="action savejob fav  favReady">
-                    <a href="javascript:SaveListing('<?php echo $job['job_id']?>')" id="save_<?php echo $job['job_id']?>" title="Lưu việc làm này"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
+                    
+                    <?php if(($job['saved_jobId'] !== $job['job_id']) || ($userId_cookie !== $job['user_uniqueId']) || ($job['IPAddress'] !== filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP))){ //Show save job button?>                    
+                        
+                        <a href="#" data-browser="<?php echo $Browser_detection->getName();?>" data-category="<?php echo $job["category_id"]?>"  data-jobid="<?php echo $job["job_id"]?>" title="Lưu việc làm này" class="savethisJob" id="<?php echo $job["job_id"]?>" onclick="javascript:saveJob(this, sitePath)"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
+
+                    <?php } else { // Show saved ?>
+
+                        <a href="#" title="Đã lưu" class="savethisJob" id="<?php echo $job["job_id"]?>"><i class="fa fa-check"></i>Đã lưu việc này</a>                    
+
+                    <?php }?>
+                        
                 </span> 
                 <span class="salary"><em></em>  Not disclosed </span> 
             </section>

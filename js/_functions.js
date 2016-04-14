@@ -224,12 +224,12 @@ function GoBack()
 	history.back();
 }
 
-function saveJob(id){
+function saveJob(id, sitePath){
     var jobid   = $(id).attr('data-jobid');
     var category = $(id).attr('data-category');
     var browser = $(id).attr('data-browser');
     var requestType = "save";
-    var url_ajax = 'luu-viec-lam';
+    var url_ajax = sitePath + '/luu-viec-lam';
     $.ajax({
         url:url_ajax,
         cache: false,

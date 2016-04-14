@@ -40,22 +40,22 @@ if(
 <!--http://bxslider.com/options-->
 <script>
     /**Slide show list featured jobs home page*/
-    $(document).ready(function(){
-        $('.bxslider').bxSlider({
-            slideWidth: 250,
-            minSlides: 2,
-            maxSlides: 4,
-            moveSlides: 4,
-            slideMargin: 10,
-            adaptiveHeight: true,
-            nextSelector: '#bx-next',
-            prevSelector: '#bx-prev',
-            nextText: 'Trang kế tiếp →',
-            prevText: '← Trang sau',
-            pager: true,
-            pagerType: 'short',
-        });
-    });
+//    $(document).ready(function(){
+//        $('.bxslider').bxSlider({
+//            slideWidth: 250,
+//            minSlides: 2,
+//            maxSlides: 4,
+//            moveSlides: 4,
+//            slideMargin: 10,
+//            adaptiveHeight: true,
+//            nextSelector: '#bx-next',
+//            prevSelector: '#bx-prev',
+//            nextText: 'Trang kế tiếp →',
+//            prevText: '← Trang sau',
+//            pager: true,
+//            pagerType: 'short',
+//        });
+//    });
 </script>
 <div class="home-panel">
     <section class="container">
