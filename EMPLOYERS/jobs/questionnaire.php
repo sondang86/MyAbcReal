@@ -7,17 +7,7 @@
 if(!defined('IN_SCRIPT')) die("");
 ?>
 <div class="fright">
-
-	<?php
-		echo LinkTile
-		 (
-			"jobs",
-			"my",
-			$M_GO_BACK,
-			"",
-			"red"
-		 );
-	?>
+    <?php echo LinkTile ("jobs","my",$M_GO_BACK,"","red");?>    
 </div>
 <div class="clear"></div>
 
