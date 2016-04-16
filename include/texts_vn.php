@@ -10,9 +10,8 @@ $WORK_LOCATION="Vị trí làm việc";
 $M_MINIMUM_SALARY="Mức lương tối thiểu";
 $M_JOBS_BY_FEATURED="Việc làm nổi bật";
 $M_JOBS_BY_LATEST="Việc làm mới nhất";
+
 //SonDang
-
-
 $M_BROWSE_MAP="Browse by Map";
 $M_ADD_MAP="Thêm địa chỉ vào bản đồ";
 $M_LONGITUDE="Longitude";
@@ -160,13 +159,13 @@ $M_PLEASE_ANSWER_QUESTIONS="Hãy trả lời những câu hỏi dưới đây";
 $M_VISITS="Lượt xem";
 $M_YOUR_LATEST_JOBS="Việc làm mới nhất của bạn";
 $M_QUESTIONNAIRE="Bảng câu hỏi";
-$M_MODIFY_QUESTION="Sửa đổi các câu hỏi lựa chọn";
+$M_MODIFY_QUESTION="Sửa câu hỏi";
 $M_DELETE="Xóa bỏ";
 $M_NEW_QUESTION_ADDED="Các câu hỏi mới được thêm thành công!";
 $M_ADD="Bổ sung";
 $M_QUESTION="Câu hỏi";
 $M_POSSIBLE_ANSWERS="Đáp thể";
-$M_ADD_NEW_QUESTION="Thêm mới Câu hỏi";
+$M_ADD_NEW_QUESTION="Thêm câu hỏi mới";
 $M_STILL_NO_QUESTIONS="Bạn vẫn không thêm bất kỳ câu hỏi";
 $M_REACHED_MAXIMUM_SUBSCR="Bạn đã đạt đến số lượng tối đa cho phép CV của thuê bao hiện tại của bạn.";
 $M_PLEASE_SELECT_TO_POST="Vui lòng chọn một thuê bao mới để có thể xem chi tiết Sơ yếu lý lịch.";

@@ -7,207 +7,68 @@
 if(!defined('IN_SCRIPT')) die("");
 global $db, $commonQueries;
 $job_id = filter_input(INPUT_GET,'id', FILTER_SANITIZE_NUMBER_INT);
-
-//Fetch questionnaire data
-$columns = array(
-    $DBprefix."questionnaire.id as questionnaire_id",$DBprefix."questionnaire.employer",
-    $DBprefix."questionnaire.job_id",$DBprefix."questionnaire.question",
-    $DBprefix."questionnaire.question_type",$DBprefix."questionnaire.date",
-    $DBprefix."questionnaire_type.name as questionnaire_typeName",
-    $DBprefix."questionnaire_type.name_en as questionnaire_typeName_en",
-);
-$db->join("questionnaire_type", $DBprefix."questionnaire.question_type =".$DBprefix."questionnaire_type.questionnaire_type", "LEFT");
-$questionnaires_list = $db->where('job_id', $job_id)->get('questionnaire', NULL, $columns);
-
+    
+//Fetch questionnaire data   
+$questionnaires_list = $commonQueries->getQuestionnaire($job_id); 
 ?>
 
-<?php
-    if(isset($_POST['submit'])){
-        $questions_answers = array_reverse(filter_input(INPUT_POST,'answerPoll',FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY));
-        $question_title = filter_input(INPUT_POST,'question-title', FILTER_SANITIZE_STRING);
-        
-        //Insert question
-        $question_data = array(
-            "job_id"            => $job_id,
-            "question"          => $question_title,
-            "question_type"     => filter_input(INPUT_POST,'pollSelection', FILTER_SANITIZE_NUMBER_INT),
-            "employer"          => $AuthUserName,
-            "date"              => strtotime(date("Y-m-d G:i:s")),
-        );        
-        $question_id = $db->insert('questionnaire',$question_data);
-        if (!$question_id){
-            echo 'problem while insert data';die;
-        }
-        
-        //Insert question answers 
-        foreach ($questions_answers as $questions_answer) {            
-            $dataInsert = Array (                
-                "question_ask"      => $questions_answer,
-                "questionnaire_id"  => $question_id,
-                "employer"          => $AuthUserName
-            );
 
-            $questions_answerId = $db->insert('questionnaire_questions', $dataInsert);
-            if(!$questions_answerId){
-                echo 'problem while insert data';die;
-            }            
-        }
-        
-        
-        //Succeed, back to question page
-        $website->redirect("index.php?category=jobs&action=questionnaire&id=$job_id");
-    }
-
-?>
-
-<script>
-    /*Add & Remove questionnaire*/
-    $(function() {
-        var scntDiv = $('#answerPoll');
-        var i = $('#answerPollArea p').size() + 1;        
-        $(document).on('click','#addMore', function(e) {
-            $('<p><span><input type="text" size="20" name="answerPoll[]" required/></span><span><a href="#" id="remScnt">Xóa</a></span></p>').appendTo(scntDiv).fadeIn('slow');
-            i++;
-            if (i > 5) {
-                $("#addMore").hide();
-            } 
-            return false;
-        });
-        
-        /*Remove questionnaire*/
-        $(document).on('click', '#remScnt', function() { 
-            if( i > 1 ) {
-                $(this).parents('p').remove();
-                i--;
-            };
-            
-            //Show 
-            if (i < 6) {
-                $("#addMore").show();
-            }
-            return false;
-        });        
-        
-    });
-    
-    /*questionnaire selection*/
-    $(document).ready(function(){
-        $(document).on('change',"#pollSelection",function() {
-            /*Show or hide option based on selection*/
-            if($("#pollSelection").val() === '2') {
-                $("#answerPollArea").show("fade", 500);
-            } else {
-                $("#answerPollArea").fadeOut();
-            } 
-        });
-        
-        //disable values if hidden
-        $('form').submit(function(e){
-            $('#answerPoll input:hidden').attr("disabled",true); 
-        });
-    });
-    
-    
-    
-    
-</script>
-<style>
-    
-    #answerPoll p span input {
-        width: 75%;
-        margin-right: 15px;
-    }
-    
-    .questionnaire-employer {
-        min-height: 350px;
-        position: relative;
-        padding: 10px;
-        border-radius: 5px;
-    }
-    
-    .questionnaire-save {
-        margin-top: 15px;
-    }
-</style>
-<div class="row">
-    <h3 class="no-top-margin title col-md-9"><?php echo $M_ADD_NEW_QUESTION;?></h3>
-    <aside class="col-md-2 fright">
+<div class="row questionnaire-title">
+    <section class="col-md-8 col-xs-12"></section>
+    <aside class="col-md-2 col-sm-6 col-xs-12">
+        <?php echo LinkTile ("jobs","new_questionnaire&job_id=$job_id",$M_ADD_NEW_QUESTION,"","blue");?> 
+    </aside>
+    <aside class="col-md-2 col-sm-6 col-xs-12">
         <?php echo LinkTile ("jobs","my",$M_GO_BACK,"","red");?>    
     </aside>
 </div>
 
-<!--Questionnaire-->
-<div class="col-md-9 questionnaire-employer">
-    <form method="POST">
-        <div class="row">
-            <h5 class="col-md-2">Câu hỏi (*): </h5>
-            <p class="col-md-8"><textarea name="question-title" style="width: 100%; min-height: 150px;" required></textarea></p>
-            <section class="col-md-2" style="text-align: right;">
-                <select id="pollSelection" name="pollSelection">
-                    <option value="1">Người dùng trả lời</option>
-                    <option value="2">Trắc nghiệm</option>
-                </select>
-            </section>        
-        </div>
-        
-        <!--Poll answers-->
-        <div class="row answerPollArea" id="answerPollArea" style="margin-top: 20px; display: none;">
-            <h5 class="col-md-2">Câu trả lời: </h5>
-            <section class="col-md-8 answerPoll" id="answerPoll">        
-                <p>
-                    <span><input type="text" name="answerPoll[]"></span>
-                    <span><button id="addMore">Thêm câu trả lời +</button></span>
-                </p>        
-            </section>  
-        </div>
-        
-        <div class="row">
-            <section class="col-md-2"></section>
-            <label class="col-md-10 questionnaire-save" style="">
-                <input type="submit" name="submit" value="Lưu">
-            </label>
-        </div>
-    </form>
-</div>
 
-
+<?php if ($questionnaires_list !== FALSE){ //Found questions?>    
 <!--List questions-->
-
-<div class="table-responsive">
-    <table class="table table-hover admin-table">
-        <thead>
-            <tr class="table-tr">
-                <th width="70">                    
-                    <a class="header-td" href="index.php?category=home&amp;action=apply&amp;order=date&amp;order_type=desc">
-                        Date
-                    </a>    
-                </th>
-                <th width="140">                    
-                    <span class="header-td">
-                        Loại câu hỏi
-                    </span>    
-                </th>
-                <th width="330">                    
-                    <a class="header-td" href="index.php?category=home&amp;action=apply&amp;order=employer_reply&amp;order_type=desc">
-                        Tiêu đề
-                    </a>    
-                </th>
-                <th width="80">                    
-                    <span class="header-td">
-                        Chi tiết
-                    </span>    
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($questionnaires_list as $questionnaire) :?>
-            <tr bgcolor="#ffffff">
-                <td><?php echo date('Y m d G:i',$questionnaire['date']);?></td>
-                <td valign="middle"><?php echo $questionnaire['questionnaire_typeName'];?></td>
-                <td><?php echo $questionnaire['question'];?></td>
-                <td><a href="index.php?category=jobs&folder=questionnaire&page=edit&id=<?php echo $questionnaire['questionnaire_id'];?>&job_id=<?php echo $questionnaire['job_id'];?>"><img src="../images/job-details.png"></a></td>
-            </tr>
-            <?php endforeach;?>
-        </tbody>
-    </table>
+<div class="col-md-12">
+    <h4>Danh sách câu hỏi: </h4>
+    <div class="table-responsive">
+        <table class="table table-hover admin-table">
+            <thead>
+                <tr class="table-tr">
+                    <th width="70">                    
+                        <a class="header-td" href="index.php?category=home&amp;action=apply&amp;order=date&amp;order_type=desc">
+                            Ngày đăng
+                        </a>    
+                    </th>
+                    <th width="140">                    
+                        <span class="header-td">
+                            Loại câu hỏi
+                        </span>    
+                    </th>
+                    <th width="330">                    
+                        <a class="header-td" href="index.php?category=home&amp;action=apply&amp;order=employer_reply&amp;order_type=desc">
+                            Tiêu đề
+                        </a>    
+                    </th>
+                    <th width="80">                    
+                        <span class="header-td">
+                            Chi tiết
+                        </span>    
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($questionnaires_list as $questionnaire) :?>
+                <tr bgcolor="#ffffff">
+                    <td><?php echo date('Y m d G:i',$questionnaire['date']);?></td>
+                    <td valign="middle"><?php echo $questionnaire['questionnaire_typeName'];?></td>
+                    <td><?php echo $questionnaire['question'];?></td>
+                    <td><a href="index.php?category=jobs&folder=questionnaire&page=edit&id=<?php echo $questionnaire['questionnaire_id'];?>&job_id=<?php echo $questionnaire['job_id'];?>" title="Sửa câu hỏi này"><img src="../images/job-details.png"></a></td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+        </table>
+    </div>
 </div>
+<?php } else {?>
+<div class="col-md-12">
+    <h4>Hiện chưa có câu hỏi nào cho việc làm này</h4>
+</div>
+<?php } ?>

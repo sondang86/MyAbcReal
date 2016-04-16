@@ -6,12 +6,12 @@
     class CommonsQueries {
         private $_db;
         private $_dbPrefix;
-        
+            
         public function __construct(MysqliDb $db) {
             $this->_db = $db;
         }
-
-        
+            
+            
         /**
         * Get specific data by id or all data
         * @param var $table table name
@@ -27,7 +27,7 @@
                 return $this->_db->get($table);
             }
         }
-        
+            
         /**
         * Output "selected" text if 2 params equal
         *  
@@ -39,7 +39,7 @@
                 return NULL;
             }
         }
-        
+            
         /**
         *  Output "Yes 1" or "No 0" texts based on language id
         *  @param var $value value 1 or 0
@@ -50,7 +50,7 @@
                 switch ($value) { //English
                     case "1": echo "Yes";
                     break;
-
+                        
                     case "0": echo "No";
                     break;
                 }
@@ -58,13 +58,13 @@
                 switch ($value) { //English
                     case "1": echo "Có";
                     break;
-
+                        
                     case "0": echo "Không";
                     break;
                 }    
             }
         }
-        
+            
         /**
         *  Count records matched by id
         *  @param var $column column to be count in table
@@ -76,7 +76,7 @@
             $stats = ((object)$this->_db->getOne ($table, "count(*) as count"));
             return $stats;
         }
-        
+            
         /**
         *  Find jobs by id
         *  @param var $table table name
@@ -92,8 +92,8 @@
             $data = ((object)$this->_db->get($table,$limit,$columns));
             return $data;
         }
-        
-        
+            
+            
         /**
         *  Find jobs by employer id, default find by employer Id 1
         * 
@@ -114,27 +114,27 @@
                 $DBprefix."employers.id as employer_id",$DBprefix."employers.username as employer_username",
                 $DBprefix."employers.logo",$DBprefix."employers.company"
             );
-
+                
             $this->_db->join("categories", $DBprefix."jobs.job_category=".$DBprefix."categories.category_id", "LEFT");
             $this->_db->join("job_types", $DBprefix."jobs.job_type=".$DBprefix."job_types.id", "LEFT");
             $this->_db->join("salary", $DBprefix."jobs.salary=".$DBprefix."salary.salary_id", "LEFT");
             $this->_db->join("locations", $DBprefix."jobs.region=".$DBprefix."locations.id", "LEFT");
             $this->_db->join("employers", $DBprefix."jobs.employer=".$DBprefix."employers.username", "LEFT");
-            
+                
             //Find jobs by id if id not empty
             if(!empty($id)){
                 $this->_db->where ($DBprefix."employers.id", "$id");
             }
-            
+                
             $data = $this->_db->withTotalCount()->get("jobs", $limit, $selected_columns);
-            
+                
             if($this->_db->totalCount > 0){
                 return $data;
             } else {
                 return FALSE;
             }
         }
-
+            
         /**
         *  Find jobs by category or location or another types
         * 
@@ -165,7 +165,7 @@
                 return FALSE;
             }
         }
-        
+            
         /**
         *  Search jobs function
         * 
@@ -198,7 +198,7 @@
             $this->_db->join('saved_jobs', $DBprefix."jobs.id = ".$DBprefix."saved_jobs.job_id AND "
                     .$DBprefix."saved_jobs.user_uniqueId = '$userId_cookie' AND "
                     .$DBprefix."saved_jobs.IPAddress = '".filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP)."' ", "LEFT");
-            
+                        
             //Check conditions
             if(!empty($queryString)){
                 $this->_db->where("title LIKE '%" . $queryString ."%'");
@@ -209,22 +209,22 @@
             if(!empty($location)){
                 $this->_db->where("region", $location);
             }
-            
+                
             //Order by featured first
             $this->_db->orderBy("featured", "DESC");
             $this->_db->orderBy("date", "DESC");
             $jobs_list['data'] = $this->_db->withTotalCount()->get("jobs", NULL, $jobsInfo_columns);
             $jobs_list['totalCount'] = $this->_db->totalCount;
-            
-            
+                
+                
             if ($this->_db->totalCount > 0){
                 return $jobs_list;
             } else {
                 return FALSE;
             }
         }
-        
-        
+            
+            
         /**
         *  check id is exists or not
         * 
@@ -232,7 +232,7 @@
         *  @param var $SEO_setting setting of SEO URL (0 or 1)
         *  @param var $segment segment of the URL (default is 3)
         */
-        
+            
         public function check_present_id($type, $SEO_setting="0", $segment="3"){
             global $website;
             if ($SEO_setting == "0"){// SEO is disabled
@@ -243,23 +243,23 @@
                     //Sanitize data
                     $filted_type = filter_input(INPUT_GET, $type, FILTER_SANITIZE_NUMBER_INT);
                     $website->ms_i($filted_type); 
-
+                        
                     $value = $filted_type;    
                 }
             } else { //SEO enabled   
                 $value = $website->getURL_segment($website->currentURL(),$segment);    
             }
-            
+                
             return $value;
        }
-       
+           
        /**
         *  Convert True or False to integer
         * 
         *  @param var $data data input is either string TRUE or FALSE
         *  
         */
-        
+            
         public function convert_TrueFalse($data){
             if($data == true){
                 $data = 1;
@@ -268,7 +268,7 @@
             }
             return $data;
         }
-        
+            
         /**
         *  calculate and output time ago result
         * 
@@ -278,27 +278,27 @@
         public function time_ago($time, $lang=array("giây", "phút", "giờ", "ngày", "tuần", "tháng", "năm", "thập kỷ")){
            $periods = $lang;
            $lengths = array("60","60","24","7","4.35","12","10");
-
+               
            $now = time();
-
+               
                $difference     = $now - $time;
                $tense         = "ago";
-
+                   
            for($j = 0; $difference >= $lengths[$j] && $j < count($lengths)-1; $j++) {
                $difference /= $lengths[$j];
            }
-
+               
            $difference = round($difference);
-
+               
            if($difference != 1) {
                $periods[$j].= "";
            }
-
+               
            return "$difference $periods[$j] trước ";
         }
-        
-        
-        
+            
+            
+            
         /**
         *  Calculate Real Differences Between Two Dates or Timestamps
         *  Time format is UNIX timestamp or PHP strtotime compatible strings
@@ -313,7 +313,7 @@
           if (!is_int($time2)) {
             $time2 = strtotime($time2);
           }
-
+              
           // If time1 is bigger than time2
           // Then swap time1 and time2
           if ($time1 > $time2) {
@@ -321,11 +321,11 @@
             $time1 = $time2;
             $time2 = $ttime;
           }
-
+              
           // Set up intervals and diffs arrays
           $intervals = array('year','month','day','hour','minute','second');
           $diffs = array();
-
+              
           // Loop thru all intervals
           foreach ($intervals as $interval) {
             // Create temp time from time1 and interval
@@ -340,11 +340,11 @@
               $ttime = strtotime("+" . $add . " " . $interval, $time1);
               $looped++;
             }
-
+                
             $time1 = strtotime("+" . $looped . " " . $interval, $time1);
             $diffs[$interval] = $looped;
           }
-
+              
           $count = 0;
           $times = array();
           // Loop thru all diffs
@@ -365,12 +365,12 @@
               $count++;
             }
           }
-
+              
           // Return string with times
           return implode(", ", $times);
         }
-        
-        
+            
+            
         /**
         *  Get saved jobs in the last xxx days
         *  @param var $day the last days range where you want to retrieve
@@ -392,31 +392,31 @@
                 $DBprefix."saved_jobs.job_id as saved_jobId",$DBprefix."saved_jobs.user_type as saved_job_userType",
                 $DBprefix."saved_jobs.date as saved_jobDate",$DBprefix."saved_jobs.user_uniqueId as user_uniqueId" //saved jobs table
             );
-            
+                
             $this->_db->join('categories', $DBprefix."jobs.job_category =".$DBprefix."categories.category_id", "LEFT");
             $this->_db->join('salary', $DBprefix."jobs.salary = ".$DBprefix."salary.salary_id", "LEFT");
             $this->_db->join('job_types', $DBprefix."jobs.job_type = ".$DBprefix."job_types.id", "LEFT");
             $this->_db->join('locations', $DBprefix."jobs.region = ".$DBprefix."locations.id", "LEFT");
             $this->_db->join('employers', $DBprefix."jobs.employer = ".$DBprefix."employers.username", "LEFT");
             $this->_db->join('saved_jobs', $DBprefix."jobs.id = ".$DBprefix."saved_jobs.job_id", "LEFT");
-            
+                
             //Get user saved jobs in the last 1 days
             //http://dba.stackexchange.com/questions/97211/get-rows-where-lastlogintimestamp-is-in-last-7-days
             $data['saved_jobs'] = $this->_db->where($DBprefix."saved_jobs.date >= CAST(UNIX_TIMESTAMP(NOW() - INTERVAL $day DAY) AS CHAR(10))")//http://dba.stackexchange.com/questions/97211/get-rows-where-lastlogintimestamp-is-in-last-7-days
             ->where("user_uniqueId",filter_input(INPUT_COOKIE,'userId', FILTER_SANITIZE_STRING))
             ->where("IPAddress", filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP))
             ->withTotalCount()->get("jobs", NULL, $jobsInfo_columns);
-            
+                
             //Total records found
             $data['totalCount'] = $this->_db->totalCount;
-            
+                
             if ($this->_db->totalCount > 0) {
                 return $data;
             } else {
                 return FALSE; //No records found
             }            
         }
-        
+            
         /**
         *  Count total records present in table
         *  @param var $table table where retrieve data
@@ -426,14 +426,14 @@
             $this->_db->withTotalCount()->get($table, NULL, $columns);
             return $this->_db->totalCount;
         }
-        
+            
         /**
         *  Find job by id and all of details information
         * 
         *  @param var $id job's id
         *  
         */
-        
+            
        public function jobDetails($id, $userId_cookie){
            global $DBprefix;
            $columns = array(
@@ -450,7 +450,7 @@
                 $DBprefix."saved_jobs.browser", $DBprefix."saved_jobs.IPAddress",  
                 $DBprefix."saved_jobs.user_uniqueId as user_uniqueId",$DBprefix."saved_jobs.job_id as saved_jobId"//saved jobs table
             );
-
+                
             $this->_db->join("employers", $DBprefix."jobs.employer=".$DBprefix."employers.username", "LEFT");
             $this->_db->join("categories", $DBprefix."jobs.job_category=".$DBprefix."categories.category_id", "LEFT");
             $this->_db->join("locations", $DBprefix."jobs.region=".$DBprefix."locations.id", "LEFT");
@@ -460,18 +460,81 @@
             $this->_db->join('saved_jobs', $DBprefix."jobs.id = ".$DBprefix."saved_jobs.job_id AND "
                     .$DBprefix."saved_jobs.user_uniqueId = '$userId_cookie' AND "
                     .$DBprefix."saved_jobs.IPAddress = '".filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP)."' ", "LEFT");
-
+                        
             $this->_db->where($DBprefix."jobs.id", $id);
             $this->_db->where($DBprefix."jobs.status", "1");
-
-
+                
+                
             $job_details = $this->_db->withTotalCount()->get("jobs", NULL,$columns);
-            
-            
+                
+                
             if ($this->_db->totalCount > 0) {
                 return $job_details[0];
             } else {
                 return FALSE;
             }
-           }
         }
+            
+        /**
+         *  get questionnaire by job id
+         * 
+         *  @param var $id job's id
+         *  
+         */
+             
+        public function getQuestionnaire($job_id){
+            global $DBprefix;
+                
+             //Fetch questionnaire data
+             $columns = array(
+                 $DBprefix."questionnaire.id as questionnaire_id",$DBprefix."questionnaire.employer",
+                 $DBprefix."questionnaire.job_id",$DBprefix."questionnaire.question",
+                 $DBprefix."questionnaire.question_type",$DBprefix."questionnaire.date",
+                 $DBprefix."questionnaire_type.name as questionnaire_typeName",
+                 $DBprefix."questionnaire_type.name_en as questionnaire_typeName_en",
+             );
+             $this->_db->join("questionnaire_type", $DBprefix."questionnaire.question_type =".$DBprefix."questionnaire_type.questionnaire_type", "LEFT");
+             $data = $this->_db->where('job_id', $job_id)->withTotalCount()->get('questionnaire', NULL, $columns);
+                 
+             if ($this->_db->totalCount > 0) {
+                 return $data;
+             } else {
+                 return FALSE;
+             }
+        }
+            
+        /**
+         *  get questionnaire questions by questionnaire id and job id
+         * 
+         *  @param var $questionnaire_id questionnaire id
+         *  @param var $job_id job id
+         */
+             
+        public function getQuestionnaireQuestions($questionnaire_id, $job_id){
+            global $DBprefix;
+            //Fetch questionnaire data
+             $columns = array(
+                 $DBprefix."questionnaire_questions.id as questionsId",
+                 $DBprefix."questionnaire_questions.question_ask",
+                 $DBprefix."questionnaire_questions.questionnaire_id",
+                 $DBprefix."questionnaire_questions.employer",
+                 $DBprefix."questionnaire_questions.job_id as questions_jobId",
+                 $DBprefix."questionnaire.id as questionnaireId",
+                 $DBprefix."questionnaire.question as questionnaireQuestion",
+                 $DBprefix."questionnaire.question_type",$DBprefix."questionnaire.date",
+             );
+             $this->_db->join("questionnaire",
+                     $DBprefix."questionnaire_questions.questionnaire_id =".$DBprefix."questionnaire.id AND "
+                     .$DBprefix."questionnaire_questions.job_id = ".$DBprefix."questionnaire.job_id", "LEFT");
+             $data = $this->_db->where($DBprefix."questionnaire_questions.job_id", $job_id)
+                     ->where($DBprefix."questionnaire_questions.questionnaire_id", $questionnaire_id)
+                     ->withTotalCount()->get('questionnaire_questions', NULL, $columns);
+                 
+             if ($this->_db->totalCount > 0) {
+                 return $data;
+             } else {
+                 return FALSE;
+             }    
+        }            
+    }
+?>

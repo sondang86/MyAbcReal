@@ -1451,6 +1451,23 @@ input[type="submit"]{
     margin-bottom: 15px;
 }
 
+    
+    #answerPoll p span input {
+        width: 75%;
+        margin-right: 15px;
+    }
+    
+    .questionnaire-employer {
+        min-height: 350px;
+        position: relative;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    
+    .questionnaire-save {
+        margin-top: 15px;
+    }
+
 /* Responsive design goes here */
 
 /* D?nh cho ?i?n tho?i */
