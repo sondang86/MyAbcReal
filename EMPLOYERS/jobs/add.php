@@ -8,7 +8,6 @@ global $db, $categories, $job_types, $locations, $salaries,$experience_list;
         echo LinkTile("jobs","my",$MY_JOB_ADS,"","blue");
 ?>
 </div>
-<div class="clear"></div>
 <?php
 
 if(!isset($_REQUEST["Step"])||$_REQUEST["Step"]=="")
@@ -23,7 +22,6 @@ else
 		$Step--;
 	}
 }
-echo date("Y m d h:i:s", 1460172998)
 ?>
 
 
@@ -80,7 +78,6 @@ elseif($website->GetParam("CHARGE_TYPE") == 2)
 
 <?php
     if(isset($_POST['submit'])){
-//        print_r(strtotime($_POST['employer-start-date'] . " " . date("h:i:s")));die;
         //Insert data to database
         $data = Array( 
             "employer" => "$AuthUserName",
@@ -144,7 +141,7 @@ if($show_post_form) //Allow employers to post job if they're not reached limit s
                 <!--Title-->
                 <label>
                     <span>Tiêu đề (*): </span>
-                    <input type="text" name="employer-post-title" required>
+                    <input type="text" name="employer-post-title" required style="text-align: left">
                 </label>
                 
                 <!--Descriptions-->

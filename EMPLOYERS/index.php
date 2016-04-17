@@ -110,9 +110,12 @@ $currentPage->Process($is_mobile);
 $website->Render();
 if(isset($_POST["Export"])) ob_end_flush();
 ?>
+
 <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'  type='text/css'>
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<!--https://github.com/craftpip/jquery-confirm-->
+<link href="/vieclambanthoigian.com.vn/css/jquery-confirm.min.css" rel="stylesheet" type="text/css"/>
+<script src="/vieclambanthoigian.com.vn/js/jquery-confirm.min.js" type="text/javascript"></script>
+
 <script src="http://jqueryvalidation.org/files/dist/jquery.validate.min.js"></script>
 <script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
 <script>

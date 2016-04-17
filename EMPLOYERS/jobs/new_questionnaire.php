@@ -1,7 +1,10 @@
 <?php    
     global $db, $commonQueries;
     $job_id = filter_input(INPUT_GET,'job_id', FILTER_SANITIZE_NUMBER_INT);
-        
+    $job_info = $commonQueries->jobDetails($job_id);
+    //Fetch questionnaire data   
+    $questionnaires_list = $commonQueries->getQuestionnaire($job_id); 
+
     //Form submitted
     if(isset($_POST['submit'])){
         $questions_answers = array_reverse(filter_input(INPUT_POST,'answerPoll',FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY));
@@ -38,7 +41,10 @@
         //Succeed, back to question page
         $website->redirect("index.php?category=jobs&action=questionnaire&id=$job_id");
     }
-        
+  
+if ($AuthUserName !== $job_info['employer']){//Job question does not belong to current employer
+   echo "Không tìm thấy dữ liệu :(";
+} else {
 ?>
     
 <script>
@@ -98,15 +104,23 @@
 <!--Questionnaire-->
 <div class="col-md-9 questionnaire-employer">
     <form method="POST">
-        <div class="row">
+        <!--SELECTION-->
+        <div class="row question_selection">
+            <section>
+                <span class="col-md-2">Loại câu hỏi: </span>
+                <aside class="col-md-8">
+                    <select id="pollSelection" name="pollSelection">
+                        <option value="1">Người dùng trả lời</option>
+                        <option value="2">Trắc nghiệm</option>
+                    </select>
+                </aside>
+            </section> 
+        </div>
+        
+        <!--QUESTION-->
+        <div class="row question_area">
             <h5 class="col-md-2">Câu hỏi (*): </h5>
-            <p class="col-md-8"><textarea name="question-title" style="width: 100%; min-height: 150px;" required></textarea></p>
-            <section class="col-md-2" style="text-align: right;">
-                <select id="pollSelection" name="pollSelection">
-                    <option value="1">Người dùng trả lời</option>
-                    <option value="2">Trắc nghiệm</option>
-                </select>
-            </section>        
+            <p class="col-md-10"><textarea name="question-title" style="width: 100%; min-height: 100px;" required></textarea></p>                   
         </div>
             
         <!--Poll answers-->
@@ -128,3 +142,4 @@
         </div>
     </form>
 </div>
+<?php }?>

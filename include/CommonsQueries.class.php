@@ -434,7 +434,7 @@
         *  
         */
             
-       public function jobDetails($id, $userId_cookie){
+       public function jobDetails($id, $userId_cookie=""){
            global $DBprefix;
            $columns = array(
                 $DBprefix."jobs.id as job_id",$DBprefix."jobs.job_category",

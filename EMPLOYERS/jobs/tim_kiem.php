@@ -6,21 +6,14 @@ global $db, $categories, $job_types, $locations, $salaries, $all_jobs;
 //Perform search query    
 if (isset($_GET['query'])):
     $query = $_GET['query'];
-    $cv = $db->rawQuery("SELECT * from jobsportal_jobs WHERE `title` LIKE '%$query%'");
+    $cv = $db->rawQuery("SELECT * from jobsportal_jobs WHERE `title` LIKE '%$query%' AND employer = '$AuthUserName'");
 ?>
 
-<div class="fright">
-    
-<?php
-    echo LinkTile
-    (
-        "jobs",
-        "add",
-        $M_NEW_JOB,
-        "",
-        "green"
-    );
-?>            
+<div class="row">
+    <section class="col-md-9 col-sm-6"></section>
+    <aside class="col-md-3 col-sm-4 col-xs-12 pull-right">
+        <?php echo LinkTile("jobs","add",$M_NEW_JOB,"","green");?>            
+    </aside>
 </div>
 
 <div class="container">

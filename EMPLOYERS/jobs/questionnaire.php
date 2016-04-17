@@ -10,8 +10,13 @@ $job_id = filter_input(INPUT_GET,'id', FILTER_SANITIZE_NUMBER_INT);
     
 //Fetch questionnaire data   
 $questionnaires_list = $commonQueries->getQuestionnaire($job_id); 
+//print_r($questionnaires_list);
 ?>
 
+<?php 
+    if ($questionnaires_list !== FALSE){ //Found questions
+        if ($AuthUserName == $questionnaires_list[0]['employer']){//Job question does belong to current employer
+?>    
 
 <div class="row questionnaire-title">
     <section class="col-md-8 col-xs-12"></section>
@@ -22,9 +27,6 @@ $questionnaires_list = $commonQueries->getQuestionnaire($job_id);
         <?php echo LinkTile ("jobs","my",$M_GO_BACK,"","red");?>    
     </aside>
 </div>
-
-
-<?php if ($questionnaires_list !== FALSE){ //Found questions?>    
 <!--List questions-->
 <div class="col-md-12">
     <h4>Danh sách câu hỏi: </h4>
@@ -67,8 +69,21 @@ $questionnaires_list = $commonQueries->getQuestionnaire($job_id);
         </table>
     </div>
 </div>
-<?php } else {?>
-<div class="col-md-12">
-    <h4>Hiện chưa có câu hỏi nào cho việc làm này</h4>
-</div>
-<?php } ?>
+<?php } else { //Job question does not belong to employer
+        echo "Không tìm thấy dữ liệu :(";
+    } 
+} else { ?>
+    <div class="row questionnaire-title">
+        <section class="col-md-8 col-xs-12"></section>
+        <aside class="col-md-2 col-sm-6 col-xs-12">
+            <?php echo LinkTile ("jobs","new_questionnaire&job_id=$job_id",$M_ADD_NEW_QUESTION,"","blue");?> 
+        </aside>
+        <aside class="col-md-2 col-sm-6 col-xs-12">
+            <?php echo LinkTile ("jobs","my",$M_GO_BACK,"","red");?>    
+        </aside>
+    </div>
+    <div class="col-md-12">
+        <h4>Hiện chưa có câu hỏi nào cho việc làm này</h4>
+    </div>
+<?php }
+?>

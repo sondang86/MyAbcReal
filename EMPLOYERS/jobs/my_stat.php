@@ -1,164 +1,87 @@
 <?php
-// Jobs Portal, http://www.netartmedia.net/jobsportal
-// A software product of NetArt Media, All Rights Reserved
-// Find out more about our products and services on:
-// http://www.netartmedia.net
-?><?php
-if(!defined('IN_SCRIPT')) die("");
+    if(!defined('IN_SCRIPT')) die("");
+    global $db, $commonQueries;
 ?>
-<div class="fright">
+<div class="row">
+    <div class="col-md-3 pull-right">
+    <?php
+        echo LinkTile ("jobs","my",$M_GO_BACK,"","red");
+    ?>
+    </div>
+</div>         
+<h3>
+	<?php echo $MANAGE_YOUR_JOB_ADS;?>
+</h3>
 
-	<?php
-		echo LinkTile
-		 (
-			"jobs",
-			"my",
-			$M_GO_BACK,
-			"",
-			"red"
-		 );
-	?>
+<div class="container">
+    <div class="row" style="width: 99%">
+        <div class="col-md-12">
+            <!--Search jobs-->
+            <form action="index.php" method="GET">
+                <div class="pull-right sort-by" id="sort-by">
+                    <div>
+                        <input type="hidden" name="category" value="jobs" placeholder="Nhập tên công việc">
+                        <input type="hidden" name="action" value="tim_kiem">
+                        <input type="text" name="query" placeholder="Tiêu đề công việc">
+                    </div>
+                    <div><input type="submit" value="Tìm kiếm"></div>
+                </div>
+            </form>
+            <script>
+                $(document).ready(function(){
+                    $(function(){
+                        var checkboxes = $(':checkbox:not(#checkAll)').click(function(event){
+                            $('#submit').prop("disabled", checkboxes.filter(':checked').length == 0);
+                        });
+
+                        $('#checkAll').click(function(event) {   
+                            checkboxes.prop('checked', this.checked);
+                            $('#submit').prop("disabled", !this.checked)
+                        });
+                    });
+                });                                    
+            </script>
+            <!--List jobs-->
+            <form action="" method="POST">
+                <div class="table-responsive" >          
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" name="selectAll" id="checkAll"></th>
+                                <th>Sửa đổi</th>
+                                <th>Ngày đăng</th>
+                                <th>Hạn đăng</th>
+                                <th>Tiêu đề</th>
+                                <th>Nội dung</th>
+                                <th></th>
+                                <th></th>
+                                <th>Ưu tiên</th>
+                            </tr>
+                        </thead>
+                        <tbody>                                
+                            <?php foreach ($job_by_employer as $value) :
+                                //Count total questions found
+                                $questions_count = $db->where('job_id', $value['id'])->where('employer', $AuthUserName)->getValue ("questionnaire", "count(*)");
+                            ?>
+                            <tr>
+                                <td><input type="checkbox" name="post[]" value="<?php echo $value['id']?>"></td>
+                                <td class="col-md-1" style="text-align: center"><a href="index.php?category=jobs&amp;folder=my&amp;page=edit&amp;id=<?php echo $value['id']?>"><img src="../images/edit-icon.gif" width="24" height="20" border="0"></a></td>
+                                <td class="col-md-1"><?php echo date('Y-m-d', $value['date'])?></td>
+                                <td class="col-md-1"><?php echo date('Y-m-d', $value['expires'])?></td>
+                                <td class="col-md-2"><?php echo $website->limitCharacters($value['title'],50);?></td>
+                                <td class="col-md-4"><?php echo $website->limitCharacters($value['message'], 200);?></td>
+                                <td class="col-md-1"><a href="index.php?category=jobs&amp;action=questionnaire&amp;id=<?php echo $value['id']?>">Bảng câu hỏi (<?php echo $questions_count;?>)</a></td>
+                                <td class="col-md-1"><a href="index.php?category=jobs&amp;action=my_stat&amp;id=<?php echo $value['id']?>">Số liệu thống kê</a></td>
+                                <td><a href="index.php?category=jobs&amp;action=my_featured&amp;featured=1&amp;id=<?php echo $value['id']?>"><img border="0" src="../images/active_<?php echo $value['featured']?>.gif"></a></td>
+                            </tr>
+                                <?php endforeach;?>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="form-submit">
+                    <input type="submit" name="delete" value="Xóa" id="submit" disabled>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
-<div class="clear"></div>
-<?php
-$id=$_REQUEST["id"];
-$website->ms_i($id);
-
-$strWhereQuery = "WHERE posting_id=".$id;
-
-if(get_param("selected_mode") == "custom")
-{
-	$start_time = mktime(0,0,0,get_param("month_from"),get_param("day_from"),get_param("year_from"));
-	
-	$end_time = mktime(0,0,0,get_param("month_to"),get_param("day_to"),get_param("year_to"));
-	
-	$strWhereQuery .= " AND date>".$start_time." AND date<".$end_time;
-}
-
-?>
-	
-		<form action="index.php" method="post">
-		<input type="hidden" name="category" value="<?php echo $category;?>">
-	
-		<input type="hidden" name="id" value="<?php echo $id;?>">
-		
-		<?php
-		if(isset($action))
-		{
-		?>
-			<input type="hidden" name="action" value="<?php echo $action;?>"/>
-
-		<?php
-		}
-		else
-		{
-		?>
-		
-		<input type="hidden" name="page" value="<?php echo $page;?>"/>
-		<input type="hidden" name="folder" value="<?php echo $folder;?>"/>
-		<?php
-		}
-		?>
-		
-		<h3 class="no-top-margin"><?php echo $M_SHOW_STATISTICS;?>:</h3>
-		<br>
-		<input type="radio" name="selected_mode" value="" <?php echo (get_param("selected_mode")==""?"checked":"");?>> All
-		<br><br>
-		<input type="radio" name="selected_mode" value="custom" <?php echo (get_param("selected_mode")=="custom"?"checked":"");?>>
-		
-		<?php echo $M_FROM;?>:   
-		<select name="day_from" class=text>
-		<?php
-			for($i=1;$i<=31;$i++)
-			{
-				echo "<option ".(get_param("day_from") == $i?"selected":"").">".$i."</option>";
-			}
-		?>
-		</select>
-		/
-		<select name="month_from" class=text>
-		<?php
-			for($i=1;$i<=12;$i++)
-			{
-				echo "<option ".(get_param("month_from") == $i?"selected":"").">".$i."</option>";
-			}
-		?>
-		</select>
-		/
-		<select name="year_from" class=text>
-		<?php
-			for($i=12;$i<=20;$i++)
-			{
-				echo "<option ".(get_param("year_from") == ($i+2000)?"selected":"").">".(2000 + $i)."</option>";
-			}
-		?>
-		</select>
-		
-		<br/><br/>
-		&nbsp;&nbsp;&nbsp;
-		<?php echo $M_TO;?>:
-		&nbsp;&nbsp;&nbsp;&nbsp;
-			<select name="day_to" class=text>
-		<?php
-			for($i=1;$i<=31;$i++)
-			{
-				echo "<option ".(get_param("day_to") == $i?"selected":"").">".$i."</option>";
-			}
-		?>
-		</select>
-		/
-		<select name="month_to" class=text>
-		<?php
-			for($i=1;$i<=12;$i++)
-			{
-				echo "<option ".(get_param("month_to") == $i?"selected":"").">".$i."</option>";
-			}
-		?>
-		</select>
-		/
-		<select name="year_to" class=text>
-		<?php
-			for($i=12;$i<=20;$i++)
-			{
-				echo "<option ".(get_param("year_to") == ($i+2000)?"selected":"").">".(2000 + $i)."</option>";
-			}
-		?>
-		</select>
-		<br><br>
-		
-		<input type="submit" class="btn btn-primary" value=" <?php echo $M_SHOW;?> ">
-		
-		</form>
-		
-		<br><br><br>
-		
-		<?php echo $AD_SHOWN;?>
-		<b>
-		<?php
-		echo $database->SQLCount_Query("SELECT * FROM ".$DBprefix."jobs_stat ".$strWhereQuery);
-		?>
-		</b> <?php echo $TIMES_FOR_SELECTED;?>
-		<br><br>
-		<br>
-		<i><?php echo $M_DETAILED_REPORT;?></i>
-		<br><br>
-		<center>
-			<?php
-			
-				RenderTable
-				(
-						"jobs_stat",
-						array("date","ip","user"),
-						array($M_DATE,$M_IP,$M_JOBSEEKER),
-						"300",
-						$strWhereQuery,
-						"",
-						"id",
-						
-						"index.php"
-				);
-				
-				?>
-			</center>
-	
-
