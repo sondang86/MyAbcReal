@@ -4,8 +4,7 @@
     $company_id = $commonQueries->check_present_id("id",$SEO_setting);
     $website->ms_i($company_id); //validate first    
     $company_jobs = $commonQueries->jobs_by_employerId($company_id, array(0,5)); //get 5 jobs only
-    $db->where("id", $company_id);
-    $company_info = $db->get("employers");    
+    $company_info = $db->where("id", $company_id)->get("employers");    
         
     //if user is logged in, store data
     if(!empty($_COOKIE["AuthJ"])){

@@ -89,6 +89,7 @@
             if (!empty($where)){
                 $this->_db->where ($where, $id);
             }
+            $this->_db->orderBy("date", "DESC");
             $data = ((object)$this->_db->get($table,$limit,$columns));
             return $data;
         }
@@ -535,6 +536,105 @@
              } else {
                  return FALSE;
              }    
-        }            
+        }
+        
+        
+        /**
+         *  get single value in specific table
+         * 
+         *  @param var $table table where you want to get data, default is jobs table
+         *  @param var $show_column column to be show in out, default is show all columns
+         *  @param var $where_column1 column to be selected in condition 1
+         *  @param var $where_clause1 clause in where condition 1
+         *  @param var $where_column2 column to be selected in condition 2 (this could be optional)
+         *  @param var $where_clause2 clause in where condition 2 (this could be optional)
+         *  @param var $featured where featured could be active (1) or not (0)
+         */        
+        public function getSingleValue($table="jobs",$show_column=NULL, $where_column1, $where_clause1, $where_column2=NULL, $where_clause2=NULL, $featured=NULL) {
+            //Retrieve data
+            $this->_db->where($where_column1, $where_clause1); 
+            if($where_column2 !== NULL && $where_clause2 !== NULL){
+                $this->_db->where($where_column2, $where_clause2);
+            }
+            if ($featured !== NULL){
+                $this->_db->where('featured', $featured); 
+            }
+            $data = $this->_db->withTotalCount()->getOne($table, $show_column);
+            
+            if ($this->_db->totalCount > 0) {//featured record
+                return $data;
+            } else {
+                return FALSE;
+            }
+        }
+        
+        
+        /**
+         *  update single value in specific table
+         * 
+         *  @param var $table table where you want to get data, default is jobs table
+         *  @param var $show_column column to be show in out, default is show all columns
+         *  @param var $where_column1 column to be selected in condition 1
+         *  @param var $where_clause1 clause in where condition 1
+         *  @param var $where_column2 column to be selected in condition 2 (this could be optional)
+         *  @param var $where_clause2 clause in where condition 2 (this could be optional)
+         *  @param var $featured where featured could be active (1) or not (0)
+         */        
+        public function updateSingleValue($table="jobs",$where_column, $where_clause,
+                $data = Array (
+                    'featured' => '1',
+                )
+            ) {           
+            
+            $this->_db->where($where_column, $where_clause);
+            if ($this->_db->update ($table, $data)){
+                return TRUE;
+            }
+            else {
+                echo 'update failed: ' . $db->getLastError();
+            }
+        }
+        
+        
+        /**
+        * Function to create and display error and success messages
+        * http://www.phpdevtips.com/2013/05/simple-session-based-flash-messages/
+        * @access public
+        * @param string session name
+        * @param string message
+        * @param string display class
+        * @return string message
+        * 
+        */
+       function flash( $name = '', $message = '', $class = 'success fadeout-message' )
+       {
+           //We can only do something if the name isn't empty
+           if( !empty( $name ) )
+           {
+               //No message, create it
+               if( !empty( $message ) && empty( $_SESSION[$name] ) )
+               {
+                   if( !empty( $_SESSION[$name] ) )
+                   {
+                       unset( $_SESSION[$name] );
+                   }
+                   if( !empty( $_SESSION[$name.'_class'] ) )
+                   {
+                       unset( $_SESSION[$name.'_class'] );
+                   }
+
+                   $_SESSION[$name] = $message;
+                   $_SESSION[$name.'_class'] = $class;
+               }
+               //Message exists, display it
+               elseif( !empty( $_SESSION[$name] ) && empty( $message ) )
+               {
+                   $class = !empty( $_SESSION[$name.'_class'] ) ? $_SESSION[$name.'_class'] : 'success';
+                   echo '<div class="'.$class.'" id="msg-flash">'.$_SESSION[$name].'</div>';
+                   unset($_SESSION[$name]);
+                   unset($_SESSION[$name.'_class']);
+               }
+           }
+       }
     }
 ?>

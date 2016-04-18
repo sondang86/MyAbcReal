@@ -5,37 +5,41 @@
 // http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-global $db, $categories, $job_types, $locations, $salaries, $all_jobs, $commonQueries;
+global $db, $categories, $job_types, $locations, $salaries, $all_jobs, $commonQueries, $employerInfo;
 $job_by_employer = $commonQueries->job_by_id('jobs','employer',"$AuthUserName");
-
-//print_r($job_by_employer);
 
 //Delete jobs posted
 if (isset($_POST['delete']) && !empty($_POST['post'])){
     foreach ($_POST['post'] as $value) { 
         $filted_value = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
         $db->where('id', $filted_value);
-        $db->delete('jobs');
+        if(!$db->delete('jobs')){
+            echo "problem when deleting records";die;
+        };
     }
+    $commonQueries->flash('message', 'Xóa thành công');
     $website->redirect("index.php?category=jobs&action=my");
 }
 ?>
-<div class="row">
+
+<nav class="row">
+    <div class="col-md-9">
+        <?php $commonQueries->flash('message')?>
+    </div>
     <div class="col-md-3 pull-right">
     <?php
         echo LinkTile("jobs","add",$M_NEW_JOB,"","green");
     ?>
     </div>
-</div>         
-<h3>
-	<?php echo $MANAGE_YOUR_JOB_ADS;?>
-</h3>
+</nav>     
+
+<h3><?php echo $MANAGE_YOUR_JOB_ADS;?></h3>
 
 <div class="container">
     <div class="row" style="width: 99%">
         <div class="col-md-12">
             <!--Search jobs-->
-            <form action="index.php" method="GET">
+            <form action="index.php" method="GET" id="search">
                 <div class="pull-right sort-by" id="sort-by">
                     <div>
                         <input type="hidden" name="category" value="jobs" placeholder="Nhập tên công việc">
@@ -46,49 +50,10 @@ if (isset($_POST['delete']) && !empty($_POST['post'])){
                 </div>
             </form>
             
-            <script>
-                $(document).ready(function(){
-                    $(function(){
-                        var checkboxes = $(':checkbox:not(#checkAll)').click(function(event){
-                            $('#submit').prop("disabled", checkboxes.filter(':checked').length == 0);
-                        });
-
-                        $('#checkAll').click(function(event) {   
-                            checkboxes.prop('checked', this.checked);
-                            $('#submit').prop("disabled", !this.checked)
-                        });
-                    });
-                    
-                    /*Confirmation modal box*/
-                    $('a.confirm').click().confirm({
-                        content: 'Vui lòng xác nhận việc làm này sẽ hiển thị lên đầu danh sách?',
-                        confirm: function(){
-                        $.ajax({
-                            url: "http://<?php echo $DOMAIN_NAME?>/extensions/set_featured.php",
-                            type: "post",
-                            data: {
-                                job_id: this.$target.data('jobid'),                                    
-                                title: this.$target.data('title'),
-                                job_featured: this.$target.data('featured')
-                            },
-                            success: function (response) {
-                               // you will get response from your php page (what you echo or print)                 
-
-                            },
-                                error: function(response) {
-                                   console.log(response);
-                                }
-                            });
-                        },
-                        cancel: function(){
-                            console.log('the user clicked cancel');
-                        }
-                    });
-                });                 
-            </script>
+            
             
             <!--List jobs-->
-            <form action="" method="POST">
+            <form action="" role="form" method="POST" id="form_delete">
                 <div class="table-responsive" >          
                     <table class="table">
                         <thead>
@@ -119,8 +84,8 @@ if (isset($_POST['delete']) && !empty($_POST['post'])){
                                 <td class="col-md-2"><a href="index.php?category=jobs&amp;action=questionnaire&amp;id=<?php echo $value['id']?>">Bảng câu hỏi (<?php echo $questions_count;?>)</a></td>
                                 <!--<td class="col-md-1"><a href="index.php?category=jobs&amp;action=my_stat&amp;id=<?php echo $value['id']?>">Số liệu thống kê</a></td>-->
                                 <td>
-                                    <a href="#" class="confirm" data-title="Ưu tiên việc làm này?" data-jobid="<?php echo $value['id']?>" data-featured="<?php echo $value['featured']?>">
-                                        <img border="0" src="../images/active_<?php echo $value['featured']?>.gif">
+                                    <a href="#" class="confirm" data-title="Vui lòng xác nhận" data-jobid="<?php echo $value['id']?>" data-featured="<?php echo $value['featured']?>">
+                                        <img border="0" src="../images/active_<?php echo $value['featured']?>.gif" id="image_icon_<?php echo $value['id'];?>">
                                     </a>
                                 </td>
                             </tr>
@@ -129,10 +94,77 @@ if (isset($_POST['delete']) && !empty($_POST['post'])){
                     </table>
                 </div>
                 <div class="form-submit">
-                    <input type="submit" name="delete" value="Xóa" id="submit" disabled>
+                    <input type="hidden" name="delete">
+                    <input type="submit" value="Xóa" id="delete" disabled>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function(){
+        //Hide delete button if nothing selected
+        $(function(){
+            var checkboxes = $(':checkbox:not(#checkAll)').click(function(event){
+                $('#delete').prop("disabled", checkboxes.filter(':checked').length == 0);
+            });
+
+            $('#checkAll').click(function(event) {   
+                checkboxes.prop('checked', this.checked);
+                $('#delete').prop("disabled", !this.checked)
+            });
+        });
+                    
+        /*Confirmation modal box*/
+        $('a.confirm').confirm({
+            title: 'Vui lòng xác nhận',
+            content: 'Việc làm này sẽ hiển thị lên đầu danh sách?',
+            confirmButton: 'Có',
+            cancelButton: 'Không',
+            confirm: function(){
+                $.ajax({ //Sending data to Server side
+                    
+                    url: "http://<?php echo $DOMAIN_NAME?>/extensions/set_featured.php",
+                    type: "post",
+                    dataType: "JSON",
+                    data: {
+                        proceed: 1,
+                        user: '<?php echo $AuthUserName;?>',
+                        subscription: '<?php echo $employerInfo['subscription'];?>',
+                        job_id: this.$target.data('jobid'),                                    
+                        title: this.$target.data('title'),
+                        job_featured: this.$target.data('featured')
+                    },
+                    success: function (response) {
+                        $.alert(response.message);
+                        //Replace icon respectively
+                        $('#image_icon_'+response.jobid).attr('src',"http://localhost/vieclambanthoigian.com.vn/images/" + response.icon);
+                    },
+                    error: function(response) {
+                        console.log(response);
+                    }
+                });
+            },
+            cancel: function(){
+                console.log('the user clicked cancel');
+            }
+        });
+                    
+        //Delete confirmation        
+        $('#delete').confirm({
+            content: 'bạn có muốn xóa những việc đã chọn?',
+            confirm: function(){
+                $('#form_delete').submit();
+            },
+            cancel: function(){
+                console.log('the user clicked cancel');
+            },
+            title: 'Vui lòng xác nhận',
+            confirmButton: 'Có',
+            cancelButton: 'Không'
+        });
+                    
+    });                 
+</script>
 

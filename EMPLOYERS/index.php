@@ -5,6 +5,11 @@
 // http://www.netartmedia.net
 ?><?php
 define("IN_SCRIPT","1");
+//Ensure that a session exists (just in case)
+if(!session_id()){
+    session_start();
+}
+
 $is_mobile=false;
 if(isset($_POST["Export"])) ob_start();
 include("../config.php");
@@ -70,7 +75,8 @@ if (isset($_REQUEST["id"])){
 
     
 include("include/AdminUser.class.php");
-if(!isset($AuthUserName) || !isset($AuthGroup)) $website->ForceLogin();
+if(!isset($AuthUserName) || !isset($AuthGroup)) {$website->ForceLogin();}
+$employerInfo = $commonQueries->getSingleValue('employers', NULL, 'username', "$AuthUserName");
 $currentUser = new AdminUser($AuthUserName, $AuthGroup);
 $currentUser->LoadPermissions();
 $lang = $currentUser->GetLanguage();
@@ -109,17 +115,20 @@ $currentPage = new AdminPage();
 $currentPage->Process($is_mobile);
 $website->Render();
 if(isset($_POST["Export"])) ob_end_flush();
+
 ?>
 
 <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'  type='text/css'>
 <!--https://github.com/craftpip/jquery-confirm-->
 <link href="/vieclambanthoigian.com.vn/css/jquery-confirm.min.css" rel="stylesheet" type="text/css"/>
 <script src="/vieclambanthoigian.com.vn/js/jquery-confirm.min.js" type="text/javascript"></script>
+<!--<script src="/vieclambanthoigian.com.vn/js/jquery.confirm.js" type="text/javascript"></script>-->
 
 <script src="http://jqueryvalidation.org/files/dist/jquery.validate.min.js"></script>
 <script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
 <script>
     jQuery(document).ready(function(){
+        //Datepicker
         jQuery("#employer-start-date").datepicker({
             dateFormat: 'yy-mm-dd' 
         }).datepicker("setDate", new Date());

@@ -6,7 +6,7 @@ global $db, $categories, $job_types, $locations, $salaries, $all_jobs;
 //Perform search query    
 if (isset($_GET['query'])):
     $query = $_GET['query'];
-    $cv = $db->rawQuery("SELECT * from jobsportal_jobs WHERE `title` LIKE '%$query%' AND employer = '$AuthUserName'");
+    $cv = $db->rawQuery("SELECT * from jobsportal_jobs WHERE `title` LIKE '%$query%' AND employer = '$AuthUserName' ORDER BY date DESC");
 ?>
 
 <div class="row">
@@ -36,7 +36,7 @@ if (isset($_GET['query'])):
                 <table class="table">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" name="select_all" id="checkAll"></th>
+                            <!--<th><input type="checkbox" name="select_all" id="checkAll"></th>-->
                             <th>Sửa đổi</th>
                             <th>Ngày đăng</th>
                             <th>Hạn đăng</th>
@@ -50,15 +50,16 @@ if (isset($_GET['query'])):
                     <tbody>
                         <?php foreach ($cv as $value) :?>
                         <tr>
-                            <td><input type="checkbox" name="post" value="<?php echo $value['id']?>"></td>
-                            <td class="col-md-1" style="text-align: center"><a href="index.php?category=jobs&amp;folder=my&amp;page=edit&amp;id=25"><img src="../images/edit-icon.gif" width="24" height="20" border="0"></a></td>
+                            <!--<td><input type="checkbox" name="post" value="<?php echo $value['id']?>"></td>-->
+                            <td class="col-md-1"><a href="index.php?category=jobs&amp;folder=my&amp;page=edit&amp;id=<?php echo $value['id']?>"><img src="../images/edit-icon.gif" width="24" height="20" border="0"></a></td>
                             <td class="col-md-1"><?php echo date('Y-m-d', $value['date'])?></td>
                             <td class="col-md-1"><?php echo date('Y-m-d', $value['expires'])?></td>
                             <td class="col-md-2"><?php echo $website->limitCharacters($value['title'],50);?></td>
                             <td class="col-md-4"><?php echo $website->limitCharacters($value['message'], 200);?></td>
                             <td class="col-md-1"><a href="index.php?category=jobs&amp;action=questionnaire&amp;id=<?php echo $value['id']?>">Bảng câu hỏi</a></td>
                             <td class="col-md-1"><a href="index.php?category=jobs&amp;action=my_stat&amp;id=<?php echo $value['id']?>">Số liệu thống kê</a></td>
-                            <td><a href="index.php?category=jobs&amp;action=my_featured&amp;featured=1&amp;id=<?php echo $value['id']?>"><img border="0" src="../images/active_0.gif"></a></td>
+                            <td><img border="0" src="../images/active_<?php echo $value['featured']?>.gif"></td>
+                            <!--<td><a href="index.php?category=jobs&amp;action=my_featured&amp;featured=1&amp;id=<?php echo $value['id']?>"><img border="0" src="../images/active_<?php echo $value['featured']?>.gif"></a></td>-->
                         </tr>
                         <?php endforeach;?>
                     </tbody>

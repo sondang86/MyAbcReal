@@ -17,10 +17,10 @@
             <div class="container text-center">
 <?php
     include("texts_en.php");
-    global $DOMAIN_NAME;
+    $DOMAIN_NAME = "localhost/vieclambanthoigian.com.vn";
 ?>
                 <br/><br/>
-                <a href="http://www.netartmedia.net/jobsportal" target="_blank"><h1><strong>Jobs Portal</strong></h1></a>
+                <a href="#" target="_blank"><h1><strong>Jobs Portal</strong></h1></a>
             
                 <br/>
             
@@ -59,7 +59,7 @@
                         }
                     </script>
                                     
-                    <form action="http://<?php echo $DOMAIN_NAME?>/loginaction.php" method="post" onsubmit="return ValidateLoginForm(this)">
+                    <form action="http://<?php echo $DOMAIN_NAME?>/admin/loginaction.php" method="post" onsubmit="return ValidateLoginForm(this)">
                         <br/>
                         <br/>
                         <img src="images/signin-user.png" width="100" width="100"/>

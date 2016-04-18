@@ -1,6 +1,12 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
-global $db, $categories, $job_types, $locations, $salaries,$experience_list;
+global $db, $categories, $job_types, $locations, $salaries,$experience_list, $commonQueries;
+
+//Ensure that a session exists (just in case)
+if( !session_id() )
+{
+    session_start();
+}
 ?>
 <div class="fright">
     
@@ -97,7 +103,10 @@ elseif($website->GetParam("CHARGE_TYPE") == 2)
     $id = $db->insert('jobs', $data);
     if($id){
         $message = 'job was created. Id=' . $id;
-        $website->redirect("index.php?category=jobs&action=add");
+        //Set the first flash message with default class
+        $commonQueries->flash('message', '<h4>Thêm việc mới thành công</h4>' );
+        //Redirect back to menu
+        $website->redirect("index.php?category=jobs&action=my&result=added");
     } else {
         $message = "there were an error occurred";
         die;
