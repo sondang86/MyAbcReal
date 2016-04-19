@@ -7,10 +7,7 @@ if(!defined('IN_SCRIPT')) die("");
 global $db;
 //Get company info
 $company_info = $db->where('username', "$AuthUserName")->getOne('employers');
-
-//echo "<pre>";
-//print_r($company_info);
-//echo "</pre>";
+    
 ?>
 <div class="row">
     <div class="col-md-3 col-md-push-9">        
@@ -21,43 +18,44 @@ $company_info = $db->where('username', "$AuthUserName")->getOne('employers');
 ?>              
     </div>        
     <div class="col-md-9 col-md-pull-3">
-        <h4><?php echo $VIEW_PROFILE;?></h4>  
+        <h4><?php echo $VIEW_PROFILE;?></h4>
         <table>
             <tbody>
                 <tr height="38">
-                    <td width="120" valign="middle">Tên đăng nhập:</td>
-                    <td valign="middle"><b><?php echo $company_info['username']?></b></td>
+                    <td width="120" valign="middle"><label>Tên đăng nhập:</label></td>
+                    <td valign="middle"><p><?php echo $company_info['username']?></p></td>
                 </tr>
                 <tr height="38">
-                    <td width="120" valign="middle">Công ty:</td>
-                    <td valign="middle"><b><?php echo $company_info['company']?></b></td>
+                    <td width="120" valign="middle"><label>Công ty:</label></td>
+                    <td valign="middle"><p><?php echo $company_info['company']?></p></td>
                 </tr>
                 <tr height="38">
-                    <td width="120" valign="middle">Thông tin công ty:</td>
+                    <td width="120" valign="middle"><label>Thông tin công ty:</label></td>
                     <td valign="middle">
                         <p><?php echo $company_info['company_description']?></p>
                     </td>
                 </tr>
                 <tr height="38">
-                    <td width="120" valign="middle">Người liên hệ:</td>
-                    <td valign="middle"><b><?php echo $company_info['contact_person']?></b></td>
+                    <td width="120" valign="middle"><label>Người liên hệ:</label></td>
+                    <td valign="middle"><p><?php echo $company_info['contact_person']?></p></td>
                 </tr>
                 <tr height="38">
-                    <td width="120" valign="middle">Địa chỉ:</td>
+                    <td width="120" valign="middle"><label>Địa chỉ:</label></td>
                     <td valign="middle"><p><?php echo $company_info['address']?></p></td>
-                </tr><tr height="38">
-                    <td width="120" valign="middle">Điện thoại:</td>
-                    <td valign="middle"><b><?php echo $company_info['phone']?></b></td>
                 </tr>
                 <tr height="38">
-                    <td width="120" valign="middle">Fax:</td>
+                    <td width="120" valign="middle"><label>Điện thoại:</label></td>
+                    <td valign="middle"><p><?php echo $company_info['phone']?></p></td>
+                </tr>
+                <tr height="38">
+                    <td width="120" valign="middle"><label>Fax:</label></td>
                     <td valign="middle"><p><?php echo $company_info['fax']?></p></td>
                 </tr>
                 <tr height="38">
-                    <td width="120" valign="middle">Trang web:</td>
+                    <td width="120" valign="middle"><label>Trang web:</label></td>
                     <td valign="middle"><p><?php echo $company_info['website']?></p></td>
                 </tr>
             </tbody>
-        </table>  
+        </table>
     </div>
 </div>    

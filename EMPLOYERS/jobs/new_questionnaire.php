@@ -39,6 +39,7 @@
         }
             
         //Succeed, back to question page
+        $commonQueries->flash('message', $commonQueries->messageStyle('info', "Đã thêm câu hỏi mới"));
         $website->redirect("index.php?category=jobs&action=questionnaire&id=$job_id");
     }
   

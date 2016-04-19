@@ -1,198 +1,88 @@
 <?php
-// Jobs Portal
-// http://www.netartmedia.net/jobsportal
-// Copyright (c) All Rights Reserved NetArt Media
-// Find out more about our products and services on:
-// http://www.netartmedia.net
+// Jobs Portal 
+// Copyright (c) All Rights Reserved, NetArt Media 2003-2015
+// Check http://www.netartmedia.net/jobsportal for demos and information
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
+global $db, $commonQueries;
+//Get company info
+$company_info = $db->where('username', "$AuthUserName")->getOne('employers');
+    
+if (isset($_POST['submit'])){
+    //Perform update    
+    $data = Array (
+        'company' => $_POST['company'],
+        'company_description' => $_POST['company_description'],        
+        'contact_person' => $_POST['contact_person'],
+        'address' => $_POST['address'],
+        'phone' => $_POST['phone'],
+        'fax' => $_POST['fax'],
+        'website' => $_POST['website'],
+    );
+    $db->where('username', "$AuthUserName");
+    if ($db->update ('employers', $data)){
+        $commonQueries->flash('message', $commonQueries->messageStyle('info', 'Lưu thay đổi thành công!'));
+        $website->redirect('index.php?category=profile&action=edit');
+    } else{
+        echo 'update failed: ' . $db->getLastError();die;
+    }
+}
+    
 ?>
-<div class="fright">
-
-	<?php
-				 
-		echo LinkTile
-		(
-			"profile",
-			"logo",
-			$M_LOGO,
-			"",
-			"yellow"
-		);
-	
-		echo LinkTile
-		(
-			"profile",
-			"video",
-			$M_VIDEO_PRESENTATION,
-			"",
-			"lila"
-		);
-	
-	
-	?>
-
-</div>
-<div class="clear"></div>
-<h3>
-	<?php echo $EDIT_YOUR_PROFILE;?>
-</h3>
-<br/>
-
+    
+<div class="row">
+    <div class="col-md-3 col-md-push-9">        
 <?php
-
-
-$strSpecialHiddenFieldsToAdd="";
-
-
-if(is_array(unserialize(aParameter(270))))
-{
-		$arrFields = unserialize(aParameter(270));
-}
-else
-{
-		$arrFields = array();
-}	
-
-
-if(isset($_POST["SpecialProcessEditForm"]))
-{
-		$iFCounter = 0;
-
-		$arrPValues = array();
-			
-		$iFCounter = 0;
-			
-		foreach($arrFields as $arrField)
-		{		
-			$arrPValues[$arrField[0]]=get_param("pfield".$iFCounter);
-			$iFCounter++;
-		}		
-		$id=$_POST["id"];
-		$database->SQLUpdate_SingleValue
-		(
-				"employers",
-				"id",
-				$id,
-				"employer_fields",
-				serialize($arrPValues)
-		);
-		$arrUser = $database->DataArray("employers","username='$AuthUserName'");
-
-}
-		
-
-$arrEmployerFields = array();
-							
-if(is_array(unserialize($arrUser["employer_fields"])))
-{
-				
-		$arrEmployerFields = unserialize($arrUser["employer_fields"]);
-}
-
-
-$iFCounter = 0;
-$SelectWidth=280;
-
-foreach($arrFields as $arrField)
-{
-	
-	$strSpecialHiddenFieldsToAdd.="<tr height=\"38\">";
-	
-	$strSpecialHiddenFieldsToAdd.= "<td valign=\"middle\">".str_show($arrField[0], true).":</td>";	
-	
-	$strSpecialHiddenFieldsToAdd.= "<td valign=\"middle\">";
-	
-	if(trim($arrField[2]) != "")
-	{
-			$strSpecialHiddenFieldsToAdd.= "<select  name=\"pfield".$iFCounter."\" ".(isset($SelectWidth)?" style=\"width:".$SelectWidth."px !important\"":"").">";
-			
-			
-			$arrFieldValues = explode("\n", trim($arrField[2]));
-					
-						
-			if(sizeof($arrFieldValues) > 0)
-			{
-				foreach($arrFieldValues as $strFieldValue)
-				{
-					$strFieldValue = trim($strFieldValue);
-					if(strstr($strFieldValue,"{"))
-					{
-					
-						$strVName = substr($strFieldValue,1,strlen($strFieldValue)-2);
-						
-						$strSpecialHiddenFieldsToAdd.= "<option ".(trim($$strVName)==$arrEmployerFields[$arrField[0]]?"selected":"").">".trim($$strVName)."</option>";
-						
-					}
-					else
-					{
-						$strSpecialHiddenFieldsToAdd.= "<option ".(isset($arrEmployerFields[$arrField[0]])&&trim($strFieldValue)==$arrEmployerFields[$arrField[0]]?"selected":"").">".trim($strFieldValue)."</option>";
-					}		
-				
-				}
-			}
-			
-			$strSpecialHiddenFieldsToAdd.= "</select>";
-	}
-	else
-	{
-			$strSpecialHiddenFieldsToAdd.= "<input value=\"".(isset($arrEmployerFields[$arrField[0]])?$arrEmployerFields[$arrField[0]]:"")."\" type=text name=\"pfield".$iFCounter."\" ".(isset($SelectWidth)?"style=\"width:".$SelectWidth."px !important\"":"").">";
-	}
-	
-	$strSpecialHiddenFieldsToAdd.= "</td>";
-	
-	
-		$strSpecialHiddenFieldsToAdd.= "</tr>";
-	
-
-	$iFCounter++;		
-}
-
-$_REQUEST["strSpecialHiddenFieldsToAdd"]=$strSpecialHiddenFieldsToAdd;
-
-		
-
-$strAuthQuery = "username='".$AuthUserName."' ";
-
-$SelectWidth=400;
-
-AddEditForm
-(
-	array
-	(
-		$M_USERNAME.":",
-		$M_COMPANY.":",
-		$M_COMPANY_DESCRIPTION.":",
-		$CONTACT_PERSON.":",
-		$M_ADDRESS.":",
-		$TELEPHONE.":",
-		$FAX.":",
-		$M_WEBSITE.":",
-		$M_I_WOULD_LIKE_SUBSCRIBE." ".$DOMAIN_NAME." ".$M_NEWSLETTER.":",
-		$M_SHOW_INFO.":"
-	),
-	array
-	(
-		"username",
-		"company",
-		"company_description",
-		"contact_person",
-		"address",
-		"phone",
-		"fax",
-		"website",
-		"newsletter",
-		"show_information"
-	),
-	array("username"),
-	array("textbox_40","textbox_40","textarea_50_4","textbox_40","textarea_50_4","textbox_40","textbox_40","textbox_40",
-	"combobox_".$M_YES."^1_".$M_NO."^0",
-	"combobox_".$M_YES."^1_".$M_NO."^0"),
-	"employers",
-	"id",
-	$arrUser["id"],
-	$LES_VALEURS_MODIFIEES_SUCCES,
-	"",
-	"210"
-);
-?>
+    echo LinkTile("profile","logo",$M_LOGO,"","yellow");
+    echo LinkTile("profile","video",$M_VIDEO_PRESENTATION,"","lila");        
+?>              
+    </div>        
+    <div class="col-md-9 col-md-pull-3">
+        <h4><?php $commonQueries->flash('message')?></h4>
+        <h4><?php echo $VIEW_PROFILE;?></h4>
+        <form action="" method="POST">
+            <table class="editForm">
+                <tbody>
+                    <tr height="38">
+                        <td width="120"><label>Tên đăng nhập:</label></td>
+                        <td><p><?php echo $company_info['username']?></p></td>
+                    </tr>
+                    <tr height="38">
+                        <td width="120"><label>Công ty:</label></td>
+                        <td><input type="text" name="company" value="<?php echo $company_info['company']?>"></td>
+                    </tr>
+                    <tr height="38">
+                        <td width="120" valign="middle"><label>Thông tin công ty:</label></td>
+                        <td  style="width: 80%">
+                            <textarea type="text" name="company_description"><?php echo $company_info['company_description']?></textarea>
+                        </td>
+                    </tr>
+                    <tr height="38">
+                        <td width="120"><label>Người liên hệ:</label></td>
+                        <td><input type="text" name="contact_person" value="<?php echo $company_info['contact_person']?>"></td>
+                    </tr>
+                    <tr height="38">
+                        <td width="120"><label>Địa chỉ:</label></td>
+                        <td><input type="text" name="address" value="<?php echo $company_info['address']?>"></td>
+                    </tr>
+                    <tr height="38">
+                        <td width="120" valign="middle"><label>Điện thoại:</label></td>
+                        <td><input type="text" name="phone" value="<?php echo $company_info['phone']?>"></td>
+                    </tr>
+                    <tr height="38">
+                        <td width="120"><label>Fax:</label></td>
+                        <td><input type="text" name="fax" value="<?php echo $company_info['fax']?>"></td>
+                    </tr>
+                    <tr height="38">
+                        <td width="120"><label>Trang web:</label></td>
+                        <td><input type="text" name="website" value="<?php echo $company_info['website']?>"></td>
+                    </tr>
+                    <tr height="38">
+                        <td width="120"></td>
+                        <td><input type="submit" name="submit" value="Lưu"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>    

@@ -11,6 +11,26 @@ $job_id = filter_input(INPUT_GET,'id', FILTER_SANITIZE_NUMBER_INT);
 //Fetch questionnaire data   
 $questionnaires_list = $commonQueries->getQuestionnaire($job_id); 
 //print_r($questionnaires_list);
+
+if(isset($_POST['delete'])){
+    //Sanitize data first
+    $questions = filter_input(INPUT_POST, 'questions', FILTER_SANITIZE_NUMBER_INT, FILTER_REQUIRE_ARRAY);
+    
+    foreach ($questions as $questionId) {
+        $data[$questionId] = $db->withTotalCount()
+                ->where('questionnaire_id', $questionId)
+                ->where('employer', "$AuthUserName")
+                ->where('job_id',$job_id)
+                ->get('questionnaire_questions'); //Delete in questionnaire_questions table first
+//        if($db->delete('questionnaire_questions')) {
+//            echo 'successfully deleted';            
+//        }
+        echo "<pre>";
+        print_r($data);
+        echo "</pre>";
+    }
+}
+
 ?>
 
 <?php 
@@ -19,7 +39,7 @@ $questionnaires_list = $commonQueries->getQuestionnaire($job_id);
 ?>    
 
 <div class="row questionnaire-title">
-    <section class="col-md-8 col-xs-12"></section>
+    <section class="col-md-8 col-xs-12"><h4><?php echo $commonQueries->flash('message');?></h4></section>
     <aside class="col-md-2 col-sm-6 col-xs-12">
         <?php echo LinkTile ("jobs","new_questionnaire&job_id=$job_id",$M_ADD_NEW_QUESTION,"","blue");?> 
     </aside>
@@ -27,13 +47,16 @@ $questionnaires_list = $commonQueries->getQuestionnaire($job_id);
         <?php echo LinkTile ("jobs","my",$M_GO_BACK,"","red");?>    
     </aside>
 </div>
+
 <!--List questions-->
 <div class="col-md-12">
     <h4>Danh sách câu hỏi: </h4>
     <div class="table-responsive">
+        <form action="" method="POST">
         <table class="table table-hover admin-table">
             <thead>
                 <tr class="table-tr">
+                    <th width="10"></th>
                     <th width="70">                    
                         <a class="header-td" href="index.php?category=home&amp;action=apply&amp;order=date&amp;order_type=desc">
                             Ngày đăng
@@ -59,6 +82,7 @@ $questionnaires_list = $commonQueries->getQuestionnaire($job_id);
             <tbody>
                 <?php foreach ($questionnaires_list as $questionnaire) :?>
                 <tr bgcolor="#ffffff">
+                    <td><a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
                     <td><?php echo date('Y m d G:i',$questionnaire['date']);?></td>
                     <td valign="middle"><?php echo $questionnaire['questionnaire_typeName'];?></td>
                     <td><?php echo $questionnaire['question'];?></td>
@@ -67,6 +91,11 @@ $questionnaires_list = $commonQueries->getQuestionnaire($job_id);
                 <?php endforeach;?>
             </tbody>
         </table>
+        <div class="form-submit">
+            <input type="hidden" name="delete">
+            <input type="submit" value="Xóa" id="delete" disabled>
+        </div>
+        </form>
     </div>
 </div>
 <?php } else { //Job question does not belong to employer

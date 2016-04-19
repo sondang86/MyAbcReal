@@ -104,18 +104,6 @@ if (isset($_POST['delete']) && !empty($_POST['post'])){
 
 <script>
     $(document).ready(function(){
-        //Hide delete button if nothing selected
-        $(function(){
-            var checkboxes = $(':checkbox:not(#checkAll)').click(function(event){
-                $('#delete').prop("disabled", checkboxes.filter(':checked').length == 0);
-            });
-
-            $('#checkAll').click(function(event) {   
-                checkboxes.prop('checked', this.checked);
-                $('#delete').prop("disabled", !this.checked)
-            });
-        });
-                    
         /*Confirmation modal box*/
         $('a.confirm').confirm({
             title: 'Vui lòng xác nhận',

@@ -636,5 +636,21 @@
                }
            }
        }
+       
+       /**
+        * customize the flash messages or messages
+        * http://www.tutorialrepublic.com/twitter-bootstrap-tutorial/bootstrap-alerts.php
+        * @access public
+        * @param type class of message (info/warning/error/alert), default is info
+        * @param message message output
+        * 
+        */
+       public function messageStyle($type="info", $message){
+           $data = "<div class='alert alert-$type fade in'>"
+                   ."<a href='#' class='close' data-dismiss='alert'>&times;</a>"
+                   ."<strong>$message</strong></div>";
+           
+           return $data;
+        }       
     }
 ?>
