@@ -1,11 +1,11 @@
 <?php
 // Jobs Portal All Rights Reserved
-// A software product of NetArt Media, All Rights Reserved
+// A software product of Vieclambanthoigian Media, All Rights Reserved
 // Find out more about our products and services on:
-// http://www.netartmedia.net
+// 
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries;
+global $db, $commonQueries,$DOMAIN_NAME;
 $job_id = filter_input(INPUT_GET,'id', FILTER_SANITIZE_NUMBER_INT);
     
 //Fetch questionnaire data   
@@ -14,29 +14,14 @@ $questionnaires_list = $commonQueries->getQuestionnaire($job_id);
 
 if(isset($_POST['delete'])){
     //Sanitize data first
-    $questions = filter_input(INPUT_POST, 'questions', FILTER_SANITIZE_NUMBER_INT, FILTER_REQUIRE_ARRAY);
+    $questions = filter_input(INPUT_POST, 'questions', FILTER_SANITIZE_NUMBER_INT);    
     
-    foreach ($questions as $questionId) {
-        $data[$questionId] = $db->withTotalCount()
-                ->where('questionnaire_id', $questionId)
-                ->where('employer', "$AuthUserName")
-                ->where('job_id',$job_id)
-                ->get('questionnaire_questions'); //Delete in questionnaire_questions table first
-//        if($db->delete('questionnaire_questions')) {
-//            echo 'successfully deleted';            
-//        }
-        echo "<pre>";
-        print_r($data);
-        echo "</pre>";
-    }
 }
 
-?>
-
-<?php 
     if ($questionnaires_list !== FALSE){ //Found questions
         if ($AuthUserName == $questionnaires_list[0]['employer']){//Job question does belong to current employer
-?>    
+?>  
+
 
 <div class="row questionnaire-title">
     <section class="col-md-8 col-xs-12"><h4><?php echo $commonQueries->flash('message');?></h4></section>
@@ -52,7 +37,6 @@ if(isset($_POST['delete'])){
 <div class="col-md-12">
     <h4>Danh sách câu hỏi: </h4>
     <div class="table-responsive">
-        <form action="" method="POST">
         <table class="table table-hover admin-table">
             <thead>
                 <tr class="table-tr">
@@ -81,8 +65,12 @@ if(isset($_POST['delete'])){
             </thead>
             <tbody>
                 <?php foreach ($questionnaires_list as $questionnaire) :?>
-                <tr bgcolor="#ffffff">
-                    <td><a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
+                <tr bgcolor="#ffffff" id="questionnaire_<?php echo $questionnaire['questionnaire_id']?>">
+                    <td>
+                        <a href="#" data-jobid="<?php echo $questionnaire['job_id']?>" data-questionnaireId="<?php echo $questionnaire['questionnaire_id']?>" class="confirm_remove" title="Xóa câu hỏi này">
+                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        </a>
+                    </td>
                     <td><?php echo date('Y m d G:i',$questionnaire['date']);?></td>
                     <td valign="middle"><?php echo $questionnaire['questionnaire_typeName'];?></td>
                     <td><?php echo $questionnaire['question'];?></td>
@@ -91,28 +79,60 @@ if(isset($_POST['delete'])){
                 <?php endforeach;?>
             </tbody>
         </table>
-        <div class="form-submit">
-            <input type="hidden" name="delete">
-            <input type="submit" value="Xóa" id="delete" disabled>
-        </div>
-        </form>
     </div>
 </div>
 <?php } else { //Job question does not belong to employer
         echo "Không tìm thấy dữ liệu :(";
     } 
 } else { ?>
-    <div class="row questionnaire-title">
-        <section class="col-md-8 col-xs-12"></section>
-        <aside class="col-md-2 col-sm-6 col-xs-12">
+<div class="row questionnaire-title">
+    <section class="col-md-8 col-xs-12"></section>
+    <aside class="col-md-2 col-sm-6 col-xs-12">
             <?php echo LinkTile ("jobs","new_questionnaire&job_id=$job_id",$M_ADD_NEW_QUESTION,"","blue");?> 
-        </aside>
-        <aside class="col-md-2 col-sm-6 col-xs-12">
+    </aside>
+    <aside class="col-md-2 col-sm-6 col-xs-12">
             <?php echo LinkTile ("jobs","my",$M_GO_BACK,"","red");?>    
-        </aside>
-    </div>
-    <div class="col-md-12">
-        <h4>Hiện chưa có câu hỏi nào cho việc làm này</h4>
-    </div>
-<?php }
-?>
+    </aside>
+</div>
+<div class="col-md-12">
+    <h4>Hiện chưa có câu hỏi nào cho việc làm này</h4>
+</div>
+<?php }?>
+<script>
+    $(document).ready(function(){
+        /*Confirmation modal box*/
+        $('a.confirm_remove').confirm({
+            title: 'Vui lòng xác nhận',
+            content: 'Xóa câu hỏi này?',
+            confirmButton: 'Có',
+            cancelButton: 'Không',
+            confirm: function(){
+                $.ajax({ //Sending data to Server side                    
+                    url: "http://<?php echo $DOMAIN_NAME?>/extensions/remove_question.php",
+                    type: "post",
+                    dataType: "JSON",
+                    data: {
+                        proceed: 1,
+                        remove_question: 1,
+                        user: '<?php echo $AuthUserName;?>',
+                        job_id: this.$target.data('jobid'),                                    
+                        questionnaire_id: this.$target.data('questionnaireid')
+                    },
+                    success: function (response) {
+                        $.alert(response.message);
+                        //Hide the removed div if success
+                        if (response.status == "1"){
+                            $("#questionnaire_"+response.questionnaire_id).hide('fade');
+                        }
+                    },
+                    error: function(response) {
+                        console.log(response);
+                    }
+                });
+            },
+            cancel: function(){
+                console.log('the user clicked cancel');
+            }
+        });
+    });    
+</script>

@@ -153,4 +153,11 @@ if(isset($_POST["Export"])) ob_end_flush();
     
     /*Select all option*/
     $("#checkAll").change(select_all);   
+    
+    $(document).ready(function(){
+        $('.confirm').confirm({
+            content: 'Xóa câu hỏi đã chọn?',
+            title: 'Vui lòng xác nhận'
+        });
+    });
 </script>

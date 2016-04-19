@@ -8,18 +8,6 @@ if(!defined('IN_SCRIPT')) die("");
 global $db, $categories, $job_types, $locations, $salaries, $all_jobs, $commonQueries, $employerInfo;
 $job_by_employer = $commonQueries->job_by_id('jobs','employer',"$AuthUserName");
 
-//Delete jobs posted
-if (isset($_POST['delete']) && !empty($_POST['post'])){
-    foreach ($_POST['post'] as $value) { 
-        $filted_value = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
-        $db->where('id', $filted_value);
-        if(!$db->delete('jobs')){
-            echo "problem when deleting records";die;
-        };
-    }
-    $commonQueries->flash('message', 'Xóa thành công');
-    $website->redirect("index.php?category=jobs&action=my");
-}
 ?>
 
 <nav class="row">
@@ -58,7 +46,7 @@ if (isset($_POST['delete']) && !empty($_POST['post'])){
                     <table class="table">
                         <thead>
                             <tr>
-                                <th><input type="checkbox" name="selectAll" id="checkAll"></th>
+                                <th></th>
                                 <th>Sửa đổi</th>
                                 <th>Ngày đăng</th>
                                 <th>Hạn đăng</th>
@@ -74,8 +62,12 @@ if (isset($_POST['delete']) && !empty($_POST['post'])){
                                 $questions_count = $db->where('job_id', $value['id'])->where('employer', $AuthUserName)->getValue ("questionnaire", "count(*)");
                             ?>
                             
-                            <tr>
-                                <td><input type="checkbox" name="post[]" value="<?php echo $value['id']?>"></td>
+                            <tr id="job_id_<?php echo $value['id']?>">
+                                <td>
+                                    <a href="#" data-jobid="<?php echo $value['id']?>" data-questionsCount="<?php echo $questions_count;?>" class="confirm_remove" title="Xóa câu hỏi này">
+                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    </a>
+                                </td>                                 
                                 <td class="col-md-1" style="text-align: center"><a href="index.php?category=jobs&amp;folder=my&amp;page=edit&amp;id=<?php echo $value['id']?>"><img src="../images/edit-icon.gif" width="24" height="20" border="0"></a></td>
                                 <td class="col-md-1"><?php echo date('Y-m-d', $value['date'])?></td>
                                 <td class="col-md-1"><?php echo date('Y-m-d', $value['expires'])?></td>
@@ -84,7 +76,7 @@ if (isset($_POST['delete']) && !empty($_POST['post'])){
                                 <td class="col-md-2"><a href="index.php?category=jobs&amp;action=questionnaire&amp;id=<?php echo $value['id']?>">Bảng câu hỏi (<?php echo $questions_count;?>)</a></td>
                                 <!--<td class="col-md-1"><a href="index.php?category=jobs&amp;action=my_stat&amp;id=<?php echo $value['id']?>">Số liệu thống kê</a></td>-->
                                 <td>
-                                    <a href="#" class="confirm" data-title="Vui lòng xác nhận" data-jobid="<?php echo $value['id']?>" data-featured="<?php echo $value['featured']?>">
+                                    <a href="#" class="confirm_featured" data-title="Vui lòng xác nhận" data-jobid="<?php echo $value['id']?>" data-featured="<?php echo $value['featured']?>">
                                         <img border="0" src="../images/active_<?php echo $value['featured']?>.gif" id="image_icon_<?php echo $value['id'];?>">
                                     </a>
                                 </td>
@@ -104,8 +96,8 @@ if (isset($_POST['delete']) && !empty($_POST['post'])){
 
 <script>
     $(document).ready(function(){
-        /*Confirmation modal box*/
-        $('a.confirm').confirm({
+        /*Confirmation on set featured job*/
+        $('a.confirm_featured').confirm({
             title: 'Vui lòng xác nhận',
             content: 'Việc làm này sẽ hiển thị lên đầu danh sách?',
             confirmButton: 'Có',
@@ -140,17 +132,61 @@ if (isset($_POST['delete']) && !empty($_POST['post'])){
         });
                     
         //Delete confirmation        
-        $('#delete').confirm({
-            content: 'bạn có muốn xóa những việc đã chọn?',
+//        $('#delete').confirm({
+//            content: 'bạn có muốn xóa những việc đã chọn?',
+//            title: 'Vui lòng xác nhận',
+//            confirmButton: 'Có',
+//            cancelButton: 'Không',
+//            
+//            confirm: function(){
+//                $('#form_delete').submit();
+//            },
+//            cancel: function(){
+//                console.log('the user clicked cancel');
+//            }            
+//        });
+        
+        /*Confirmation on delete job*/
+        $('a.confirm_remove').confirm({
+            title: 'Vui lòng xác nhận',
+            content: 'Xóa việc làm này?',
+            confirmButton: 'Có',
+            cancelButton: 'Không',
+            
             confirm: function(){
-                $('#form_delete').submit();
+                var question_count = this.$target.data('questionscount');
+                console.log(question_count);
+                //Make sure user delete questions first, questions list must be empty to proceed next
+                if(question_count == "0"){
+                    $.ajax({ //Sending data to Server side                    
+                        url: "http://<?php echo $DOMAIN_NAME?>/extensions/remove_question.php",
+                        type: "post",
+                        dataType: "JSON",
+                        data: {
+                            proceed: 1,
+                            remove_job: 1,
+                            user: '<?php echo $AuthUserName;?>',
+                            job_id: this.$target.data('jobid'),                                    
+                            questionnaire_id: this.$target.data('questionnaireid')
+                        },
+                        success: function (response) {
+                            $.alert(response.message);
+                            //Hide the removed div if success
+                            if (response.status == "1"){
+                                $("#job_id_"+response.job_id).hide('fade');
+                            }
+                        },
+                        error: function(response) {
+                            console.log(response);
+                        }
+                    });                      
+                } else {                                      
+                    $.alert('Bạn vui lòng xóa câu hỏi trong bảng câu hỏi trước!');
+                }
             },
             cancel: function(){
                 console.log('the user clicked cancel');
-            },
-            title: 'Vui lòng xác nhận',
-            confirmButton: 'Có',
-            cancelButton: 'Không'
+            }
         });
                     
     });                 

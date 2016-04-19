@@ -1,7 +1,5 @@
 <?php
 //    if(!defined('IN_SCRIPT')) die("");
-    
-    
     if ($_POST['proceed'] == "1"){        
         //instantiate neccessary classes
         require_once '../include/CommonsQueries.class.php';

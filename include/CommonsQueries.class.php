@@ -645,12 +645,55 @@
         * @param message message output
         * 
         */
-       public function messageStyle($type="info", $message){
+        public function messageStyle($type="info", $message){
            $data = "<div class='alert alert-$type fade in'>"
                    ."<a href='#' class='close' data-dismiss='alert'>&times;</a>"
                    ."<strong>$message</strong></div>";
            
            return $data;
         }       
+        
+        /**
+        * Find jobs by username/employer
+        * 
+        * @access public
+        * @param username username to be searched
+        * @param limit limitation records to be selected
+        * 
+        */
+        public function jobs_by_username($username, $limit=NULL){
+            global $DBprefix;
+            $selected_columns = array(
+                $DBprefix."jobs.id as job_id",$DBprefix."jobs.employer",$DBprefix."jobs.job_category",
+                $DBprefix."jobs.experience",$DBprefix."jobs.region",$DBprefix."jobs.title",$DBprefix."jobs.SEO_title",
+                $DBprefix."jobs.message",$DBprefix."jobs.active",$DBprefix."jobs.featured",
+                $DBprefix."jobs.job_type",$DBprefix."jobs.salary",$DBprefix."jobs.status",
+                $DBprefix."locations.City",$DBprefix."locations.City_en",
+                $DBprefix."categories.category_name_vi",$DBprefix."categories.category_name",
+                $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",
+                $DBprefix."salary.salary_range",$DBprefix."salary.salary_range_en",
+                $DBprefix."employers.id as employer_id",$DBprefix."employers.username as employer_username",
+                $DBprefix."employers.logo",$DBprefix."employers.company",
+                $DBprefix."questionnaire.id as questionnaire_id",
+            );
+                
+            $this->_db->join("categories", $DBprefix."jobs.job_category=".$DBprefix."categories.category_id", "LEFT");
+            $this->_db->join("job_types", $DBprefix."jobs.job_type=".$DBprefix."job_types.id", "LEFT");
+            $this->_db->join("salary", $DBprefix."jobs.salary=".$DBprefix."salary.salary_id", "LEFT");
+            $this->_db->join("locations", $DBprefix."jobs.region=".$DBprefix."locations.id", "LEFT");
+            $this->_db->join("employers", $DBprefix."jobs.employer=".$DBprefix."employers.username", "LEFT");
+            $this->_db->join("questionnaire", $DBprefix."jobs.id=".$DBprefix."questionnaire.job_id AND "
+                            .$DBprefix."jobs.employer=".$DBprefix."questionnaire.employer", "LEFT"); 
+            
+            $this->_db->where ($DBprefix."jobs.employer", "$username");
+                
+            $data = $this->_db->withTotalCount()->get("jobs", $limit, $selected_columns);
+                
+            if($this->_db->totalCount > 0){
+                return $data;
+            } else {
+                return FALSE;
+            }
+        }
     }
 ?>
