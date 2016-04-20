@@ -719,7 +719,7 @@
         * @param last_activity last activity of user in website, by default is 3600s = 60mins
         * 
         */
-        public function CheckSession($last_activity=3600) {
+        public function CheckSession($last_activity="3600") {
             if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > $last_activity)) {
                 // last request was more than 60 minutes ago
                 session_unset();     // unset $_SESSION variable for the run-time 

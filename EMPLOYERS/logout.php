@@ -6,5 +6,7 @@
 // http://www.netartmedia.net
 ?><?php 
 setcookie("AuthVendor","",time()-1,"/");
+// Finally, destroy the session.
+session_destroy();
 echo "<script>document.location.href='../index.php?l=1".(isset($_REQUEST["show_login"])?"&show_login=1":"").(isset($_REQUEST["lng"])?"&lang=".$_REQUEST["lng"]:"")."';</script>";
 ?>

@@ -41,12 +41,12 @@ if(isset($_POST['Email']) && isset($_POST['Password'])){
     } else { //User could be jobseeker
         $jobseekers = $db->where('username', "$email")
             ->where('password', "$Password")
-            ->withTotalCount()->getOne('jobseekers','username');
+            ->withTotalCount()->getOne('jobseekers',array('username', 'password'));
         
         if ($db->totalCount > 0){ //User is jobseeker
             //Store user data in session
-            $_SESSION['username'] = $employer['username'];
-            $_SESSION['user_password'] = $employer['password'];
+            $_SESSION['username'] = $jobseekers['username'];
+            $_SESSION['user_password'] = $jobseekers['password'];
             $_SESSION['user_type'] = 'jobseeker';
             $website->redirect('JOBSEEKERS/index.php');
             

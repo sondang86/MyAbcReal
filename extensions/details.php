@@ -51,21 +51,13 @@
             <a href="<?php $website->check_SEO_link("companyInfo", $SEO_setting, $job_details['employer_id'],$website->seoUrl($job_details['company']));?>" class="sub-text underline-link">Thông tin công ty</a>
             
             <?php 
-            print_r($AuthUserName);
                 //If user is employer, hide the apply job
-                if (!empty($AuthUserName)){
-                    if ($commonQueries->isEmployer($AuthUserName) == FALSE){                
+                if ($_SESSION['user_type'] !== "employer"){
             ?>
                 <a href="<?php $website->check_SEO_link("apply_job", $SEO_setting, $job_details['job_id'],$job_details['SEO_title']);?>">
                     <input type="submit" class="btn btn-default custom-gradient btn-green" value=" Nộp hồ sơ ">
                 </a>
-            <?php   } 
-                } else { //User is guest, we can show apply job to them?>
-                <a href="<?php $website->check_SEO_link("apply_job", $SEO_setting, $job_details['job_id'],$job_details['SEO_title']);?>">
-                    <input type="submit" class="btn btn-default custom-gradient btn-green" value=" Nộp hồ sơ ">
-                </a>
-            <?php };
-            ?>
+            <?php   }?>
         </aside>
     </section>
         

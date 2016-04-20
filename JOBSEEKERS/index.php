@@ -3,15 +3,15 @@
 // A software product of NetArt Media, All Rights Reserved
 // Find out more about our products and services on:
 // http://www.netartmedia.net
-?>
 
-    
-<?php
 define("IN_SCRIPT","1");
 $is_mobile=false;
 include("../config.php");
 if(!$DEBUG_MODE) error_reporting(0);
-
+//Ensure that a session exists (just in case)
+if(!session_id()){
+    session_start();
+}
 
 //Autoload classes once called
 function __autoload($classname) {
@@ -130,24 +130,24 @@ $website->Render();
     /*file upload validation*/
     
     /*
-    * Preview image before upload
-    * http://stackoverflow.com/questions/18694437/how-to-preview-image-before-uploading-in-jquery
-    */
+     * Preview image before upload
+     * http://stackoverflow.com/questions/18694437/how-to-preview-image-before-uploading-in-jquery
+     */
     
     function readURL(input) {
         if (input.files && input.files[0]) {
-          var reader = new FileReader();
-          reader.onload = function(e) {
-            $('#preview').attr('src', e.target.result);
-          };
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#preview').attr('src', e.target.result);
+            };
 
-          reader.readAsDataURL(input.files[0]);
+            reader.readAsDataURL(input.files[0]);
         }
-      }
+    }
 
-      $("#logo").change(function() {
+    $("#logo").change(function() {
         readURL(this);
-      });
+    });
     /*Preview image before upload*/
 
     $("#preferred_locations").select2({});
