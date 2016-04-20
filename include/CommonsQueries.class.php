@@ -695,5 +695,37 @@
                 return FALSE;
             }
         }
+        
+        /**
+        * Check whether user is employer or jobseeker
+        * 
+        * @access public
+        * @param username username to be searched
+        * 
+        */
+        public function isEmployer($username){
+            $this->_db->withTotalCount()->where('username',"$username")->getOne('employers');
+            if ($this->_db->totalCount > 0){// Is employer
+                return TRUE;
+            } else { //Is jobseeker
+                return FALSE;
+            }
+        }
+        
+        /**
+        * Check if user inactivity for specific time
+        * 
+        * @access public
+        * @param last_activity last activity of user in website, by default is 3600s = 60mins
+        * 
+        */
+        public function CheckSession($last_activity=3600) {
+            if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > $last_activity)) {
+                // last request was more than 60 minutes ago
+                session_unset();     // unset $_SESSION variable for the run-time 
+                session_destroy();   // destroy session data in storage
+            }
+            $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
+        }
     }
 ?>

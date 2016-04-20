@@ -7,7 +7,11 @@
 ?><?php
 if(!file_exists("config.php")) die("<script>document.location.href='ADMIN/setup.php';</script>");
 define("IN_SCRIPT","1");
-session_start();
+//Ensure that a session exists (just in case)
+if(!session_id()){
+    session_start();
+}
+
 require("config.php");
 if(!$DEBUG_MODE) error_reporting(0);
     
@@ -40,6 +44,8 @@ $website = new SiteManager();
 $website->SetDatabase($database);
     
 $commonQueries = new CommonsQueries($db);
+
+$commonQueries->CheckSession();
     
 //Common tables
 $categories = $db->get ('categories');

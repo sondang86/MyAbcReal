@@ -3,7 +3,6 @@
     global $db,$categories, $categories_subs,$commonQueries,  $SEO_setting, $userId_cookie,$Browser_detection;
     $job_id = $commonQueries->check_present_id($_GET, $SEO_setting, 3);
     $job_details = $commonQueries->jobDetails($job_id, $userId_cookie);
-    
 ?>    
 <a id="go_back_button" class="btn btn-default btn-xs pull-right no-decoration margin-bottom-5" href="javascript:GoBack()">Quay lại</a>    
 <article class="job-details-wrap">
@@ -50,9 +49,23 @@
             </a>
             <a href="<?php $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $job_details['job_id'],$job_details['SEO_title']);?>" class="sub-text underline-link">Việc làm khác từ <?php echo $job_details['company']?></a>            
             <a href="<?php $website->check_SEO_link("companyInfo", $SEO_setting, $job_details['employer_id'],$website->seoUrl($job_details['company']));?>" class="sub-text underline-link">Thông tin công ty</a>
-            <a href="<?php $website->check_SEO_link("apply_job", $SEO_setting, $job_details['job_id'],$job_details['SEO_title']);?>">
-                <input type="submit" class="btn btn-default custom-gradient btn-green" value=" Nộp hồ sơ ">
-            </a>
+            
+            <?php 
+            print_r($AuthUserName);
+                //If user is employer, hide the apply job
+                if (!empty($AuthUserName)){
+                    if ($commonQueries->isEmployer($AuthUserName) == FALSE){                
+            ?>
+                <a href="<?php $website->check_SEO_link("apply_job", $SEO_setting, $job_details['job_id'],$job_details['SEO_title']);?>">
+                    <input type="submit" class="btn btn-default custom-gradient btn-green" value=" Nộp hồ sơ ">
+                </a>
+            <?php   } 
+                } else { //User is guest, we can show apply job to them?>
+                <a href="<?php $website->check_SEO_link("apply_job", $SEO_setting, $job_details['job_id'],$job_details['SEO_title']);?>">
+                    <input type="submit" class="btn btn-default custom-gradient btn-green" value=" Nộp hồ sơ ">
+                </a>
+            <?php };
+            ?>
         </aside>
     </section>
         

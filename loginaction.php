@@ -1,113 +1,58 @@
 <?php
-ob_start();
 include("config.php");
+//Ensure that a session exists (just in case)
+if(!session_id()){
+    session_start();
+}
 if(!$DEBUG_MODE) error_reporting(0);
-define("LOGIN_PAGE", "index.php");
-define("LOGIN_EXPIRE_AFTER", 3600*24);
-$Email = $_POST["Email"];
-$Password = $_POST["Password"];
-include("include/Database.class.php");
-$database = new Database();
-$database->Connect($DBHost, $DBUser,$DBPass );
-$database->SelectDB($DBName);
-
-
-if($Email == "" || $Password == "") 
-{
-	die("<script>document.location.href='".LOGIN_PAGE."?error=no".(isset($_POST["lang"])?"&lang=".$_POST["lang"]:"").(isset($_POST["p"])?"&p=".$_POST["p"]:"")."';</script>");
+if (empty($website)){
+    $website = new SiteManager();
 }
-else
-{
-	
-	$subAccount="";
-
-	$strSelectSA="select username,password,employer from ".$DBprefix."sub_accounts where username='".$database->escape_string($Email)."' ";
-
-	$LoginResultSA=$database->Query($strSelectSA);
-	$LoginInfoSA = $database->fetch_array($LoginResultSA);
-	
-	if($database->num_rows($LoginResultSA)>0&&$LoginInfoSA["password"]==$Password) 
-	{
-		$subAccount=$Email;
-		$Email = $LoginInfoSA["employer"];
-	}
-		
-	$strSelect="select username,password from ".$DBprefix."employers where username='".$database->escape_string($Email)."'  AND active=1";
-	$LoginResult=$database->Query($strSelect);
-	$LoginInfo = $database->fetch_array($LoginResult);
-	
-	
-	if($database->num_rows($LoginResult)>0&&($subAccount!=""||$LoginInfo["password"]==$Password)) 
-	{
-		$strCookie=$LoginInfo["username"]."~".md5($LoginInfo["password"])."~".(time()+LOGIN_EXPIRE_AFTER."~".($subAccount!=""?$subAccount:""));
-		
-		setcookie("AuthE",$strCookie);	
-			
-		$database->Query
-		("
-			INSERT INTO ".$DBprefix."login_log(username,ip,date,action) 
-			VALUES('".($subAccount!=""?($LoginInfo["username"]."/".$subAccount):$subAccount)."','".$_SERVER["REMOTE_ADDR"]."','".time()."','login')
-		");
-									
-		echo "<script>document.location.href='EMPLOYERS/index.php".(isset($_POST["lang"])?"?lng=".$_POST["lang"]:"")."';</script>";		
-	}
-	else 
-	{
-	
-		$strSelect="select username,password,id from ".$DBprefix."jobseekers where username='".$database->escape_string($Email)."' AND active=1";
-	
-		$LoginResult=$database->Query($strSelect);
-		$LoginInfo = $database->fetch_array($LoginResult);
-
-		if($database->num_rows($LoginResult)>0&&$LoginInfo["password"]==$Password) 
-		{
-			$strCookie=$LoginInfo["username"]."~".md5($LoginInfo["password"])."~".(time()+LOGIN_EXPIRE_AFTER) . "~" . $LoginInfo["id"];
-
-			setcookie("AuthJ",$strCookie);	
-			
-			$database->Query
-			("
-				INSERT INTO ".$DBprefix."login_log(username,ip,date,action) 
-				VALUES('".$LoginInfo["username"]."','".$_SERVER["REMOTE_ADDR"]."','".time()."','login')
-			");
-			
-
-			if(isset($_POST["returnURL"]) && $_POST["returnURL"]!= "")				
-			{
-				
-				echo "<script>document.location.href='".$_POST["returnURL"]."';</script>";					
-			}
-			else
-			{
-				echo "<script>document.location.href='JOBSEEKERS/index.php".(isset($_POST["lang"])?"?lng=".$_POST["lang"]:"")."';</script>";					
-			}			
-			echo "<script>document.location.href='JOBSEEKERS/index.php".(isset($_POST["lang"])?"?lng=".$_POST["lang"]:"")."';</script>";					
-			
-		}
-		else
-		{			
-			
-			$database->Query
-			("
-				INSERT INTO ".$DBprefix."login_log(username,ip,date,action,cookie) 
-				VALUES('".$Email."','".$_SERVER["REMOTE_ADDR"]."','".time()."','error','')
-			");
-
-			if(isset($_POST["returnURL"]) && $_POST["returnURL"]!= "")				
-			{
-				
-				echo "<script>document.location.href='".$_POST["returnURL"]."&error=login';</script>";					
-			}
-			else
-			{
-				echo "<script>document.location.href='index.php?error=login';</script>";					
-			}
-		}
-		
-	}
-
+function __autoload($classname) {
+    $filename = "include/". $classname .".class.php";
+    include($filename);
 }
-	
-	
-ob_end_flush();
+    
+$db = new MysqliDb (Array (
+        'host' => $DBHost,
+        'username' => $DBUser, 
+        'password' => $DBPass,
+        'db'=> $DBName,
+        'port' => 3306,
+        'prefix' => $DBprefix,
+        'charset' => 'utf8'
+    ));
+
+if(isset($_POST['Email']) && isset($_POST['Password'])){
+    $email = filter_input(INPUT_POST, 'Email', FILTER_SANITIZE_EMAIL);
+    $Password = filter_input(INPUT_POST, 'Password', FILTER_SANITIZE_STRING);
+    //Search in employer table first
+    $employer = $db->where('username', "$email")
+            ->where('password', "$Password")
+            ->withTotalCount()->getOne('employers',array('username', 'password'));
+
+    if ($db->totalCount > 0){ //User is employer
+        //Store user data in session
+        $_SESSION['username'] = $employer['username'];
+        $_SESSION['user_password'] = $employer['password'];
+        $_SESSION['user_type'] = 'employer';
+        $website->redirect('EMPLOYERS/index.php');
+        
+    } else { //User could be jobseeker
+        $jobseekers = $db->where('username', "$email")
+            ->where('password', "$Password")
+            ->withTotalCount()->getOne('jobseekers','username');
+        
+        if ($db->totalCount > 0){ //User is jobseeker
+            //Store user data in session
+            $_SESSION['username'] = $employer['username'];
+            $_SESSION['user_password'] = $employer['password'];
+            $_SESSION['user_type'] = 'jobseeker';
+            $website->redirect('JOBSEEKERS/index.php');
+            
+        } else { //Wrong username or password
+            $website->redirect('index.php?error=expired');
+        }
+    }
+}
 ?>
