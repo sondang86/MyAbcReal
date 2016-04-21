@@ -16,8 +16,7 @@ if ($SEO_setting == "0" && isset($_REQUEST["posting_id"])){
     die("The job ID wasn't set!");
 }
 $website->ms_i($posting_id);
-$arrPosting = $database->DataArray("jobs","id=".$posting_id);
-$job_info = $db->where('id', $posting_id)->get('jobs')[0];
+$job_info = $db->where('id', $posting_id)->getOne('jobs');
 
 
 ?>
@@ -39,10 +38,9 @@ if(get_param("ProceedApply_Update") != "")
     }
     else
     {
-        $arrUserLgn = explode("~", $_COOKIE["AuthJ"]);
 
-        $username = $arrUserLgn[0];
-        $password = $arrUserLgn[1];
+        $username = $_SESSION['username'];
+	$password = $_SESSION['password'];
 
         $iInsertID = 
         $database->SQLInsert
@@ -112,13 +110,11 @@ if(get_param("ProceedApply_Update") != "")
     }
 }
 //Showing form submittion
-if($show_page_form && isset($_COOKIE["AuthJ"]))
+if($show_page_form == TRUE && $_SESSION['user_type'] == "jobseeker")
 {
-
-	$arrUserLgn = explode("~", $_COOKIE["AuthJ"]);	
-	$username = $arrUserLgn[0];
-	$password = $arrUserLgn[1];	
-	$arrJ = $database->DataArray("jobseekers","username='$username'");
+	$username = $_SESSION['username'];
+	$password = $_SESSION['user_password'];	
+	$arrJ = $db->where('username', "$username")->withTotalCount()->getOne("jobseekers");
 
         
 	$userExists = true;
@@ -129,11 +125,11 @@ if($show_page_form && isset($_COOKIE["AuthJ"]))
 	}
 
         //User already applied for this job
-	if($userExists&&($database->SQLCount("apply","WHERE jobseeker='$username' AND posting_id='$posting_id'") >0 ))
+	if($userExists &&($database->SQLCount("apply","WHERE jobseeker='$username' AND posting_id='$posting_id'") >0 ))
 	{	
 		echo "<br><span class=\"red-font\"><strong>".$M_ALREADY_APPLIED."</strong></span><br><br><br><br><br><br>";		
 	}
-	elseif($userExists&&md5($arrJ["password"])==$password) //User authenticated, show submitting form
+	elseif($userExists && ($arrJ["password"])==$password) //User authenticated, show submitting form
 	{	
 	?>
     
@@ -236,21 +232,21 @@ if($show_page_form && isset($_COOKIE["AuthJ"]))
 							
                                     if(strstr($userFile['file_name'],".pdf"))
                                     {?>
-                                        <a href="file.php?id=<?php echo $userFile['file_id']?>" target=_blank>
-                                                <img src="http://<?php echo $DOMAIN_NAME?>/JOBSEEKERS/images/pdf.gif" width="22" height="22" alt="" border="0">
-                                        </a>
+            <a href="file.php?id=<?php echo $userFile['file_id']?>" target=_blank>
+                <img src="http://<?php echo $DOMAIN_NAME?>/JOBSEEKERS/images/pdf.gif" width="22" height="22" alt="" border="0">
+            </a>
                                 <?php }
                                     else
                                     if(strstr($userFile['file_name'],".doc"))
                                     {?>
-                                        <a href="file.php?id=<?php echo $userFile['file_id']?>"  target=_blank>
-                                                <img src="http://<?php echo $DOMAIN_NAME?>/JOBSEEKERS/images/doc.gif" width="22" height="22" alt="" border="0">
-                                        </a>
+            <a href="file.php?id=<?php echo $userFile['file_id']?>"  target=_blank>
+                <img src="http://<?php echo $DOMAIN_NAME?>/JOBSEEKERS/images/doc.gif" width="22" height="22" alt="" border="0">
+            </a>
                                     <?php }	elseif(strstr($userFile['file_name'],".txt")){ ?>
-
-                                        <a href="file.php?id=<?php echo $userFile['file_id']?>"  target=_blank>
-                                                <img src="http://<?php echo $DOMAIN_NAME?>/JOBSEEKERS/images/text.gif" width="17" height="22" alt="" border="0">
-                                        </a>					
+            
+            <a href="file.php?id=<?php echo $userFile['file_id']?>"  target=_blank>
+                <img src="http://<?php echo $DOMAIN_NAME?>/JOBSEEKERS/images/text.gif" width="17" height="22" alt="" border="0">
+            </a>					
                                     <?php }
                                     else{
                                         echo $M_UNKNOWN;				
@@ -331,16 +327,14 @@ if($show_page_form && isset($_COOKIE["AuthJ"]))
 	<?php
     }	
 } else {
-//    echo "you must be jobseeker to apply this job";
+    echo "you must be jobseeker to apply this job";
 }
 
-//elseif($show_page_form) 
-//{
-//}
+
 ?>
-                                
+    
 </div>
-                                
+
 <?php
 $website->Title($APPLY_JOB_OFFER." ".strip_tags(stripslashes($job_info["title"])));
 $website->MetaDescription("");

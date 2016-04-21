@@ -11,6 +11,7 @@ define("IN_SCRIPT","1");
 if(!session_id()){
     session_start();
 }
+if (!isset($_SESSION['user_type'])){ $_SESSION['user_type'] = "guest";}
 
 require("config.php");
 if(!$DEBUG_MODE) error_reporting(0);
