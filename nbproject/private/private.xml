@@ -3,11 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/EMPLOYERS/jobs/my.php</file>
-            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/include/CommonsQueries.class.php</file>
-            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/EMPLOYERS/jobs/questionnaire.php</file>
-            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/EMPLOYERS/index.php</file>
-            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/extensions/remove_question.php</file>
+            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/extensions/apply_job.php</file>
+            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/.htaccess</file>
+            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/EMPLOYERS/jobs/new_questionnaire.php</file>
+            <file>file:/C:/wamp/www/vieclambanthoigian.com.vn/EMPLOYERS/jobs/questionnaire_edit.php</file>
         </group>
     </open-files>
 </project-private>

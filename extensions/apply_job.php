@@ -17,17 +17,20 @@ if ($SEO_setting == "0" && isset($_REQUEST["posting_id"])){
 }
 $website->ms_i($posting_id);
 $job_info = $db->where('id', $posting_id)->getOne('jobs');
-
-
+$questions =  $db->where('job_id', $posting_id)->get("questionnaire", NULL, array('id','question', 'question_type'));
 ?>
+
+
 <div class="page-wrap">
 <?php
 
-$show_page_form = true;
 
 //Update when form submitted
-if(get_param("ProceedApply_Update") != "")
-{
+if (isset($_POST['submit'])){
+    print_r($_POST);die;
+}
+
+if(get_param("ProceedApply_Update") != ""){
     if($website->GetParam("USE_CAPTCHA_IMAGES") && ( (md5($_POST['code']) != $_SESSION['code'])|| trim($_POST['code']) == "" ) )
     {
         echo "<br><span class=\"red-font\"><b>
@@ -38,9 +41,6 @@ if(get_param("ProceedApply_Update") != "")
     }
     else
     {
-
-        $username = $_SESSION['username'];
-	$password = $_SESSION['password'];
 
         $iInsertID = 
         $database->SQLInsert
@@ -109,231 +109,101 @@ if(get_param("ProceedApply_Update") != "")
             echo "<h3>".$CONGRATULATIONS_APPLIED_SUCCESS."</h3>";
     }
 }
-//Showing form submittion
-if($show_page_form == TRUE && $_SESSION['user_type'] == "jobseeker")
-{
-	$username = $_SESSION['username'];
-	$password = $_SESSION['user_password'];	
-	$arrJ = $db->where('username', "$username")->withTotalCount()->getOne("jobseekers");
+    //Showing form submittion
+    if(isset($_SESSION['username']) && $_SESSION['user_type'] == "jobseeker"){ //User must logged in as jobseeker to apply this form
+            $username = $_SESSION['username'];
+            $password = $_SESSION['user_password'];
+            $userFiles = $db->where('user', $username)->get("files");
 
-        
-	$userExists = true;
-	
-	if(!isset($arrJ["id"]))
-	{
-		$userExists = false;
-	}
 
-        //User already applied for this job
-	if($userExists &&($database->SQLCount("apply","WHERE jobseeker='$username' AND posting_id='$posting_id'") >0 ))
-	{	
-		echo "<br><span class=\"red-font\"><strong>".$M_ALREADY_APPLIED."</strong></span><br><br><br><br><br><br>";		
-	}
-	elseif($userExists && ($arrJ["password"])==$password) //User authenticated, show submitting form
-	{	
-	?>
-    
-    <form method="post">
-        <input type="hidden" name="ProceedApply_Update" value="1">
-        <input type="hidden" name="mod" value="apply_job">
-        <input type="hidden" name="posting_id" value="<?php echo $posting_id;?>">
-        
-        
-        
-        
-        <div class="page-header">
-				 <?php
-					echo "<h3 class=\"no-margin\">".$APPLY_JOB_OFFER." \"<strong>".strip_tags(stripslashes($job_info["title"]))."</strong>\"</h3>";
-				 ?>
+            $userInfo = $db->where('username', "$username")->withTotalCount()->getOne("jobseekers");
+            $userExists = $db->totalCount;
+
+            $is_applied = $db->where('jobseeker', "$username")->withTotalCount()->where('posting_id', $posting_id)->getValue("apply", "count(*)");
+
+            echo $is_applied;
+
+
+            //User already applied for this job
+            if($is_applied > "0" ){	
+                echo "<br><span class=\"red-font\"><strong>".$M_ALREADY_APPLIED."</strong></span><br>";		
+            } elseif(($userExists !== "0") && ($userInfo["password"])== $password){//User authenticated, show submitting form ?>
+
+        <div class="row messageToEmployer">
+            <h4 class="col-md-12">Nộp hồ sơ cho việc số 76</h4>
+            <section class="col-md-6">
+                <textarea placeholder="Write your message here..." name="message_to_employer"></textarea>
+            </section>
         </div>
-        
-        
-        
-        <div class="col-md-6">
-            <strong><?php echo $M_MESSAGE;?>:</strong> (<?php echo $M_OPTIONAL;?>)
-            <br/>
-            
-            <textarea cols="50" rows="5" class="form-control" name="message"></textarea>
-        </div>
-        <div class="clearfix"></div>
-        <br/>
-        <br/>
-        
-				<?php
-				
-				$questions = $database->DataTable("questionnaire","WHERE job_id=".$posting_id);
-				
-				if($database->num_rows($questions)>0)
-				{
-				?>
-        <h4><?php echo $M_PLEASE_ANSWER_QUESTIONS;?></h4>
-        <hr/>
-        <div class="col-md-6">
-					<?php
-					while($question = $database->fetch_array($questions))
-					{
-						echo "<strong>".stripslashes($question["question"])."</strong>";
-						echo "<br/>";
-						
-						if(trim($question["answers"])=="")
-						{
-							echo "<input class=\"form-control\" type=\"text\" value=\"".get_param("question".$question["id"])."\" name=\"question".$question["id"]."\"/>";
-						}
-						else
-						{
-							echo "<select class=\"form-control\" name=\"question".$question["id"]."\"/>";
-							
-							$answers=explode("\n",trim($question["answers"]));
-							
-							foreach($answers as $answer)
-							{
-								echo "<option>".stripslashes($answer)."</option>";
-							}
-							
-							echo "</select>";
-						}
-						
-						echo "<br/><br/>";
-					}
-					
-					?>
-        </div>
-				<?php
-				}
-				
-				?>
-        
-        
-        <div class="clearfix"></div>
-        
-        <h4>
-				<?php echo $PLEASE_SELECT_THE_LIST_WITH_FILES;?>
-        </h4>
-        
-        <hr/>
-        <table >
-				<?php
-				$userFiles = $database->DataTable("files","WHERE user='$username'");
-				$hasFiles = false;
-				while($userFile = $database->fetch_array($userFiles))
-				{
-                                    $hasFiles = true;
-                                    echo "<tr>";	
 
-                                    echo "
-                                            <td width=20>
-                                                    <input type=checkbox ".(isset($Ids)&&in_array($userFile["file_id"], $Ids)?"checked":"")." name=Ids[] value=\"".$userFile["file_id"]."\">
-                                            </td>
-                                    ";
+        <!--LIST QUESTIONS-->
+        <form action="" method="POST">
+                <div class="questionnaires col-md-12">
+                    <?php 
+                    foreach ($questions as $question) { //List each questionnaire?>
+                    <section>
+                        <header>
+                            <p><label>Câu hỏi: </label><span><?php echo $question['question']?></span></p>
+                        </header>
+                        
+                        <p><label>Câu trả lời :</label></p>
+                        <?php 
+                            if ($question['question_type'] == "2"){ //This is multiple choice question
+                                foreach($questionnaire_questions = $db->where('job_id', $posting_id)->where('questionnaire_id', $question['id'])->get('questionnaire_questions', NULL, array('id','question_ask', 'questionnaire_id')) as $questionnaire_question): ?>
 
-                                    echo "
-                                            <td width=30>
-                                    ";
-							
-                                    if(strstr($userFile['file_name'],".pdf"))
-                                    {?>
-            <a href="file.php?id=<?php echo $userFile['file_id']?>" target=_blank>
-                <img src="http://<?php echo $DOMAIN_NAME?>/JOBSEEKERS/images/pdf.gif" width="22" height="22" alt="" border="0">
-            </a>
-                                <?php }
-                                    else
-                                    if(strstr($userFile['file_name'],".doc"))
-                                    {?>
-            <a href="file.php?id=<?php echo $userFile['file_id']?>"  target=_blank>
-                <img src="http://<?php echo $DOMAIN_NAME?>/JOBSEEKERS/images/doc.gif" width="22" height="22" alt="" border="0">
-            </a>
-                                    <?php }	elseif(strstr($userFile['file_name'],".txt")){ ?>
-            
-            <a href="file.php?id=<?php echo $userFile['file_id']?>"  target=_blank>
-                <img src="http://<?php echo $DOMAIN_NAME?>/JOBSEEKERS/images/text.gif" width="17" height="22" alt="" border="0">
-            </a>					
-                                    <?php }
-                                    else{
-                                        echo $M_UNKNOWN;				
-                                    }								
-                                        echo "	</td>
-                                        ";
-
-                                        echo "
-                                                <td  width=100>
-                                                        ".$userFile['file_name']."
-                                                </td>
-                                        ";
-
-                                        echo "
-                                                <td>
-                                                        ".$userFile["description"]."
-                                                </td>
-                                        ";
-                                        echo "</tr>";	
-				}
-				?>
-            
-        </table>
-				<?php
-				if(!$hasFiles)
-				{
-					echo $YOU_HAVE_ANY_FILES."<br>";
-				}
-				?>
-        
-        <br><br>
-        
-				<?php
-				if($website->GetParam("USE_CAPTCHA_IMAGES"))
-				{
-				?>	
-        <table summary="" border="0">
-            <tr>
-                <td>
-                    <img src="http://<?php echo $DOMAIN_NAME?>/include/sec_image.php" width="150" height="30" >
-                </td>
-                <td>
+                                <p>                            
+                                    <span>                                    
+                                        <input type="radio" name="question_<?php echo $question['id']?>" value="<?php echo $questionnaire_question['id']?>" required>
+                                        <?php echo $questionnaire_question['question_ask']?>
+                                    </span>
+                                </p>
+                            
+                        <?php endforeach;
+                            } else {//This is short answer question?>
+                                <textarea placeholder="Write your message here..." name="short_answer" required></textarea>
+                        <?php }?>
+                    </section> 
+                    <?php }?>
                     
-								<?php echo $M_CODE;?>:
+                    <!--CAPTCHA-->
+                    <p>
+                        <label for="code">
+                        <img src="http://<?php echo $DOMAIN_NAME?>/include/sec_image.php" width="100" height="30"/>
+                        </label>
+                        <input id="code" name="code" placeholder="<?php echo $M_PLEASE_ENTER_CODE;?>" type="text" required/>
+                    </p>
                     
-                    <input type="text" name="code" value="" size=8>
-                    
-                </td>
-            </tr>
-        </table>
-        
-        
-        <br><br>
-				<?php
-				}
-				?>
-        
-        
-        
-        <input type="submit"value=" <?php echo $APPLY_NOW;?> " class="btn btn-primary">
-        <br><br>
-        
-				<?php
-				if($MULTI_LANGUAGE_SITE)
-				{
-				?>
-        <input type="hidden" name="lang" value="<?php echo $website->lang;?>"/>
-				<?php
-				}
-				?>
-        
-        
-        
-    </form>
-    
-    
-    
-	<?php
-    }	
-} else {
-    echo "you must be jobseeker to apply this job";
-}
+                    <p><input type="submit" name="submit"></p>
+                </div>
+        </form>
 
-
-?>
-    
+    <?php }  	
+        } else {
+            echo "you must be a jobseeker to apply this job";
+        }
+?>    
 </div>
+<style>
+    textarea {        
+        width: 100%; /* the inital width of the textarea */
+        height: 10em; /* the inital height of the textarea */      
+        padding: 1em;        
+        font-family: "Montserrat", "sans-serif";
+        font-size: 1em;        
+        border: 0.1em solid #ccc;
+        border-radius: 0.5em;        
+        background-color: #ffffe6;        
+    }
+    
+    .questionnaires {
+        border: 1px solid #ccc;
+    }
+    
+    .questionnaires section {
+        margin: 25px 0;
+        border-bottom: 1px solid #ccc;
+    }
+</style>
 
 <?php
 $website->Title($APPLY_JOB_OFFER." ".strip_tags(stripslashes($job_info["title"])));

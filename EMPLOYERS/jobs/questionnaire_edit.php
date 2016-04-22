@@ -10,14 +10,14 @@ global $db, $commonQueries;
 $job_id = filter_input(INPUT_GET,'job_id', FILTER_SANITIZE_NUMBER_INT);
 $questionnaire_id = filter_input(INPUT_GET,'id', FILTER_SANITIZE_NUMBER_INT);
 //Fetch questionnaire data   
-$questionnaire = $commonQueries->getQuestionnaire($job_id);
+$questionnaire = $commonQueries->getQuestionnaire($job_id, $AuthUserName, FALSE);
 $questionnaires_questions = $commonQueries->getQuestionnaireQuestions($questionnaire_id, $job_id); 
     
 //echo "<pre>";
 //print_r($questionnaires_questions);
 //echo "</pre>";
-
-
+    
+    
 if (isset($_POST['submit'])){
     //Update question title
     $db->where ('id', $questionnaire_id);
@@ -26,7 +26,7 @@ if (isset($_POST['submit'])){
     } else {
         echo 'update failed: ' . $db->getLastError();die;
     }
-    
+        
     //Update questions
     $data = array_combine(
         filter_input(INPUT_POST,'questionsId',FILTER_SANITIZE_NUMBER_INT, FILTER_REQUIRE_ARRAY),
@@ -40,15 +40,14 @@ if (isset($_POST['submit'])){
             echo 'update failed: ' . $db->getLastError();die;
         }
     }
-    
+        
     //Succeed, back to question page
     $website->redirect("index.php?category=jobs&folder=questionnaire&page=edit&id=$questionnaire_id&job_id=$job_id");
 }
-
-
+    
+    
 // username must be the same with question's username to show questions
-if ($questionnaires_questions[0]['employer'] == $AuthUserName){ 
-?>
+if ($questionnaire['employer'] == $AuthUserName){?>
     
 <div class="row">
     <h3 class="no-top-margin title col-md-9"><?php echo $M_MODIFY_QUESTION;?></h3>
@@ -57,13 +56,16 @@ if ($questionnaires_questions[0]['employer'] == $AuthUserName){
     </aside>
 </div>
     
-<!--Questionnaire-->
-<div class="col-md-9 questionnaire-employer">
-    <form method="POST">
+<form method="POST">
+<?php if ($questionnaire['question_type'] == "2"){ //multichoice questions, list all questions inside questionnaire?>    
+    <!--Questionnaire-->
+    <div class="col-md-9 questionnaire-employer">
         <div class="row">
             <h5 class="col-md-2">Câu hỏi (*): </h5>
             <p class="col-md-8">
-                <textarea name="question-title" style="width: 100%; min-height: 100px;" required><?php echo $questionnaires_questions[0]['questionnaireQuestion']?></textarea>
+                <textarea name="question-title" style="width: 100%; min-height: 100px;" required>
+                    <?php echo $questionnaires_questions[0]['questionnaireQuestion']?>
+                </textarea>
             </p>       
         </div>
             
@@ -72,7 +74,7 @@ if ($questionnaires_questions[0]['employer'] == $AuthUserName){
             <h5 class="col-md-2">Câu trả lời: </h5>
             <section class="col-md-8 answerPoll" id="answerPoll">
                 <?php foreach ($questionnaires_questions as $question) :?>
-                <p><span><input type="text" name="answerPoll[]" value="<?php echo $question['question_ask']?>"></span></p>        
+                <p><span><input type="text" name="answerPoll[]" value="<?php echo $question['question_ask']?>" required></span></p>        
                 <input type="hidden" name="questionsId[]" value="<?php echo $question['questionsId']?>">
                 <?php endforeach;?>
             </section>  
@@ -84,8 +86,25 @@ if ($questionnaires_questions[0]['employer'] == $AuthUserName){
                 <input type="submit" name="submit" value="Lưu">
             </label>
         </div>
-    </form>
-</div>
+    </div>
+        
+<?php } elseif ($questionnaire['question_type'] == "1") { //user input question?>
+    <div class="row">
+        <h5 class="col-md-2">Câu hỏi (*): </h5>
+        <p class="col-md-8">
+            <textarea name="question-title" style="width: 100%; min-height: 100px;" required><?php echo $questionnaires_questions[0]['questionnaireQuestion']?></textarea>
+        </p>       
+    </div>
+    <div class="row">
+        <section class="col-md-2"></section>
+        <label class="col-md-10 questionnaire-save" style="">
+            <input type="submit" name="submit" value="Lưu">
+        </label>
+    </div>    
+<?php   }?>
+    
+</form>
+    
 <?php } else {?>
-    <h4>Không tìm thấy dữ liệu :(</h4> 
+<h4>Không tìm thấy dữ liệu :(</h4> 
 <?php }?>

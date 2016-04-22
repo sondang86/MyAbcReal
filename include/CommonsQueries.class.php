@@ -480,28 +480,40 @@
          *  get questionnaire by job id
          * 
          *  @param var $id job's id
-         *  
+         *  @param var $username username to be searched
+         *  @param var $getall get all the records or get one record only
          */
              
-        public function getQuestionnaire($job_id){
+        public function getQuestionnaire($job_id, $username="", $getall=TRUE){
             global $DBprefix;
                 
-             //Fetch questionnaire data
-             $columns = array(
-                 $DBprefix."questionnaire.id as questionnaire_id",$DBprefix."questionnaire.employer",
-                 $DBprefix."questionnaire.job_id",$DBprefix."questionnaire.question",
-                 $DBprefix."questionnaire.question_type",$DBprefix."questionnaire.date",
-                 $DBprefix."questionnaire_type.name as questionnaire_typeName",
-                 $DBprefix."questionnaire_type.name_en as questionnaire_typeName_en",
-             );
-             $this->_db->join("questionnaire_type", $DBprefix."questionnaire.question_type =".$DBprefix."questionnaire_type.questionnaire_type", "LEFT");
-             $data = $this->_db->where('job_id', $job_id)->withTotalCount()->get('questionnaire', NULL, $columns);
-                 
-             if ($this->_db->totalCount > 0) {
-                 return $data;
-             } else {
-                 return FALSE;
-             }
+            //Fetch questionnaire data
+            $columns = array(
+                $DBprefix."questionnaire.id as questionnaire_id",$DBprefix."questionnaire.employer",
+                $DBprefix."questionnaire.job_id",$DBprefix."questionnaire.question",
+                $DBprefix."questionnaire.question_type",$DBprefix."questionnaire.date",
+                $DBprefix."questionnaire_type.name as questionnaire_typeName",
+                $DBprefix."questionnaire_type.name_en as questionnaire_typeName_en",
+            );
+            $this->_db->join("questionnaire_type", $DBprefix."questionnaire.question_type =".$DBprefix."questionnaire_type.questionnaire_type", "LEFT");
+            
+            $this->_db->where('job_id', $job_id);
+            
+            if ($username !== ""){ 
+                $this->_db->where('employer', "$username");
+            }
+            
+            if ($getall == TRUE){
+               $data = $this->_db->withTotalCount()->get('questionnaire', NULL, $columns);
+            } else {
+                $data = $this->_db->withTotalCount()->getOne('questionnaire', NULL, $columns);
+            }
+
+            if ($this->_db->totalCount > 0) {
+                return $data;
+            } else {
+                return FALSE;
+            }
         }
             
         /**

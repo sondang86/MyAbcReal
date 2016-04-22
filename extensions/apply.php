@@ -18,9 +18,7 @@ else
 }
 $website->ms_i($posting_id);
 $arrPosting = $database->DataArray("jobs","id=".$posting_id);
-//echo "<pre>";
-//print_r($arrPosting);
-//echo "</pre>";
+
 
 ?>
 <div class="page-wrap">

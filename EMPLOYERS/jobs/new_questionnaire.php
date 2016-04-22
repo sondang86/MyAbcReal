@@ -7,7 +7,8 @@
 
     //Form submitted
     if(isset($_POST['submit'])){
-        $questions_answers = array_reverse(filter_input(INPUT_POST,'answerPoll',FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY));
+//        $questions_answers = array_reverse(filter_input(INPUT_POST,'answerPoll',FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY));
+        $questions_answers = filter_input(INPUT_POST,'answerPoll',FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
         $question_title = filter_input(INPUT_POST,'question-title', FILTER_SANITIZE_STRING);
             
         //Insert question
@@ -82,16 +83,18 @@ if ($AuthUserName !== $job_info['employer']){//Job question does not belong to c
     $(function() {
         $(document).on('change',"#pollSelection",function() {
             /*Show or hide option based on selection*/
-            if($("#pollSelection").val() === '2') {
+            if($("#pollSelection").val() === '2') { //Quiz options, required input all fields
                 $("#answerPollArea").show("fade", 500);
+                $('#myform input').prop('required',true); 
             } else {
                 $("#answerPollArea").fadeOut();
+                $('#myform input').prop('required',false);
             } 
         });
         
         //disable values if hidden
         $('form').submit(function(e){
-            $('#answerPoll input:hidden').attr("disabled",true); 
+            $('#myform input:hidden').attr("disabled",true); 
         });
     });
 </script>    
@@ -104,7 +107,7 @@ if ($AuthUserName !== $job_info['employer']){//Job question does not belong to c
 
 <!--Questionnaire-->
 <div class="col-md-9 questionnaire-employer">
-    <form method="POST">
+    <form method="POST" id="myform">
         <!--SELECTION-->
         <div class="row question_selection">
             <section>
