@@ -10,21 +10,26 @@ $job_id = filter_input(INPUT_GET,'id', FILTER_SANITIZE_NUMBER_INT);
     
 //Fetch questionnaire data   
 $questionnaires_list = $commonQueries->getQuestionnaire($job_id); 
+
+//echo "<pre>";
 //print_r($questionnaires_list);
+//echo "</pre>";
 
 if(isset($_POST['delete'])){
     //Sanitize data first
     $questions = filter_input(INPUT_POST, 'questions', FILTER_SANITIZE_NUMBER_INT);    
     
 }
-
     if ($questionnaires_list !== FALSE){ //Found questions
         if ($AuthUserName == $questionnaires_list[0]['employer']){//Job question does belong to current employer
 ?>  
 
 
 <div class="row questionnaire-title">
-    <section class="col-md-8 col-xs-12"><h4><?php echo $commonQueries->flash('message');?></h4></section>
+    <section class="col-md-8 col-xs-12">
+        <h4><?php echo $commonQueries->flash('message');?></h4>
+        <h4><?php echo $commonQueries->flash('questionnaire_message');?></h4>        
+    </section>
     <aside class="col-md-2 col-sm-6 col-xs-12">
         <?php echo LinkTile ("jobs","new_questionnaire&job_id=$job_id",$M_ADD_NEW_QUESTION,"","blue");?> 
     </aside>

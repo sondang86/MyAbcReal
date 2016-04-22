@@ -8,8 +8,6 @@
 if(!defined('IN_SCRIPT')) die("");
 global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,$SEO_setting, $Browser_detection, $userId_cookie;
 
-print_r($_SESSION);
-
 $featured_jobs_columns = array(
     $DBprefix."jobs.id as job_id",$DBprefix."jobs.job_category",
     $DBprefix."jobs.title",$DBprefix."jobs.SEO_title",$DBprefix."jobs.date",

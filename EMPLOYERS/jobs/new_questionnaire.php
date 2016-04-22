@@ -2,6 +2,14 @@
     global $db, $commonQueries;
     $job_id = filter_input(INPUT_GET,'job_id', FILTER_SANITIZE_NUMBER_INT);
     $job_info = $commonQueries->jobDetails($job_id);
+    
+    //Redirect back to questionnaire menu if user already has limit 3 questions
+    $questions_count = $commonQueries->countRecords('job_id', $job_id, 'questionnaire'); 
+    if ($questions_count->count >= 3){
+        $commonQueries->flash('questionnaire_message', $commonQueries->messageStyle('danger', 'Mỗi việc chỉ có tối đa là 3 câu hỏi'));
+        $website->redirect("index.php?category=jobs&action=questionnaire&id=$job_id");
+    }
+    
     //Fetch questionnaire data   
     $questionnaires_list = $commonQueries->getQuestionnaire($job_id); 
 

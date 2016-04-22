@@ -481,10 +481,11 @@
          * 
          *  @param var $id job's id
          *  @param var $username username to be searched
+         *  @param var $questionnaire_id questionnaire's id
          *  @param var $getall get all the records or get one record only
          */
              
-        public function getQuestionnaire($job_id, $username="", $getall=TRUE){
+        public function getQuestionnaire($job_id, $username="", $questionnaire_id="", $getall=TRUE){
             global $DBprefix;
                 
             //Fetch questionnaire data
@@ -498,6 +499,10 @@
             $this->_db->join("questionnaire_type", $DBprefix."questionnaire.question_type =".$DBprefix."questionnaire_type.questionnaire_type", "LEFT");
             
             $this->_db->where('job_id', $job_id);
+            
+            if ($questionnaire_id !== ""){ 
+                $this->_db->where($DBprefix.'questionnaire.id', $questionnaire_id);
+            }
             
             if ($username !== ""){ 
                 $this->_db->where('employer', "$username");
@@ -653,7 +658,7 @@
         * customize the flash messages or messages
         * http://www.tutorialrepublic.com/twitter-bootstrap-tutorial/bootstrap-alerts.php
         * @access public
-        * @param type class of message (info/warning/error/alert), default is info
+        * @param type class of message (info/warning/danger/alert), default is info
         * @param message message output
         * 
         */

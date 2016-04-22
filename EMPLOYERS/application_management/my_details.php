@@ -22,42 +22,77 @@ $arrPostingApply = $database->DataArray("apply","id=".$apply_id);
 if($arrPostingApply["posting_id"]!=$posting_id) die("");
     
 $id = $arrPostingApply["jobseeker"];
-    
-if($arrPostingApply["guest"] == "1")
-{
-	$arrJobseeker = $database->DataArray("jobseekers_guests","id=".$arrPostingApply["guest_id"]);
-}
-else
-{
-	$arrJobseeker = $database->DataArray("jobseekers","username='$id'");
-}
+            
+//Get the current jobseeker data
+$jobseeker_profile = $GET['apply_id'];
+$jobseeker_data = $database->get_data("jobseeker_resumes", "", "WHERE username='$id'");
 
-//Questionnaire data
-$answers=$db->rawQuery
-	("
-            SELECT 
-            ".$DBprefix."questionnaire_answers.answer,
-            ".$DBprefix."questionnaire.question
-            FROM
-            ".$DBprefix."questionnaire_answers,
-            ".$DBprefix."questionnaire
-            WHERE
-            ".$DBprefix."questionnaire_answers.question_id=
-            ".$DBprefix."questionnaire.id
-            AND
-            ".$DBprefix."questionnaire_answers.app_id=".$apply_id."
-            AND 
-            ".$DBprefix."questionnaire.employer='".$AuthUserName."'
-	");
+
+$jobseeker_resume_columns = array(
+    $DBprefix."jobseeker_resumes.id as resume_id",$DBprefix."jobseeker_resumes.username",
+    $DBprefix."jobseeker_resumes.skills",$DBprefix."jobseeker_resumes.username",
+    $DBprefix."jobseeker_resumes.career_objective",$DBprefix."jobseeker_resumes.facebook_URL",
+    $DBprefix."jobseeker_resumes.experiences",$DBprefix."jobseeker_resumes.name_current_position",
+    $DBprefix."job_experience.name as job_experience_name",$DBprefix."job_experience.name_en as job_experience_name_en",
+    $DBprefix."education.education_name",$DBprefix."education.education_name_en",
+    $DBprefix."languages.name as language_name",
+    $DBprefix."language_levels.level_name as language_level_name",
+    $DBprefix."salary.salary_range",$DBprefix."salary.salary_range_en",
+    $DBprefix."categories.category_name",$DBprefix."categories.category_name_vi",
+    $DBprefix."locations.City",$DBprefix."locations.City_en",
+    $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",
+    $DBprefix."positions.position_name",$DBprefix."positions.position_name_en",
+    "expected_position.position_name as expected_position_name",
+    "expected_position.position_name_en as expected_position_name_en",
+    "expected_salary.salary_range as expected_salary_range",
+    "expected_salary.salary_range_en as expected_salary_range_en",
+);
+
+$db->join("job_experience", $DBprefix."jobseeker_resumes.experience_level=".$DBprefix."job_experience.experience_id", "LEFT");
+$db->join("education", $DBprefix."jobseeker_resumes.education_level=".$DBprefix."education.education_id", "LEFT");
+$db->join("languages", $DBprefix."jobseeker_resumes.language=".$DBprefix."languages.id", "LEFT");
+$db->join("language_levels", $DBprefix."jobseeker_resumes.language_level=".$DBprefix."language_levels.level", "LEFT");
+$db->join("salary", $DBprefix."jobseeker_resumes.salary=".$DBprefix."salary.salary_id", "LEFT");
+$db->join("categories", $DBprefix."jobseeker_resumes.job_category=".$DBprefix."categories.category_id", "LEFT");
+$db->join("locations", $DBprefix."jobseeker_resumes.location=".$DBprefix."locations.id", "LEFT");
+$db->join("job_types", $DBprefix."jobseeker_resumes.job_type=".$DBprefix."job_types.id", "LEFT");
+$db->join("positions", $DBprefix."jobseeker_resumes.current_position=".$DBprefix."positions.position_id", "LEFT");
+$db->join("positions as expected_position", $DBprefix."jobseeker_resumes.expected_position=expected_position.position_id", "LEFT");
+$db->join("salary as expected_salary", $DBprefix."jobseeker_resumes.expected_salary=expected_salary.salary_id", "LEFT");
+
+
+$db->where ($DBprefix."jobseeker_resumes.username", "$id");                
+$jobseeker_resume = $db->withTotalCount()->groupBy("username")->get("jobseeker_resumes", NULL, $jobseeker_resume_columns);
+
+echo "<pre>";
+print_r($jobseeker_resume);
+echo "</pre>";
+//if($arrPostingApply["guest"] == "1"){
+//    $arrJobseeker = $database->DataArray("jobseekers_guests","id=".$arrPostingApply["guest_id"]);
+//} else{
+//    $arrJobseeker = $database->DataArray("jobseekers","username='$id'");
+//}
+
+$questionnaire_answers_columns = array(
+    $DBprefix."questionnaire_answers.questionnaire_id as QA_questionnaire_id",
+    $DBprefix."questionnaire_answers.questionnaire_question_id",
+    $DBprefix."questionnaire_answers.short_answer",$DBprefix."questionnaire_answers.job_id",
+    $DBprefix."questionnaire.question",$DBprefix."questionnaire.question_type",
+    $DBprefix."questionnaire.employer",
+    $DBprefix."questionnaire_questions.question_ask as question_answered",$DBprefix."questionnaire.question_type",
+);
+
+$db->join("questionnaire", $DBprefix."questionnaire_answers.questionnaire_id=".$DBprefix."questionnaire.id", "LEFT");
+$db->join("questionnaire_questions", $DBprefix."questionnaire_answers.questionnaire_question_id=".$DBprefix."questionnaire_questions.id", "LEFT");
+$db->where ($DBprefix."questionnaire_answers.user", $jobseeker_data[0]['username']);                
+$db->where ($DBprefix."questionnaire_answers.job_id", $posting_id);               
+$answers = $db->withTotalCount()->get("questionnaire_answers", NULL, $questionnaire_answers_columns);
+
 ?>
 <div class="row">
     <div class="col-md-3 col-sm-6 col-xs-12 fright">
         <?php
             echo LinkTile("","",$M_GO_BACK,"","red","small","true","window.history.back");
-            
-            //Get the current jobseeker data
-            $jobseeker_profile = $GET['apply_id'];
-            $jobseeker_data = $database->get_data("jobseeker_resumes", "", "WHERE username='$id'");
         ?>
     </div>
 </div>
@@ -69,7 +104,7 @@ $answers=$db->rawQuery
             <?php echo $DETAILS_JS;?> : <?php echo $id;?>
             </h4>
         </div>
-
+        
         <ul class="jobseeker-select">
             <li><h5><?php echo $M_NAME_CURRENT_POSITION;?> : </h5></li>
             <li><h5><?php echo $jobseeker_data[0]['name_current_position'];?></h5></li>
@@ -108,7 +143,13 @@ $answers=$db->rawQuery
             <div class="form-group">
                 <label for="maxOfInterval" class="control-label"><?php echo $answer['question']?></label>
                 <aside>
-                    <p>Trả lời:</p> <?php echo $answer['answer']?>
+                    <p>Trả lời:</p>
+                    <?php if($answer['question_answered'] == ""){
+                            echo $answer['short_answer'];                        
+                        } else {
+                            echo $answer['question_answered'];
+                        }
+                    ?>
                 </aside>
             </div>
         </div>
@@ -117,10 +158,10 @@ $answers=$db->rawQuery
 </div>
 
 
-<!--SonDang modify here-->
+<!--JOBSEEKER CV-->
 <div class="jobseeker-cv">    
     <div class="jobseeker-main">
-        
+        <h4>Thông tin ứng viên: </h4>
         <!--MAIN-->
         <div class="row jobseeker-mainTitle">
             <div class="col-md-6 col-sm-6 col-xs-12 cv-details">
@@ -191,7 +232,7 @@ $answers=$db->rawQuery
             <div class="jobseeker-title"><h4><?php echo $M_CAREER_OBJECTIVE;?></h4></div>
                 <?php echo $jobseeker_data[0]['career_objective'];?>
         </div>
-
+        
         <!--FACEBOOK URL-->
         <div class="cv-details">
             <label>
@@ -211,7 +252,7 @@ $answers=$db->rawQuery
             <div class="jobseeker-title"><h4><?php echo $M_YOUR_SKILLS;?></h4></div>
                 <?php echo $jobseeker_data[0]['skills'];?>
         </div>
-
+        
         <!--LIST ATTACHED FILES-->
         <div class="row">
             <div class="col-md-12">
@@ -242,7 +283,7 @@ $answers=$db->rawQuery
                     </p>
                     <?php }?>	
                 </section>
-                </div>
+            </div>
         </div>
     </div>    
     

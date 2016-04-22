@@ -10,7 +10,7 @@ global $db, $commonQueries;
 $job_id = filter_input(INPUT_GET,'job_id', FILTER_SANITIZE_NUMBER_INT);
 $questionnaire_id = filter_input(INPUT_GET,'id', FILTER_SANITIZE_NUMBER_INT);
 //Fetch questionnaire data   
-$questionnaire = $commonQueries->getQuestionnaire($job_id, $AuthUserName, FALSE);
+$questionnaire = $commonQueries->getQuestionnaire($job_id, $AuthUserName,$questionnaire_id, FALSE);
 $questionnaires_questions = $commonQueries->getQuestionnaireQuestions($questionnaire_id, $job_id); 
     
 //echo "<pre>";
@@ -42,6 +42,7 @@ if (isset($_POST['submit'])){
     }
         
     //Succeed, back to question page
+    $commonQueries->flash('questionnaire_message', $commonQueries->messageStyle('info', 'Lưu thay đổi thành công!'));
     $website->redirect("index.php?category=jobs&folder=questionnaire&page=edit&id=$questionnaire_id&job_id=$job_id");
 }
     
@@ -50,12 +51,17 @@ if (isset($_POST['submit'])){
 if ($questionnaire['employer'] == $AuthUserName){?>
     
 <div class="row">
-    <h3 class="no-top-margin title col-md-9"><?php echo $M_MODIFY_QUESTION;?></h3>
+    <h4 class="no-top-margin title col-md-9">
+        <?php $commonQueries->flash('questionnaire_message')?>
+    </h4>
     <aside class="col-md-2 fright">
         <?php echo LinkTile ("jobs","questionnaire&id=".$_REQUEST["job_id"],$M_GO_BACK,"","red");?>    
     </aside>
 </div>
     
+<div class="row">
+    <h3 class="col-md-12"><?php echo $M_MODIFY_QUESTION;?></h3>
+</div>
 <form method="POST">
 <?php if ($questionnaire['question_type'] == "2"){ //multichoice questions, list all questions inside questionnaire?>    
     <!--Questionnaire-->
@@ -63,9 +69,7 @@ if ($questionnaire['employer'] == $AuthUserName){?>
         <div class="row">
             <h5 class="col-md-2">Câu hỏi (*): </h5>
             <p class="col-md-8">
-                <textarea name="question-title" style="width: 100%; min-height: 100px;" required>
-                    <?php echo $questionnaires_questions[0]['questionnaireQuestion']?>
-                </textarea>
+                <textarea name="question-title" style="width: 100%; min-height: 100px;" required><?php echo $questionnaires_questions[0]['questionnaireQuestion']?></textarea>
             </p>       
         </div>
             
@@ -92,7 +96,7 @@ if ($questionnaire['employer'] == $AuthUserName){?>
     <div class="row">
         <h5 class="col-md-2">Câu hỏi (*): </h5>
         <p class="col-md-8">
-            <textarea name="question-title" style="width: 100%; min-height: 100px;" required><?php echo $questionnaires_questions[0]['questionnaireQuestion']?></textarea>
+            <textarea name="question-title" style="width: 100%; min-height: 100px;" required><?php echo $questionnaire['question']?></textarea>
         </p>       
     </div>
     <div class="row">
