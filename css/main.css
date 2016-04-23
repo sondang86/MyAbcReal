@@ -2592,6 +2592,10 @@ div.upload input:hover {
     margin-top: 15px;
 }
 
+/*Pagination*/
+
+
+
 /* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {
     .jobseeker-info li{
@@ -2620,13 +2624,13 @@ div.upload input:hover {
     .js-forms label{
         display: block;
         margin: 0;
-        text-align: center;
+        /*text-align: center;*/
     }
     
     .js-forms span {
         float: left;
         width: 100%;
-        text-align: center;
+        /*text-align: center;*/
         padding-right: 10px;
         margin: 10px auto 0;
         color: #888;
@@ -2799,6 +2803,8 @@ div.upload input:hover {
         color: #888;
         text-shadow: 1px 1px 1px #FFF;
         border:1px solid #E4E4E4;    
+        width: 100%;
+        float: left;
     }
     
     .jobseeker-mainTitle {
@@ -2807,7 +2813,7 @@ div.upload input:hover {
     
     .js-forms {
         margin: 10px auto;
-        max-width: 500px;
+        /*max-width: 500px;*/
     }
     
     .js-forms label{
@@ -2817,8 +2823,8 @@ div.upload input:hover {
     
     .js-forms span {
         float: left;
-        width: 28%;
-        text-align: right;
+        width: 20%;
+        /*text-align: right;*/
         padding-right: 10px;
         margin-top: 10px;
         color: #888;
@@ -2831,7 +2837,7 @@ div.upload input:hover {
         margin: 2px 6px 16px 0;
         outline: 0 none;
         padding: 3px 3px 3px 5px;
-        width: 70%;
+        width: 75%;
         font-size: 12px;
         line-height: 15px;
         box-shadow: inset 0px 1px 4px #ECECEC;

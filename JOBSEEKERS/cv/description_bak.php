@@ -4,16 +4,40 @@
 // Find out more about our products and services on:
 // http://www.netartmedia.net
 ?><?php
-    if(!defined('IN_SCRIPT')) die("");
+if(!defined('IN_SCRIPT')) die("");
 ?>
+
 <div class="fright">
-<?php 
-//    echo LinkTile("cv","edit",$M_TEXT_EDITOR,"","yellow");	 
-    echo LinkTile("cv","resume_creator",$M_RESUME_CREATOR,"","green");
+	<?php
+	echo LinkTile
+		 (
+			"cv",
+			"edit",
+			$M_TEXT_EDITOR,
+			"",
+			"yellow"
+		 );
+		 
+		 
+	echo LinkTile
+	 (
+		"cv",
+		"resume_creator",
+		$M_RESUME_CREATOR,
+		"",
+		"green"
+	 );
+	 
+
 ?>
 </div>
-<h3><?php echo $M_CREATE_ONLINE_RESUME;?></h3>
-
+<div class="clear"></div>
+<h3>
+	<?php echo $M_CREATE_ONLINE_RESUME;?>
+</h3>
+<br/>
+		
+		
 <?php 
 $M_OFFER_TWO_OPTIONS=str_replace("{upload_link}","<a class=\"underline-link\" href=\"index.php?category=documents&action=add&resume=1\">",$M_OFFER_TWO_OPTIONS);
 $M_OFFER_TWO_OPTIONS=str_replace("{end_upload_link}","</a>",$M_OFFER_TWO_OPTIONS);
@@ -22,7 +46,7 @@ echo $M_OFFER_TWO_OPTIONS;
 <br><br><br>
 
 <div class="row">
-<!--	<div class="col-md-6">
+	<div class="col-md-6">
 		<b>1. <a href="index.php?category=cv&action=edit"><?php echo $M_TEXT_EDITOR;?></a></b>
 		<br><br>
 		
@@ -30,9 +54,9 @@ echo $M_OFFER_TWO_OPTIONS;
 		<br/><br/>
 		
 		<a class="img-responsive" href="index.php?category=cv&action=edit"><img src="images/cv_text.gif" width="300" height="253" alt="" border="0"></a>
-	</div>-->
+	</div>
 			
-	<div class="col-md-12">
+	<div class="col-md-6">
 		<b>2. <a href="index.php?category=cv&action=resume_creator"><?php echo $M_RESUME_CREATOR;?></a></b>
 		
 		<br><br>

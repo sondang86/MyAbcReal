@@ -1212,6 +1212,19 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
     border-bottom: 2px solid yellowgreen;
 }
 
+.JS_profile {
+    padding: 10px 0;
+    position: relative;
+}
+
+.JS_profile a {
+    position: absolute;
+    bottom: 25px;
+    right: 20px;
+    font-size: 12px;
+    list-style-type: none;
+}
+
 /* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {
     .locationCheckbox {

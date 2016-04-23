@@ -744,5 +744,68 @@
             }
             $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
         }
+        
+        
+        /**
+        * A simple pagination using Bootstrap
+        * 
+        * @access public
+        * @param reload url where you want to navigate to
+        * @param page current page of pagination
+        * @param totalPages total pages in pagination
+        * @param SEO_setting default 1 is enabled 
+        */
+        public function pagination($reload, $page, $totalPages, $SEO_setting="1") {
+            echo '<div><ul class="pagination">';
+            if ($totalPages > 1) {
+                echo $this->paginate($reload, $page, $totalPages, $SEO_setting);
+            }
+            echo "</ul></div>";
+        }
+        
+        protected function paginate($reload, $page, $totalPages, $SEO_setting, $adjacents=5) {
+            //Remove page= and allow integer numbef only if SEO setting enabled (1)
+            if ($SEO_setting == "1"){
+                $additional_page_word = "";
+            } else {
+                $additional_page_word = "&amp;page=";
+            }
+            $prevlabel = "&lsaquo; Prev";
+            $nextlabel = "Next &rsaquo;";
+            $out = "";
+            // previous
+            if ($page == 1) {
+                $out.= "";
+            } elseif ($page == 2) {
+                $out.="<li><a href=\"".$reload."\">".$prevlabel."</a>\n</li>";
+            } else {
+                $out.="<li><a href=\"".$reload."$additional_page_word"."1\">First</a>\n</li>";                
+//                $out.="<li><a href='&page=1'>1</a>\n</li>";
+            }
+            $pmin=($page>$adjacents)?($page - $adjacents):1;
+            $pmax=($page<($totalPages - $adjacents))?($page + $adjacents):$totalPages;
+            for ($i = $pmin; $i <= $pmax; $i++) {
+                if ($i == $page) {
+                    $out.= "<li class=\"active\"><a href=''>".$i."</a></li>\n";
+                } elseif ($i == 1) {
+                    $out.= "<li><a href=\"".$reload."\">".$i."</a>\n</li>";
+                } else {
+                    $out.= "<li><a href=\"".$reload. "$additional_page_word".$i."\">".$i. "</a>\n</li>";
+                }
+            }
+
+            if ($page<($totalPages - $adjacents)) {
+                $out.= "<li><a >..</a>\n</li>";
+                $out.= "<li><a href=\"" . $reload."$additional_page_word".$totalPages."\">" .$totalPages."</a>\n</li>";
+            }
+            // next
+            if ($page < $totalPages) {
+                $out.= "<li><a href=\"".$reload."$additional_page_word".($page + 1)."\">".$nextlabel."</a>\n</li>";
+            } else {
+                $out.= "";
+            }
+            $out.= "";
+            return $out;
+        }
     }
 ?>

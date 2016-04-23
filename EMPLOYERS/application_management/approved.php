@@ -4,36 +4,15 @@ global $db;
 ?>
 <div class="row">
     <div class="col-md-4 col-sm-6 col-xs-12 fright">        
-	<?php	
-            echo LinkTile
-             (
-                    "application_management",
-                    "rejected",
-                    $M_REJECTED_APPLICATIONS,
-                    "",
-                    "red"
-             );
-
-
-            echo LinkTile
-             (
-                    "application_management",
-                    "list",
-                    $JOBSEEKERS_APPLIED,
-                    "",
-                    "blue"
-             );
-	?>
+    <?php   
+        echo LinkTile("application_management","rejected",$M_REJECTED_APPLICATIONS,"","red");
+        echo LinkTile("application_management","list",$JOBSEEKERS_APPLIED,"","blue");
+    ?>
     </div>
 </div>    
-<div class="clear"></div>
-<h3>
-	<?php echo $M_JOBSEEKERS_APPROVED;?>
-</h3>
 
-<script>
+<h3><?php echo $M_JOBSEEKERS_APPROVED;?></h3>
 
-</script>
 
 <?php
         
@@ -80,7 +59,6 @@ global $db;
 	";
 
     $CVs_approved = $db->withTotalCount()->rawQuery($QueryListCVs_Approved); 
-//    print_r($CVs_approved);
     
     //Delete selected value in tables
     if(isset($_REQUEST["Delete"])&&isset($_REQUEST["CheckList"]))

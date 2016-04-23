@@ -6,7 +6,7 @@
 // http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,$SEO_setting, $Browser_detection, $userId_cookie;
+global $db,$pagination, $categories, $categories_subs,$commonQueries, $locations, $companies,$SEO_setting, $Browser_detection, $userId_cookie;
 
 $featured_jobs_columns = array(
     $DBprefix."jobs.id as job_id",$DBprefix."jobs.job_category",
@@ -38,12 +38,17 @@ $db->where($DBprefix."jobs.expires", time(), ">");
 $db->where($DBprefix."jobs.featured", "1");
 
 $db->orderBy('RAND()');
-//$db->groupBy ("job_id");
 
-$featured_jobs = $db->get("jobs", array(0,10),$featured_jobs_columns);
+//Pagination
+$reload="";
+$page = 3;
+// set page limit to 2 results per page. 20 by default
+$db->pageLimit = 1;
+$featured_jobs = $db->arraybuilder()->paginate("jobs", $page,$featured_jobs_columns);
+
+$commonQueries->pagination($reload, $page, 2000, 1);
 
 $segment = $website->getURL_segment($website->currentURL());
-
 ?>
 
 <section class="row stats top-title">

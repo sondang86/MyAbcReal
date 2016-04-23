@@ -31,6 +31,8 @@ $db = new MysqliDb (Array (
         'charset' => 'utf8'
     ));
 $commonQueries = new CommonsQueries(new MysqliDb ());
+//ensure user not inactive
+$commonQueries->CheckSession();
 
 $database = new Database();
 $database->Connect($DBHost, $DBUser,$DBPass );
@@ -64,8 +66,8 @@ $job_experience = $db->get_data('job_experience');
 $job_availability = $db->get_data('job_availability');
 $salaries = $db->get_data('salary');
 $current_language = $db->get_data('languages','id',"WHERE default_language=1")[0];
-$jobseeker_profile = $db->get_data('jobseekers', '', "WHERE username='$AuthUserName'");
-$gender = $db->get_data('gender','',"WHERE language_id=$current_language AND gender_id=".$jobseeker_profile[0]['gender'])[0];
+$jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers');
+
 
 
 

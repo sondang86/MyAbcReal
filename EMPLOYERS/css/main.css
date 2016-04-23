@@ -1319,7 +1319,7 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
 
 .jobseeker-messageArea {
     padding: 10px;
-    margin-bottom: 25px;
+    margin: 30px 0;
     border: 0.1em solid #ccc;
     border-radius: 0.5em;
     background: #fff;
@@ -1433,8 +1433,13 @@ input[type="submit"]{
     flex-wrap: wrap;
 }
 
+.questionnaire-form article {
+    display: block;
+    width: 100%;
+}
+
 .form-group {
-    padding: 0 10px;
+    padding: 20px 10px;
     /*    width: 48%;
         float: left;*/
     border: 1px solid #CCC;

@@ -26,7 +26,7 @@ if
 	$this->admin_settings["logo_text"]!=""
 )
 {
-	echo '<a class="navbar-brand text-logo custom-color" href="http://'.$this->domain.'">'.stripslashes($this->admin_settings["logo_text"]).'</a>';
+//	echo '<a class="navbar-brand text-logo custom-color" href="http://'.$this->domain.'">'.stripslashes($this->admin_settings["logo_text"]).'</a>';
 }
 else
 {
