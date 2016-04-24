@@ -214,9 +214,22 @@
             //Order by featured first
             $this->_db->orderBy("featured", "DESC");
             $this->_db->orderBy("date", "DESC");
-            $jobs_list['data'] = $this->_db->withTotalCount()->get("jobs", NULL, $jobsInfo_columns);
-            $jobs_list['totalCount'] = $this->_db->totalCount;
-                
+            
+            //Pagination options
+            //Set current page to 1 if empty
+            if (isset($_GET['trang'])){
+                $current_page = filter_input(INPUT_GET, 'trang', FILTER_SANITIZE_NUMBER_INT);
+            } else {
+                $current_page = 1;
+            }
+            // set page limit to 2 results per page. 20 by default
+            $this->_db->pageLimit = 10;
+            $jobs_list['data'] = $this->_db->arraybuilder()->withTotalCount()->paginate("jobs", $current_page,$jobsInfo_columns);            
+            $jobs_list['totalCount'] = $this->_db->totalCount; 
+            $jobs_list['current_page'] = $current_page;
+            $jobs_list['total_pages'] = $this->_db->totalPages;
+//            $jobs_list['data'] = $this->_db->withTotalCount()->get("jobs", NULL, $jobsInfo_columns);
+//            $jobs_list['totalCount'] = $this->_db->totalCount;                
                 
             if ($this->_db->totalCount > 0){
                 return $jobs_list;
@@ -768,7 +781,7 @@
             if ($SEO_setting == "1"){
                 $additional_page_word = "";
             } else {
-                $additional_page_word = "&amp;page=";
+                $additional_page_word = "trang=";
             }
             $prevlabel = "&lsaquo; Prev";
             $nextlabel = "Next &rsaquo;";
@@ -777,12 +790,12 @@
             if ($page == 1) {
                 $out.= "";
             } elseif ($page == 2) {
-                $out.="<li><a href=\"".$reload."\">".$prevlabel."</a>\n</li>";
+                $out.="<li><a href=\"".$reload."$additional_page_word"."1\">".$prevlabel."</a>\n</li>";
             } else {
                 $out.="<li><a href=\"".$reload."$additional_page_word"."1\">First</a>\n</li>";                
 //                $out.="<li><a href='&page=1'>1</a>\n</li>";
             }
-            $pmin=($page>$adjacents)?($page - $adjacents):1;
+            $pmin=($page>$adjacents)?($page - $adjacents):2; //Hide page 1
             $pmax=($page<($totalPages - $adjacents))?($page + $adjacents):$totalPages;
             for ($i = $pmin; $i <= $pmax; $i++) {
                 if ($i == $page) {
@@ -806,6 +819,23 @@
             }
             $out.= "";
             return $out;
+        }
+        
+        
+        /**
+        * A simple function that track execution time of Mysql's query
+        * 
+        * @access public
+        * @param sql_query Mysql query to be tracks
+        * 
+        *         
+        */        
+        public function QueryExecutionTime($sql_query){
+             $msc_old = microtime(true);
+             $this->_db->rawQuery($sql_query);
+             $msc_new = microtime(true) - $msc_old;
+             echo "Query execution time in ". $msc_new . ' seconds'; // in seconds
+         //    echo ($msc * 1000) . ' milliseconds'; // in millseconds
         }
     }
 ?>

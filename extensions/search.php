@@ -137,7 +137,20 @@
         } else { //No jobs found
     ?>
         <h4>Không tìm thấy việc phù hợp với tiêu chí đặt ra. Bạn vui lòng thử lại</h4>
-    <?php }?>    
+    <?php }
+    
+    ?> 
+        
+    <!--PAGINATION-->
+    <div class="row">
+        <section class="col-md-12 paginationArea">
+            <?php 
+                //Make sure default pagination works correctly
+                if ($queryString == ""){ $reload = "?"; } else { $reload = "?q=$queryString&"; }
+                $commonQueries->pagination($reload, $jobs_found['current_page'], $jobs_found['total_pages'], 0);
+            ?>
+        </section>
+    </div>
 </div>    
 <?php
 $website->Title("Tìm kiếm");

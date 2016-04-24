@@ -52,8 +52,8 @@ RewriteRule ^nha-tuyen-dung.html$ index.php?mod=employers_registration&lang=vn
 RewriteRule ^([^/\.]+).html$ index.php?page=$1 [L]
 
 RewriteRule ^chi-tiet-cong-viec/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?mod=details&id=$1
-RewriteRule ^viec-lam-noi-bat/?$ index.php?mod=featured
-RewriteRule ^viec-lam-moi-nhat/?$ index.php?mod=latest_jobs
+#RewriteRule ^viec-lam-noi-bat/?$ index.php?mod=featured
+#RewriteRule ^viec-lam-moi-nhat/?$ index.php?mod=latest_jobs
 RewriteRule ^nop-ho-so/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?mod=apply_job&posting_id=$1&lang=vn
 RewriteRule ^viec-lam-da-luu/?$ index.php?mod=saved&lang=vn
 RewriteRule ^viec-lam-cung-cong-ty/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?mod=job_by_company&company=$1&lang=vn
@@ -61,8 +61,10 @@ RewriteRule ^thong-tin-cong-ty/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?mod=company&
 RewriteRule ^danh-gia-cong-ty/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?write=1&mod=reviews&id=$1&lang=vn
 RewriteRule ^viec-lam-theo-nganh/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?mod=category&id=$1&lang=vn
 RewriteRule ^viec-lam-theo-dia-diem/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?mod=location&id=$1&lang=vn
-#Search URL
+#Search URLs
 RewriteRule ^tim-kiem/?(.*)?$ index.php?mod=search [QSA]
+RewriteRule ^viec-lam-moi-nhat/?(.*)?$ index.php?mod=latest_jobs [QSA]
+RewriteRule ^viec-lam-noi-bat/?(.*)?$ index.php?mod=featured
 
 #save URL
 RewriteRule ^luu-viec-lam/?$ index.php?mod=save 

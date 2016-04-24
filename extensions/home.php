@@ -39,18 +39,27 @@ $db->where($DBprefix."jobs.featured", "1");
 
 $db->orderBy('RAND()');
 
-//Pagination
-$reload="";
-$page = 3;
-// set page limit to 2 results per page. 20 by default
-$db->pageLimit = 1;
-$featured_jobs = $db->arraybuilder()->paginate("jobs", $page,$featured_jobs_columns);
 
-$commonQueries->pagination($reload, $page, 2000, 1);
+$featured_jobs = $db->get("jobs", NULL,$featured_jobs_columns);
 
 $segment = $website->getURL_segment($website->currentURL());
 ?>
+<style>
+    #by_featured {
+        width: 100%;
+        height: 500px;
+        margin: 50px auto 0 auto;
+        position: relative;
+        overflow: auto;
+      }
 
+</style>
+<script>
+    //https://github.com/noraesae/perfect-scrollbar
+    $(document).ready(function(){
+        $('#by_featured').perfectScrollbar();
+    });    
+</script>
 <section class="row stats top-title">
     <header class="col-md-12">
         <h4>Việc làm nổi bật: </h4>
