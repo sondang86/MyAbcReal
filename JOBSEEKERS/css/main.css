@@ -1248,6 +1248,19 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
         width: 60%;
         min-height: 150px;
     }
+    
+    .js-radioBoxes {
+        width: 100%;
+        float: left
+    }
+    
+    .js-radioBoxes span{
+        width: 99px;
+    }
+    
+    .js-radioBoxes span input{
+        margin-right: 5px;
+    }
 }
  
 /* D?nh cho m?y t?nh b?ng chi?u d?c */
@@ -1350,6 +1363,11 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
     
     .info-section:hover {
         border: 1px #cccccc solid;
+    }
+    
+    .js-radioBoxes {
+        width: 60%;
+        float: left;
     }
 }
  

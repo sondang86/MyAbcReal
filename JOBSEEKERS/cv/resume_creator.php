@@ -15,13 +15,17 @@ $job_types = $db->get('job_types');
 $locations = $db->get('locations');
 $languages = $db->get('languages');
 $language_levels = $db->get('language_levels');
+$skills = $db->get('skills');
+//Get the current jobseeker data
+$jobseeker_data = $db->where('username', "$AuthUserName")->getOne('jobseeker_resumes');
 
+//Jobseeker profile data
 $selected_columns = array(
     $DBprefix."jobseekers.id as jobseeker_id",$DBprefix."jobseekers.username",
     $DBprefix."jobseekers.first_name",$DBprefix."jobseekers.last_name",
     $DBprefix."jobseekers.address",$DBprefix."jobseekers.phone",
     $DBprefix."jobseekers.description",$DBprefix."jobseekers.profile_pic",
-    $DBprefix."jobseekers.profile_description",
+    $DBprefix."jobseekers.profile_description",$DBprefix."jobseekers.profile_description",
     $DBprefix."marital_status.name as marital_status_name",$DBprefix."marital_status.name_en as marital_status_name_en",
     $DBprefix."gender.name as gender_name",$DBprefix."gender.name_en as gender_name_en"
 );
@@ -33,9 +37,7 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
 //echo "<pre>";
 //print_r($jobseeker_profile);
 //echo "</pre>";
-
-    $job_types = $db->get_data('job_types');
-        
+       
     if(isset($_POST["ProceedSaveResume"])){
         
         if($database->SQLCount("jobseeker_resumes","WHERE username='".$AuthUserName."'") == 0){
@@ -62,6 +64,9 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
             "language_1_level" => filter_input(INPUT_POST,'js-languageLevel1', FILTER_SANITIZE_NUMBER_INT),
             "language_2" => filter_input(INPUT_POST,'js-language2', FILTER_SANITIZE_NUMBER_INT),
             "language_2_level" => filter_input(INPUT_POST,'js-languageLevel2', FILTER_SANITIZE_NUMBER_INT),
+            "IT_skills" => filter_input(INPUT_POST,'js-IT_skill', FILTER_SANITIZE_NUMBER_INT),
+            "group_skills" => filter_input(INPUT_POST,'js-group_skill', FILTER_SANITIZE_NUMBER_INT),
+            "pressure_skill" => filter_input(INPUT_POST,'js-pressure_skill', FILTER_SANITIZE_NUMBER_INT),
         );
             
         $db->where ('username', "$AuthUserName");
@@ -71,12 +76,9 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
         } else {
             echo 'update failed: ' . $db->getLastError();die;
         }
-    }
-        
-    $arrResume = $database->DataArray("jobseeker_resumes","username='".$AuthUserName."'");
-        
-    //Get the current jobseeker data
-    $jobseeker_data = $db->where('username', "$AuthUserName")->getOne('jobseeker_resumes');
+    }        
+       
+
         
     ?>
 <style>
@@ -116,7 +118,7 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
                         <label>
                             <span><b><?php echo $M_CURRENT_POSITION;?></b></span>                            
                             <select name="js-current-position" required>
-                                <option value="">Please select</option>
+                                <option value=""><?php echo $M_PLEASE_SELECT;?></option>
                                 <?php foreach ($positions as $value) :?>
                                 <option value="<?php echo $value['position_id']?>" <?php if($value['position_id'] == $jobseeker_data['current_position']) {echo "selected";}?>><?php echo $value['position_name']?></option>
                                 <?php endforeach;?>
@@ -125,7 +127,7 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
                         <label>
                             <span><b><?php echo $M_SALARY;?></b></span>						
                             <select name="js-salary" required>
-                                <option value="">Please select</option>
+                                <option value=""><?php echo $M_PLEASE_SELECT;?></option>
                             <?php foreach ($salaries as $value) :?>
                                 <option value="<?php echo $value['salary_id']?>" <?php if($value['salary_id'] == $jobseeker_data['salary']) {echo "selected";}?>><?php echo $value['salary_range']?></option>
                             <?php endforeach;?>
@@ -134,7 +136,7 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
                         <label>
                             <span><b><?php echo $M_NAME_EXPECTED_POSITION;?></b></span>                                               
                             <select name="js-expected-position">
-                                <option value="">Please select</option>
+                                <option value=""><?php echo $M_PLEASE_SELECT;?></option>
                             <?php foreach ($positions as $value) :?>
                                 <option value="<?php echo $value['position_id']?>" <?php if($value['position_id'] == $jobseeker_data['expected_position']) {echo "selected";}?>><?php echo $value['position_name']?></option>
                             <?php endforeach;?>
@@ -143,7 +145,7 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
                         <label>
                             <span><b><?php echo $M_NAME_EXPECTED_SALARY;?></b></span>						
                             <select name="js-expected-salary" required>
-                                <option value="">Please select</option>
+                                <option value=""><?php echo $M_PLEASE_SELECT;?></option>
                             <?php foreach ($salaries as $value) :?>
                                 <option value="<?php echo $value['salary_id']?>" <?php if($value['salary_id'] == $jobseeker_data['expected_salary']) {echo "selected";}?>><?php echo $value['salary_range']?></option>
                             <?php endforeach;?>
@@ -241,12 +243,15 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
                             
                     </div>
                 </div>
+                
+                <!--CAREER OBJECTIVE-->
                 <div class="jobseeker-messageArea" name="js-careerObjective" class="jobseeker-messageArea" rows="5" style="width: 100%">
                     <div class="jobseeker-title"><h4><?php echo $M_CAREER_OBJECTIVE;?></h4></div>
                     <p><label>Gợi ý: Mục tiêu ngắn hạn của bạn trong một vài năm tới, Mục tiêu dài hạn trong 5-10 năm tới</label></p>
                     <textarea name="js-careerObjective" id="jobseeker-experience" rows="5" style="width: 100%"><?php echo $jobseeker_data['career_objective'];?></textarea>
                 </div>
                     
+                <!--EXPERIENCE-->
                 <div class="jobseeker-messageArea" rows="5" style="width: 100%">
                     <div class="jobseeker-title">
                         <h4><?php echo $M_EXPERIENCE;?></h4>
@@ -256,18 +261,62 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
                     <textarea name="js-experience" id="jobseeker-experience" rows="5" style="width: 100%"><?php echo $jobseeker_data['experiences'];?></textarea>
                 </div>
                 <br><br>
-                    
+                   
+                <!--SKILLS-->
                 <div class="jobseeker-messageArea" style="width:100%">
                     <div class="jobseeker-title"><h4><?php echo $M_YOUR_SKILLS;?></h4></div>
                     <p><label>Gợi ý: Liệt kê những kỹ năng, khả năng nổi bật của bạn</label></p>
+                    <p><label>Ví dụ: </label></p>
+                    <p>- Kỹ năng liên quan chuyên môn </p>
+                    <p>- Kỹ năng về ngoại ngữ: tiếng Anh, Pháp, Trung v.v... </p>
+                    <p>- Kỹ năng về tin học: tin học văn phòng, ngôn ngữ lập trình, quản trị điều hành mạng v.v... </p>
+                    <p>- Kỹ năng giao tiếp, thuyết phục khách hàng v.v... </p>
+                    <p>- Khả năng nắm bắt công việc, làm việc theo nhóm, nghiên cứu tài liệu v.v... </p>
+                    <p>- Khả năng hòa nhập, thích nghi với môi trường, khả năng tư duy, thuyết trình v.v... </p>
+                    <p>- Mô tả phải có ít nhất 50 ký tự trở lên</p>
                     <textarea name="skills" style="width:100%" rows="5" ><?php echo $jobseeker_data['skills'];?></textarea>
                 </div>
-                <!--<strong><i><?php echo $LIST_ATTACHED;?>:</i></strong>-->  
+                <!--<strong><i><?php echo $LIST_ATTACHED;?>:</i></strong>-->                  
                 
-                <label class="col-md-6 js-forms">
-                    <span><b><?php echo $M_FACEBOOK_URL;?>: </b></span>
-                    <input type="text" name="js-facebookURL" value="<?php echo $jobseeker_data['facebook_URL'];?>">
-                </label>
+                <div class="row">
+                    <label class="col-md-8 js-forms">
+                        <span><b>Tin học văn phòng : </b></span>
+                        <section class="js-radioBoxes">
+                            <?php foreach ($skills as $skill) :?>
+                            <span><input type="radio" name="js-IT_skill" value="<?php echo $skill['skill_id']?>" required <?php if($skill['skill_id'] == $jobseeker_data['IT_skills']){echo "checked";}?>><?php echo $skill['name']?></span>
+                            <?php endforeach;?>
+                        </section>
+                    </label>
+                </div>
+                
+                <section class="row">
+                    <label class="col-md-8 js-forms">
+                        <span><b>Khả năng làm việc nhóm: </b></span>
+                        <section class="js-radioBoxes">
+                            <?php foreach ($skills as $skill) :?>
+                            <span><input type="radio" name="js-group_skill" value="<?php echo $skill['skill_id']?>" required <?php if($skill['skill_id'] == $jobseeker_data['group_skills']){echo "checked";}?>><?php echo $skill['name']?></span>
+                            <?php endforeach;?>
+                        </section>
+                    </label>
+                </section>
+                
+                <section class="row">
+                    <label class="col-md-8 js-forms">
+                        <span><b>Khả năng chịu áp lực: </b></span>
+                        <section class="js-radioBoxes">
+                            <?php foreach ($skills as $skill) :?>
+                            <span><input type="radio" name="js-pressure_skill" value="<?php echo $skill['skill_id']?>" required <?php if($skill['skill_id'] == $jobseeker_data['pressure_skill']){echo "checked";}?>><?php echo $skill['name']?></span>
+                            <?php endforeach;?>
+                        </section>
+                    </label>
+                </section>                
+                
+                <section class="row">
+                    <label class="col-md-8 js-forms">
+                        <span><b><?php echo $M_FACEBOOK_URL;?>: </b></span>
+                        <input type="text" name="js-facebookURL" value="<?php echo $jobseeker_data['facebook_URL'];?>">
+                    </label>
+                </section>
                     
             </div>            
         </div>
