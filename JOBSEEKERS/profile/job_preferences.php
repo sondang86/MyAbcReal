@@ -2,8 +2,9 @@
 if(!defined('IN_SCRIPT')) die("");
 global $db, $commonQueries, $jobseeker_profile, $locations, $categories,
 $job_types, $job_experience, $job_availability;
-$jobseeker_categories = $db->get_data('jobseeker_categories','', "WHERE jobseeker_id=". $jobseeker_profile[0]['id']);
-$jobseeker_locations = $db->get_data('jobseeker_locations','', "WHERE jobseeker_id=". $jobseeker_profile[0]['id']);
+$jobseeker_categories = $db->where('jobseeker_id', $jobseeker_profile['id'])->get('jobseeker_categories');
+$jobseeker_locations = $db->where('jobseeker_id', $jobseeker_profile['id'])->get('jobseeker_locations');
+
 
 //Get jobseeker selected categories names only
 foreach ($jobseeker_categories as $smallKey => $smallElement) {
@@ -33,6 +34,9 @@ foreach ($jobseeker_locations as $smallKey => $smallElement) {
     }
 }
 
+//$jobseeker_categories = $commonQueries->getJobseeker_categories($jobseeker_profile['jobseeker_id']);
+//$jobseeker_locations = $commonQueries->getJobseeker_locations($jobseeker_profile['jobseeker_id']);
+
 ?>
 
 
@@ -40,7 +44,7 @@ foreach ($jobseeker_locations as $smallKey => $smallElement) {
 <div class="fright">
 <?php 
     echo LinkTile("profile","edit",$EDIT_YOUR_PROFILE,"","green");
-    echo LinkTile("cv","description",$EDIT_YOUR_CV,"","yellow");
+    echo LinkTile("cv","resume_creator",$M_RESUME_CREATOR,"","green");
 ?>
 </div>
 
@@ -56,13 +60,13 @@ foreach ($jobseeker_locations as $smallKey => $smallElement) {
         
         //Sections update
         $data_input = array(
-            'profile_description' => $db->cleanData(filter_input(INPUT_POST, 'profile_description')),
+            'profile_description' => filter_input(INPUT_POST, 'profile_description', FILTER_SANITIZE_STRING),
             'job_type' => filter_input(INPUT_POST, 'job_type', FILTER_SANITIZE_NUMBER_INT),
             'experience' => filter_input(INPUT_POST, 'experience', FILTER_SANITIZE_NUMBER_INT),
             'availability' => filter_input(INPUT_POST, 'availability', FILTER_SANITIZE_NUMBER_INT)
         );
         
-        $db->where ('id', $jobseeker_profile[0]['id']);
+        $db->where ('id', $jobseeker_profile['id']);
         if ($db->update ('jobseekers', $data_input)){
             echo $db->count . ' records were updated';
         }
@@ -75,7 +79,7 @@ foreach ($jobseeker_locations as $smallKey => $smallElement) {
             //If user records exists, delete them
             $db->withTotalCount()->get('jobseeker_locations');
             if($db->totalCount !== "0"){            
-                $db->where('jobseeker_id', $jobseeker_profile[0]['id']);
+                $db->where('jobseeker_id', $jobseeker_profile['id']);
                 if($db->delete('jobseeker_locations')){
                     echo 'successfully deleted';
                 } else {
@@ -87,7 +91,7 @@ foreach ($jobseeker_locations as $smallKey => $smallElement) {
             foreach ($_POST['preferred_locations'] as $preferred_location) {
                 $location_data = array(
                     'location_id'   => $preferred_location,
-                    'jobseeker_id'  => $jobseeker_profile[0]['id']
+                    'jobseeker_id'  => $jobseeker_profile['id']
                 );
 
                 $id = $db->insert ('jobseeker_locations', $location_data);
@@ -105,7 +109,7 @@ foreach ($jobseeker_locations as $smallKey => $smallElement) {
             //If user records exists, delete them
             $db->withTotalCount()->get('jobseeker_categories');
             if($db->totalCount !== "0"){
-                $db->where('jobseeker_id', $jobseeker_profile[0]['id']);
+                $db->where('jobseeker_id', $jobseeker_profile['id']);
                 if($db->delete('jobseeker_categories')){
                     echo 'successfully deleted';
                 } else { //Problems when deleting
@@ -117,7 +121,7 @@ foreach ($jobseeker_locations as $smallKey => $smallElement) {
             foreach ($_POST['preferred_categories'] as $preferred_category) {
                 $category_data = array(
                     'category_id'   => $preferred_category,
-                    'jobseeker_id'  => $jobseeker_profile[0]['id']
+                    'jobseeker_id'  => $jobseeker_profile['id']
                 );
 
                 $id = $db->insert ('jobseeker_categories', $category_data);
@@ -143,7 +147,7 @@ foreach ($jobseeker_locations as $smallKey => $smallElement) {
                 Mô tả ngắn gọn những loại công việc mà bạn đang tìm kiếm:
             </span>
             <section class="col-md-12">
-                <textarea name="profile_description" class="fullWidth" required><?php echo $jobseeker_profile[0]['profile_description']?></textarea>
+                <textarea name="profile_description" class="fullWidth" required><?php echo $jobseeker_profile['profile_description']?></textarea>
             </section>
             <!--JOB SEEKING DESCRIPTION-->
         </div>
@@ -154,7 +158,7 @@ foreach ($jobseeker_locations as $smallKey => $smallElement) {
             <section class="col-md-9 col-sm-7 col-xs-12">
                 <select name="job_type">
                     <?php foreach ($job_types as $job_type):?>
-                    <option value="<?php echo $job_type['id']?>" <?php if($job_type['id'] == $jobseeker_profile[0]['job_type']){echo "selected";}?>><?php echo $job_type['job_name']?></option>
+                    <option value="<?php echo $job_type['id']?>" <?php if($job_type['id'] == $jobseeker_profile['job_type']){echo "selected";}?>><?php echo $job_type['job_name']?></option>
                     <?php endforeach;?>
                 </select>
             </section>
@@ -170,7 +174,7 @@ foreach ($jobseeker_locations as $smallKey => $smallElement) {
             <section class="col-md-9 col-sm-7 col-xs-12">
                 <select name="experience">
                     <?php foreach ($job_experience as $experience):?>
-                    <option value="<?php echo $experience['experience_id']?>" <?php if($experience['experience_id'] == $jobseeker_profile[0]['experience']){echo "selected";}?>><?php echo $experience['name']?></option>
+                    <option value="<?php echo $experience['experience_id']?>" <?php if($experience['experience_id'] == $jobseeker_profile['experience']){echo "selected";}?>><?php echo $experience['name']?></option>
                     <?php endforeach;?>
                 </select>
             </section>
@@ -185,7 +189,7 @@ foreach ($jobseeker_locations as $smallKey => $smallElement) {
             <section class="col-md-9 col-sm-7 col-xs-12">
                 <select name="availability">
                     <?php foreach ($job_availability as $availability):?>
-                    <option value="<?php echo $availability['availability_id']?>" <?php if($availability['availability_id'] == $jobseeker_profile[0]['availability']){echo "selected";}?>><?php echo $availability['availability']?></option>
+                    <option value="<?php echo $availability['availability_id']?>" <?php if($availability['availability_id'] == $jobseeker_profile['availability']){echo "selected";}?>><?php echo $availability['availability']?></option>
                     <?php endforeach;?>
                 </select>
             </section>

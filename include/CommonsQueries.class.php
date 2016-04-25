@@ -8,7 +8,9 @@
         private $_dbPrefix;
             
         public function __construct(MysqliDb $db) {
+            global $DBprefix;
             $this->_db = $db;
+            $this->_dbPrefix = $DBprefix;
         }
             
             
@@ -102,29 +104,28 @@
         *  @param var $limit limit the number of records to be appear
         */
         public function jobs_by_employerId($id="1", $limit=NULL) {
-            global $DBprefix;
             $selected_columns = array(
-                $DBprefix."jobs.id as job_id",$DBprefix."jobs.employer",$DBprefix."jobs.job_category",
-                $DBprefix."jobs.experience",$DBprefix."jobs.region",$DBprefix."jobs.title",$DBprefix."jobs.SEO_title",
-                $DBprefix."jobs.message",$DBprefix."jobs.active",$DBprefix."jobs.featured",
-                $DBprefix."jobs.job_type",$DBprefix."jobs.salary",$DBprefix."jobs.status",
-                $DBprefix."locations.City",$DBprefix."locations.City_en",
-                $DBprefix."categories.category_name_vi",$DBprefix."categories.category_name",
-                $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",
-                $DBprefix."salary.salary_range",$DBprefix."salary.salary_range_en",
-                $DBprefix."employers.id as employer_id",$DBprefix."employers.username as employer_username",
-                $DBprefix."employers.logo",$DBprefix."employers.company"
+                $this->_dbPrefix."jobs.id as job_id",$this->_dbPrefix."jobs.employer",$this->_dbPrefix."jobs.job_category",
+                $this->_dbPrefix."jobs.experience",$this->_dbPrefix."jobs.region",$this->_dbPrefix."jobs.title",$this->_dbPrefix."jobs.SEO_title",
+                $this->_dbPrefix."jobs.message",$this->_dbPrefix."jobs.active",$this->_dbPrefix."jobs.featured",
+                $this->_dbPrefix."jobs.job_type",$this->_dbPrefix."jobs.salary",$this->_dbPrefix."jobs.status",
+                $this->_dbPrefix."locations.City",$this->_dbPrefix."locations.City_en",
+                $this->_dbPrefix."categories.category_name_vi",$this->_dbPrefix."categories.category_name",
+                $this->_dbPrefix."job_types.job_name",$this->_dbPrefix."job_types.job_name_en",
+                $this->_dbPrefix."salary.salary_range",$this->_dbPrefix."salary.salary_range_en",
+                $this->_dbPrefix."employers.id as employer_id",$this->_dbPrefix."employers.username as employer_username",
+                $this->_dbPrefix."employers.logo",$this->_dbPrefix."employers.company"
             );
                 
-            $this->_db->join("categories", $DBprefix."jobs.job_category=".$DBprefix."categories.category_id", "LEFT");
-            $this->_db->join("job_types", $DBprefix."jobs.job_type=".$DBprefix."job_types.id", "LEFT");
-            $this->_db->join("salary", $DBprefix."jobs.salary=".$DBprefix."salary.salary_id", "LEFT");
-            $this->_db->join("locations", $DBprefix."jobs.region=".$DBprefix."locations.id", "LEFT");
-            $this->_db->join("employers", $DBprefix."jobs.employer=".$DBprefix."employers.username", "LEFT");
+            $this->_db->join("categories", $this->_dbPrefix."jobs.job_category=".$this->_dbPrefix."categories.category_id", "LEFT");
+            $this->_db->join("job_types", $this->_dbPrefix."jobs.job_type=".$this->_dbPrefix."job_types.id", "LEFT");
+            $this->_db->join("salary", $this->_dbPrefix."jobs.salary=".$this->_dbPrefix."salary.salary_id", "LEFT");
+            $this->_db->join("locations", $this->_dbPrefix."jobs.region=".$this->_dbPrefix."locations.id", "LEFT");
+            $this->_db->join("employers", $this->_dbPrefix."jobs.employer=".$this->_dbPrefix."employers.username", "LEFT");
                 
             //Find jobs by id if id not empty
             if(!empty($id)){
-                $this->_db->where ($DBprefix."employers.id", "$id");
+                $this->_db->where ($this->_dbPrefix."employers.id", "$id");
             }
                 
             $data = $this->_db->withTotalCount()->get("jobs", $limit, $selected_columns);
@@ -143,16 +144,15 @@
         *  @param var $limit limit the number of records to be appear
         */
         public function jobs_by_type($type="job_category", $limit=NULL) {
-            global $DBprefix;
             //Find jobs based on specific category
             $jobsInfo_columns = Array (
-                $DBprefix."jobs.id as job_id",$DBprefix."jobs.date", $DBprefix."jobs.employer", 
-                $DBprefix."jobs.job_category", $DBprefix."jobs.region", $DBprefix."jobs.title", $DBprefix."jobs.expires", //
-                $DBprefix."jobs.message", $DBprefix."jobs.job_type", $DBprefix."jobs.salary","jobsportal_jobs.applications", // Main table
-                $DBprefix."categories.category_name_vi",$DBprefix."categories.category_id", //Categories table
-                $DBprefix."salary.salary_id",$DBprefix."salary.salary_range", //Salary table
-                $DBprefix."locations.City",$DBprefix."locations.id as location_id", //Locations table
-                $DBprefix."employers.id as employer_id",$DBprefix."employers.company as company",$DBprefix."employers.logo as company_logo" //Employer table
+                $this->_dbPrefix."jobs.id as job_id",$this->_dbPrefix."jobs.date", $this->_dbPrefix."jobs.employer", 
+                $this->_dbPrefix."jobs.job_category", $this->_dbPrefix."jobs.region", $this->_dbPrefix."jobs.title", $this->_dbPrefix."jobs.expires", //
+                $this->_dbPrefix."jobs.message", $this->_dbPrefix."jobs.job_type", $this->_dbPrefix."jobs.salary","jobsportal_jobs.applications", // Main table
+                $this->_dbPrefix."categories.category_name_vi",$this->_dbPrefix."categories.category_id", //Categories table
+                $this->_dbPrefix."salary.salary_id",$this->_dbPrefix."salary.salary_range", //Salary table
+                $this->_dbPrefix."locations.City",$this->_dbPrefix."locations.id as location_id", //Locations table
+                $this->_dbPrefix."employers.id as employer_id",$this->_dbPrefix."employers.company as company",$this->_dbPrefix."employers.logo as company_logo" //Employer table
                 );
             $this->_db->join('categories', "jobsportal_jobs.job_category = jobsportal_categories.category_id", "LEFT");
             $this->_db->join('salary', "jobsportal_jobs.salary = jobsportal_salary.salary_id", "LEFT");
@@ -174,31 +174,30 @@
         *  @param var $limit limit the number of records to be appear
         */
         public function jobs_by_keywords($queryString="",$category="",$location="", $limit=NULL, $userId_cookie=""){
-            global $DBprefix;
             $jobsInfo_columns = Array (
-                $DBprefix."jobs.id as job_id",$DBprefix."jobs.date", $DBprefix."jobs.employer",
-                $DBprefix."jobs.SEO_title",$DBprefix."jobs.job_category", 
-                $DBprefix."jobs.region",$DBprefix."jobs.featured",
-                $DBprefix."jobs.title", $DBprefix."jobs.expires", //
-                $DBprefix."jobs.message", $DBprefix."jobs.job_type", 
-                $DBprefix."jobs.salary",$DBprefix."jobs.applications", // Main table
-                $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",
-                $DBprefix."categories.category_name_vi",$DBprefix."categories.category_id", //Categories table
-                $DBprefix."salary.salary_id",$DBprefix."salary.salary_range", //Salary table
-                $DBprefix."locations.City",$DBprefix."locations.id as location_id", //Locations table
-                $DBprefix."employers.id as employer_id",$DBprefix."employers.company as company",$DBprefix."employers.logo as company_logo", //Employer table
-                $DBprefix."saved_jobs.user_type as saved_job_userType",$DBprefix."saved_jobs.date as saved_jobDate",
-                $DBprefix."saved_jobs.browser", $DBprefix."saved_jobs.IPAddress",  
-                $DBprefix."saved_jobs.user_uniqueId as user_uniqueId",$DBprefix."saved_jobs.job_id as saved_jobId"//saved jobs table
+                $this->_dbPrefix."jobs.id as job_id",$this->_dbPrefix."jobs.date", $this->_dbPrefix."jobs.employer",
+                $this->_dbPrefix."jobs.SEO_title",$this->_dbPrefix."jobs.job_category", 
+                $this->_dbPrefix."jobs.region",$this->_dbPrefix."jobs.featured",
+                $this->_dbPrefix."jobs.title", $this->_dbPrefix."jobs.expires", //
+                $this->_dbPrefix."jobs.message", $this->_dbPrefix."jobs.job_type", 
+                $this->_dbPrefix."jobs.salary",$this->_dbPrefix."jobs.applications", // Main table
+                $this->_dbPrefix."job_types.job_name",$this->_dbPrefix."job_types.job_name_en",
+                $this->_dbPrefix."categories.category_name_vi",$this->_dbPrefix."categories.category_id", //Categories table
+                $this->_dbPrefix."salary.salary_id",$this->_dbPrefix."salary.salary_range", //Salary table
+                $this->_dbPrefix."locations.City",$this->_dbPrefix."locations.id as location_id", //Locations table
+                $this->_dbPrefix."employers.id as employer_id",$this->_dbPrefix."employers.company as company",$this->_dbPrefix."employers.logo as company_logo", //Employer table
+                $this->_dbPrefix."saved_jobs.user_type as saved_job_userType",$this->_dbPrefix."saved_jobs.date as saved_jobDate",
+                $this->_dbPrefix."saved_jobs.browser", $this->_dbPrefix."saved_jobs.IPAddress",  
+                $this->_dbPrefix."saved_jobs.user_uniqueId as user_uniqueId",$this->_dbPrefix."saved_jobs.job_id as saved_jobId"//saved jobs table
             );
-            $this->_db->join('categories', $DBprefix."jobs.job_category =".$DBprefix."categories.category_id", "LEFT");
-            $this->_db->join('salary', $DBprefix."jobs.salary = ".$DBprefix."salary.salary_id", "LEFT");
-            $this->_db->join('job_types', $DBprefix."jobs.job_type = ".$DBprefix."job_types.id", "LEFT");
-            $this->_db->join('locations', $DBprefix."jobs.region = ".$DBprefix."locations.id", "LEFT");
-            $this->_db->join('employers', $DBprefix."jobs.employer = ".$DBprefix."employers.username", "LEFT");
-            $this->_db->join('saved_jobs', $DBprefix."jobs.id = ".$DBprefix."saved_jobs.job_id AND "
-                    .$DBprefix."saved_jobs.user_uniqueId = '$userId_cookie' AND "
-                    .$DBprefix."saved_jobs.IPAddress = '".filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP)."' ", "LEFT");
+            $this->_db->join('categories', $this->_dbPrefix."jobs.job_category =".$this->_dbPrefix."categories.category_id", "LEFT");
+            $this->_db->join('salary', $this->_dbPrefix."jobs.salary = ".$this->_dbPrefix."salary.salary_id", "LEFT");
+            $this->_db->join('job_types', $this->_dbPrefix."jobs.job_type = ".$this->_dbPrefix."job_types.id", "LEFT");
+            $this->_db->join('locations', $this->_dbPrefix."jobs.region = ".$this->_dbPrefix."locations.id", "LEFT");
+            $this->_db->join('employers', $this->_dbPrefix."jobs.employer = ".$this->_dbPrefix."employers.username", "LEFT");
+            $this->_db->join('saved_jobs', $this->_dbPrefix."jobs.id = ".$this->_dbPrefix."saved_jobs.job_id AND "
+                    .$this->_dbPrefix."saved_jobs.user_uniqueId = '$userId_cookie' AND "
+                    .$this->_dbPrefix."saved_jobs.IPAddress = '".filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP)."' ", "LEFT");
                         
             //Check conditions
             if(!empty($queryString)){
@@ -390,33 +389,32 @@
         *  @param var $day the last days range where you want to retrieve
         */
         public function getSavedJobs($day="1") {
-            global $DBprefix;
             $jobsInfo_columns = Array (
-                $DBprefix."jobs.id as job_id",$DBprefix."jobs.date", $DBprefix."jobs.employer",
-                $DBprefix."jobs.SEO_title",$DBprefix."jobs.job_category", 
-                $DBprefix."jobs.region",$DBprefix."jobs.featured",
-                $DBprefix."jobs.title", $DBprefix."jobs.expires", //
-                $DBprefix."jobs.message", $DBprefix."jobs.job_type", 
-                $DBprefix."jobs.salary",$DBprefix."jobs.applications", // Main table
-                $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",
-                $DBprefix."categories.category_name_vi",$DBprefix."categories.category_id", //Categories table
-                $DBprefix."salary.salary_id",$DBprefix."salary.salary_range", //Salary table
-                $DBprefix."locations.City",$DBprefix."locations.id as location_id", //Locations table
-                $DBprefix."employers.id as employer_id",$DBprefix."employers.company as company",$DBprefix."employers.logo as company_logo", //Employer table
-                $DBprefix."saved_jobs.job_id as saved_jobId",$DBprefix."saved_jobs.user_type as saved_job_userType",
-                $DBprefix."saved_jobs.date as saved_jobDate",$DBprefix."saved_jobs.user_uniqueId as user_uniqueId" //saved jobs table
+                $this->_dbPrefix."jobs.id as job_id",$this->_dbPrefix."jobs.date", $this->_dbPrefix."jobs.employer",
+                $this->_dbPrefix."jobs.SEO_title",$this->_dbPrefix."jobs.job_category", 
+                $this->_dbPrefix."jobs.region",$this->_dbPrefix."jobs.featured",
+                $this->_dbPrefix."jobs.title", $this->_dbPrefix."jobs.expires", //
+                $this->_dbPrefix."jobs.message", $this->_dbPrefix."jobs.job_type", 
+                $this->_dbPrefix."jobs.salary",$this->_dbPrefix."jobs.applications", // Main table
+                $this->_dbPrefix."job_types.job_name",$this->_dbPrefix."job_types.job_name_en",
+                $this->_dbPrefix."categories.category_name_vi",$this->_dbPrefix."categories.category_id", //Categories table
+                $this->_dbPrefix."salary.salary_id",$this->_dbPrefix."salary.salary_range", //Salary table
+                $this->_dbPrefix."locations.City",$this->_dbPrefix."locations.id as location_id", //Locations table
+                $this->_dbPrefix."employers.id as employer_id",$this->_dbPrefix."employers.company as company",$this->_dbPrefix."employers.logo as company_logo", //Employer table
+                $this->_dbPrefix."saved_jobs.job_id as saved_jobId",$this->_dbPrefix."saved_jobs.user_type as saved_job_userType",
+                $this->_dbPrefix."saved_jobs.date as saved_jobDate",$this->_dbPrefix."saved_jobs.user_uniqueId as user_uniqueId" //saved jobs table
             );
                 
-            $this->_db->join('categories', $DBprefix."jobs.job_category =".$DBprefix."categories.category_id", "LEFT");
-            $this->_db->join('salary', $DBprefix."jobs.salary = ".$DBprefix."salary.salary_id", "LEFT");
-            $this->_db->join('job_types', $DBprefix."jobs.job_type = ".$DBprefix."job_types.id", "LEFT");
-            $this->_db->join('locations', $DBprefix."jobs.region = ".$DBprefix."locations.id", "LEFT");
-            $this->_db->join('employers', $DBprefix."jobs.employer = ".$DBprefix."employers.username", "LEFT");
-            $this->_db->join('saved_jobs', $DBprefix."jobs.id = ".$DBprefix."saved_jobs.job_id", "LEFT");
+            $this->_db->join('categories', $this->_dbPrefix."jobs.job_category =".$this->_dbPrefix."categories.category_id", "LEFT");
+            $this->_db->join('salary', $this->_dbPrefix."jobs.salary = ".$this->_dbPrefix."salary.salary_id", "LEFT");
+            $this->_db->join('job_types', $this->_dbPrefix."jobs.job_type = ".$this->_dbPrefix."job_types.id", "LEFT");
+            $this->_db->join('locations', $this->_dbPrefix."jobs.region = ".$this->_dbPrefix."locations.id", "LEFT");
+            $this->_db->join('employers', $this->_dbPrefix."jobs.employer = ".$this->_dbPrefix."employers.username", "LEFT");
+            $this->_db->join('saved_jobs', $this->_dbPrefix."jobs.id = ".$this->_dbPrefix."saved_jobs.job_id", "LEFT");
                 
             //Get user saved jobs in the last 1 days
             //http://dba.stackexchange.com/questions/97211/get-rows-where-lastlogintimestamp-is-in-last-7-days
-            $data['saved_jobs'] = $this->_db->where($DBprefix."saved_jobs.date >= CAST(UNIX_TIMESTAMP(NOW() - INTERVAL $day DAY) AS CHAR(10))")//http://dba.stackexchange.com/questions/97211/get-rows-where-lastlogintimestamp-is-in-last-7-days
+            $data['saved_jobs'] = $this->_db->where($this->_dbPrefix."saved_jobs.date >= CAST(UNIX_TIMESTAMP(NOW() - INTERVAL $day DAY) AS CHAR(10))")//http://dba.stackexchange.com/questions/97211/get-rows-where-lastlogintimestamp-is-in-last-7-days
             ->where("user_uniqueId",filter_input(INPUT_COOKIE,'userId', FILTER_SANITIZE_STRING))
             ->where("IPAddress", filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP))
             ->withTotalCount()->get("jobs", NULL, $jobsInfo_columns);
@@ -449,34 +447,33 @@
         */
             
        public function jobDetails($id, $userId_cookie=""){
-           global $DBprefix;
            $columns = array(
-                $DBprefix."jobs.id as job_id",$DBprefix."jobs.job_category",
-                $DBprefix."jobs.applications",$DBprefix."jobs.employer",
-                $DBprefix."jobs.title",$DBprefix."jobs.SEO_title",$DBprefix."jobs.date as date",
-                $DBprefix."jobs.message",$DBprefix."employers.company",$DBprefix."employers.logo",$DBprefix."employers.id as employer_id",
-                $DBprefix."categories.category_name_vi",$DBprefix."categories.category_name",$DBprefix."categories.id as category_id",
-                $DBprefix."locations.City",$DBprefix."locations.City_en",$DBprefix."locations.id as location_id",
-                $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",
-                $DBprefix."job_experience.name as experience_name",$DBprefix."job_experience.name_en as experience_name_en",
-                $DBprefix."salary.salary_range",$DBprefix."salary.salary_range_en",
-                $DBprefix."saved_jobs.user_type as saved_job_userType",$DBprefix."saved_jobs.date as saved_jobDate",
-                $DBprefix."saved_jobs.browser", $DBprefix."saved_jobs.IPAddress",  
-                $DBprefix."saved_jobs.user_uniqueId as user_uniqueId",$DBprefix."saved_jobs.job_id as saved_jobId"//saved jobs table
+                $this->_dbPrefix."jobs.id as job_id",$this->_dbPrefix."jobs.job_category",
+                $this->_dbPrefix."jobs.applications",$this->_dbPrefix."jobs.employer",
+                $this->_dbPrefix."jobs.title",$this->_dbPrefix."jobs.SEO_title",$this->_dbPrefix."jobs.date as date",
+                $this->_dbPrefix."jobs.message",$this->_dbPrefix."employers.company",$this->_dbPrefix."employers.logo",$this->_dbPrefix."employers.id as employer_id",
+                $this->_dbPrefix."categories.category_name_vi",$this->_dbPrefix."categories.category_name",$this->_dbPrefix."categories.id as category_id",
+                $this->_dbPrefix."locations.City",$this->_dbPrefix."locations.City_en",$this->_dbPrefix."locations.id as location_id",
+                $this->_dbPrefix."job_types.job_name",$this->_dbPrefix."job_types.job_name_en",
+                $this->_dbPrefix."job_experience.name as experience_name",$this->_dbPrefix."job_experience.name_en as experience_name_en",
+                $this->_dbPrefix."salary.salary_range",$this->_dbPrefix."salary.salary_range_en",
+                $this->_dbPrefix."saved_jobs.user_type as saved_job_userType",$this->_dbPrefix."saved_jobs.date as saved_jobDate",
+                $this->_dbPrefix."saved_jobs.browser", $this->_dbPrefix."saved_jobs.IPAddress",  
+                $this->_dbPrefix."saved_jobs.user_uniqueId as user_uniqueId",$this->_dbPrefix."saved_jobs.job_id as saved_jobId"//saved jobs table
             );
                 
-            $this->_db->join("employers", $DBprefix."jobs.employer=".$DBprefix."employers.username", "LEFT");
-            $this->_db->join("categories", $DBprefix."jobs.job_category=".$DBprefix."categories.category_id", "LEFT");
-            $this->_db->join("locations", $DBprefix."jobs.region=".$DBprefix."locations.id", "LEFT");
-            $this->_db->join("job_types", $DBprefix."jobs.job_type=".$DBprefix."job_types.id", "LEFT");
-            $this->_db->join("job_experience", $DBprefix."jobs.experience=".$DBprefix."job_experience.experience_id", "LEFT");
-            $this->_db->join("salary", $DBprefix."jobs.salary=".$DBprefix."salary.salary_id", "LEFT");
-            $this->_db->join('saved_jobs', $DBprefix."jobs.id = ".$DBprefix."saved_jobs.job_id AND "
-                    .$DBprefix."saved_jobs.user_uniqueId = '$userId_cookie' AND "
-                    .$DBprefix."saved_jobs.IPAddress = '".filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP)."' ", "LEFT");
+            $this->_db->join("employers", $this->_dbPrefix."jobs.employer=".$this->_dbPrefix."employers.username", "LEFT");
+            $this->_db->join("categories", $this->_dbPrefix."jobs.job_category=".$this->_dbPrefix."categories.category_id", "LEFT");
+            $this->_db->join("locations", $this->_dbPrefix."jobs.region=".$this->_dbPrefix."locations.id", "LEFT");
+            $this->_db->join("job_types", $this->_dbPrefix."jobs.job_type=".$this->_dbPrefix."job_types.id", "LEFT");
+            $this->_db->join("job_experience", $this->_dbPrefix."jobs.experience=".$this->_dbPrefix."job_experience.experience_id", "LEFT");
+            $this->_db->join("salary", $this->_dbPrefix."jobs.salary=".$this->_dbPrefix."salary.salary_id", "LEFT");
+            $this->_db->join('saved_jobs', $this->_dbPrefix."jobs.id = ".$this->_dbPrefix."saved_jobs.job_id AND "
+                    .$this->_dbPrefix."saved_jobs.user_uniqueId = '$userId_cookie' AND "
+                    .$this->_dbPrefix."saved_jobs.IPAddress = '".filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP)."' ", "LEFT");
                         
-            $this->_db->where($DBprefix."jobs.id", $id);
-            $this->_db->where($DBprefix."jobs.status", "1");
+            $this->_db->where($this->_dbPrefix."jobs.id", $id);
+            $this->_db->where($this->_dbPrefix."jobs.status", "1");
                 
                 
             $job_details = $this->_db->withTotalCount()->get("jobs", NULL,$columns);
@@ -499,22 +496,20 @@
          */
              
         public function getQuestionnaire($job_id, $username="", $questionnaire_id="", $getall=TRUE){
-            global $DBprefix;
-                
             //Fetch questionnaire data
             $columns = array(
-                $DBprefix."questionnaire.id as questionnaire_id",$DBprefix."questionnaire.employer",
-                $DBprefix."questionnaire.job_id",$DBprefix."questionnaire.question",
-                $DBprefix."questionnaire.question_type",$DBprefix."questionnaire.date",
-                $DBprefix."questionnaire_type.name as questionnaire_typeName",
-                $DBprefix."questionnaire_type.name_en as questionnaire_typeName_en",
+                $this->_dbPrefix."questionnaire.id as questionnaire_id",$this->_dbPrefix."questionnaire.employer",
+                $this->_dbPrefix."questionnaire.job_id",$this->_dbPrefix."questionnaire.question",
+                $this->_dbPrefix."questionnaire.question_type",$this->_dbPrefix."questionnaire.date",
+                $this->_dbPrefix."questionnaire_type.name as questionnaire_typeName",
+                $this->_dbPrefix."questionnaire_type.name_en as questionnaire_typeName_en",
             );
-            $this->_db->join("questionnaire_type", $DBprefix."questionnaire.question_type =".$DBprefix."questionnaire_type.questionnaire_type", "LEFT");
+            $this->_db->join("questionnaire_type", $this->_dbPrefix."questionnaire.question_type =".$this->_dbPrefix."questionnaire_type.questionnaire_type", "LEFT");
             
             $this->_db->where('job_id', $job_id);
             
             if ($questionnaire_id !== ""){ 
-                $this->_db->where($DBprefix.'questionnaire.id', $questionnaire_id);
+                $this->_db->where($this->_dbPrefix.'questionnaire.id', $questionnaire_id);
             }
             
             if ($username !== ""){ 
@@ -542,23 +537,22 @@
          */
              
         public function getQuestionnaireQuestions($questionnaire_id, $job_id){
-            global $DBprefix;
             //Fetch questionnaire data
              $columns = array(
-                 $DBprefix."questionnaire_questions.id as questionsId",
-                 $DBprefix."questionnaire_questions.question_ask",
-                 $DBprefix."questionnaire_questions.questionnaire_id",
-                 $DBprefix."questionnaire_questions.employer",
-                 $DBprefix."questionnaire_questions.job_id as questions_jobId",
-                 $DBprefix."questionnaire.id as questionnaireId",
-                 $DBprefix."questionnaire.question as questionnaireQuestion",
-                 $DBprefix."questionnaire.question_type",$DBprefix."questionnaire.date",
+                 $this->_dbPrefix."questionnaire_questions.id as questionsId",
+                 $this->_dbPrefix."questionnaire_questions.question_ask",
+                 $this->_dbPrefix."questionnaire_questions.questionnaire_id",
+                 $this->_dbPrefix."questionnaire_questions.employer",
+                 $this->_dbPrefix."questionnaire_questions.job_id as questions_jobId",
+                 $this->_dbPrefix."questionnaire.id as questionnaireId",
+                 $this->_dbPrefix."questionnaire.question as questionnaireQuestion",
+                 $this->_dbPrefix."questionnaire.question_type",$this->_dbPrefix."questionnaire.date",
              );
              $this->_db->join("questionnaire",
-                     $DBprefix."questionnaire_questions.questionnaire_id =".$DBprefix."questionnaire.id AND "
-                     .$DBprefix."questionnaire_questions.job_id = ".$DBprefix."questionnaire.job_id", "LEFT");
-             $data = $this->_db->where($DBprefix."questionnaire_questions.job_id", $job_id)
-                     ->where($DBprefix."questionnaire_questions.questionnaire_id", $questionnaire_id)
+                     $this->_dbPrefix."questionnaire_questions.questionnaire_id =".$this->_dbPrefix."questionnaire.id AND "
+                     .$this->_dbPrefix."questionnaire_questions.job_id = ".$this->_dbPrefix."questionnaire.job_id", "LEFT");
+             $data = $this->_db->where($this->_dbPrefix."questionnaire_questions.job_id", $job_id)
+                     ->where($this->_dbPrefix."questionnaire_questions.questionnaire_id", $questionnaire_id)
                      ->withTotalCount()->get('questionnaire_questions', NULL, $columns);
                  
              if ($this->_db->totalCount > 0) {
@@ -692,30 +686,29 @@
         * 
         */
         public function jobs_by_username($username, $limit=NULL){
-            global $DBprefix;
             $selected_columns = array(
-                $DBprefix."jobs.id as job_id",$DBprefix."jobs.employer",$DBprefix."jobs.job_category",
-                $DBprefix."jobs.experience",$DBprefix."jobs.region",$DBprefix."jobs.title",$DBprefix."jobs.SEO_title",
-                $DBprefix."jobs.message",$DBprefix."jobs.active",$DBprefix."jobs.featured",
-                $DBprefix."jobs.job_type",$DBprefix."jobs.salary",$DBprefix."jobs.status",
-                $DBprefix."locations.City",$DBprefix."locations.City_en",
-                $DBprefix."categories.category_name_vi",$DBprefix."categories.category_name",
-                $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",
-                $DBprefix."salary.salary_range",$DBprefix."salary.salary_range_en",
-                $DBprefix."employers.id as employer_id",$DBprefix."employers.username as employer_username",
-                $DBprefix."employers.logo",$DBprefix."employers.company",
-                $DBprefix."questionnaire.id as questionnaire_id",
+                $this->_dbPrefix."jobs.id as job_id",$this->_dbPrefix."jobs.employer",$this->_dbPrefix."jobs.job_category",
+                $this->_dbPrefix."jobs.experience",$this->_dbPrefix."jobs.region",$this->_dbPrefix."jobs.title",$this->_dbPrefix."jobs.SEO_title",
+                $this->_dbPrefix."jobs.message",$this->_dbPrefix."jobs.active",$this->_dbPrefix."jobs.featured",
+                $this->_dbPrefix."jobs.job_type",$this->_dbPrefix."jobs.salary",$this->_dbPrefix."jobs.status",
+                $this->_dbPrefix."locations.City",$this->_dbPrefix."locations.City_en",
+                $this->_dbPrefix."categories.category_name_vi",$this->_dbPrefix."categories.category_name",
+                $this->_dbPrefix."job_types.job_name",$this->_dbPrefix."job_types.job_name_en",
+                $this->_dbPrefix."salary.salary_range",$this->_dbPrefix."salary.salary_range_en",
+                $this->_dbPrefix."employers.id as employer_id",$this->_dbPrefix."employers.username as employer_username",
+                $this->_dbPrefix."employers.logo",$this->_dbPrefix."employers.company",
+                $this->_dbPrefix."questionnaire.id as questionnaire_id",
             );
                 
-            $this->_db->join("categories", $DBprefix."jobs.job_category=".$DBprefix."categories.category_id", "LEFT");
-            $this->_db->join("job_types", $DBprefix."jobs.job_type=".$DBprefix."job_types.id", "LEFT");
-            $this->_db->join("salary", $DBprefix."jobs.salary=".$DBprefix."salary.salary_id", "LEFT");
-            $this->_db->join("locations", $DBprefix."jobs.region=".$DBprefix."locations.id", "LEFT");
-            $this->_db->join("employers", $DBprefix."jobs.employer=".$DBprefix."employers.username", "LEFT");
-            $this->_db->join("questionnaire", $DBprefix."jobs.id=".$DBprefix."questionnaire.job_id AND "
-                            .$DBprefix."jobs.employer=".$DBprefix."questionnaire.employer", "LEFT"); 
+            $this->_db->join("categories", $this->_dbPrefix."jobs.job_category=".$this->_dbPrefix."categories.category_id", "LEFT");
+            $this->_db->join("job_types", $this->_dbPrefix."jobs.job_type=".$this->_dbPrefix."job_types.id", "LEFT");
+            $this->_db->join("salary", $this->_dbPrefix."jobs.salary=".$this->_dbPrefix."salary.salary_id", "LEFT");
+            $this->_db->join("locations", $this->_dbPrefix."jobs.region=".$this->_dbPrefix."locations.id", "LEFT");
+            $this->_db->join("employers", $this->_dbPrefix."jobs.employer=".$this->_dbPrefix."employers.username", "LEFT");
+            $this->_db->join("questionnaire", $this->_dbPrefix."jobs.id=".$this->_dbPrefix."questionnaire.job_id AND "
+                            .$this->_dbPrefix."jobs.employer=".$this->_dbPrefix."questionnaire.employer", "LEFT"); 
             
-            $this->_db->where ($DBprefix."jobs.employer", "$username");
+            $this->_db->where ($this->_dbPrefix."jobs.employer", "$username");
                 
             $data = $this->_db->withTotalCount()->get("jobs", $limit, $selected_columns);
                 
@@ -837,5 +830,87 @@
              echo "Query execution time in ". $msc_new . ' seconds'; // in seconds
          //    echo ($msc * 1000) . ' milliseconds'; // in millseconds
         }
+        
+        
+        /**
+        * A simple function that get jobseeker desired categories
+        * 
+        * @access public
+        * @param jobseeker_id jobseeker id
+        * 
+        *         
+        */        
+        public function getJobseeker_categories($jobseeker_id){
+            $this->_db->join("categories", $this->_dbPrefix."jobseeker_categories.category_id=".$this->_dbPrefix."categories.id", "LEFT");
+            $jobseeker_categories = $this->_db->withTotalCount()->where('jobseeker_id', $jobseeker_id)->get('jobseeker_categories');
+            return $jobseeker_categories;
+        }
+        
+        
+        /**
+        * A simple function that get jobseeker desired locations
+        * 
+        * @access public
+        * @param jobseeker_id jobseeker id
+        * 
+        *         
+        */        
+        public function getJobseeker_locations($jobseeker_id){
+            $this->_db->join("locations", $this->_dbPrefix."jobseeker_locations.location_id=".$this->_dbPrefix."locations.id", "LEFT");
+            $jobseeker_locations = $this->_db->withTotalCount()->where('jobseeker_id', $jobseeker_id)->get('jobseeker_locations');
+            if($this->_db->totalCount > 0){
+                return $jobseeker_locations;
+            } else {
+                return FALSE;
+            }
+        }
+        
+        /**
+        * A function that get jobseeker profile details
+        * 
+        * @access public
+        * @param username username/email to be search
+        *         
+        */        
+        public function getJobseeker_profile($username){
+            $selected_columns = array(
+                $this->_dbPrefix."jobseekers.id as jobseeker_id",$this->_dbPrefix."jobseekers.username",
+                $this->_dbPrefix."jobseekers.first_name",$this->_dbPrefix."jobseekers.last_name",
+                $this->_dbPrefix."jobseekers.address",$this->_dbPrefix."jobseekers.phone",
+                $this->_dbPrefix."jobseekers.description",$this->_dbPrefix."jobseekers.profile_pic",
+                $this->_dbPrefix."jobseekers.profile_description",$this->_dbPrefix."jobseekers.profile_description",
+                $this->_dbPrefix."marital_status.name as marital_status_name",$this->_dbPrefix."marital_status.name_en as marital_status_name_en",
+                $this->_dbPrefix."gender.name as gender_name",$this->_dbPrefix."gender.name_en as gender_name_en"
+            );
+
+            $this->_db->join("marital_status", $this->_dbPrefix."jobseekers.marital_status=".$this->_dbPrefix."marital_status.marital_id", "LEFT");
+            $this->_db->join("gender", $this->_dbPrefix."jobseekers.gender=".$this->_dbPrefix."gender.gender_id", "LEFT");
+            $jobseeker_profile = $this->_db->where('username', "$username")->getOne('jobseekers', $selected_columns);
+            
+            return $jobseeker_profile;
+        }
+        
+        
+        /**
+        * A function that get jobseeker profile details
+        * 
+        * @access public
+        * @param table table to be selected
+        *         
+        */        
+        public function getCommonTables($table){
+            $data['positions'] = $this->_db->get('positions');
+            $data['salaries'] = $this->_db->get('salary');
+            $data['categories'] = $this->_db->get('categories');
+            $data['education'] = $this->_db->get('education');
+            $data['job_types'] = $this->_db->get('job_types');
+            $data['locations'] = $this->_db->get('locations');
+            $data['languages'] = $this->_db->get('languages');
+            $data['language_levels'] = $this->_db->get('language_levels');
+            $data['skills'] = $this->_db->get('skills');
+            
+            return $data[$table];
+        }
+        
     }
 ?>

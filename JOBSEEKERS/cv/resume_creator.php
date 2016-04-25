@@ -7,6 +7,7 @@
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
 global $db, $commonQueries;
+
 $positions = $db->get('positions');
 $salaries = $db->get('salary');
 $categories = $db->get('categories');
@@ -16,28 +17,15 @@ $locations = $db->get('locations');
 $languages = $db->get('languages');
 $language_levels = $db->get('language_levels');
 $skills = $db->get('skills');
+
 //Get the current jobseeker data
 $jobseeker_data = $db->where('username', "$AuthUserName")->getOne('jobseeker_resumes');
+    
+//Get the jobseeker profile data
+$jobseeker_profile = $commonQueries->getJobseeker_profile($AuthUserName);
+$jobseeker_categories = $commonQueries->getJobseeker_categories($jobseeker_profile['jobseeker_id']);
+$jobseeker_locations = $commonQueries->getJobseeker_locations($jobseeker_profile['jobseeker_id']);
 
-//Jobseeker profile data
-$selected_columns = array(
-    $DBprefix."jobseekers.id as jobseeker_id",$DBprefix."jobseekers.username",
-    $DBprefix."jobseekers.first_name",$DBprefix."jobseekers.last_name",
-    $DBprefix."jobseekers.address",$DBprefix."jobseekers.phone",
-    $DBprefix."jobseekers.description",$DBprefix."jobseekers.profile_pic",
-    $DBprefix."jobseekers.profile_description",$DBprefix."jobseekers.profile_description",
-    $DBprefix."marital_status.name as marital_status_name",$DBprefix."marital_status.name_en as marital_status_name_en",
-    $DBprefix."gender.name as gender_name",$DBprefix."gender.name_en as gender_name_en"
-);
-
-$db->join("marital_status", $DBprefix."jobseekers.marital_status=".$DBprefix."marital_status.marital_id", "LEFT");
-$db->join("gender", $DBprefix."jobseekers.gender=".$DBprefix."gender.gender_id", "LEFT");
-$jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers', $selected_columns);
-
-//echo "<pre>";
-//print_r($jobseeker_profile);
-//echo "</pre>";
-       
     if(isset($_POST["ProceedSaveResume"])){
         
         if($database->SQLCount("jobseeker_resumes","WHERE username='".$AuthUserName."'") == 0){
@@ -76,20 +64,18 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
         } else {
             echo 'update failed: ' . $db->getLastError();die;
         }
-    }        
-       
-
-        
-    ?>
+    } 
+?>
 <style>
     .navmenu a {
         float: right;
     }
 </style>
+
 <nav class="row">
     <section class="col-md-9"><h4><?php $commonQueries->flash('message');?></h4></section>
     <section class="col-md-3 navmenu">
-        <?php echo LinkTile("cv","description",$M_GO_BACK,"","red");?>                                                    
+        <?php echo LinkTile("profile","current",$M_GO_BACK,"","red");?>                                                    
     </section>
 </nav>        
     
@@ -113,8 +99,20 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
                 <a href="index.php?category=profile&action=current">Sửa thông tin cá nhân</a>
             </section>
             <div class="col-md-12 jobseeker-main">
+                <div class="row jobseeker-title">
+                    <section class="col-md-6 col-sm-6 col-xs-12 js-forms">
+                        <label>
+                            <span><b>Tiêu đề hồ sơ (*): </b></span>
+                            <input type="text" name="js-title" title="">
+                            <p><label>Ví dụ: Giám đốc kinh doanh, nhân viên marketing, nhân viên bán hàng v.v...</label></p>
+                        </label>
+                    </section>
+                </div>
+                    
                 <div class="row jobseeker-mainTitle">
                     <div class="col-md-6 col-sm-6 col-xs-12 js-forms">
+                        
+                        <!--CURRENT POSITION-->
                         <label>
                             <span><b><?php echo $M_CURRENT_POSITION;?></b></span>                            
                             <select name="js-current-position" required>
@@ -124,6 +122,8 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
                                 <?php endforeach;?>
                             </select>
                         </label>
+                            
+                        <!--CURRENT SALARY-->
                         <label>
                             <span><b><?php echo $M_SALARY;?></b></span>						
                             <select name="js-salary" required>
@@ -133,6 +133,8 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
                             <?php endforeach;?>
                             </select>            
                         </label>
+                        
+                        <!--EXPECTED POSITION-->
                         <label>
                             <span><b><?php echo $M_NAME_EXPECTED_POSITION;?></b></span>                                               
                             <select name="js-expected-position">
@@ -142,6 +144,8 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
                             <?php endforeach;?>
                             </select>
                         </label>
+                        
+                        <!--EXPECTED SALARY-->
                         <label>
                             <span><b><?php echo $M_NAME_EXPECTED_SALARY;?></b></span>						
                             <select name="js-expected-salary" required>
@@ -151,6 +155,8 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
                             <?php endforeach;?>
                             </select>
                         </label>
+                        
+                        <!--BROWSE CATEGORY-->
                         <label>
                             <span><b><?php echo $M_BROWSE_CATEGORY;?></b></span>						
                             <select name="js-category">
@@ -160,6 +166,7 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
                             </select>
                         </label>
                             
+                        <!--DESIRE WORK LOCATION-->
                         <label>
                             <span><b><?php echo $WORK_LOCATION;?></b></span>						
                             <select name="js-location">
@@ -167,7 +174,9 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
                                 <option value="<?php echo $value['id']?>" <?php if($value['id'] == $jobseeker_data['location']) {echo "selected";}?>><?php echo $value['City']?></option>
                         <?php endforeach;?>
                             </select>
-                        </label>                    
+                        </label>
+                        
+                        <!--EDUCATION-->
                         <label>
                             <span><b><?php echo $M_EDUCATION;?></b></span>						
                             <select name="education_level">
@@ -176,12 +185,11 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
                                 <option value="<?php echo $value['education_id']?>" <?php if($value['education_id'] == $jobseeker_data['education_level']) {echo "selected";}?>><?php echo $value['education_name']?></option>
                             <?php endforeach;?>
                             </select>
-                        </label>
-                            
+                        </label>                            
                     </div>
+                    
+                    <!--Language forms-->
                     <div class="col-md-6 col-sm-6 col-xs-12 js-forms">
-                        
-                        <!--Language forms-->
                         <label>
                             <span><b><?php echo $M_JOB_TYPE;?></b></span>						
                             <select name="js-jobType">                            
@@ -238,16 +246,20 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
                                 <option value="<?php echo $value['level']?>" <?php if($value['level'] == $jobseeker_data['language_2_level']) {echo "selected";}?>><?php echo $value['level_name']?></option>
                             <?php endforeach;?>
                             </select>
-                        </label>
-                        <!--Language forms-->
-                            
+                        </label>   
                     </div>
                 </div>
+                <!--Language forms-->
                 
                 <!--CAREER OBJECTIVE-->
                 <div class="jobseeker-messageArea" name="js-careerObjective" class="jobseeker-messageArea" rows="5" style="width: 100%">
                     <div class="jobseeker-title"><h4><?php echo $M_CAREER_OBJECTIVE;?></h4></div>
                     <p><label>Gợi ý: Mục tiêu ngắn hạn của bạn trong một vài năm tới, Mục tiêu dài hạn trong 5-10 năm tới</label></p>
+                    <p><label>Ví dụ: </label></p>
+                    <p>- Mong muốn được làm việc trong môi trường năng động, chuyên nghiệp v.v...</p>
+                    <p>- Công ty tạo điều kiện tốt cho việc học tập nâng cao trình độ v.v...</p>
+                    <p>- Công việc ổn định lâu dài, có cơ hội thăng tiến cao v.v...</p>
+                    <p>- Mong muốn được đóng góp cho công ty </p>
                     <textarea name="js-careerObjective" id="jobseeker-experience" rows="5" style="width: 100%"><?php echo $jobseeker_data['career_objective'];?></textarea>
                 </div>
                     
@@ -260,8 +272,7 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
                     </div>
                     <textarea name="js-experience" id="jobseeker-experience" rows="5" style="width: 100%"><?php echo $jobseeker_data['experiences'];?></textarea>
                 </div>
-                <br><br>
-                   
+                    
                 <!--SKILLS-->
                 <div class="jobseeker-messageArea" style="width:100%">
                     <div class="jobseeker-title"><h4><?php echo $M_YOUR_SKILLS;?></h4></div>
@@ -277,7 +288,8 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
                     <textarea name="skills" style="width:100%" rows="5" ><?php echo $jobseeker_data['skills'];?></textarea>
                 </div>
                 <!--<strong><i><?php echo $LIST_ATTACHED;?>:</i></strong>-->                  
-                
+                    
+                <!--IT SKILLS-->
                 <div class="row">
                     <label class="col-md-8 js-forms">
                         <span><b>Tin học văn phòng : </b></span>
@@ -288,7 +300,8 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
                         </section>
                     </label>
                 </div>
-                
+                    
+                <!--GROUP SKILL-->
                 <section class="row">
                     <label class="col-md-8 js-forms">
                         <span><b>Khả năng làm việc nhóm: </b></span>
@@ -300,6 +313,7 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
                     </label>
                 </section>
                 
+                <!--PRESSURE SKILL-->
                 <section class="row">
                     <label class="col-md-8 js-forms">
                         <span><b>Khả năng chịu áp lực: </b></span>
@@ -309,8 +323,45 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
                             <?php endforeach;?>
                         </section>
                     </label>
-                </section>                
-                
+                </section>
+                    
+                <!--DESIRED LOCATIONS-->
+                <div class="row top-bottom-margin desires-section">
+                    <span class="col-md-3"><h5>Nơi làm việc mong muốn</h5></span>
+                    <section class="col-md-4 ListDesires-section">
+                <?php foreach ($jobseeker_locations as $jobseeker_location) :?>
+                        <span class="desire-tag"><?php echo $jobseeker_location['City'] ?>,</span>
+                <?php endforeach;?>
+                    </section>
+                    <section class="col-md-5 select2-searchBox">
+                        <select name="preferred_locations[]" id="preferred_locations" multiple="multiple">
+                    <?php foreach ($locations as $location) :?>
+                            <option value="<?php echo $location['id']?>"><?php echo $location['City']?></option>
+                    <?php endforeach; ?>
+                        </select>
+                    </section>
+                </div>
+                <!--DESIRED LOCATIONS-->
+                    
+                <!--DESIRED CATEGORIES-->
+                <div class="row top-bottom-margin desires-section">
+                    <span class="col-md-3"><h5>Ngành nghề mong muốn</h5></span>
+                    <section class="col-md-4 ListDesires-section">
+                <?php foreach ($jobseeker_categories as $jobseeker_category) :?>
+                        <span class="desire-tag"><?php echo $jobseeker_category['category_name_vi'] ?>,</span>
+                <?php endforeach;?>
+                    </section>
+                    <section class="col-md-5 select2-searchBox">
+                        <select name="preferred_categories[]" id="preferred_categories" multiple="multiple">
+                    <?php foreach ($categories as $value) :?>
+                            <option value="<?php echo $value['id']?>"><?php echo $value['category_name_vi']?></option>
+                    <?php endforeach; ?>
+                        </select>
+                    </section>
+                </div>
+                <!--DESIRED CATEGORIES-->
+                 
+                <!--FACEBOOK ADDRESS-->
                 <section class="row">
                     <label class="col-md-8 js-forms">
                         <span><b><?php echo $M_FACEBOOK_URL;?>: </b></span>

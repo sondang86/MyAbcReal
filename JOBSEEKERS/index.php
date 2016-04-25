@@ -30,7 +30,7 @@ $db = new MysqliDb (Array (
         'prefix' => $DBprefix,
         'charset' => 'utf8'
     ));
-$commonQueries = new CommonsQueries(new MysqliDb ());
+$commonQueries = new CommonsQueries($db);
 //ensure user not inactive
 $commonQueries->CheckSession();
 
@@ -67,9 +67,6 @@ $job_availability = $db->get_data('job_availability');
 $salaries = $db->get_data('salary');
 $current_language = $db->get_data('languages','id',"WHERE default_language=1")[0];
 $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers');
-
-
-
 
 
 $website->LoadTemplate(-1);
@@ -152,6 +149,14 @@ $website->Render();
     });
     /*Preview image before upload*/
 
-    $("#preferred_locations").select2({});
-    $("#preferred_categories").select2({});
+
+    /*select2 options*/
+    $("#preferred_locations").select2({
+        minimumResultsForSearch: 1,
+        maximumSelectionLength: 3
+    });
+    $("#preferred_categories").select2({
+        minimumSelectionLength: 1,
+        maximumSelectionLength: 3
+    });
 </script>

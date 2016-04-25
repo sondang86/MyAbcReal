@@ -12,7 +12,8 @@ global $db, $commonQueries, $current_language, $gender, $jobseeker_profile;
     <div class="fright">
     <?php
         echo LinkTile ("profile","edit",$EDIT_YOUR_PROFILE,"","green");	 
-        echo LinkTile ("cv","description",$EDIT_YOUR_CV,"","yellow");
+//        echo LinkTile ("cv","description",$EDIT_YOUR_CV,"","yellow");
+        echo LinkTile("cv","resume_creator",$M_RESUME_CREATOR,"","green");
     ?>
     </div>
     <div class="clear"></div>

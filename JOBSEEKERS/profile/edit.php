@@ -6,14 +6,15 @@
 ?>
 <?php
     if(!defined('IN_SCRIPT')) die("");
-    global $db, $commonQueries;
+    global $db, $commonQueries;    
     $jobseeker_profile = $db->get_data('jobseekers', '', "WHERE username='$AuthUserName'");
 ?>
 <div class="fright">
 
 <?php //Navigations
     echo LinkTile ("profile","current",$VIEW_PROFILE ,"","green");
-    echo LinkTile ("cv","edit",$EDIT_YOUR_CV,"","blue");
+//    echo LinkTile ("cv","edit",$EDIT_YOUR_CV,"","blue");
+    echo LinkTile("cv","resume_creator",$M_RESUME_CREATOR,"","green");
 ?>	
 	
 </div>
