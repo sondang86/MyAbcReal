@@ -35,7 +35,8 @@ if(isset($_POST["ProceedSaveResume"])){
     //Locations update
     if(isset($_POST['preferred_locations'])){
         //If user records exists, delete them
-        $db->withTotalCount()->get('jobseeker_locations');
+        
+        $db->where('jobseeker_id', $jobseeker_profile['jobseeker_id'])->withTotalCount()->get('jobseeker_locations');
         if($db->totalCount !== "0"){            
             $db->where('jobseeker_id', $jobseeker_profile['jobseeker_id']);
             if($db->delete('jobseeker_locations')){
@@ -65,7 +66,7 @@ if(isset($_POST["ProceedSaveResume"])){
     //categories update
     if(isset($_POST['preferred_categories'])){
         //If user records exists, delete them
-        $db->withTotalCount()->get('jobseeker_categories');
+        $db->where('jobseeker_id', $jobseeker_profile['jobseeker_id'])->withTotalCount()->get('jobseeker_categories');
         if($db->totalCount !== "0"){
             $db->where('jobseeker_id', $jobseeker_profile['jobseeker_id']);
             if($db->delete('jobseeker_categories')){
