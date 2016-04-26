@@ -159,4 +159,12 @@ $website->Render();
         minimumSelectionLength: 1,
         maximumSelectionLength: 3
     });
+    
+    $("#myform").validate({
+        rules:{
+          ppp:{
+            required: true
+          }
+        }
+    }); 
 </script>

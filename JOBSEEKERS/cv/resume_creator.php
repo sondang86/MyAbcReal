@@ -26,45 +26,105 @@ $jobseeker_profile = $commonQueries->getJobseeker_profile($AuthUserName);
 $jobseeker_categories = $commonQueries->getJobseeker_categories($jobseeker_profile['jobseeker_id']);
 $jobseeker_locations = $commonQueries->getJobseeker_locations($jobseeker_profile['jobseeker_id']);
 
-    if(isset($_POST["ProceedSaveResume"])){
+if(isset($_POST["ProceedSaveResume"])){
         
-        if($database->SQLCount("jobseeker_resumes","WHERE username='".$AuthUserName."'") == 0){
-            $database->SQLInsert("jobseeker_resumes",array("username"),array($AuthUserName));
-        }  
-            
-        $data = array (
-            "name_current_position" => filter_input(INPUT_POST,'js-nameCP', FILTER_SANITIZE_STRING),
-            "current_position" => filter_input(INPUT_POST,'js-current-position', FILTER_SANITIZE_NUMBER_INT), 
-            "salary" => filter_input(INPUT_POST,'js-salary', FILTER_SANITIZE_NUMBER_INT), 
-            "expected_position" => filter_input(INPUT_POST,'js-expected-position', FILTER_SANITIZE_NUMBER_INT), 
-            "expected_salary" => filter_input(INPUT_POST,'js-expected-salary', FILTER_SANITIZE_NUMBER_INT), 
-            "job_category" => filter_input(INPUT_POST,'js-category', FILTER_SANITIZE_NUMBER_INT), 
-            "location" => filter_input(INPUT_POST,'js-location', FILTER_SANITIZE_NUMBER_INT), 
-            "education_level" => filter_input(INPUT_POST,'education_level', FILTER_SANITIZE_NUMBER_INT),
-            "job_type" => filter_input(INPUT_POST,'js-jobType', FILTER_SANITIZE_NUMBER_INT),
-            "career_objective" => filter_input(INPUT_POST,'js-careerObjective', FILTER_SANITIZE_STRING),
-            "facebook_URL" => filter_input(INPUT_POST,'js-facebookURL', FILTER_SANITIZE_STRING),
-            "experiences" => filter_input(INPUT_POST,'js-experience', FILTER_SANITIZE_STRING),
-            "skills" => filter_input(INPUT_POST,'skills', FILTER_SANITIZE_STRING),
-            "language" => filter_input(INPUT_POST,'js-language', FILTER_SANITIZE_NUMBER_INT),
-            "language_level" => filter_input(INPUT_POST,'js-languageLevel', FILTER_SANITIZE_NUMBER_INT),
-            "language_1" => filter_input(INPUT_POST,'js-language1', FILTER_SANITIZE_NUMBER_INT),
-            "language_1_level" => filter_input(INPUT_POST,'js-languageLevel1', FILTER_SANITIZE_NUMBER_INT),
-            "language_2" => filter_input(INPUT_POST,'js-language2', FILTER_SANITIZE_NUMBER_INT),
-            "language_2_level" => filter_input(INPUT_POST,'js-languageLevel2', FILTER_SANITIZE_NUMBER_INT),
-            "IT_skills" => filter_input(INPUT_POST,'js-IT_skill', FILTER_SANITIZE_NUMBER_INT),
-            "group_skills" => filter_input(INPUT_POST,'js-group_skill', FILTER_SANITIZE_NUMBER_INT),
-            "pressure_skill" => filter_input(INPUT_POST,'js-pressure_skill', FILTER_SANITIZE_NUMBER_INT),
-        );
-            
-        $db->where ('username', "$AuthUserName");
-        if ($db->update ('jobseeker_resumes', $data)){
-            $commonQueries->flash('message',$commonQueries->messageStyle('info',"Cập nhật thành công"));
-            $website->redirect("index.php?category=cv&action=resume_creator");
-        } else {
-            echo 'update failed: ' . $db->getLastError();die;
+    if($database->SQLCount("jobseeker_resumes","WHERE username='".$AuthUserName."'") == 0){
+        $database->SQLInsert("jobseeker_resumes",array("username"),array($AuthUserName));
+    }
+
+    //Locations update
+    if(isset($_POST['preferred_locations'])){
+        //If user records exists, delete them
+        $db->withTotalCount()->get('jobseeker_locations');
+        if($db->totalCount !== "0"){            
+            $db->where('jobseeker_id', $jobseeker_profile['jobseeker_id']);
+            if($db->delete('jobseeker_locations')){
+                echo 'successfully deleted';
+            } else {
+                echo "There was a problem when deleting locations";die;
+            }            
         }
-    } 
+
+        //Insert records
+        foreach ($_POST['preferred_locations'] as $preferred_location) {
+            $location_data = array(
+                'location_id'   => $preferred_location,
+                'jobseeker_id'  => $jobseeker_profile['jobseeker_id']
+            );
+
+            $id = $db->insert ('jobseeker_locations', $location_data);
+            if($id){
+                echo 'records were created. Id=' . $id;
+            } else {
+                echo 'problem while creating records';die;
+            }
+        }   
+    }
+
+
+    //categories update
+    if(isset($_POST['preferred_categories'])){
+        //If user records exists, delete them
+        $db->withTotalCount()->get('jobseeker_categories');
+        if($db->totalCount !== "0"){
+            $db->where('jobseeker_id', $jobseeker_profile['jobseeker_id']);
+            if($db->delete('jobseeker_categories')){
+                echo 'successfully deleted';
+            } else { //Problems when deleting
+                echo "There was a problem when deleting categories";die;
+            }            
+        }
+
+        //Insert again
+        foreach ($_POST['preferred_categories'] as $preferred_category) {
+            $category_data = array(
+                'category_id'   => $preferred_category,
+                'jobseeker_id'  => $jobseeker_profile['jobseeker_id']
+            );
+
+            $id = $db->insert ('jobseeker_categories', $category_data);
+            if($id){
+                echo 'records were created. Id=' . $id;
+            } else {
+                echo 'problem while creating records';die;
+            }
+        }
+    }
+
+    $data = array (
+        "title"                 => filter_input(INPUT_POST,'js-title', FILTER_SANITIZE_STRING),
+        "name_current_position" => filter_input(INPUT_POST,'js-nameCP', FILTER_SANITIZE_STRING),
+        "current_position"      => filter_input(INPUT_POST,'js-current-position', FILTER_SANITIZE_NUMBER_INT), 
+        "salary"                => filter_input(INPUT_POST,'js-salary', FILTER_SANITIZE_NUMBER_INT), 
+        "expected_position"     => filter_input(INPUT_POST,'js-expected-position', FILTER_SANITIZE_NUMBER_INT), 
+        "expected_salary"       => filter_input(INPUT_POST,'js-expected-salary', FILTER_SANITIZE_NUMBER_INT), 
+        "job_category"          => filter_input(INPUT_POST,'js-category', FILTER_SANITIZE_NUMBER_INT), 
+        "location"              => filter_input(INPUT_POST,'js-location', FILTER_SANITIZE_NUMBER_INT), 
+        "education_level"       => filter_input(INPUT_POST,'education_level', FILTER_SANITIZE_NUMBER_INT),
+        "job_type"              => filter_input(INPUT_POST,'js-jobType', FILTER_SANITIZE_NUMBER_INT),
+        "career_objective"      => filter_input(INPUT_POST,'js-careerObjective', FILTER_SANITIZE_STRING),
+        "facebook_URL"          => filter_input(INPUT_POST,'js-facebookURL', FILTER_SANITIZE_STRING),
+        "experiences"           => filter_input(INPUT_POST,'js-experience', FILTER_SANITIZE_STRING),
+        "skills"                => filter_input(INPUT_POST,'skills', FILTER_SANITIZE_STRING),
+        "language"              => filter_input(INPUT_POST,'js-language', FILTER_SANITIZE_NUMBER_INT),
+        "language_level"        => filter_input(INPUT_POST,'js-languageLevel', FILTER_SANITIZE_NUMBER_INT),
+        "language_1"            => filter_input(INPUT_POST,'js-language1', FILTER_SANITIZE_NUMBER_INT),
+        "language_1_level"      => filter_input(INPUT_POST,'js-languageLevel1', FILTER_SANITIZE_NUMBER_INT),
+        "language_2"            => filter_input(INPUT_POST,'js-language2', FILTER_SANITIZE_NUMBER_INT),
+        "language_2_level"      => filter_input(INPUT_POST,'js-languageLevel2', FILTER_SANITIZE_NUMBER_INT),
+        "IT_skills"             => filter_input(INPUT_POST,'js-IT_skill', FILTER_SANITIZE_NUMBER_INT),
+        "group_skills"          => filter_input(INPUT_POST,'js-group_skill', FILTER_SANITIZE_NUMBER_INT),
+        "pressure_skill"        => filter_input(INPUT_POST,'js-pressure_skill', FILTER_SANITIZE_NUMBER_INT),
+    );
+
+    $db->where ('username', "$AuthUserName");
+    if ($db->update ('jobseeker_resumes', $data)){
+        $commonQueries->flash('message',$commonQueries->messageStyle('info',"Cập nhật thành công"));
+        $website->redirect("index.php?category=cv&action=resume_creator");
+    } else {
+        echo 'update failed: ' . $db->getLastError();die;
+    }
+} 
 ?>
 <style>
     .navmenu a {
@@ -81,7 +141,7 @@ $jobseeker_locations = $commonQueries->getJobseeker_locations($jobseeker_profile
     
 <!--SonDang modify here-->
 <div class="row">
-    <form action="index.php" method="post" class="col-md-12">
+    <form action="index.php" method="post" class="col-md-12" id="myform">
         <input type="hidden" name="ProceedSaveResume" value="1">
         <input type="hidden" name="action" value="<?php echo $action;?>">
         <input type="hidden" name="category" value="<?php echo $category;?>">
@@ -103,7 +163,7 @@ $jobseeker_locations = $commonQueries->getJobseeker_locations($jobseeker_profile
                     <section class="col-md-6 col-sm-6 col-xs-12 js-forms">
                         <label>
                             <span><b>Tiêu đề hồ sơ (*): </b></span>
-                            <input type="text" name="js-title" title="">
+                            <input type="text" name="js-title" title="" value="<?php echo $jobseeker_data['title']?>" required>
                             <p><label>Ví dụ: Giám đốc kinh doanh, nhân viên marketing, nhân viên bán hàng v.v...</label></p>
                         </label>
                     </section>
@@ -369,6 +429,8 @@ $jobseeker_locations = $commonQueries->getJobseeker_locations($jobseeker_profile
                     </label>
                 </section>
                     
+                <!--JOBSEEKER ID-->
+                <input type="hidden" name="jobseeker_id" value="<?php echo $jobseeker_profile['jobseeker_id']?>">
             </div>            
         </div>
         <input type="submit" value=" <?php echo $SAUVEGARDER;?> " class="btn btn-primary">
