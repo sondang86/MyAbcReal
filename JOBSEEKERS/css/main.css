@@ -1365,6 +1365,14 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
         border: 1px #cccccc solid;
     }
     
+    .info-description {
+        border: 1px solid #DADADA;
+        border-radius: 5px;
+        padding: 10px;
+        background: #ffffff;
+        margin: 15px 0;
+    }
+    
     .js-radioBoxes {
         width: 60%;
         float: left;
