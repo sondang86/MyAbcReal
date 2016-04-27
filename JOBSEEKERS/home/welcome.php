@@ -273,7 +273,7 @@ function CallBack()
 				$i_app_counter++;
 			?>
 			
-				<a  href="index.php?category=home&folder=apply&page=edit&id=<?php echo $application["app_id"];?>" class="list-group-item no-decoration <?php if($i_app_counter%2==0) echo 'alt-back';?>" >
+				<a  href="index.php?category=home&folder=apply&page=edit&apply_id=<?php echo $application["app_id"];?>" class="list-group-item no-decoration <?php if($i_app_counter%2==0) echo 'alt-back';?>" >
 					<div class="row">
 						<div class="col-md-2">
 							<strong><?php echo date($website->GetParam("DATE_HOUR_FORMAT"),$application["date"]);?></strong>

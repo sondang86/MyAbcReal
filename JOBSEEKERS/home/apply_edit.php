@@ -14,9 +14,22 @@ global $db;
     
 <?php  
     
-$id=$_REQUEST["id"];
-$website->ms_i($id);
-$application = $db->where('id', $id)->getOne('apply');
+//URL security check 
+if (!isset($_GET['apply_id'])){
+    $website->redirect('index.php');
+} else {
+    $apply_id=$_REQUEST["apply_id"];
+}
+$website->ms_i($apply_id);
+$application = $db->where('id', $apply_id)->withTotalCount()->getOne('apply');
+
+if ($db->totalCount == "0"){ //not found any records?>
+<div class="row">
+    <section class="col-md-12">
+        <h4>Không tìm thấy công việc này</h4>
+    </section>
+</div>
+<?php } else {
 $Posting =  $db->join("categories", "jobsportal_jobs.job_category=jobsportal_categories.category_id", "LEFT")
             ->join("locations", "jobsportal_jobs.region=jobsportal_locations.id", "LEFT")
             ->join("salary", "jobsportal_jobs.salary=jobsportal_salary.salary_id", "LEFT")
@@ -76,6 +89,5 @@ $employer = $db->where('username', $Posting['employer'])->getOne('employers');
         <label><?php echo $DESCRIPTION?></label>
         <p><?php echo nl2br($Posting["message"])?></p>
     </section>
-            
-    
 </div>
+<?php }?>
