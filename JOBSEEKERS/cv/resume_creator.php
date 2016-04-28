@@ -116,6 +116,7 @@ if(isset($_POST["ProceedSaveResume"])){
         "IT_skills"             => filter_input(INPUT_POST,'js-IT_skill', FILTER_SANITIZE_NUMBER_INT),
         "group_skills"          => filter_input(INPUT_POST,'js-group_skill', FILTER_SANITIZE_NUMBER_INT),
         "pressure_skill"        => filter_input(INPUT_POST,'js-pressure_skill', FILTER_SANITIZE_NUMBER_INT),
+        "date_updated"          => strtotime(date("Y-m-d H:i:s"))
     );
 
     $db->where ('username', "$AuthUserName");

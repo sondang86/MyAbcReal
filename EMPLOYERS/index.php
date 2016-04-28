@@ -37,12 +37,14 @@ $commonQueries = new CommonsQueries($db);
 $commonQueries->CheckSession("3600");
     
 //Common tables
-$categories = $db->get ('categories');
-$job_types = $db->get ('job_types');
-$locations = $db->get ('locations');
-$salaries = $db->get ('salary');
-$all_jobs = $db->get('jobs');   
-$experience_list = $db->get('job_experience');
+$categories         = $db->get ('categories');
+$job_types          = $db->get ('job_types');
+$locations          = $db->get ('locations');
+$salaries           = $db->get ('salary');
+$all_jobs           = $db->get('jobs');   
+$experience_list    = $db->get('job_experience');
+$positions          = $db->get('positions');
+$education          = $db->get('education');
 
 $website = new SiteManager();
 $website->isAdminPanel = true;

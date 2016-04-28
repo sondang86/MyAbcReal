@@ -86,18 +86,18 @@ elseif($website->GetParam("CHARGE_TYPE") == 2)
     if(isset($_POST['submit'])){
         //Insert data to database
         $data = Array( 
-            "employer" => "$AuthUserName",
-            "job_category" => filter_input(INPUT_POST, 'post-category'),
-            "job_type" => filter_input(INPUT_POST, 'post-jobtypes'),
-            "title" => filter_input(INPUT_POST, 'employer-post-title',FILTER_SANITIZE_STRING), 
-            "message" => filter_input(INPUT_POST,'employer-post-details',FILTER_SANITIZE_STRING),
-            "experience" => filter_input(INPUT_POST,'experience',FILTER_SANITIZE_NUMBER_INT),
-            "region" => filter_input(INPUT_POST,'post-locations'),
-            "salary" => filter_input(INPUT_POST,'post-salary'),
-            "date" => strtotime(filter_input(INPUT_POST,'employer-start-date'). " " . date("G:i:s")),
-            "expires" => (strtotime(filter_input(INPUT_POST,'employer-start-date')) + (21*86400)), //21 days limitation
-            "status" => filter_input(INPUT_POST,'post-active'),
-            "SEO_title" => $db->secure_input($website->seoURL($website->stripVN(filter_input(INPUT_POST,'employer-post-title'))))
+            "employer"      => "$AuthUserName",
+            "job_category"  => filter_input(INPUT_POST, 'post-category'),
+            "job_type"      => filter_input(INPUT_POST, 'post-jobtypes'),
+            "title"         => filter_input(INPUT_POST, 'employer-post-title',FILTER_SANITIZE_STRING), 
+            "message"       => filter_input(INPUT_POST,'employer-post-details',FILTER_SANITIZE_STRING),
+            "experience"    => filter_input(INPUT_POST,'experience',FILTER_SANITIZE_NUMBER_INT),
+            "region"        => filter_input(INPUT_POST,'post-locations'),
+            "salary"        => filter_input(INPUT_POST,'post-salary'),
+            "date"          => strtotime(filter_input(INPUT_POST,'employer-start-date'). " " . date("G:i:s")),
+            "expires"       => (strtotime(filter_input(INPUT_POST,'employer-start-date')) + (21*86400)), //21 days limitation
+            "status"        => filter_input(INPUT_POST,'post-active'),
+            "SEO_title"     => $db->secure_input($website->seoURL($website->stripVN(filter_input(INPUT_POST,'employer-post-title')))),
          );
         
     $id = $db->insert('jobs', $data);
