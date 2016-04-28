@@ -9,7 +9,7 @@ $db->orderBy("id","asc");
 $db->where ("employer", "$AuthUserName");
 $jobs_by_employer = $db->get("jobs");
 
-
+print_r($_SERVER['DOCUMENT_ROOT']);
 if(isset($_REQUEST["bn"]))
 {
 	if($_REQUEST["bn"]=="s")

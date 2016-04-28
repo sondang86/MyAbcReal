@@ -227,9 +227,7 @@
             $jobs_list['totalCount'] = $this->_db->totalCount; 
             $jobs_list['current_page'] = $current_page;
             $jobs_list['total_pages'] = $this->_db->totalPages;
-//            $jobs_list['data'] = $this->_db->withTotalCount()->get("jobs", NULL, $jobsInfo_columns);
-//            $jobs_list['totalCount'] = $this->_db->totalCount;                
-                
+
             if ($this->_db->totalCount > 0){
                 return $jobs_list;
             } else {
@@ -910,6 +908,75 @@
             $data['skills'] = $this->_db->get('skills');
             
             return $data[$table];
+        }
+        
+        
+        /**
+        *  Search jobseeker resumes function
+        * 
+        *  @param var $type id or name of the selected column
+        *  @param var $limit limit the number of records to be appear
+        */
+        public function get_jobseeker_resumes($queryString="",$category="",$location="", $limit=NULL, $userId_cookie=""){
+            $jobsInfo_columns = Array (
+                $this->_dbPrefix."jobs.id as job_id",$this->_dbPrefix."jobs.date", $this->_dbPrefix."jobs.employer",
+                $this->_dbPrefix."jobs.SEO_title",$this->_dbPrefix."jobs.job_category", 
+                $this->_dbPrefix."jobs.region",$this->_dbPrefix."jobs.featured",
+                $this->_dbPrefix."jobs.title", $this->_dbPrefix."jobs.expires", //
+                $this->_dbPrefix."jobs.message", $this->_dbPrefix."jobs.job_type", 
+                $this->_dbPrefix."jobs.salary",$this->_dbPrefix."jobs.applications", // Main table
+                $this->_dbPrefix."job_types.job_name",$this->_dbPrefix."job_types.job_name_en",
+                $this->_dbPrefix."categories.category_name_vi",$this->_dbPrefix."categories.category_id", //Categories table
+                $this->_dbPrefix."salary.salary_id",$this->_dbPrefix."salary.salary_range", //Salary table
+                $this->_dbPrefix."locations.City",$this->_dbPrefix."locations.id as location_id", //Locations table
+                $this->_dbPrefix."employers.id as employer_id",$this->_dbPrefix."employers.company as company",$this->_dbPrefix."employers.logo as company_logo", //Employer table
+                $this->_dbPrefix."saved_jobs.user_type as saved_job_userType",$this->_dbPrefix."saved_jobs.date as saved_jobDate",
+                $this->_dbPrefix."saved_jobs.browser", $this->_dbPrefix."saved_jobs.IPAddress",  
+                $this->_dbPrefix."saved_jobs.user_uniqueId as user_uniqueId",$this->_dbPrefix."saved_jobs.job_id as saved_jobId"//saved jobs table
+            );
+            $this->_db->join('categories', $this->_dbPrefix."jobs.job_category =".$this->_dbPrefix."categories.category_id", "LEFT");
+            $this->_db->join('salary', $this->_dbPrefix."jobs.salary = ".$this->_dbPrefix."salary.salary_id", "LEFT");
+            $this->_db->join('job_types', $this->_dbPrefix."jobs.job_type = ".$this->_dbPrefix."job_types.id", "LEFT");
+            $this->_db->join('locations', $this->_dbPrefix."jobs.region = ".$this->_dbPrefix."locations.id", "LEFT");
+            $this->_db->join('employers', $this->_dbPrefix."jobs.employer = ".$this->_dbPrefix."employers.username", "LEFT");
+            $this->_db->join('saved_jobs', $this->_dbPrefix."jobs.id = ".$this->_dbPrefix."saved_jobs.job_id AND "
+                    .$this->_dbPrefix."saved_jobs.user_uniqueId = '$userId_cookie' AND "
+                    .$this->_dbPrefix."saved_jobs.IPAddress = '".filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP)."' ", "LEFT");
+                        
+            //Check conditions
+            if(!empty($queryString)){
+                $this->_db->where("title LIKE '%" . $queryString ."%'");
+            }
+            if(!empty($category)){
+                $this->_db->where("job_category", $category);
+            }                        
+            if(!empty($location)){
+                $this->_db->where("region", $location);
+            }
+                
+            //Order by featured first
+            $this->_db->orderBy("featured", "DESC");
+            $this->_db->orderBy("date", "DESC");
+            
+            //Pagination options
+            //Set current page to 1 if empty
+            if (isset($_GET['trang'])){
+                $current_page = filter_input(INPUT_GET, 'trang', FILTER_SANITIZE_NUMBER_INT);
+            } else {
+                $current_page = 1;
+            }
+            // set page limit to 2 results per page. 20 by default
+            $this->_db->pageLimit = 10;
+            $jobs_list['data'] = $this->_db->arraybuilder()->withTotalCount()->paginate("jobs", $current_page,$jobsInfo_columns);            
+            $jobs_list['totalCount'] = $this->_db->totalCount; 
+            $jobs_list['current_page'] = $current_page;
+            $jobs_list['total_pages'] = $this->_db->totalPages;
+
+            if ($this->_db->totalCount > 0){
+                return $jobs_list;
+            } else {
+                return FALSE;
+            }
         }
         
     }

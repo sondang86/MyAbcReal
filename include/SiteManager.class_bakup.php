@@ -150,10 +150,10 @@ class SiteManager
 		global $_REQUEST,$DBprefix;
 		if($template_id==-1)
 		{
-			if(file_exists('users_template.htm'))
+			if(file_exists('../users_template.htm'))
 			{
 				$templateArray=array();
-				$templateArray["html"] = file_get_contents('users_template.htm');
+				$templateArray["html"] = file_get_contents('../users_template.htm');
 			}
 			else
 			{

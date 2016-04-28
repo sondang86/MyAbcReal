@@ -12,13 +12,13 @@ if(!session_id()){
 
 $is_mobile=false;
 if(isset($_POST["Export"])) ob_start();
-include("../config.php");
+include_once("../config.php");
 if(!$DEBUG_MODE) error_reporting(0);
     
 //auto load classes when call
 function __autoload($classname) {
     $filename = "../include/". $classname .".class.php";
-    include($filename);
+    include_once($filename);
 }
    
 $db = new MysqliDb (Array (
@@ -52,7 +52,7 @@ $database = new Database();
 $database->Connect($DBHost, $DBUser,$DBPass );
 $database->SelectDB($DBName);
 $website->SetDatabase($database);
-include("security.php");
+include_once("security.php");
 $website->LoadSettings();
 
 //Get job by employer id
@@ -79,7 +79,7 @@ if (isset($_REQUEST["id"])){
     
 
     
-include("include/AdminUser.class.php");
+include_once("include/AdminUser.class.php");
 if(!isset($AuthUserName) || !isset($AuthGroup)) {$website->ForceLogin();}
 $employerInfo = $commonQueries->getSingleValue('employers', NULL, 'username', "$AuthUserName");
 $currentUser = new AdminUser($AuthUserName, $AuthGroup);
@@ -88,34 +88,35 @@ $lang = $currentUser->GetLanguage();
     
 if(file_exists("../ADMIN/texts_".$lang.".php"))
 {
-	include("../ADMIN/texts_".$lang.".php");
+	include_once("../ADMIN/texts_".$lang.".php");
 }
 else
 {
-	include("../ADMIN/texts_en.php");
+	include_once("../ADMIN/texts_en.php");
 }
-include("../include/texts_".$lang.".php");
+include_once("../include/texts_".$lang.".php");
     
     
-    
+//include_once ('users_template.htm');    
+
 $website->LoadTemplate(-1);
-$website->TemplateHTML=str_replace('"css/','"../css/',$website->TemplateHTML);
-$website->TemplateHTML=str_replace('"images/','"../images/',$website->TemplateHTML);
-$website->TemplateHTML=str_replace('</head>','<link rel="stylesheet" href="css/main.css"/></head>',$website->TemplateHTML);
+$website->TemplateHTML=str_replace('"css/','"/vieclambanthoigian.com.vn/css/',$website->TemplateHTML);
+$website->TemplateHTML=str_replace('"images/','"/vieclambanthoigian.com.vn/images/',$website->TemplateHTML);
+$website->TemplateHTML=str_replace('</head>','<link rel="stylesheet" href="/vieclambanthoigian.com.vn/employers/css/main.css"/></head>',$website->TemplateHTML);
 $website->TemplateHTML=str_replace
 ('</body>','  
-<script type="text/javascript" src="js/admin.js"></script>
+<script type="text/javascript" src="/vieclambanthoigian.com.vn/EMPLOYERS/js/admin.js"></script>
 <script>
 $(init);
     
 String.prototype.trim=function(){return this.replace(/^\s+|\s+$/g, \'\');};
     
 </script>
-<iframe id="ajax-ifr" name="ajax-ifr" src="include/empty-page.php" style="position:absolute;top:0px;left:0px;visibility:hidden" width="1" height="1"></iframe></body>',$website->TemplateHTML);
+<iframe id="ajax-ifr" name="ajax-ifr" src="/vieclambanthoigian.com.vn/include/empty-page.php" style="position:absolute;top:0px;left:0px;visibility:hidden" width="1" height="1"></iframe></body>',$website->TemplateHTML);
     
     
-include("include/page_functions.php");
-include("include/AdminPage.class.php");
+include_once("include/page_functions.php");
+include_once("include/AdminPage.class.php");
 $currentPage = new AdminPage();
 $currentPage->Process($is_mobile);
 $website->Render();
@@ -153,6 +154,18 @@ if(isset($_POST["Export"])) ob_end_flush();
                 $('#delete').prop("disabled", !this.checked)
             });
         });
+        
+        
+        // Remove empty fields from GET forms
+        // URL: http://www.billerickson.net/code/hide-empty-fields-get-form/        
+        // Change 'form' to class or ID of your specific form
+        $("#jobseekers_search").submit(function() {
+            $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
+            return true; // ensure form still submits
+        });
+        
+        // Un-disable form fields when page loads, in case they click back after submission
+        $( "#jobseekers_search" ).find( ":input" ).prop( "disabled", false );
         
     });
     
