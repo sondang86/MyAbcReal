@@ -6,7 +6,8 @@
 ?><?php
 //if(!defined('IN_SCRIPT')) die("");
 global $db, $commonQueries, $categories, $salaries,$experience_list, $positions, $locations, $education;
-    
+$search_result = "0";
+
 if (isset($_GET['tim_kiem']) && $_GET['tim_kiem'] == "1"){
 //    print_r($_GET);
     //with keywords search
@@ -24,17 +25,20 @@ if (isset($_GET['tim_kiem']) && $_GET['tim_kiem'] == "1"){
     // with date_updated option
     if(isset($_GET['by_date_updated'])){ $by_date_updated = filter_input(INPUT_GET, 'by_date_updated', FILTER_SANITIZE_NUMBER_INT);} else {$by_date_updated="";} 
     
-    //perform search
     $jobsInfo_columns = Array (
         $DBprefix."jobseeker_resumes.id as resume_id",$DBprefix."jobseeker_resumes.username",
         $DBprefix."jobseeker_resumes.title as resume_title",$DBprefix."jobseeker_resumes.skills as resume_skills",
         $DBprefix."jobseeker_resumes.date_updated as resume_date_updated",
         $DBprefix."job_experience.name as job_experience_name",$DBprefix."job_experience.name_en as job_experience_name_en",
+        $DBprefix."job_experience.experience_id",
         $DBprefix."education.education_name as education_name",$DBprefix."education.education_name_en as education_name_en",
-        $DBprefix."salary.salary_range",$DBprefix."salary.salary_range_en",
+        $DBprefix."education.education_id",
+        $DBprefix."salary.salary_range",$DBprefix."salary.salary_range_en",$DBprefix."salary.salary_id",
         $DBprefix."categories.category_name",$DBprefix."categories.category_name_vi",
-        $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",
-        $DBprefix."locations.City",$DBprefix."locations.City_en",
+        $DBprefix."categories.id as category_id",
+        $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",$DBprefix."job_types.id as job_type_id",
+        $DBprefix."locations.City",$DBprefix."locations.City_en",$DBprefix."locations.id as location_id",
+//        "GROUP_CONCAT(".$DBprefix."jobseeker_categories.category_id) as desired_category",
     );
     
     $db->join('education', $DBprefix."jobseeker_resumes.education_level =".$DBprefix."education.education_id", "LEFT");
@@ -43,10 +47,41 @@ if (isset($_GET['tim_kiem']) && $_GET['tim_kiem'] == "1"){
     $db->join('job_types', $DBprefix."jobseeker_resumes.job_type =".$DBprefix."job_types.id", "LEFT");
     $db->join('locations', $DBprefix."jobseeker_resumes.location =".$DBprefix."locations.id", "LEFT");
     $db->join('job_experience', $DBprefix."jobseeker_resumes.experience_level =".$DBprefix."job_experience.experience_id", "LEFT");
-    $resumes = $db->where('title LIKE "%kỹ%"')
-            ->orWhere('skills LIKE "%kỹ%"')
-            ->withTotalCount()
-            ->get('jobseeker_resumes', NULL, $jobsInfo_columns);
+//    $db->join('jobseeker_categories', $DBprefix."jobseeker_resumes.id =".$DBprefix."jobseeker_categories.jobseeker_id", "LEFT");
+    
+    //perform search by conditions   
+    if ($queryString !== ""){ //title search with keywords included
+//        $db->where("MATCH(title) AGAINST ('$queryString' IN BOOLEAN MODE)");
+        $db->where("MATCH(title) AGAINST ('$queryString' IN BOOLEAN MODE)");
+    }
+    
+    if ($by_category !== ""){  
+        $db->where('job_category', $by_category);
+    }
+    
+    if ($by_location !== ""){ 
+        $db->where('location', $by_location);
+    }
+    
+    if ($by_education !== ""){ 
+        $db->where('education_level', $by_education);
+    }
+        
+    if ($by_experience_level !== ""){
+        $db->where('experience_level', $by_experience_level);
+    }
+    
+    if ($by_expected_position !== ""){ //expected position included
+        $db->where('expected_position', $by_expected_position);
+    }    
+//    
+//    if ($by_date_updated !== ""){ //resume updated included
+//        $db->where('date_updated', $by_date_updated);
+//    }
+    
+    $resumes = $db->withTotalCount()->get('jobseeker_resumes', NULL, $jobsInfo_columns);
+    
+    $search_result = $db->totalCount;
     
     echo "<pre>";
     print_r($resumes);
@@ -141,8 +176,9 @@ if (isset($_GET['tim_kiem']) && $_GET['tim_kiem'] == "1"){
             <span class="glyphicon glyphicon-cog"></span> Tìm kiếm
         </button>-->
     </div>
-        
-    <!--LISTING SEARCH RESUMES RESULTS-->
+    
+    <!--LISTING SEARCH RESUMES RESULTS-->        
+    <?php if ($search_result > 0) ://Search found records?>
     <div class="contentArea">
         <?php foreach ($resumes as $resume) :?>
         <article class="row joblistArea">
@@ -197,6 +233,7 @@ if (isset($_GET['tim_kiem']) && $_GET['tim_kiem'] == "1"){
             </footer>    
         </article>
         <?php endforeach;?>
+        <?php endif;?>
         
         <!--PAGINATION-->
         <div class="row">
