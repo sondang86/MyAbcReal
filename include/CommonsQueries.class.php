@@ -979,5 +979,30 @@
             }
         }
         
+        
+        /**
+        *  Add + before every words
+        * 
+        *  @param var $string input string 
+        */
+        public function addPlustoString($string){
+            $search_words = explode(' ', $string);
+            $sql_search = '+' . implode(" +", $search_words);
+            return $sql_search;
+        }
+        
+        /**
+        *  Add + before every words and before "" double quotes
+        * 
+        *  @param var $string input string 
+        */
+        public function addPlustoString2($string){
+            //"[^"]*"|\S+ is the regex that matches a double quoted text OR any non-space word 
+            //and replacement is +$0 that prefixes each match with +.
+            $regex = '/"[^"]*"|\S+/m'; 
+            $result = preg_replace($regex, '+$0', $string);
+            return $result;
+        }
+        
     }
 ?>

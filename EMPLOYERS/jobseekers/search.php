@@ -1,17 +1,24 @@
 <?php
-// Jobs Portal, http://www.netartmedia.net/jobsportal
-// A software product of NetArt Media, All Rights Reserved
-// Find out more about our products and services on:
-// http://www.netartmedia.net
-?><?php
 //if(!defined('IN_SCRIPT')) die("");
 global $db, $commonQueries, $categories, $salaries,$experience_list, $positions, $locations, $education;
 $search_result = "0";
 
+
+//Testing
+//$query = $_GET['q'];
+//$search_query = $commonQueries->addPlustoString($query);
+//$db->where("MATCH(title) AGAINST ('($search_query)' IN BOOLEAN MODE)");
+//$teetetet = $db->get('jobseeker_resumes');
+
+//$teetetet = $db->rawQuery("SELECT * FROM jobsportal_jobseeker_resumes WHERE MATCH(title) AGAINST ('($search_query)' IN BOOLEAN MODE)");
+
+
 if (isset($_GET['tim_kiem']) && $_GET['tim_kiem'] == "1"){
 //    print_r($_GET);
     //with keywords search
-    if (isset($_GET['q'])){$queryString = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING);} else {$queryString = "";}    
+    if (isset($_GET['q'])){$queryString = $commonQueries->addPlustoString(filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING));} else {$queryString = "";}    
+    
+    print_r($queryString);
     // with category option
     if(isset($_GET['by_category'])){ $by_category = filter_input(INPUT_GET, 'by_category', FILTER_SANITIZE_NUMBER_INT);} else {$by_category="";}
     // with location option
@@ -74,18 +81,13 @@ if (isset($_GET['tim_kiem']) && $_GET['tim_kiem'] == "1"){
     if ($by_expected_position !== ""){ //expected position included
         $db->where('expected_position', $by_expected_position);
     }    
-//    
-//    if ($by_date_updated !== ""){ //resume updated included
-//        $db->where('date_updated', $by_date_updated);
-//    }
+
     
     $resumes = $db->withTotalCount()->get('jobseeker_resumes', NULL, $jobsInfo_columns);
     
     $search_result = $db->totalCount;
     
-    echo "<pre>";
-    print_r($resumes);
-    echo "</pre>";
+
 }
     
 ?>
