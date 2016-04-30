@@ -14,7 +14,7 @@ $is_mobile=false;
 if(isset($_POST["Export"])) ob_start();
 include_once("../config.php");
 if(!$DEBUG_MODE) error_reporting(0);
-    
+
 //auto load classes when call
 function __autoload($classname) {
     $filename = "../include/". $classname .".class.php";
@@ -76,9 +76,6 @@ if (isset($_REQUEST["id"])){
     $jobs_by_employerId = $db->get("jobs", NULL, $selected_columns);
 }
 
-    
-
-    
 include_once("include/AdminUser.class.php");
 if(!isset($AuthUserName) || !isset($AuthGroup)) {$website->ForceLogin();}
 $employerInfo = $commonQueries->getSingleValue('employers', NULL, 'username', "$AuthUserName");

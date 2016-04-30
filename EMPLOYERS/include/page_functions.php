@@ -1774,7 +1774,7 @@ function LinkTile
 			$js_function = ""
 		)
 {
-	global $lang,$currentPage,$currentUser,$DEBUG_MODE,$is_mobile;
+	global $lang,$currentPage,$currentUser,$DEBUG_MODE,$is_mobile, $EMPLOYER_DOMAIN_NAME;
 	
 	$has_param = strpos($action,"=");
 	
@@ -1804,7 +1804,7 @@ function LinkTile
 	else
 	if($no_ajax || (isset($is_mobile)&&$is_mobile) || (isset($DEBUG_MODE)&&$DEBUG_MODE)||true)
 	{
-		$tileLink = "index.php?category=".$category."&action=".$action;
+		$tileLink = $EMPLOYER_DOMAIN_NAME."index.php?category=".$category."&action=".$action;
 	}
 	else
 	{
@@ -1818,21 +1818,21 @@ function LinkTile
 	
 	if($text==$SEND_MESSAGE)
 	{
-		$str_icon_file = "images/icons/messages.png";
+		$str_icon_file = $EMPLOYER_DOMAIN_NAME."images/icons/messages.png";
 	}
 	else
 	if($text==$M_SAVE_RESUME_AS_PDF)
 	{
-		$str_icon_file = "images/icons/documents.png";
+		$str_icon_file = $EMPLOYER_DOMAIN_NAME."images/icons/documents.png";
 	}
 	else
 	if(file_exists("images/icons/".$action.".png"))
 	{
-		$str_icon_file = "images/icons/".$action.".png";
+		$str_icon_file = $EMPLOYER_DOMAIN_NAME."images/icons/".$action.".png";
 	}
 	else
 	{
-		$str_icon_file = "images/icons/default.png";
+		$str_icon_file = $EMPLOYER_DOMAIN_NAME."images/icons/default.png";
 	}
 	
 	global $M_GO_BACK;

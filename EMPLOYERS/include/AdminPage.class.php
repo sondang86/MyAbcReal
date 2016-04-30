@@ -120,7 +120,7 @@ class AdminPage
 			$main_admin["logo_text"]!=""
 		)
 		{
-			$logo_html .= '<a class="navbar-brand text-logo admin-user-text-logo custom-color" href="index.php">'.stripslashes($main_admin["logo_text"]).'</a>';
+			$logo_html .= '<a class="navbar-brand text-logo admin-user-text-logo custom-color" href="http://'.$DOMAIN_NAME.'/EMPLOYERS/index.php">'.stripslashes($main_admin["logo_text"]).'</a>';
 		}
 		else
 		{
@@ -340,7 +340,7 @@ class AdminPage
 	
 	function StartMenu()
 	{
-		global $M_START,$M_ADD_ON,$lang,$website;
+		global $M_START,$M_ADD_ON,$lang,$website, $DOMAIN_NAME;
 		
 		
 		include("../include/texts_".$lang.".php");
@@ -362,12 +362,12 @@ class AdminPage
 			{
 				if($oLinkActions[$i]=="home"&&$evSLinkActions[0]=="welcome")
 				{
-					$menu_html.="\n<li class=\"dropdown\"><a class=\"main-top-link\" href=\"index.php\">".$oLinkTexts[$i]."</a>";
+					$menu_html.="\n<li class=\"dropdown\"><a class=\"main-top-link\" href=\"http://$DOMAIN_NAME/EMPLOYERS/index.php\">".$oLinkTexts[$i]."</a>";
 					
 				}
 				else
 				{
-					$menu_html.="\n<li class=\"dropdown\"><a class=\"main-top-link\" href=\"index.php?category=".$oLinkActions[$i]."&action=".$evSLinkActions[0]."\">".$oLinkTexts[$i]."</a>";
+					$menu_html.="\n<li class=\"dropdown\"><a class=\"main-top-link\" href=\"http://$DOMAIN_NAME/EMPLOYERS/index.php?category=".$oLinkActions[$i]."&action=".$evSLinkActions[0]."\">".$oLinkTexts[$i]."</a>";
 					
 				}
 				$bottom_menu.="\n<h5 class=\"bottom-header\">".$oLinkTexts[$i]."</h5>";

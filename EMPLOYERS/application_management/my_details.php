@@ -17,7 +17,8 @@ $arrPostingApply = $database->DataArray("apply","id=".$apply_id);
 if($arrPostingApply["posting_id"]!=$posting_id) die("");
     
 $id = $arrPostingApply["jobseeker"];
-            
+
+       
 //Get the current jobseeker data
 $jobseeker_data = $db->where('username', "$id")->getOne("jobseeker_resumes");
 

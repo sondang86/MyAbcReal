@@ -281,12 +281,12 @@
         }
             
         /**
-        *  calculate and output time ago result
+        *  calculate and output time ago result, the calculation method is current time - $time
         * 
-        *  @param var $time input time in Unix timestamp, the calculation is current time - $time
+        *  @param var $time input time in Unix timestamp
         *  @param var $lang time language array s/m/h/d/w/m/y/decade
         */
-        public function time_ago($time, $lang=array("giây", "phút", "giờ", "ngày", "tuần", "tháng", "năm", "thập kỷ")){
+        public function time_ago($time, $lang=array("giây", "phút", "giờ", "ngày", "tuần", "tháng", "năm")){
            $periods = $lang;
            $lengths = array("60","60","24","7","4.35","12","10");
                
@@ -856,11 +856,7 @@
         public function getJobseeker_locations($jobseeker_id){
             $this->_db->join("locations", $this->_dbPrefix."jobseeker_locations.location_id=".$this->_dbPrefix."locations.id", "LEFT");
             $jobseeker_locations = $this->_db->withTotalCount()->where('jobseeker_id', $jobseeker_id)->get('jobseeker_locations');
-            if($this->_db->totalCount > 0){
-                return $jobseeker_locations;
-            } else {
-                return FALSE;
-            }
+            return $jobseeker_locations;
         }
         
         /**
@@ -1002,6 +998,149 @@
             $regex = '/"[^"]*"|\S+/m'; 
             $result = preg_replace($regex, '+$0', $string);
             return $result;
+        }
+        
+        /**
+        *  Check if variable1 presents and equal with second variable, then output desired text
+        * 
+        *  @param var string input string 
+        *  @param var var2 input string 
+        *  @param var desired_text input string 
+        */
+        public function checkEqually($var1,$var2,$desired_text="selected"){
+            if(($var1 !== NULL) && $var1 == $var2){ 
+                echo $desired_text;                
+            }
+        }
+        
+        
+        /**
+        *  get jobseeker resume details or all resumes
+        * 
+        *  @param var username username/email of customer
+        *
+        * 
+        */
+        public function getJobseekerResume($resume_id){
+            $jobseeker_resume_columns = array(
+                $this->_dbPrefix."jobseeker_resumes.id as resume_id",$this->_dbPrefix."jobseeker_resumes.username",
+                $this->_dbPrefix."jobseeker_resumes.skills",$this->_dbPrefix."jobseeker_resumes.username",
+                $this->_dbPrefix."jobseeker_resumes.career_objective",$this->_dbPrefix."jobseeker_resumes.facebook_URL",
+                $this->_dbPrefix."jobseeker_resumes.experiences",$this->_dbPrefix."jobseeker_resumes.name_current_position",    
+                $this->_dbPrefix."job_experience.name as job_experience_name",$this->_dbPrefix."job_experience.name_en as job_experience_name_en",
+                $this->_dbPrefix."education.education_name",$this->_dbPrefix."education.education_name_en",
+                $this->_dbPrefix."languages.name as language_name",
+                $this->_dbPrefix."language_levels.level_name as language_level_name",
+                $this->_dbPrefix."salary.salary_range as current_salary",$this->_dbPrefix."salary.salary_range_en current_salary_en",
+                $this->_dbPrefix."categories.category_name as desired_category",$this->_dbPrefix."categories.category_name_vi as desired_category_vi",
+                $this->_dbPrefix."locations.City as desired_city",$this->_dbPrefix."locations.City_en as desired_city_en",
+                $this->_dbPrefix."job_types.job_name",$this->_dbPrefix."job_types.job_name_en",
+                $this->_dbPrefix."positions.position_name as current_position_name",$this->_dbPrefix."positions.position_name_en as current_position_name_en",
+                "expected_position.position_name as expected_position_name",
+                "expected_position.position_name_en as expected_position_name_en",
+                "expected_salary.salary_range as expected_salary_range",
+                "expected_salary.salary_range_en as expected_salary_range_en",
+                "IT_skill.name as IT_skill_name","IT_skill.name_en as IT_skill_name_en",
+                "group_skill.name as group_skill_name","group_skill.name_en as group_skill_name_en",
+                "pressure_skill.name as pressure_skill_name","pressure_skill.name_en as pressure_skill_name_en",
+            );
+
+            $this->_db->join("job_experience", $this->_dbPrefix."jobseeker_resumes.experience_level=".$this->_dbPrefix."job_experience.experience_id", "LEFT");
+            $this->_db->join("education", $this->_dbPrefix."jobseeker_resumes.education_level=".$this->_dbPrefix."education.education_id", "LEFT");
+            $this->_db->join("languages", $this->_dbPrefix."jobseeker_resumes.language=".$this->_dbPrefix."languages.id", "LEFT");
+            $this->_db->join("language_levels", $this->_dbPrefix."jobseeker_resumes.language_level=".$this->_dbPrefix."language_levels.level", "LEFT");
+            $this->_db->join("salary", $this->_dbPrefix."jobseeker_resumes.salary=".$this->_dbPrefix."salary.salary_id", "LEFT");
+            $this->_db->join("categories", $this->_dbPrefix."jobseeker_resumes.job_category=".$this->_dbPrefix."categories.category_id", "LEFT");
+            $this->_db->join("locations", $this->_dbPrefix."jobseeker_resumes.location=".$this->_dbPrefix."locations.id", "LEFT");
+            $this->_db->join("job_types", $this->_dbPrefix."jobseeker_resumes.job_type=".$this->_dbPrefix."job_types.id", "LEFT");
+            $this->_db->join("positions", $this->_dbPrefix."jobseeker_resumes.current_position=".$this->_dbPrefix."positions.position_id", "LEFT");
+            $this->_db->join("positions as expected_position", $this->_dbPrefix."jobseeker_resumes.expected_position=expected_position.position_id", "LEFT");
+            $this->_db->join("salary as expected_salary", $this->_dbPrefix."jobseeker_resumes.expected_salary=expected_salary.salary_id", "LEFT");
+            $this->_db->join("skills as IT_skill", $this->_dbPrefix."jobseeker_resumes.IT_skills=IT_skill.skill_id", "LEFT");
+            $this->_db->join("skills as group_skill", $this->_dbPrefix."jobseeker_resumes.group_skills=group_skill.skill_id", "LEFT");
+            $this->_db->join("skills as pressure_skill", $this->_dbPrefix."jobseeker_resumes.pressure_skill=pressure_skill.skill_id", "LEFT");
+
+            $this->_db->where ($this->_dbPrefix."jobseeker_resumes.id", $resume_id);                
+            $jobseeker_resumes['jobseeker_resumes'] = $this->_db->withTotalCount()->getOne("jobseeker_resumes", $jobseeker_resume_columns);
+            $jobseeker_resumes['totalCount'] = $this->_db->totalCount;
+            
+            if ($this->_db->totalCount > 0){ //Found record
+                return $jobseeker_resumes;
+            } else {
+                return FALSE;
+            }
+        }
+        
+        /**
+        *  search jobseeker resumes based by conditions or all resumes
+        * 
+        *  @param var condition true is enable search with conditions, false is search all
+        *  @param var queryString query input in title's search
+        *  @param var by_category search by category included
+        *  @param var by_location search by location included
+        *  @param var by_education search by education included
+        *  @param var by_expected_position search by expected_position included
+        *  @param var by_experience_level search by experience_level included
+        */
+        public function Search_Resumes($condition=TRUE,$queryString="",$by_category="",$by_location="",$by_education="",$by_expected_position="",$by_experience_level="") {
+            $jobsInfo_columns = Array (
+                $this->_dbPrefix."jobseeker_resumes.id as resume_id",$this->_dbPrefix."jobseeker_resumes.username",
+                $this->_dbPrefix."jobseeker_resumes.title as resume_title",$this->_dbPrefix."jobseeker_resumes.skills as resume_skills",
+                $this->_dbPrefix."jobseeker_resumes.date_updated as resume_date_updated",
+                $this->_dbPrefix."job_experience.name as job_experience_name",$this->_dbPrefix."job_experience.name_en as job_experience_name_en",
+                $this->_dbPrefix."job_experience.experience_id",
+                $this->_dbPrefix."positions.position_name",$this->_dbPrefix."positions.position_name_en",
+                $this->_dbPrefix."education.education_name as education_name",$this->_dbPrefix."education.education_name_en as education_name_en",
+                $this->_dbPrefix."education.education_id",
+                $this->_dbPrefix."salary.salary_range",$this->_dbPrefix."salary.salary_range_en",$this->_dbPrefix."salary.salary_id",
+                $this->_dbPrefix."categories.category_name",$this->_dbPrefix."categories.category_name_vi",
+                $this->_dbPrefix."categories.id as category_id",
+                $this->_dbPrefix."job_types.job_name",$this->_dbPrefix."job_types.job_name_en",$this->_dbPrefix."job_types.id as job_type_id",
+                $this->_dbPrefix."locations.City",$this->_dbPrefix."locations.City_en",$this->_dbPrefix."locations.id as location_id",
+                $this->_dbPrefix."jobseekers.first_name",$this->_dbPrefix."jobseekers.last_name",
+            );
+
+            $this->_db->join('positions', $this->_dbPrefix."jobseeker_resumes.current_position =".$this->_dbPrefix."positions.position_id", "LEFT");
+            $this->_db->join('education', $this->_dbPrefix."jobseeker_resumes.education_level =".$this->_dbPrefix."education.education_id", "LEFT");
+            $this->_db->join('salary', $this->_dbPrefix."jobseeker_resumes.expected_salary =".$this->_dbPrefix."salary.salary_id", "LEFT");
+            $this->_db->join('categories', $this->_dbPrefix."jobseeker_resumes.job_category =".$this->_dbPrefix."categories.category_id", "LEFT");
+            $this->_db->join('job_types', $this->_dbPrefix."jobseeker_resumes.job_type =".$this->_dbPrefix."job_types.id", "LEFT");
+            $this->_db->join('locations', $this->_dbPrefix."jobseeker_resumes.location =".$this->_dbPrefix."locations.id", "LEFT");
+            $this->_db->join('job_experience', $this->_dbPrefix."jobseeker_resumes.experience_level =".$this->_dbPrefix."job_experience.experience_id", "LEFT");
+            $this->_db->join('jobseekers', $this->_dbPrefix."jobseeker_resumes.username =".$this->_dbPrefix."jobseekers.username", "LEFT");
+
+            //perform search by conditions   
+            if ($condition == TRUE){
+                if ($queryString !== ""){ //title search with keywords included
+                    $this->_db->where("MATCH(".$this->_dbPrefix."jobseeker_resumes.title) AGAINST ('$queryString*' IN BOOLEAN MODE)");
+                }
+
+                if ($by_category !== ""){  
+                    $this->_db->where('job_category', $by_category);
+                }
+
+                if ($by_location !== ""){ 
+                    $this->_db->where('location', $by_location);
+                }
+
+                if ($by_education !== ""){ 
+                    $this->_db->where('education_level', $by_education);
+                }
+
+                if ($by_experience_level !== ""){
+                    $this->_db->where('experience_level', $by_experience_level);
+                }
+
+                if ($by_expected_position !== ""){ //expected position included
+                    $this->_db->where('expected_position', $by_expected_position);
+                }  
+                
+            }
+
+            $resumes['resumes'] = $this->_db->withTotalCount()->get('jobseeker_resumes', NULL, $jobsInfo_columns);
+            $resumes['totalCount'] = $this->_db->totalCount; 
+
+            return $resumes;
         }
         
     }

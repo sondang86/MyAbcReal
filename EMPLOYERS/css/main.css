@@ -1498,6 +1498,36 @@ input[type="submit"]{
     margin: 15px 0;
 }
 
+/*Search area*/
+.search-area {
+    margin: 25px 0;
+}
+
+.search-button {
+    width: 100%;
+    /* border: 1px solid; */
+    border-radius: 5px;
+    padding: 8px;
+    background: #fc205b;
+}
+
+.search-button i {
+    color: #ffffff;
+}
+
+.search-form input[type="text"]{
+    width: 100%;
+    color: grey;
+}
+
+::-webkit-input-placeholder {
+    color: red;
+}
+
+.search-form div select {
+    width: 100% !important;
+}
+
 /* Responsive design goes here */
 
 /* D?nh cho ?i?n tho?i */

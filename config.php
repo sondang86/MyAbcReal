@@ -1,5 +1,7 @@
 <?php
 $DOMAIN_NAME = "localhost/vieclambanthoigian.com.vn";
+$EMPLOYER_DOMAIN_NAME = "http://$DOMAIN_NAME/EMPLOYERS/";
+$JOBSEEKER_DOMAIN_NAME = "http://$DOMAIN_NAME/JOBSEEKERS/";
 
 //MYSQL DATABASE ACCESS SETTINGS
 $DBHost="localhost";
