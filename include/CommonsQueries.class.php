@@ -41,6 +41,22 @@
                 return NULL;
             }
         }
+        
+        /**
+        *  Check if value empty will output n/a message instead
+        * 
+        *  @param var value value to be check
+        *  @param var method method to be use when value not null
+        * 
+        */
+        public function check_nA($value, $method){
+            if ($value !== ""){
+                echo $method;
+            } else {
+                echo "N/A";
+            }
+        }
+        
             
         /**
         *  Output "Yes 1" or "No 0" texts based on language id
@@ -740,7 +756,7 @@
         * @param last_activity last activity of user in website, by default is 3600s = 60mins
         * 
         */
-        public function CheckSession($last_activity="3600") {
+        public function CheckSession($last_activity="7200") {
             if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > $last_activity)) {
                 // last request was more than 60 minutes ago
                 session_unset();     // unset $_SESSION variable for the run-time 
@@ -1137,9 +1153,9 @@
                 
             }
 
+            //Get the data
             $resumes['resumes'] = $this->_db->withTotalCount()->get('jobseeker_resumes', NULL, $jobsInfo_columns);
             $resumes['totalCount'] = $this->_db->totalCount; 
-
             return $resumes;
         }
         

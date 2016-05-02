@@ -66,7 +66,20 @@ $job_experience = $db->get_data('job_experience');
 $job_availability = $db->get_data('job_availability');
 $salaries = $db->get_data('salary');
 $current_language = $db->get_data('languages','id',"WHERE default_language=1")[0];
-$jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers');
+
+$profile_columns = array(
+    $DBprefix."jobseekers.id as jobseeker_id",$DBprefix."jobseekers.username",$DBprefix."jobseekers.first_name",
+    $DBprefix."jobseekers.last_name",$DBprefix."jobseekers.address",$DBprefix."jobseekers.phone",
+    $DBprefix."jobseekers.marital_status",$DBprefix."jobseekers.description",$DBprefix."jobseekers.dob as date_of_birth",
+    $DBprefix."jobseekers.mobile",$DBprefix."jobseekers.gender",$DBprefix."jobseekers.profile_pic",
+    $DBprefix."jobseekers.date as date_joined",$DBprefix."jobseekers.profile_description",
+    $DBprefix."jobseekers.profile_public",$DBprefix."jobseekers.newsletter",
+    $DBprefix."gender.name as gender_name",$DBprefix."gender.name_en as gender_name_en"
+);
+
+$db->join('common_yes_no as profile_public', $DBprefix."jobseekers.profile_public = profile_public.common_id", "LEFT");
+$db->join('gender', $DBprefix."jobseekers.gender =". $DBprefix."gender.gender_id", "LEFT");
+$jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers',$profile_columns);
 
 
 $website->LoadTemplate(-1);
@@ -96,18 +109,23 @@ $website->Render();
 
 ?>
 <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'  type='text/css'>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-<script src="http://jqueryvalidation.org/files/dist/jquery.validate.min.js"></script>
-<script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
+<!--<link href="/vieclambanthoigian.com.vn/css/sky-forms.css" rel="stylesheet" type="text/css"/>-->
+<!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">-->
+<!--<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>-->
+<script src="/vieclambanthoigian.com.vn/js/jquery.validate.min.js" type="text/javascript"></script>
+<script src="/vieclambanthoigian.com.vn/js/additional-methods.min.js" type="text/javascript"></script>
+<script src="/vieclambanthoigian.com.vn/js/jquery.maskedinput.js" type="text/javascript"></script>
 <link href="../include/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
 <script src="../include/select2/js/select2.min.js" type="text/javascript"></script>
 
 <script>
     jQuery(document).ready(function(){
         jQuery("#datePicker").datepicker({
-            dateFormat: 'yy-mm-dd' 
+            dateFormat: 'dd-mm-yy',
+            changeMonth: true,
+            changeYear:true,
+            yearRange: "1950:+0"
         });
     });
     

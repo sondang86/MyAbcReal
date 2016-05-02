@@ -78,7 +78,7 @@ if ($AuthUserName !== $job_info['employer']){//Job question does not belong to c
                 i--;
             };
             
-            //Show 
+            //Show add more button
             if (i < 6) {
                 $("#addMore").show();
             }

@@ -1225,6 +1225,13 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
     list-style-type: none;
 }
 
+
+/*Datepicker*/
+
+.ui-datepicker-month, .ui-datepicker-year {
+    min-width: 45% !important;
+}
+
 /* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {
     .locationCheckbox {
@@ -1260,6 +1267,13 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
     
     .js-radioBoxes span input{
         margin-right: 5px;
+    }
+    
+    .js-editForm {
+        margin: 25px 5px;
+        width: 99%;
+        border-radius: 5px;
+        background: rgba(170, 170, 170, 0.15);
     }
 }
  

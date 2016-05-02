@@ -7,17 +7,18 @@
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
 global $db, $commonQueries;
-
+    
 $positions = $db->get('positions');
 $salaries = $db->get('salary');
 $categories = $db->get('categories');
 $education = $db->get('education');
 $job_types = $db->get('job_types');
 $locations = $db->get('locations');
-$languages = $db->get('languages');
 $language_levels = $db->get('language_levels');
+$languages = $db->get('skill_languages');
 $skills = $db->get('skills');
 
+    
 //Get the current jobseeker data
 $jobseeker_data = $db->where('username', "$AuthUserName")->getOne('jobseeker_resumes');
     
@@ -26,16 +27,42 @@ $jobseeker_profile = $commonQueries->getJobseeker_profile($AuthUserName);
 $jobseeker_categories = $commonQueries->getJobseeker_categories($jobseeker_profile['jobseeker_id']);
 $jobseeker_locations = $commonQueries->getJobseeker_locations($jobseeker_profile['jobseeker_id']);
 
+$db->where('resume_id',$jobseeker_data['id']);
+$jobseeker_languages = $db->withTotalCount()->get('jobseeker_languages');
+$jobseeker_languages_count = $db->totalCount;
+    
+echo "<pre>";
+print_r($jobseeker_data);
+echo "</pre>";
+    
 if(isset($_POST["ProceedSaveResume"])){
-        
+    //Update jobseeker languages
+    if(isset($_POST['js-Language']) && isset($_POST['js-languageLevel'])){
+        foreach ($_POST['js-Language'] as $key => $value) {
+            $data = Array (
+                "language_id" => $value,
+                "level_id" => $_POST['js-languageLevel'][$key],
+                "resume_id" => $_POST['resume_id'],
+                "updated_at" => $db->now(),
+            );
+            $updateColumns = Array ("language_id", "level_id");
+            $lastInsertId = $_POST['language_keyId'][$key];
+            $db->onDuplicate($updateColumns, $lastInsertId);
+            $id = $db->insert ('jobseeker_languages', $data);
+        }        
+    }
+//        print_r($_POST['language_keyId']);die;
+
+    die;
+    
     if($database->SQLCount("jobseeker_resumes","WHERE username='".$AuthUserName."'") == 0){
         $database->SQLInsert("jobseeker_resumes",array("username"),array($AuthUserName));
     }
-
+        
     //Locations update
     if(isset($_POST['preferred_locations'])){
         //If user records exists, delete them
-        
+            
         $db->where('jobseeker_id', $jobseeker_profile['jobseeker_id'])->withTotalCount()->get('jobseeker_locations');
         if($db->totalCount !== "0"){            
             $db->where('jobseeker_id', $jobseeker_profile['jobseeker_id']);
@@ -45,14 +72,14 @@ if(isset($_POST["ProceedSaveResume"])){
                 echo "There was a problem when deleting locations";die;
             }            
         }
-
+            
         //Insert records
         foreach ($_POST['preferred_locations'] as $preferred_location) {
             $location_data = array(
                 'location_id'   => $preferred_location,
                 'jobseeker_id'  => $jobseeker_profile['jobseeker_id']
             );
-
+                
             $id = $db->insert ('jobseeker_locations', $location_data);
             if($id){
                 echo 'records were created. Id=' . $id;
@@ -61,8 +88,8 @@ if(isset($_POST["ProceedSaveResume"])){
             }
         }   
     }
-
-
+        
+        
     //categories update
     if(isset($_POST['preferred_categories'])){
         //If user records exists, delete them
@@ -75,14 +102,14 @@ if(isset($_POST["ProceedSaveResume"])){
                 echo "There was a problem when deleting categories";die;
             }            
         }
-
+            
         //Insert again
         foreach ($_POST['preferred_categories'] as $preferred_category) {
             $category_data = array(
                 'category_id'   => $preferred_category,
                 'jobseeker_id'  => $jobseeker_profile['jobseeker_id']
             );
-
+                
             $id = $db->insert ('jobseeker_categories', $category_data);
             if($id){
                 echo 'records were created. Id=' . $id;
@@ -91,7 +118,11 @@ if(isset($_POST["ProceedSaveResume"])){
             }
         }
     }
-
+    
+    
+    
+        
+    //Update jobseeker resume
     $data = array (
         "title"                 => filter_input(INPUT_POST,'js-title', FILTER_SANITIZE_STRING),
         "name_current_position" => filter_input(INPUT_POST,'js-nameCP', FILTER_SANITIZE_STRING),
@@ -107,18 +138,12 @@ if(isset($_POST["ProceedSaveResume"])){
         "facebook_URL"          => filter_input(INPUT_POST,'js-facebookURL', FILTER_SANITIZE_STRING),
         "experiences"           => filter_input(INPUT_POST,'js-experience', FILTER_SANITIZE_STRING),
         "skills"                => filter_input(INPUT_POST,'skills', FILTER_SANITIZE_STRING),
-        "language"              => filter_input(INPUT_POST,'js-language', FILTER_SANITIZE_NUMBER_INT),
-        "language_level"        => filter_input(INPUT_POST,'js-languageLevel', FILTER_SANITIZE_NUMBER_INT),
-        "language_1"            => filter_input(INPUT_POST,'js-language1', FILTER_SANITIZE_NUMBER_INT),
-        "language_1_level"      => filter_input(INPUT_POST,'js-languageLevel1', FILTER_SANITIZE_NUMBER_INT),
-        "language_2"            => filter_input(INPUT_POST,'js-language2', FILTER_SANITIZE_NUMBER_INT),
-        "language_2_level"      => filter_input(INPUT_POST,'js-languageLevel2', FILTER_SANITIZE_NUMBER_INT),
         "IT_skills"             => filter_input(INPUT_POST,'js-IT_skill', FILTER_SANITIZE_NUMBER_INT),
         "group_skills"          => filter_input(INPUT_POST,'js-group_skill', FILTER_SANITIZE_NUMBER_INT),
         "pressure_skill"        => filter_input(INPUT_POST,'js-pressure_skill', FILTER_SANITIZE_NUMBER_INT),
         "date_updated"          => strtotime(date("Y-m-d H:i:s"))
     );
-
+        
     $db->where ('username', "$AuthUserName");
     if ($db->update ('jobseeker_resumes', $data)){
         $commonQueries->flash('message',$commonQueries->messageStyle('info',"Cập nhật thành công"));
@@ -126,14 +151,11 @@ if(isset($_POST["ProceedSaveResume"])){
     } else {
         echo 'update failed: ' . $db->getLastError();die;
     }
+    
 } 
 ?>
-<style>
-    .navmenu a {
-        float: right;
-    }
-</style>
 
+    
 <nav class="row">
     <section class="col-md-9"><h4><?php $commonQueries->flash('message');?></h4></section>
     <section class="col-md-3 navmenu">
@@ -149,7 +171,11 @@ if(isset($_POST["ProceedSaveResume"])){
         <input type="hidden" name="category" value="<?php echo $category;?>">
         <div class="jobseeker-cv">
             <section class="col-md-2 profilePic">
-                <figure><img src="../images/jobseekers/profile_pic/<?php echo $jobseeker_profile['profile_pic'];?>" id="preview" alt="Ảnh cá nhân hiện tại" class="img-responsive"></figure>
+                <?php if (!empty($jobseeker_profile['profile_pic'])){?>
+                <figure><img src="http://<?php echo $DOMAIN_NAME?>/images/jobseekers/profile_pic/<?php echo $jobseeker_profile['profile_pic'];?>" id="preview" alt="Ảnh cá nhân hiện tại" class="img-responsive" width="150" height="200"></figure>
+                <?php } else {?>
+                <figure><img src="http://<?php echo $DOMAIN_NAME?>/images/jobseekers/profile_pic/avatar_nam.jpg" id="preview" alt="Ảnh cá nhân hiện tại" class="img-responsive" width="150" height="200"></figure>
+                <?php }?>
             </section>
             <section class="col-md-10 JS_profile">
                 <p><label>Họ và Tên: </label> <span><?php echo $jobseeker_profile['first_name']?> <?php echo $jobseeker_profile['last_name']?></span></p>
@@ -195,7 +221,7 @@ if(isset($_POST["ProceedSaveResume"])){
                             <?php endforeach;?>
                             </select>            
                         </label>
-                        
+                            
                         <!--EXPECTED POSITION-->
                         <label>
                             <span><b><?php echo $M_NAME_EXPECTED_POSITION;?></b></span>                                               
@@ -206,7 +232,7 @@ if(isset($_POST["ProceedSaveResume"])){
                             <?php endforeach;?>
                             </select>
                         </label>
-                        
+                            
                         <!--EXPECTED SALARY-->
                         <label>
                             <span><b><?php echo $M_NAME_EXPECTED_SALARY;?></b></span>						
@@ -217,7 +243,7 @@ if(isset($_POST["ProceedSaveResume"])){
                             <?php endforeach;?>
                             </select>
                         </label>
-                        
+                            
                         <!--BROWSE CATEGORY-->
                         <label>
                             <span><b><?php echo $M_BROWSE_CATEGORY;?></b></span>						
@@ -237,7 +263,7 @@ if(isset($_POST["ProceedSaveResume"])){
                         <?php endforeach;?>
                             </select>
                         </label>
-                        
+                            
                         <!--EDUCATION-->
                         <label>
                             <span><b><?php echo $M_EDUCATION;?></b></span>						
@@ -249,70 +275,184 @@ if(isset($_POST["ProceedSaveResume"])){
                             </select>
                         </label>                            
                     </div>
-                    
+                        
                     <!--Language forms-->
                     <div class="col-md-6 col-sm-6 col-xs-12 js-forms">
                         <label>
                             <span><b><?php echo $M_JOB_TYPE;?></b></span>						
-                            <select name="js-jobType">                            
+                            <select name="js-jobType[]">                            
                         <?php foreach ($job_types as $value) :?>
                                 <option value="<?php echo $value['id']?>" <?php if($value['id'] == $jobseeker_data['job_type']) {echo "selected";}?>><?php echo $value['job_name']?></option>
                         <?php endforeach;?>
                             </select>
                         </label>
-                        <label>
-                            <span><label for="js-Language"><?php echo $M_FOREIGN_LANGUAGE;?>: </label></span>
-                            <select name="js-language" required>
-                                <option value="">Select language</option>
-                        <?php foreach ($languages as $value) :?>
-                                <option value="<?php echo $value['id']?>" <?php if($value['id'] == $jobseeker_data['language']) {echo "selected";}?>><?php echo $value['name']?></option>
-                        <?php endforeach;?>
-                            </select>
-                            <span></span>
-                            <select name="js-languageLevel" required>
-                                <option value=""><?php echo $M_PLEASE_SELECT;?></option>
-                            <?php foreach ($language_levels as $value) :?>
-                                <option value="<?php echo $value['level']?>" <?php if($value['level'] == $jobseeker_data['language_level']) {echo "selected";}?>><?php echo $value['level_name']?></option>
-                            <?php endforeach;?>
-                            </select>
-                        </label>
-                        <label>
-                            <span><label for="js-Language"><?php echo $M_FOREIGN_LANGUAGE;?>: </label></span>
-                            <select name="js-language1">
-                                <option value="">Select language</option>
-                        <?php foreach ($languages as $value) :?>
-                                <option value="<?php echo $value['id']?>" <?php if($value['id'] == $jobseeker_data['language_1']) {echo "selected";}?>><?php echo $value['name']?></option>
-                        <?php endforeach;?>
-                            </select>
-                            <span></span>
-                            <select name="js-languageLevel1">
-                                <option value="">Select level</option>
-                                <option value=""><?php echo $M_PLEASE_SELECT;?></option>
-                            <?php foreach ($language_levels as $value) :?>
-                                <option value="<?php echo $value['level']?>" <?php if($value['level'] == $jobseeker_data['language_1_level']) {echo "selected";}?>><?php echo $value['level_name']?></option>
-                            <?php endforeach;?>
-                            </select>
-                        </label>
-                        <label>
-                            <span><label for="js-Language"><?php echo $M_FOREIGN_LANGUAGE;?>: </label></span>
-                            <select name="js-language2">
-                                <option value="">Select language</option>
-                        <?php foreach ($languages as $value) :?>
-                                <option value="<?php echo $value['id']?>" <?php if($value['id'] == $jobseeker_data['language_2']) {echo "selected";}?>><?php echo $value['name']?></option>
-                        <?php endforeach;?>
-                            </select>
-                            <span></span>
-                            <select name="js-languageLevel2">
-                                <option value=""><?php echo $M_PLEASE_SELECT;?></option>
-                            <?php foreach ($language_levels as $value) :?>
-                                <option value="<?php echo $value['level']?>" <?php if($value['level'] == $jobseeker_data['language_2_level']) {echo "selected";}?>><?php echo $value['level_name']?></option>
-                            <?php endforeach;?>
-                            </select>
-                        </label>   
                     </div>
                 </div>
                 <!--Language forms-->
-                
+                    
+                <!--Language add-->
+                <div class="row edit_language">
+                    <section class="col-md-11"><h4>Ngoại ngữ: </h4></section>
+                    <section class="col-md-1">
+                        <a href="#" onClick="MyWindow=window.open('http://www.google.com','MyWindow',width=600,height=300); return false;">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>                        
+                        </a>                    
+                    </section>
+                </div>
+                <div class='wrapper'>
+                <?php if ($jobseeker_languages_count == "0") { //No languages found, display default selection tab?>
+                    
+                    <fieldset class="row language-form">
+                        
+                        <section class="col-md-4">
+                            <span>Trình độ</span>
+                            <select name="js-Language[]" required>
+                                <option value="">Select</option>
+                                <?php foreach ($languages as $value) :?>
+                                <option value="<?php echo $value['id']?>"><?php echo $value['language_name']?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </section>
+                            
+                        <section class="col-md-4">
+                            <span>Trình độ</span>
+                            <select name="js-languageLevel[]" required>
+                                <option value="">Select</option>
+                                <?php foreach ($language_levels as $value) :?>
+                                <option value="<?php echo $value['level']?>"><?php echo $value['level_name']?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </section>
+                            
+                        <section class="col-md-1">
+                            <button class="delete">X</button>
+                        </section>
+                                                
+                    </fieldset>
+                    
+                <?php } else {                        
+                        
+                    foreach ($jobseeker_languages as $jobseeker_language) :?>
+                    <fieldset class="row language-form">
+                        
+                        <section class="col-md-4">
+                            <span>Trình độ</span>
+                            <select name="js-Language[]" required>
+                                <option value="">Select</option>
+                                <?php foreach ($languages as $value) :?>
+                                <option value="<?php echo $value['id']?>" <?php if($value['id'] == $jobseeker_language['language_id']) {echo "selected";}?>><?php echo $value['language_name']?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </section>
+                            
+                        <section class="col-md-4">
+                            <span>Trình độ</span>
+                            <select name="js-languageLevel[]" required>
+                                <option value="">Select</option>
+                                <?php foreach ($language_levels as $value) :?>
+                                <option value="<?php echo $value['level']?>" <?php if($value['level'] == $jobseeker_language['level_id']) {echo "selected";}?>><?php echo $value['level_name']?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </section>
+                            
+                        <section class="col-md-1">
+                            <button class="delete">X</button>
+                        </section>
+                        
+                        <input type="hidden" name="language_keyId[]" value="<?php echo $jobseeker_language['id']?>">
+                        
+                    </fieldset>
+                    <?php endforeach; }?>
+                </div>
+                    
+                <div class="row addbutton">
+                    <section class="col-md-12">
+                        <input id="addbutton" type="button" value="Thêm ngoại ngữ" />
+                    </section>
+                </div>
+                    
+                    
+                <style>
+                    .addbutton {
+                        margin-top: 10px;
+                    }
+                    .language-form {
+                        margin-top: 10px;
+                    }
+                        
+                    .language-form select {
+                        margin-right: 5px;
+                    }
+                        
+                    .language-form span select{
+                        margin: 10px 0;
+                    }
+                    
+                    .language-form section span {
+                        margin-right: 30px;
+                    }                    
+                    
+                    .language-form section select {
+                        width: 75%;
+                    }
+                    
+                    .navmenu a {
+                        float: right;
+                    }
+                </style>
+                    
+                    
+                <script>   
+                    var Count = $('.language-form').length; //Count total current language tabs
+                    
+                    //Hide add more language button
+                    if (Count > 3) {
+                        $("#addbutton").hide("slow");                           
+                    }
+                    
+
+                    function add_element(Count){
+                        if (Count > 0) {
+                            $('#removebutton').show("slow");
+                        }
+                        //Clone select options slowly
+                        $('.language-form:first').clone().find('option').prop('selected', false).end().appendTo('.wrapper');
+                        
+                        //Show add button while < 3 elements only
+                        if (Count > 3){
+                            $("#addbutton").hide("slow");
+                        } 
+                    };
+                    
+                    //Add language
+                    
+                    $(document).on('click',"#addbutton", function(){
+                        Count++; // + 1 tab
+                        add_element(Count);
+                    });
+                    
+                    //Remove selected tab
+                    $(document).on('click', ".delete", function(e){
+                        //Prevent delete the last tab
+                        if (Count > "1") {
+                            //Delete slowly
+                            $(this).parents(".language-form").fadeOut(100, function(){
+                                $(this).remove();
+                            });
+                            Count--;
+                            
+                            //Show back add button
+                            if(Count <= "3"){
+                                $("#addbutton").show("slow");
+                            }
+                        }
+                        
+                        //Prevent form click
+                        e.preventDefault();
+                    });
+                    
+                </script>
+                    
                 <!--CAREER OBJECTIVE-->
                 <div class="jobseeker-messageArea" name="js-careerObjective" class="jobseeker-messageArea" rows="5" style="width: 100%">
                     <div class="jobseeker-title"><h4><?php echo $M_CAREER_OBJECTIVE;?></h4></div>
@@ -374,7 +514,7 @@ if(isset($_POST["ProceedSaveResume"])){
                         </section>
                     </label>
                 </section>
-                
+                    
                 <!--PRESSURE SKILL-->
                 <section class="row">
                     <label class="col-md-8 js-forms">
@@ -422,7 +562,7 @@ if(isset($_POST["ProceedSaveResume"])){
                     </section>
                 </div>
                 <!--DESIRED CATEGORIES-->
-                 
+                    
                 <!--FACEBOOK ADDRESS-->
                 <section class="row">
                     <label class="col-md-8 js-forms">
@@ -431,8 +571,8 @@ if(isset($_POST["ProceedSaveResume"])){
                     </label>
                 </section>
                     
-                <!--JOBSEEKER ID-->
-                <input type="hidden" name="jobseeker_id" value="<?php echo $jobseeker_profile['jobseeker_id']?>">
+                <input type="hidden" name="jobseeker_id" value="<?php echo $jobseeker_profile['jobseeker_id'] //JOBSEEKER ID?>">
+                <input type="hidden" name="resume_id" value="<?php echo $jobseeker_data['id']; //RESUME ID?>">
             </div>            
         </div>
         <input type="submit" value=" <?php echo $SAUVEGARDER;?> " class="btn btn-primary">
