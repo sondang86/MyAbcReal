@@ -1232,6 +1232,37 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
     min-width: 45% !important;
 }
 
+
+/*Language forms*/
+
+.addbutton {
+    margin-top: 10px ;
+}
+
+.language-form {
+    margin-top: 10px;
+}
+
+.language-form select {
+    margin-right: 5px;
+}
+
+.language-form span select{
+    margin: 10px 0;
+}
+
+.language-form section span {
+    margin-right: 30px;
+}                    
+
+.language-form section select {
+    width: 75%;
+}
+
+.navmenu a {
+    float: right;
+}
+
 /* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {
     .locationCheckbox {
