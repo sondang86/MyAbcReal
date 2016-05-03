@@ -162,7 +162,23 @@ if(isset($_POST["ProceedSaveResume"])){
     
 <!--SonDang modify here-->
 <div class="row">
-    <form action="index.php" method="post" class="col-md-12" id="myform">
+<form action="index.php" method="post" class="col-md-12" id="myformtest">
+
+    <section class="col col-6">
+            <label class="label">Required field</label>
+            <label class="input">
+                    <i class="icon-append fa fa-asterisk"></i>
+                    <select name="js_language">
+                        <option value="">Select option</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+            </label>
+            <button type="submit" class="button">Submit</button>
+    </section>
+</form> 
+    
+<form action="" method="post" class="col-md-12" id="js_form">        
         <input type="hidden" name="ProceedSaveResume" value="1">
         <input type="hidden" name="action" value="<?php echo $action;?>">
         <input type="hidden" name="category" value="<?php echo $category;?>">
@@ -293,7 +309,7 @@ if(isset($_POST["ProceedSaveResume"])){
                 <div class="row edit_language">
                     <section class="col-md-11"><h4>Ngoại ngữ: </h4></section>
                     <section class="col-md-1">
-                        <a href="#" onClick="" id="modify-language">
+                        <a href="#" id="modify-language">
                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>                        
                         </a>                    
                     </section>
@@ -305,7 +321,7 @@ if(isset($_POST["ProceedSaveResume"])){
                         
                         <section class="col-md-4">
                             <span>Trình độ</span>
-                            <select name="js-Language" required>
+                            <select name="js_language">
                                 <option value="">Select</option>
                                 <?php foreach ($languages as $value) :?>
                                 <option value="<?php echo $value['id']?>"><?php echo $value['language_name']?></option>
@@ -315,7 +331,7 @@ if(isset($_POST["ProceedSaveResume"])){
                             
                         <section class="col-md-4">
                             <span>Trình độ</span>
-                            <select name="js-languageLevel" required>
+                            <select name="js_language_level">
                                 <option value="">Select</option>
                                 <?php foreach ($language_levels as $value) :?>
                                 <option value="<?php echo $value['level']?>"><?php echo $value['level_name']?></option>
@@ -336,7 +352,7 @@ if(isset($_POST["ProceedSaveResume"])){
                         
                         <section class="col-md-4">
                             <span>Trình độ</span>
-                            <select name="js-Language" required>
+                            <select name="js_language" required>
                                 <option value="">Select</option>
                                 <?php foreach ($languages as $value) :?>
                                 <option value="<?php echo $value['id']?>" <?php if($value['id'] == $jobseeker_language['language_id']) {echo "selected";}?>><?php echo $value['language_name']?></option>
@@ -346,7 +362,7 @@ if(isset($_POST["ProceedSaveResume"])){
                             
                         <section class="col-md-4">
                             <span>Trình độ</span>
-                            <select name="js-languageLevel" required>
+                            <select name="js_language_level" required>
                                 <option value="">Select</option>
                                 <?php foreach ($language_levels as $value) :?>
                                 <option value="<?php echo $value['level']?>" <?php if($value['level'] == $jobseeker_language['level_id']) {echo "selected";}?>><?php echo $value['level_name']?></option>
@@ -364,112 +380,20 @@ if(isset($_POST["ProceedSaveResume"])){
                     <?php endforeach; }?>
                 </div>
                     
+                <!--ADD MORE LANGUAGE BUTTON-->
                 <div class="row addbutton">
                     <section class="col-md-6">
                         <input id="addbutton" type="button" value="Thêm ngoại ngữ" />
                     </section>
                     <section class="col-md-6" id="language_choice" style="display: none;">
-                        <span><button id="save_language">Lưu</button></span>
-                        <span><button id="cancel_language">Hủy</button></span>
+                        <button type="submit" class="button">Submit</button>
+<!--                        <span><button id="save_language" type="submit" class="button">Lưu</button></span>
+                        <span><button id="cancel_language">Hủy</button></span>-->
                     </section>
                 </div>
-                                  
                 
-                <script>   
-//                    $(document).on('click','#save_language',function(){
-//                        var minutes = $('.language-form').serializeObject();
-//                        console.log(minutes);
-//                    });
-                    
-                    
-                    var Count = $('.language-form').length; //Count total current language tabs
-                    
-                    //Hide add more language button
-                    if (Count > 3) {
-                        $("#addbutton").hide("slow");                           
-                    }
-                    
-
-                    function add_element(Count){
-                        if (Count > 0) {
-                            $('#removebutton').show("slow");
-                        }
-                        //Clone select options slowly
-                        $('.language-form:first').clone().find('option').prop('selected', false).end().appendTo('.wrapper');
-                        
-                        //Show add button while < 3 elements only
-                        if (Count > 3){
-                            $("#addbutton").hide("slow");
-                        } 
-                    };
-                    
-                    //Add language
-                    
-                    $(document).on('click',"#addbutton", function(){
-                        Count++; // + 1 tab
-                        add_element(Count);
-                    });
-                    
-                    //Remove selected tab
-                    $(document).on('click', ".delete", function(e){
-                        //Prevent delete the last tab
-                        if (Count > "1") {
-                            //Delete slowly
-                            $(this).parents(".language-form").fadeOut(100, function(){
-                                $(this).remove();
-                            });
-                            Count--;
-                            
-                            //Show back add button
-                            if(Count <= "3"){
-                                $("#addbutton").show("slow");
-                            }
-                        }
-                        
-                        //Prevent form click
-                        e.preventDefault();
-                    });
-                    
-                    //Language modify
-                    //Disable select forms & buttons by default
-                    $(document).ready(function(){
-                       $(".language-form section select").attr("disabled", true); //Disable selection by default
-                    });
-                    
-                    //Show the save & cancel options
-                    $(document).on("click", "#modify-language", function(e){
-                        $("#language_choice").show("slow");
-                        $(".language-form section select").attr("disabled", false);
-                        e.preventDefault();
-                    });
-                    
-                    //disable language form input if user click cancel
-                    $(document).on("click", "#cancel_language", function(e){
-                        $("#language_choice").hide("slow");
-                        $(".language-form section select").attr("disabled", true);
-                        e.preventDefault();
-                    });
-                    
-                    //Save data to db
-                    $(document).on("click", "#save_language", function(e){
-                        var languages_selected = $('.language-form').serializeObject();
-                        json_languages_selected = JSON.stringify( languages_selected );
-                        e.preventDefault();
-                        console.log(json_languages_selected);                        
-
-                        $.ajax({
-                            type: "POST",
-                            dataType: "json",
-                            url: "http://localhost/vieclambanthoigian.com.vn/jobseekers/extensions/save_languages.php",
-                            data: json_languages_selected,
-                            success:  function(data){
-                                alert(data);
-                            }
-                        });
-                    });
-                    
-                </script>
                 
+                          
                 
                 <!--CAREER OBJECTIVE-->
                 <div class="jobseeker-messageArea" name="js-careerObjective" class="jobseeker-messageArea" rows="5" style="width: 100%">
@@ -593,7 +517,138 @@ if(isset($_POST["ProceedSaveResume"])){
                 <input type="hidden" name="resume_id" value="<?php echo $jobseeker_data['id']; //RESUME ID?>">
             </div>            
         </div>
-        <input type="submit" value=" <?php echo $SAUVEGARDER;?> " class="btn btn-primary">
+        <!--<input type="submit" value=" <?php echo $SAUVEGARDER;?> " class="btn btn-primary">-->
     </form>
 </div>
 <!--###SonDang modify here###-->
+
+<script>   
+    var Count = $('.language-form').length; //Count total current language tabs
+
+    //Hide add more language button
+    if (Count > 3) {
+        $("#addbutton").hide("slow");                           
+    }
+
+
+    function add_element(Count){
+        if (Count > 0) {
+            $('#removebutton').show("slow");
+        }
+        //Clone select options slowly
+        $('.language-form:first').clone().find('option').prop('selected', false).end().appendTo('.wrapper');
+
+        //Show add button while < 3 elements only
+        if (Count > 3){
+            $("#addbutton").hide("slow");
+        } 
+    };
+
+    //Add language
+
+    $(document).on('click',"#addbutton", function(){
+        Count++; // + 1 tab
+        add_element(Count);
+    });
+
+    //Remove selected tab
+    $(document).on('click', ".delete", function(e){
+        //Prevent delete the last tab
+        if (Count > "1") {
+            //Delete slowly
+            $(this).parents(".language-form").fadeOut(100, function(){
+                $(this).remove();
+            });
+            Count--;
+
+            //Show back add button
+            if(Count <= "3"){
+                $("#addbutton").show("slow");
+            }
+        }
+
+        //Prevent form click
+        e.preventDefault();
+    });
+
+    //Language modify
+    //Disable select forms & buttons by default
+    $(document).ready(function(){
+       $(".language-form section select").attr("disabled", true); //Disable selection by default
+    });
+
+    //Show the save & cancel options
+    $(document).on("click", "#modify-language", function(e){
+        $("#language_choice").show("slow");
+        $(".language-form section select").attr("disabled", false);
+        e.preventDefault();
+    });
+
+    //disable language form input if user click cancel
+    $(document).on("click", "#cancel_language", function(e){
+        $("#language_choice").hide("slow");
+        $(".language-form section select").attr("disabled", true);
+        e.preventDefault();
+    });
+
+    //Save data to db
+    $(document).on("click", "#save_language", function(e){
+        var languages_selected = $('.language-form').serializeObject();
+        json_languages_selected = JSON.stringify( languages_selected );
+        e.preventDefault();
+        console.log(json_languages_selected);                        
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "http://localhost/vieclambanthoigian.com.vn/jobseekers/extensions/save_languages.php",
+            data: { languages_selected: json_languages_selected },
+            success:  function(data){
+                alert(data);
+            }
+        });
+    });
+
+    $(document).ready(function(){
+        // Validation
+        $("#js_form").validate({					
+            // Rules for form validation
+            rules:{
+                js_language:{
+                    required: true
+                },
+                js_language_level:{
+                    required: true
+                }
+            },
+
+            // Messages for form validation
+            messages:{
+                js_language:{
+                    required: 'Please enter something'
+                },
+                js_language_level:{
+                    required: 'Please enter something'
+                }
+            },
+            submitHandler: function() {
+                var languages = $('.language-form').serializeObject();
+                json_languages_selected = JSON.stringify( languages );
+                
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: "http://localhost/vieclambanthoigian.com.vn/jobseekers/extensions/save_languages.php",
+                    data: { languages_selected: json_languages_selected },
+                    success: function(response){
+                        console.log(response.js_language_level);
+                        console.log(response.js_language);
+                    }
+                });
+            }
+        });
+
+    });	
+    
+
+</script>
