@@ -58,13 +58,19 @@ else
 include("../include/texts_".$lang.".php");
 
 //Common tables
-$categories = $db->get_data();
-$locations = $db->get_data('locations');
-$education = $db->get_data('education');
-$job_types = $db->get_data('job_types');
+
+$positions = $db->get('positions');
+$salaries = $db->get('salary');
+$categories = $db->get('categories');
+$education = $db->get('education');
+$job_types = $db->get('job_types');
+$locations = $db->get('locations');
+$language_levels = $db->get('language_levels');
+$languages = $db->get('skill_languages');
+$skills = $db->get('skills');
+
 $job_experience = $db->get_data('job_experience');
 $job_availability = $db->get_data('job_availability');
-$salaries = $db->get_data('salary');
 $current_language = $db->get_data('languages','id',"WHERE default_language=1")[0];
 
 $profile_columns = array(

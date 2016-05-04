@@ -6,18 +6,7 @@
 // http://www.netartmedia.net
 
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries;
-    
-$positions = $db->get('positions');
-$salaries = $db->get('salary');
-$categories = $db->get('categories');
-$education = $db->get('education');
-$job_types = $db->get('job_types');
-$locations = $db->get('locations');
-$language_levels = $db->get('language_levels');
-$languages = $db->get('skill_languages');
-$skills = $db->get('skills');
-
+global $db, $commonQueries,$positions,$salaries,$categories,$education,$job_types,$location,$language_levels,$languages,$skills, $locations;
     
 //Get the current jobseeker data
 $jobseeker_data = $db->where('username', "$AuthUserName")->getOne('jobseeker_resumes');
@@ -49,13 +38,13 @@ if(isset($_POST["ProceedSaveResume"])){
             $id = $db->insert ('jobseeker_languages', $data);
         }        
     }
-
-    die;
     
-    if($database->SQLCount("jobseeker_resumes","WHERE username='".$AuthUserName."'") == 0){
-        $database->SQLInsert("jobseeker_resumes",array("username"),array($AuthUserName));
+    //Pre-create resume if empty
+    $db->where('username', "$AuthUserName")->withTotalCount()->getOne('jobseeker_resumes');
+    if ($db->totalCount == "0"){
+        $db->insert('jobseeker_resumes', array('username' => "$AuthUserName"));
     }
-        
+
     //Locations update
     if(isset($_POST['preferred_locations'])){
         //If user records exists, delete them
@@ -161,22 +150,7 @@ if(isset($_POST["ProceedSaveResume"])){
 </nav>        
     
 <!--SonDang modify here-->
-<div class="row">
-<form action="index.php" method="post" class="col-md-12" id="myformtest">
-
-    <section class="col col-6">
-            <label class="label">Required field</label>
-            <label class="input">
-                    <i class="icon-append fa fa-asterisk"></i>
-                    <select name="js_language">
-                        <option value="">Select option</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                    </select>
-            </label>
-            <button type="submit" class="button">Submit</button>
-    </section>
-</form> 
+<div class="row"> 
     
 <form action="" method="post" class="col-md-12" id="js_form">        
         <input type="hidden" name="ProceedSaveResume" value="1">
@@ -199,110 +173,149 @@ if(isset($_POST["ProceedSaveResume"])){
                 <p><label>Giới tính: </label> <span><?php echo $jobseeker_profile['gender_name']?></span></p>
                 <a href="index.php?category=profile&action=current">Sửa thông tin cá nhân</a>
             </section>
+            
+            <!--EXPECTED AREA SCRIPT-->
+            <script>
+                //Disabled select options by default
+                $(document).ready(function(){
+                    $(".js-forms label select,.js-forms label input").attr('disabled', true);
+                });
+
+                //Show the save & cancel options
+                $(document).on("click", "#modify-expected-areas", function(e){
+                    $("#expected_area").show("slow");
+                    $(".js-forms label select, .js-forms label input").attr("disabled", false);
+                    e.preventDefault();
+                });
+
+                //disable language form input if user click cancel
+                $(document).on("click", "#cancel_expected_area", function(e){
+                    $("#expected_area").hide("slow");
+                    $(".js-forms label select, .js-forms label input").attr("disabled", true);
+                    e.preventDefault();
+                });
+            </script>
+            
+            <!--EXPECTED AREA-->
             <div class="col-md-12 jobseeker-main">
-                <div class="row jobseeker-title">
-                    <section class="col-md-6 col-sm-6 col-xs-12 js-forms">
-                        <label>
-                            <span><b>Tiêu đề hồ sơ (*): </b></span>
-                            <input type="text" name="js-title" title="" value="<?php echo $jobseeker_data['title']?>" required>
-                            <p><label>Ví dụ: Giám đốc kinh doanh, nhân viên marketing, nhân viên bán hàng v.v...</label></p>
-                        </label>
-                    </section>
-                </div>
-                    
-                <div class="row jobseeker-mainTitle">
-                    <div class="col-md-6 col-sm-6 col-xs-12 js-forms">
-                        
-                        <!--CURRENT POSITION-->
-                        <label>
-                            <span><b><?php echo $M_CURRENT_POSITION;?></b></span>                            
-                            <select name="js-current-position" required>
-                                <option value=""><?php echo $M_PLEASE_SELECT;?></option>
-                                <?php foreach ($positions as $value) :?>
-                                <option value="<?php echo $value['position_id']?>" <?php if($value['position_id'] == $jobseeker_data['current_position']) {echo "selected";}?>><?php echo $value['position_name']?></option>
+                <div class="row">
+                    <a id="modify-expected-areas" href="#" class="col-md-12" style="text-align: right;">
+                        <i aria-hidden="true" class="fa fa-pencil-square-o"></i>                        
+                    </a>
+                </div>                
+                
+                <div class="expected_area">
+                    <div class="row jobseeker-title">
+                        <section class="col-md-11 col-sm-11 col-xs-12 js-forms">
+                            <label>
+                                <span><b>Tiêu đề hồ sơ (*): </b></span>
+                                <input type="text" name="js-title" title="" value="<?php echo $jobseeker_data['title']?>" required>
+                                <p><label>Ví dụ: Giám đốc kinh doanh, nhân viên marketing, nhân viên bán hàng v.v...</label></p>
+                            </label>
+                        </section>
+                    </div>
+
+                    <div class="row jobseeker-mainTitle">
+                        <div class="col-md-6 col-sm-6 col-xs-12 js-forms">
+
+                            <!--CURRENT POSITION-->
+                            <label>
+                                <span><b><?php echo $M_CURRENT_POSITION;?></b></span>                            
+                                <select name="js-current-position" required>
+                                    <option value=""><?php echo $M_PLEASE_SELECT;?></option>
+                                    <?php foreach ($positions as $value) :?>
+                                    <option value="<?php echo $value['position_id']?>" <?php if($value['position_id'] == $jobseeker_data['current_position']) {echo "selected";}?>><?php echo $value['position_name']?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </label>
+
+                            <!--CURRENT SALARY-->
+                            <label>
+                                <span><b><?php echo $M_SALARY;?></b></span>						
+                                <select name="js-salary" required>
+                                    <option value=""><?php echo $M_PLEASE_SELECT;?></option>
+                                <?php foreach ($salaries as $value) :?>
+                                    <option value="<?php echo $value['salary_id']?>" <?php if($value['salary_id'] == $jobseeker_data['salary']) {echo "selected";}?>><?php echo $value['salary_range']?></option>
                                 <?php endforeach;?>
-                            </select>
-                        </label>
-                            
-                        <!--CURRENT SALARY-->
-                        <label>
-                            <span><b><?php echo $M_SALARY;?></b></span>						
-                            <select name="js-salary" required>
-                                <option value=""><?php echo $M_PLEASE_SELECT;?></option>
-                            <?php foreach ($salaries as $value) :?>
-                                <option value="<?php echo $value['salary_id']?>" <?php if($value['salary_id'] == $jobseeker_data['salary']) {echo "selected";}?>><?php echo $value['salary_range']?></option>
+                                </select>            
+                            </label>
+
+                            <!--EXPECTED POSITION-->
+                            <label>
+                                <span><b><?php echo $M_NAME_EXPECTED_POSITION;?></b></span>                                               
+                                <select name="js-expected-position">
+                                    <option value=""><?php echo $M_PLEASE_SELECT;?></option>
+                                <?php foreach ($positions as $value) :?>
+                                    <option value="<?php echo $value['position_id']?>" <?php if($value['position_id'] == $jobseeker_data['expected_position']) {echo "selected";}?>><?php echo $value['position_name']?></option>
+                                <?php endforeach;?>
+                                </select>
+                            </label>
+
+                            <!--EXPECTED SALARY-->
+                            <label>
+                                <span><b><?php echo $M_NAME_EXPECTED_SALARY;?></b></span>						
+                                <select name="js-expected-salary" required>
+                                    <option value=""><?php echo $M_PLEASE_SELECT;?></option>
+                                <?php foreach ($salaries as $value) :?>
+                                    <option value="<?php echo $value['salary_id']?>" <?php if($value['salary_id'] == $jobseeker_data['expected_salary']) {echo "selected";}?>><?php echo $value['salary_range']?></option>
+                                <?php endforeach;?>
+                                </select>
+                            </label>
+
+                        </div>
+
+                        <!--Language forms-->
+                        <div class="col-md-6 col-sm-6 col-xs-12 js-forms">
+                            <label>
+                                <span><b><?php echo $M_JOB_TYPE;?></b></span>						
+                                <select name="js-jobType[]">                            
+                            <?php foreach ($job_types as $value) :?>
+                                    <option value="<?php echo $value['id']?>" <?php if($value['id'] == $jobseeker_data['job_type']) {echo "selected";}?>><?php echo $value['job_name']?></option>
                             <?php endforeach;?>
-                            </select>            
-                        </label>
-                            
-                        <!--EXPECTED POSITION-->
-                        <label>
-                            <span><b><?php echo $M_NAME_EXPECTED_POSITION;?></b></span>                                               
-                            <select name="js-expected-position">
-                                <option value=""><?php echo $M_PLEASE_SELECT;?></option>
-                            <?php foreach ($positions as $value) :?>
-                                <option value="<?php echo $value['position_id']?>" <?php if($value['position_id'] == $jobseeker_data['expected_position']) {echo "selected";}?>><?php echo $value['position_name']?></option>
+                                </select>
+                            </label>
+
+
+                            <!--BROWSE CATEGORY-->
+                            <label>
+                                <span><b><?php echo $M_BROWSE_CATEGORY;?></b></span>						
+                                <select name="js-category">
+                            <?php foreach ($categories as $value) :?>
+                                    <option value="<?php echo $value['category_id']?>" <?php if($value['category_id'] == $jobseeker_data['job_category']) {echo "selected";}?>><?php echo $value['category_name_vi']?></option>
                             <?php endforeach;?>
-                            </select>
-                        </label>
-                            
-                        <!--EXPECTED SALARY-->
-                        <label>
-                            <span><b><?php echo $M_NAME_EXPECTED_SALARY;?></b></span>						
-                            <select name="js-expected-salary" required>
-                                <option value=""><?php echo $M_PLEASE_SELECT;?></option>
-                            <?php foreach ($salaries as $value) :?>
-                                <option value="<?php echo $value['salary_id']?>" <?php if($value['salary_id'] == $jobseeker_data['expected_salary']) {echo "selected";}?>><?php echo $value['salary_range']?></option>
+                                </select>
+                            </label>
+
+                            <!--DESIRE WORK LOCATION-->
+                            <label>
+                                <span><b><?php echo $WORK_LOCATION;?></b></span>						
+                                <select name="js-location">
+                            <?php foreach ($locations as $value) :?>
+                                    <option value="<?php echo $value['id']?>" <?php if($value['id'] == $jobseeker_data['location']) {echo "selected";}?>><?php echo $value['City']?></option>
                             <?php endforeach;?>
-                            </select>
-                        </label>
-                                                    
-                    </div>
-                        
-                    <!--Language forms-->
-                    <div class="col-md-6 col-sm-6 col-xs-12 js-forms">
-                        <label>
-                            <span><b><?php echo $M_JOB_TYPE;?></b></span>						
-                            <select name="js-jobType[]">                            
-                        <?php foreach ($job_types as $value) :?>
-                                <option value="<?php echo $value['id']?>" <?php if($value['id'] == $jobseeker_data['job_type']) {echo "selected";}?>><?php echo $value['job_name']?></option>
-                        <?php endforeach;?>
-                            </select>
-                        </label>
-                        
-                            
-                        <!--BROWSE CATEGORY-->
-                        <label>
-                            <span><b><?php echo $M_BROWSE_CATEGORY;?></b></span>						
-                            <select name="js-category">
-                        <?php foreach ($categories as $value) :?>
-                                <option value="<?php echo $value['category_id']?>" <?php if($value['category_id'] == $jobseeker_data['job_category']) {echo "selected";}?>><?php echo $value['category_name_vi']?></option>
-                        <?php endforeach;?>
-                            </select>
-                        </label>
-                            
-                        <!--DESIRE WORK LOCATION-->
-                        <label>
-                            <span><b><?php echo $WORK_LOCATION;?></b></span>						
-                            <select name="js-location">
-                        <?php foreach ($locations as $value) :?>
-                                <option value="<?php echo $value['id']?>" <?php if($value['id'] == $jobseeker_data['location']) {echo "selected";}?>><?php echo $value['City']?></option>
-                        <?php endforeach;?>
-                            </select>
-                        </label>
-                            
-                        <!--EDUCATION-->
-                        <label>
-                            <span><b><?php echo $M_EDUCATION;?></b></span>						
-                            <select name="education_level">
-                                <option value=""><?php echo $M_PLEASE_SELECT;?></option>
-                            <?php foreach ($education as $value) :?>
-                                <option value="<?php echo $value['education_id']?>" <?php if($value['education_id'] == $jobseeker_data['education_level']) {echo "selected";}?>><?php echo $value['education_name']?></option>
-                            <?php endforeach;?>
-                            </select>
-                        </label>
+                                </select>
+                            </label>
+
+                            <!--EDUCATION-->
+                            <label>
+                                <span><b><?php echo $M_EDUCATION;?></b></span>						
+                                <select name="education_level">
+                                    <option value=""><?php echo $M_PLEASE_SELECT;?></option>
+                                <?php foreach ($education as $value) :?>
+                                    <option value="<?php echo $value['education_id']?>" <?php if($value['education_id'] == $jobseeker_data['education_level']) {echo "selected";}?>><?php echo $value['education_name']?></option>
+                                <?php endforeach;?>
+                                </select>
+                            </label>
+                        </div>
                     </div>
                 </div>
+                
+                <section class="col-md-6"></section>
+                <section style="text-align: right; display: none;" id="expected_area" class="col-md-6">
+                    <!--<button type="submit" class="button" id="save_language">Submit</button>-->
+                    <span><button class="button" type="submit" id="save_expected_area">Lưu</button></span>
+                    <span><button id="cancel_expected_area">Hủy</button></span>
+                </section>
                     
                 
                 <!--Language add-->
@@ -314,25 +327,25 @@ if(isset($_POST["ProceedSaveResume"])){
                         </a>                    
                     </section>
                 </div>
+                
+                
                 <div class='wrapper'>
                 <?php if ($jobseeker_languages_count == "0") { //No languages found, display default selection tab?>
                     
                     <fieldset class="row language-form">
                         
-                        <section class="col-md-4">
+                        <section class="col-md-5">
                             <span>Trình độ</span>
                             <select name="js_language">
-                                <option value="">Select</option>
                                 <?php foreach ($languages as $value) :?>
                                 <option value="<?php echo $value['id']?>"><?php echo $value['language_name']?></option>
                                 <?php endforeach;?>
                             </select>
                         </section>
                             
-                        <section class="col-md-4">
+                        <section class="col-md-5">
                             <span>Trình độ</span>
                             <select name="js_language_level">
-                                <option value="">Select</option>
                                 <?php foreach ($language_levels as $value) :?>
                                 <option value="<?php echo $value['level']?>"><?php echo $value['level_name']?></option>
                                 <?php endforeach;?>
@@ -350,20 +363,18 @@ if(isset($_POST["ProceedSaveResume"])){
                     foreach ($jobseeker_languages as $jobseeker_language) :?>
                     <fieldset class="row language-form">
                         
-                        <section class="col-md-4">
+                        <section class="col-md-5">
                             <span>Trình độ</span>
                             <select name="js_language" required>
-                                <option value="">Select</option>
                                 <?php foreach ($languages as $value) :?>
                                 <option value="<?php echo $value['id']?>" <?php if($value['id'] == $jobseeker_language['language_id']) {echo "selected";}?>><?php echo $value['language_name']?></option>
                                 <?php endforeach;?>
                             </select>
                         </section>
                             
-                        <section class="col-md-4">
+                        <section class="col-md-5">
                             <span>Trình độ</span>
                             <select name="js_language_level" required>
-                                <option value="">Select</option>
                                 <?php foreach ($language_levels as $value) :?>
                                 <option value="<?php echo $value['level']?>" <?php if($value['level'] == $jobseeker_language['level_id']) {echo "selected";}?>><?php echo $value['level_name']?></option>
                                 <?php endforeach;?>
@@ -385,15 +396,12 @@ if(isset($_POST["ProceedSaveResume"])){
                     <section class="col-md-6">
                         <input id="addbutton" type="button" value="Thêm ngoại ngữ" />
                     </section>
-                    <section class="col-md-6" id="language_choice" style="display: none;">
-                        <button type="submit" class="button">Submit</button>
-<!--                        <span><button id="save_language" type="submit" class="button">Lưu</button></span>
-                        <span><button id="cancel_language">Hủy</button></span>-->
+                    <section class="col-md-6" id="language_choice" style="display: none; text-align: right">
+                        <!--<button type="submit" class="button" id="save_language">Submit</button>-->
+                        <span><button id="save_language" type="submit" class="button">Lưu</button></span>
+                        <span><button id="cancel_language">Hủy</button></span>
                     </section>
                 </div>
-                
-                
-                          
                 
                 <!--CAREER OBJECTIVE-->
                 <div class="jobseeker-messageArea" name="js-careerObjective" class="jobseeker-messageArea" rows="5" style="width: 100%">
@@ -523,10 +531,18 @@ if(isset($_POST["ProceedSaveResume"])){
 <!--###SonDang modify here###-->
 
 <script>   
+    
+    /** Expected area*/
+    
+    
+    /** Expected area*/
+    
+    /** Languages area*/
+    
     var Count = $('.language-form').length; //Count total current language tabs
 
     //Hide add more language button
-    if (Count > 3) {
+    if (Count > 2) {
         $("#addbutton").hide("slow");                           
     }
 
@@ -539,13 +555,12 @@ if(isset($_POST["ProceedSaveResume"])){
         $('.language-form:first').clone().find('option').prop('selected', false).end().appendTo('.wrapper');
 
         //Show add button while < 3 elements only
-        if (Count > 3){
+        if (Count > 2){
             $("#addbutton").hide("slow");
         } 
     };
-
+  
     //Add language
-
     $(document).on('click',"#addbutton", function(){
         Count++; // + 1 tab
         add_element(Count);
@@ -562,7 +577,7 @@ if(isset($_POST["ProceedSaveResume"])){
             Count--;
 
             //Show back add button
-            if(Count <= "3"){
+            if(Count <= "2"){
                 $("#addbutton").show("slow");
             }
         }
@@ -593,62 +608,29 @@ if(isset($_POST["ProceedSaveResume"])){
 
     //Save data to db
     $(document).on("click", "#save_language", function(e){
+        var resume_id = <?php echo $jobseeker_data['id'] ?>;
         var languages_selected = $('.language-form').serializeObject();
-        json_languages_selected = JSON.stringify( languages_selected );
+        
         e.preventDefault();
-        console.log(json_languages_selected);                        
+        console.log(languages_selected);        
 
         $.ajax({
             type: "POST",
             dataType: "json",
-            url: "http://localhost/vieclambanthoigian.com.vn/jobseekers/extensions/save_languages.php",
-            data: { languages_selected: json_languages_selected },
+            url: "http://localhost/vieclambanthoigian.com.vn/jobseekers/extensions/save_updates.php",
+            data: { languages: languages_selected , resume_id: resume_id, request_type: "language_update"},
             success:  function(data){
-                alert(data);
+                if(data.status == "1"){ //success, we will disable button
+                    $("#language_choice").hide("slow");
+                    $(".language-form section select").attr("disabled", true);
+                } else {
+                    alert('problemmmm');
+                };
             }
         });
     });
-
-    $(document).ready(function(){
-        // Validation
-        $("#js_form").validate({					
-            // Rules for form validation
-            rules:{
-                js_language:{
-                    required: true
-                },
-                js_language_level:{
-                    required: true
-                }
-            },
-
-            // Messages for form validation
-            messages:{
-                js_language:{
-                    required: 'Please enter something'
-                },
-                js_language_level:{
-                    required: 'Please enter something'
-                }
-            },
-            submitHandler: function() {
-                var languages = $('.language-form').serializeObject();
-                json_languages_selected = JSON.stringify( languages );
-                
-                $.ajax({
-                    type: "POST",
-                    dataType: "json",
-                    url: "http://localhost/vieclambanthoigian.com.vn/jobseekers/extensions/save_languages.php",
-                    data: { languages_selected: json_languages_selected },
-                    success: function(response){
-                        console.log(response.js_language_level);
-                        console.log(response.js_language);
-                    }
-                });
-            }
-        });
-
-    });	
     
-
+    /** Languages area*/
+    
+    
 </script>
