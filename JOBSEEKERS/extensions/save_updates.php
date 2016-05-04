@@ -57,5 +57,61 @@ if (isset($_POST['request_type']) && $_POST['request_type'] == "language_update"
     
     echo json_encode($message);
 }
+
+//Expected area 1
+if (isset($_POST['request_type']) && $_POST['request_type'] == "save_expected_area1"){ 
+    $data = array (
+        "title"                 => filter_var($_POST['data']['js-title'], FILTER_SANITIZE_STRING),
+        "current_position"      => filter_var($_POST['data']['js-current-position'], FILTER_SANITIZE_NUMBER_INT), 
+        "salary"                => filter_var($_POST['data']['js-salary'], FILTER_SANITIZE_NUMBER_INT), 
+        "expected_position"     => filter_var($_POST['data']['js-expected-position'], FILTER_SANITIZE_NUMBER_INT), 
+        "expected_salary"       => filter_var($_POST['data']['js-expected-salary'], FILTER_SANITIZE_NUMBER_INT), 
+        "job_category"          => filter_var($_POST['data']['js-category'], FILTER_SANITIZE_NUMBER_INT), 
+        "location"              => filter_var($_POST['data']['js-location'], FILTER_SANITIZE_NUMBER_INT), 
+        "education_level"       => filter_var($_POST['data']['education_level'], FILTER_SANITIZE_NUMBER_INT),
+        "job_type"              => filter_var($_POST['data']['js-jobType'], FILTER_SANITIZE_NUMBER_INT)        
+    );
+        
+    $db->where ('username', filter_input(INPUT_POST,'username', FILTER_SANITIZE_STRING));
+    if ($db->update ('jobseeker_resumes', $data)){
+        //Customize success message
+        $message = array(
+            "message"   => "Lưu thay đổi thành công",
+            "status"    => "1", //Success
+            "resume_id" => $_POST['resume_id']
+        );
+        echo json_encode($message);
+        
+    } else {
+        echo 'update failed: ' . $db->getLastError();die;
+    }
+}
+
+//Expected area 1
+if (isset($_POST['request_type']) && $_POST['request_type'] == "save_expected_area2"){ 
+    $data = array (
+        "career_objective"      => filter_var($_POST['data']['js-careerObjective'], FILTER_SANITIZE_STRING),
+        "experiences"      => filter_var($_POST['data']['js-experience'], FILTER_SANITIZE_STRING), 
+        "skills"                => filter_var($_POST['data']['skills'], FILTER_SANITIZE_STRING), 
+        "IT_skills"     => filter_var($_POST['data']['js-IT_skill'], FILTER_SANITIZE_NUMBER_INT), 
+        "group_skills"       => filter_var($_POST['data']['js-group_skill'], FILTER_SANITIZE_NUMBER_INT), 
+        "pressure_skill"          => filter_var($_POST['data']['js-pressure_skill'], FILTER_SANITIZE_NUMBER_INT), 
+        "facebook_URL"              => filter_var($_POST['data']['js-facebookURL'], FILTER_SANITIZE_STRING)
+    );
+        
+    $db->where ('username', filter_input(INPUT_POST,'username', FILTER_SANITIZE_STRING));
+    if ($db->update ('jobseeker_resumes', $data)){
+        //Customize success message
+        $message = array(
+            "message"   => "Lưu thay đổi thành công",
+            "status"    => "1", //Success
+            "resume_id" => $_POST['resume_id']
+        );
+        echo json_encode($message);
+        
+    } else {
+        echo 'update failed: ' . $db->getLastError();die;
+    }
+}
 ?>
 

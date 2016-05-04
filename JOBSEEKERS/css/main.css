@@ -1263,6 +1263,18 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
     float: right;
 }
 
+.modify section{
+    /*text-align: right;*/
+}
+
+.navigation-tabs a{
+    float: right;
+}
+
+/*.navigation-tabs {
+    margin: 15px 0;
+}*/
+
 /* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {
     .locationCheckbox {
