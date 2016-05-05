@@ -96,18 +96,18 @@ if(isset($_POST["ProceedSaveResume"])){
 } 
 ?>
 
-    
+
 <nav class="row">
     <section class="col-md-9"><h4><?php $commonQueries->flash('message');?></h4></section>
     <section class="col-md-3 navmenu">
         <?php echo LinkTile("profile","current",$M_GO_BACK,"","red");?>                                                    
     </section>
 </nav>        
-    
+
 <!--SonDang modify here-->
 <div class="row"> 
     
-<form action="" method="post" class="col-md-12" id="js_form">        
+    <form action="" method="post" class="col-md-12" id="js_form">        
         <input type="hidden" name="ProceedSaveResume" value="1">
         <input type="hidden" name="action" value="<?php echo $action;?>">
         <input type="hidden" name="category" value="<?php echo $category;?>">
@@ -129,71 +129,13 @@ if(isset($_POST["ProceedSaveResume"])){
                 <a href="index.php?category=profile&action=current">Sửa thông tin cá nhân</a>
             </section>
             
-            <!--EXPECTED AREA 1 SCRIPT-->
-            <script>
-                //Disabled select options by default
-                $(document).ready(function(){
-                    $(".js-forms label select,.js-forms label input,.js-forms input, .jobseeker-messageArea textarea, .js-radioBoxes span input").attr('disabled', true);
-                });
-
-                //Show the save & cancel options
-                $(document).on("click", "#modify-expected-areas", function(e){
-                    $("#expected_area").show("slow");
-                    $(".js-forms label select, .js-forms label input").attr("disabled", false);
-                    e.preventDefault();
-                });
-
-                //disable language form input if user click cancel
-                $(document).on("click", "#cancel_expected_area", function(e){
-                    $("#expected_area").hide("slow");
-                    $(".js-forms label select, .js-forms label input").attr("disabled", true);
-                    e.preventDefault();
-                });
-                
-                //Save data to db
-                $(document).on("click", "#save_expected_area", function(e){
-                    var resume_id       = <?php echo $jobseeker_data['id'] ?>;
-                    var username        = "<?php echo $AuthUserName?>";
-                    var expected_areas  = $('.expected_area').serializeObject();
-
-                    e.preventDefault();
-//                    console.log(expected_areas);        
-
-                    $.ajax({
-                        type: "POST",
-                        dataType: "json",
-                        url: "http://<?php echo $DOMAIN_NAME;?>/jobseekers/extensions/save_updates.php",
-                        data: { 
-                            data: expected_areas ,
-                            resume_id: resume_id,
-                            username: username,
-                            request_type: "save_expected_area1"
-                        },
-                        success:  function(data){
-                            if(data.status == "1"){ //success, we will disable button
-                                $("#expected_area").hide("slow");
-                                $(".js-forms label select, .js-forms label input").attr("disabled", true);
-                                $.alert({
-                                    title: 'Thông báo!',
-                                    content: 'Lưu thay đổi thành công!'
-                                });
-                            } else {
-                                $.alert({
-                                    title: 'Có lỗi xảy ra!',
-                                    content: 'Có lỗi xảy ra khi lưu thay đổi, vui lòng liên hệ info@vieclambanthoigian.com.vn!'
-                                });
-                            };
-                        }
-                    });
-                });
-            </script>
             
             <!--EXPECTED AREA 1-->
             <div class="col-md-12 jobseeker-main">
                 <div class="row modify">
                     <section class="col-md-11"></section>
                     <section class="col-md-1" style="text-align: right;">
-                        <a id="modify-expected-areas" href="#">
+                        <a id="modify-expected-areas" href="#" title="Sửa mục này">
                             <i aria-hidden="true" class="fa fa-pencil-square-o fa-2x"></i>                        
                         </a>
                     </section>
@@ -210,10 +152,10 @@ if(isset($_POST["ProceedSaveResume"])){
                             </label>
                         </section>
                     </div>
-
+                    
                     <div class="row jobseeker-mainTitle">
                         <div class="col-md-6 col-xs-12 js-forms">
-
+                            
                             <!--CURRENT POSITION-->
                             <label>
                                 <span><b><?php echo $M_CURRENT_POSITION;?></b></span>                            
@@ -224,7 +166,7 @@ if(isset($_POST["ProceedSaveResume"])){
                                     <?php endforeach;?>
                                 </select>
                             </label>
-
+                            
                             <!--CURRENT SALARY-->
                             <label>
                                 <span><b><?php echo $M_SALARY;?></b></span>						
@@ -235,7 +177,7 @@ if(isset($_POST["ProceedSaveResume"])){
                                 <?php endforeach;?>
                                 </select>            
                             </label>
-
+                            
                             <!--EXPECTED POSITION-->
                             <label>
                                 <span><b><?php echo $M_NAME_EXPECTED_POSITION;?></b></span>                                               
@@ -246,7 +188,7 @@ if(isset($_POST["ProceedSaveResume"])){
                                 <?php endforeach;?>
                                 </select>
                             </label>
-
+                            
                             <!--EXPECTED SALARY-->
                             <label>
                                 <span><b><?php echo $M_NAME_EXPECTED_SALARY;?></b></span>						
@@ -257,9 +199,9 @@ if(isset($_POST["ProceedSaveResume"])){
                                 <?php endforeach;?>
                                 </select>
                             </label>
-
+                            
                         </div>
-
+                        
                         <div class="col-md-6 col-xs-12 js-forms">
                             <label>
                                 <span><b><?php echo $M_JOB_TYPE;?></b></span>						
@@ -269,8 +211,8 @@ if(isset($_POST["ProceedSaveResume"])){
                             <?php endforeach;?>
                                 </select>
                             </label>
-
-
+                            
+                            
                             <!--BROWSE CATEGORY-->
                             <label>
                                 <span><b><?php echo $M_BROWSE_CATEGORY;?></b></span>						
@@ -280,7 +222,7 @@ if(isset($_POST["ProceedSaveResume"])){
                             <?php endforeach;?>
                                 </select>
                             </label>
-
+                            
                             <!--DESIRE WORK LOCATION-->
                             <label>
                                 <span><b><?php echo $WORK_LOCATION;?></b></span>						
@@ -290,7 +232,7 @@ if(isset($_POST["ProceedSaveResume"])){
                             <?php endforeach;?>
                                 </select>
                             </label>
-
+                            
                             <!--EDUCATION-->
                             <label>
                                 <span><b><?php echo $M_EDUCATION;?></b></span>						
@@ -314,6 +256,146 @@ if(isset($_POST["ProceedSaveResume"])){
                 </div>
                 
                 <!--END OF EXPECTED AREA 1-->
+                
+                <!--EXPECTED AREA 1 SCRIPT-->
+                <script>
+                    //Disabled select options by default
+                    $(document).ready(function(){
+                        $(".js-forms label select,.js-forms label input,.js-forms input, .jobseeker-messageArea textarea, .js-radioBoxes span input").attr('disabled', true);
+                    });
+
+                    //Show the save & cancel options
+                    $(document).on("click", "#modify-expected-areas", function(e){
+                        $("#expected_area").show("slow");
+                        $(".js-forms label select, .js-forms label input").attr("disabled", false);
+                        e.preventDefault();
+                    });
+
+                    //disable language form input if user click cancel
+                    $(document).on("click", "#cancel_expected_area", function(e){
+                        $("#expected_area").hide("slow");
+                        $(".js-forms label select, .js-forms label input").attr("disabled", true);
+                        e.preventDefault();
+                    });
+                
+                    //Save data to db
+                    $(document).on("click", "#save_expected_area", function(e){
+                        var resume_id       = <?php echo $jobseeker_data['id'] ?>;
+                        var username        = "<?php echo $AuthUserName?>";
+                        var expected_areas  = $('.expected_area').serializeObject();
+
+                        e.preventDefault();
+                        //                    console.log(expected_areas);        
+
+                        $.ajax({
+                            type: "POST",
+                            dataType: "json",
+                            url: "http://<?php echo $DOMAIN_NAME;?>/jobseekers/extensions/save_updates.php",
+                            data: { 
+                                data: expected_areas ,
+                                resume_id: resume_id,
+                                username: username,
+                                request_type: "save_expected_area1"
+                            },
+                            success:  function(data){
+                                if(data.status == "1"){ //success, we will disable button
+                                    $("#expected_area").hide("slow");
+                                    $(".js-forms label select, .js-forms label input").attr("disabled", true);
+                                    $.alert({
+                                        title: 'Thông báo!',
+                                        content: 'Lưu thay đổi thành công!'
+                                    });
+                                } else {
+                                    $.alert({
+                                        title: 'Có lỗi xảy ra!',
+                                        content: 'Có lỗi xảy ra khi lưu thay đổi, vui lòng liên hệ info@vieclambanthoigian.com.vn!'
+                                    });
+                                };
+                            }
+                        });
+                    });
+                </script>
+                
+                
+                
+                <div class="row edit_language modify">
+                    <section class="col-md-11"><h4>Ngoại ngữ: </h4></section>
+                    <section class="col-md-1" style="text-align: right;">
+                        <a href="#" id="modify-language" title="Sửa mục này">
+                            <i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i>                        
+                        </a>                    
+                    </section>
+                </div>
+                
+                <!--LANGUAGES AREA-->
+                <div class='wrapper'>
+                <?php if ($jobseeker_languages_count == "0") { //No languages found, display default selection tab?>
+                    
+                    <fieldset class="row language-form">
+                        
+                        <section class="col-md-4 col-sm-12">
+                            <span>Trình độ</span>
+                            <select name="js_language" class="form-control">
+                                <?php foreach ($languages as $value) :?>
+                                <option value="<?php echo $value['id']?>"><?php echo $value['language_name']?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </section>
+                        
+                        <section class="col-md-6 col-sm-11">
+                            <span>Trình độ</span>
+                            <select name="js_language_level" class="form-control">
+                                <?php foreach ($language_levels as $value) :?>
+                                <option value="<?php echo $value['level']?>"><?php echo $value['level_name']?></option>
+                                <?php endforeach;?>
+                            </select>
+                            <span><button type="button" class="delete button btn btn-danger btn-sm">X</button></span>
+                        </section>
+                        
+                    </fieldset>
+                    
+                <?php } else {                        
+                        
+                    foreach ($jobseeker_languages as $jobseeker_language) :?>
+                    <fieldset class="row language-form">
+                        
+                        <section class="col-md-5 col-xs-12">
+                            <span>Ngôn ngữ: </span>
+                            <select name="js_language" required class="form-control">
+                                <?php foreach ($languages as $value) :?>
+                                <option value="<?php echo $value['id']?>" <?php if($value['id'] == $jobseeker_language['language_id']) {echo "selected";}?>><?php echo $value['language_name']?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </section>
+                        
+                        <section class="col-md-7 col-xs-12">
+                            <span>Trình độ</span>
+                            <select name="js_language_level" required class="form-control">
+                                <?php foreach ($language_levels as $value) :?>
+                                <option value="<?php echo $value['level']?>" <?php if($value['level'] == $jobseeker_language['level_id']) {echo "selected";}?>><?php echo $value['level_name']?></option>
+                                <?php endforeach;?>
+                            </select>
+                            <span><button type="button" class="delete button btn btn-danger btn-sm">X</button></span>
+                        </section>
+                        
+                        <input type="hidden" name="language_keyId[]" value="<?php echo $jobseeker_language['id']?>">
+                        
+                    </fieldset>
+                    <?php endforeach; }?>
+                </div>
+                
+                
+                <!--ADD MORE LANGUAGE BUTTON-->
+                <div class="row addbutton">
+                    <section class="col-md-6">
+                        <input id="addbutton" type="button" value="Thêm ngoại ngữ" class="button btn btn-primary btn-sm"/>
+                    </section>
+                    <section class="col-md-6 save_cancel" id="language_choice" style="display: none; text-align: right">
+                        <span><button id="save_language" type="submit" class="button btn btn-primary btn-sm">Lưu</button></span>
+                        <span><button id="cancel_language" class="button btn btn-warning btn-sm">Hủy</button></span>
+                    </section>
+                </div>
+                <!--END LANGUAGES AREA-->
                 
                 <script>   
                     /** Languages area*/    
@@ -367,7 +449,7 @@ if(isset($_POST["ProceedSaveResume"])){
                     //Language modify
                     //Disable select forms & buttons by default
                     $(document).ready(function(){
-                       $(".language-form section select").attr("disabled", true); //Disable selection by default
+                        $(".language-form section select").attr("disabled", true); //Disable selection by default
                     });
 
                     //Show the save & cancel options
@@ -416,87 +498,119 @@ if(isset($_POST["ProceedSaveResume"])){
                     });
 
                     /** Languages area*/
-                </script>
+                </script>                
                 
-                <div class="row edit_language modify">
-                    <section class="col-md-11"><h4>Ngoại ngữ: </h4></section>
+                
+                <!--EXPECTED AREA 2-->
+                
+                <div class="row modify">
+                    <section class="col-md-11"></section>
                     <section class="col-md-1" style="text-align: right;">
-                        <a href="#" id="modify-language">
-                            <i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i>                        
-                        </a>                    
+                        <a id="modify-expected-areas2" href="#" title="Sửa mục này">
+                            <i aria-hidden="true" class="fa fa-pencil-square-o fa-2x"></i>                        
+                        </a>
                     </section>
-                </div>
-                
-                <!--LANGUAGES AREA-->
-                <div class='wrapper'>
-                <?php if ($jobseeker_languages_count == "0") { //No languages found, display default selection tab?>
+                </div>  
+                <fieldset class="row expected_area2">    
+                    <!--CAREER OBJECTIVE-->
+                    <div class="jobseeker-messageArea" name="js-careerObjective" class="jobseeker-messageArea" rows="5" style="width: 100%">
+                        <div class="jobseeker-title"><h4><?php echo $M_CAREER_OBJECTIVE;?></h4></div>
+                        <p><label>Gợi ý: Mục tiêu ngắn hạn của bạn trong một vài năm tới, Mục tiêu dài hạn trong 5-10 năm tới</label></p>
+                        <p><label>Ví dụ: </label></p>
+                        <p>- Mong muốn được làm việc trong môi trường năng động, chuyên nghiệp v.v...</p>
+                        <p>- Công ty tạo điều kiện tốt cho việc học tập nâng cao trình độ v.v...</p>
+                        <p>- Công việc ổn định lâu dài, có cơ hội thăng tiến cao v.v...</p>
+                        <p>- Mong muốn được đóng góp cho công ty </p>
+                        <textarea name="js-careerObjective" id="jobseeker-experience" rows="5" style="width: 100%"><?php echo $jobseeker_data['career_objective'];?></textarea>
+                    </div>
                     
-                    <fieldset class="row language-form">
-                        
-                        <section class="col-md-4 col-sm-12">
-                            <span>Trình độ</span>
-                            <select name="js_language" class="form-control">
-                                <?php foreach ($languages as $value) :?>
-                                <option value="<?php echo $value['id']?>"><?php echo $value['language_name']?></option>
-                                <?php endforeach;?>
-                            </select>
-                        </section>
-                            
-                        <section class="col-md-6 col-sm-11">
-                            <span>Trình độ</span>
-                            <select name="js_language_level" class="form-control">
-                                <?php foreach ($language_levels as $value) :?>
-                                <option value="<?php echo $value['level']?>"><?php echo $value['level_name']?></option>
-                                <?php endforeach;?>
-                            </select>
-                            <span><button type="button" class="delete button btn btn-danger btn-sm">X</button></span>
-                        </section>
-                                                
-                    </fieldset>
+                    <!--EXPERIENCE-->
+                    <div class="jobseeker-messageArea" rows="5" style="width: 100%">
+                        <div class="jobseeker-title">
+                            <h4><?php echo $M_EXPERIENCE;?></h4>
+                            <p><label> Liệt kê các kinh nghiệm công việc từ thời gian gần nhất trở về trước.</label></p>
+                            <p><label> Kinh nghiệm có thể trong công việc hoặc các hoạt động đoàn thể.</label></p>
+                        </div>
+                        <textarea name="js-experience" id="jobseeker-experience" rows="5" style="width: 100%"><?php echo $jobseeker_data['experiences'];?></textarea>
+                    </div>
                     
-                <?php } else {                        
-                        
-                    foreach ($jobseeker_languages as $jobseeker_language) :?>
-                    <fieldset class="row language-form">
-                        
-                        <section class="col-md-5 col-xs-12">
-                            <span>Ngôn ngữ: </span>
-                            <select name="js_language" required class="form-control">
-                                <?php foreach ($languages as $value) :?>
-                                <option value="<?php echo $value['id']?>" <?php if($value['id'] == $jobseeker_language['language_id']) {echo "selected";}?>><?php echo $value['language_name']?></option>
-                                <?php endforeach;?>
-                            </select>
-                        </section>
-                            
-                        <section class="col-md-7 col-xs-12">
-                            <span>Trình độ</span>
-                            <select name="js_language_level" required class="form-control">
-                                <?php foreach ($language_levels as $value) :?>
-                                <option value="<?php echo $value['level']?>" <?php if($value['level'] == $jobseeker_language['level_id']) {echo "selected";}?>><?php echo $value['level_name']?></option>
-                                <?php endforeach;?>
-                            </select>
-                            <span><button type="button" class="delete button btn btn-danger btn-sm">X</button></span>
-                        </section>
-                        
-                        <input type="hidden" name="language_keyId[]" value="<?php echo $jobseeker_language['id']?>">
-                        
-                    </fieldset>
-                    <?php endforeach; }?>
-                </div>
+                    <!--SKILLS-->
+                    <div class="jobseeker-messageArea" style="width:100%">
+                        <div class="jobseeker-title"><h4><?php echo $M_YOUR_SKILLS;?></h4></div>
+                        <p><label>Gợi ý: Liệt kê những kỹ năng, khả năng nổi bật của bạn</label></p>
+                        <p><label>Ví dụ: </label></p>
+                        <p>- Kỹ năng liên quan chuyên môn </p>
+                        <p>- Kỹ năng về ngoại ngữ: tiếng Anh, Pháp, Trung v.v... </p>
+                        <p>- Kỹ năng về tin học: tin học văn phòng, ngôn ngữ lập trình, quản trị điều hành mạng v.v... </p>
+                        <p>- Kỹ năng giao tiếp, thuyết phục khách hàng v.v... </p>
+                        <p>- Khả năng nắm bắt công việc, làm việc theo nhóm, nghiên cứu tài liệu v.v... </p>
+                        <p>- Khả năng hòa nhập, thích nghi với môi trường, khả năng tư duy, thuyết trình v.v... </p>
+                        <p>- Mô tả phải có ít nhất 50 ký tự trở lên</p>
+                        <textarea name="skills" style="width:100%" rows="5" ><?php echo $jobseeker_data['skills'];?></textarea>
+                    </div>
                     
-                <!--ADD MORE LANGUAGE BUTTON-->
-                <div class="row addbutton">
-                    <section class="col-md-6">
-                        <input id="addbutton" type="button" value="Thêm ngoại ngữ" class="button btn btn-primary btn-sm"/>
+                    <!--REFERENCES-->
+                    <div class="jobseeker-messageArea" style="width:100%">
+                        <div class="jobseeker-title"><h4>Thông tin người tham khảo</h4></div>
+                        <p><label>Gợi ý: Liệt kê những người tham khảo (quản lý của bạn, giám đốc, tên công ty, số điện thoại, email v.v..)</label></p>
+                        <textarea name="referrers" style="width:100%" rows="5" ><?php echo $jobseeker_data['referrers'];?></textarea>
+                    </div>
+                    
+                    
+                    <!--<strong><i><?php echo $LIST_ATTACHED;?>:</i></strong>-->                  
+                    
+                    <!--IT SKILLS-->
+                    <div class="row">
+                        <label class="col-md-12 js-forms">
+                            <span><b>Tin học văn phòng : </b></span>
+                            <section class="js-radioBoxes">
+                            <?php foreach ($skills as $skill) :?>
+                                <span><input type="radio" name="js-IT_skill" value="<?php echo $skill['skill_id']?>" required <?php if($skill['skill_id'] == $jobseeker_data['IT_skills']){echo "checked";}?>><?php echo $skill['name']?></span>
+                            <?php endforeach;?>
+                            </section>
+                        </label>
+                    </div>
+                    
+                    <!--GROUP SKILL-->
+                    <section class="row">
+                        <label class="col-md-12 js-forms">
+                            <span><b>Khả năng làm việc nhóm: </b></span>
+                            <section class="js-radioBoxes">
+                            <?php foreach ($skills as $skill) :?>
+                                <span><input type="radio" name="js-group_skill" value="<?php echo $skill['skill_id']?>" required <?php if($skill['skill_id'] == $jobseeker_data['group_skills']){echo "checked";}?>><?php echo $skill['name']?></span>
+                            <?php endforeach;?>
+                            </section>
+                        </label>
                     </section>
-                    <section class="col-md-6 save_cancel" id="language_choice" style="display: none; text-align: right">
-                        <span><button id="save_language" type="submit" class="button btn btn-primary btn-sm">Lưu</button></span>
-                        <span><button id="cancel_language" class="button btn btn-warning btn-sm">Hủy</button></span>
+                    
+                    <!--PRESSURE SKILL-->
+                    <section class="row">
+                        <label class="col-md-12 js-forms">
+                            <span><b>Khả năng chịu áp lực: </b></span>
+                            <section class="js-radioBoxes">
+                            <?php foreach ($skills as $skill) :?>
+                                <span><input type="radio" name="js-pressure_skill" value="<?php echo $skill['skill_id']?>" required <?php if($skill['skill_id'] == $jobseeker_data['pressure_skill']){echo "checked";}?>><?php echo $skill['name']?></span>
+                            <?php endforeach;?>
+                            </section>
+                        </label>
                     </section>
-                </div>
-                <!--END LANGUAGES AREA-->
-                
-                
+                    
+                    <!--FACEBOOK ADDRESS-->
+                    <section class="row">
+                        <label class="col-md-12 js-forms">
+                            <span><b><?php echo $M_FACEBOOK_URL;?>: </b></span>
+                            <input type="text" name="js-facebookURL" value="<?php echo $jobseeker_data['facebook_URL'];?>">
+                        </label>
+                    </section>
+                    
+                    <div class="row navigation-tabs">
+                        <section class="col-md-6"></section>
+                        <section style="text-align: right; display: none;" id="expected_area2" class="col-md-6 save_cancel">
+                            <span><button class="button btn btn-primary btn-sm" type="submit" id="save_expected_area2">Lưu</button></span>
+                            <span><button class="button btn btn-warning btn-sm" id="cancel_expected_area2">Hủy</button></span>
+                        </section>
+                    </div>
+                </fieldset>
                 
                 <!--EXPECTED AREA 2 SCRIPT-->
                 <script>
@@ -521,7 +635,7 @@ if(isset($_POST["ProceedSaveResume"])){
                         var expected_areas2  = $('.expected_area2').serializeObject();
 
                         e.preventDefault();
-//                        console.log(expected_areas2);        
+                        //                        console.log(expected_areas2);        
 
                         $.ajax({
                             type: "POST",
@@ -550,116 +664,10 @@ if(isset($_POST["ProceedSaveResume"])){
                             }
                         });
                     });
-                </script>
-                
-                <div class="row modify">
-                    <section class="col-md-11"></section>
-                    <section class="col-md-1" style="text-align: right;">
-                        <a id="modify-expected-areas2" href="#">
-                            <i aria-hidden="true" class="fa fa-pencil-square-o fa-2x"></i>                        
-                        </a>
-                    </section>
-                </div>  
-            <fieldset class="row expected_area2">    
-                <!--CAREER OBJECTIVE-->
-                <div class="jobseeker-messageArea" name="js-careerObjective" class="jobseeker-messageArea" rows="5" style="width: 100%">
-                    <div class="jobseeker-title"><h4><?php echo $M_CAREER_OBJECTIVE;?></h4></div>
-                    <p><label>Gợi ý: Mục tiêu ngắn hạn của bạn trong một vài năm tới, Mục tiêu dài hạn trong 5-10 năm tới</label></p>
-                    <p><label>Ví dụ: </label></p>
-                    <p>- Mong muốn được làm việc trong môi trường năng động, chuyên nghiệp v.v...</p>
-                    <p>- Công ty tạo điều kiện tốt cho việc học tập nâng cao trình độ v.v...</p>
-                    <p>- Công việc ổn định lâu dài, có cơ hội thăng tiến cao v.v...</p>
-                    <p>- Mong muốn được đóng góp cho công ty </p>
-                    <textarea name="js-careerObjective" id="jobseeker-experience" rows="5" style="width: 100%"><?php echo $jobseeker_data['career_objective'];?></textarea>
-                </div>
-                    
-                <!--EXPERIENCE-->
-                <div class="jobseeker-messageArea" rows="5" style="width: 100%">
-                    <div class="jobseeker-title">
-                        <h4><?php echo $M_EXPERIENCE;?></h4>
-                        <p><label> Liệt kê các kinh nghiệm công việc từ thời gian gần nhất trở về trước.</label></p>
-                        <p><label> Kinh nghiệm có thể trong công việc hoặc các hoạt động đoàn thể.</label></p>
-                    </div>
-                    <textarea name="js-experience" id="jobseeker-experience" rows="5" style="width: 100%"><?php echo $jobseeker_data['experiences'];?></textarea>
-                </div>
-                    
-                <!--SKILLS-->
-                <div class="jobseeker-messageArea" style="width:100%">
-                    <div class="jobseeker-title"><h4><?php echo $M_YOUR_SKILLS;?></h4></div>
-                    <p><label>Gợi ý: Liệt kê những kỹ năng, khả năng nổi bật của bạn</label></p>
-                    <p><label>Ví dụ: </label></p>
-                    <p>- Kỹ năng liên quan chuyên môn </p>
-                    <p>- Kỹ năng về ngoại ngữ: tiếng Anh, Pháp, Trung v.v... </p>
-                    <p>- Kỹ năng về tin học: tin học văn phòng, ngôn ngữ lập trình, quản trị điều hành mạng v.v... </p>
-                    <p>- Kỹ năng giao tiếp, thuyết phục khách hàng v.v... </p>
-                    <p>- Khả năng nắm bắt công việc, làm việc theo nhóm, nghiên cứu tài liệu v.v... </p>
-                    <p>- Khả năng hòa nhập, thích nghi với môi trường, khả năng tư duy, thuyết trình v.v... </p>
-                    <p>- Mô tả phải có ít nhất 50 ký tự trở lên</p>
-                    <textarea name="skills" style="width:100%" rows="5" ><?php echo $jobseeker_data['skills'];?></textarea>
-                </div>
-                
-                <!--REFERENCES-->
-                <div class="jobseeker-messageArea" style="width:100%">
-                    <div class="jobseeker-title"><h4>Thông tin người tham khảo</h4></div>
-                    <p><label>Gợi ý: Liệt kê những người tham khảo (quản lý của bạn, giám đốc, tên công ty, số điện thoại, email v.v..)</label></p>
-                    <textarea name="referrers" style="width:100%" rows="5" ><?php echo $jobseeker_data['referrers'];?></textarea>
-                </div>
+                </script>   
                 
                 
-                <!--<strong><i><?php echo $LIST_ATTACHED;?>:</i></strong>-->                  
-                    
-                <!--IT SKILLS-->
-                <div class="row">
-                    <label class="col-md-12 js-forms">
-                        <span><b>Tin học văn phòng : </b></span>
-                        <section class="js-radioBoxes">
-                            <?php foreach ($skills as $skill) :?>
-                            <span><input type="radio" name="js-IT_skill" value="<?php echo $skill['skill_id']?>" required <?php if($skill['skill_id'] == $jobseeker_data['IT_skills']){echo "checked";}?>><?php echo $skill['name']?></span>
-                            <?php endforeach;?>
-                        </section>
-                    </label>
-                </div>
-                    
-                <!--GROUP SKILL-->
-                <section class="row">
-                    <label class="col-md-12 js-forms">
-                        <span><b>Khả năng làm việc nhóm: </b></span>
-                        <section class="js-radioBoxes">
-                            <?php foreach ($skills as $skill) :?>
-                            <span><input type="radio" name="js-group_skill" value="<?php echo $skill['skill_id']?>" required <?php if($skill['skill_id'] == $jobseeker_data['group_skills']){echo "checked";}?>><?php echo $skill['name']?></span>
-                            <?php endforeach;?>
-                        </section>
-                    </label>
-                </section>
-                    
-                <!--PRESSURE SKILL-->
-                <section class="row">
-                    <label class="col-md-12 js-forms">
-                        <span><b>Khả năng chịu áp lực: </b></span>
-                        <section class="js-radioBoxes">
-                            <?php foreach ($skills as $skill) :?>
-                            <span><input type="radio" name="js-pressure_skill" value="<?php echo $skill['skill_id']?>" required <?php if($skill['skill_id'] == $jobseeker_data['pressure_skill']){echo "checked";}?>><?php echo $skill['name']?></span>
-                            <?php endforeach;?>
-                        </section>
-                    </label>
-                </section>
                 
-                <!--FACEBOOK ADDRESS-->
-                <section class="row">
-                    <label class="col-md-12 js-forms">
-                        <span><b><?php echo $M_FACEBOOK_URL;?>: </b></span>
-                        <input type="text" name="js-facebookURL" value="<?php echo $jobseeker_data['facebook_URL'];?>">
-                    </label>
-                </section>
-                
-                <div class="row navigation-tabs">
-                    <section class="col-md-6"></section>
-                    <section style="text-align: right; display: none;" id="expected_area2" class="col-md-6 save_cancel">
-                        <span><button class="button btn btn-primary btn-sm" type="submit" id="save_expected_area2">Lưu</button></span>
-                        <span><button class="button btn btn-warning btn-sm" id="cancel_expected_area2">Hủy</button></span>
-                    </section>
-                </div>
-            </fieldset>        
                 <!--DESIRED LOCATIONS-->
                 <div class="row top-bottom-margin desires-section">
                     <span class="col-md-3"><h5>Nơi làm việc mong muốn</h5></span>
@@ -677,7 +685,7 @@ if(isset($_POST["ProceedSaveResume"])){
                     </section>
                 </div>
                 <!--DESIRED LOCATIONS-->
-                    
+                
                 <!--DESIRED CATEGORIES-->
                 <div class="row top-bottom-margin desires-section">
                     <span class="col-md-3"><h5>Ngành nghề mong muốn</h5></span>
@@ -695,13 +703,13 @@ if(isset($_POST["ProceedSaveResume"])){
                     </section>
                 </div>
                 <!--DESIRED CATEGORIES-->
-                    
+                
                 <input type="hidden" name="jobseeker_id" value="<?php echo $jobseeker_profile['jobseeker_id'] //JOBSEEKER ID?>">
                 <input type="hidden" name="resume_id" value="<?php echo $jobseeker_data['id']; //RESUME ID?>">
             </div>  
             <div class="row">
-            <section class="col-md-3 pull-right"><input type="submit" value=" <?php echo $SAUVEGARDER;?> " class="btn btn-primary"></section>
-        </div>
+                <section class="col-md-3 pull-right"><input type="submit" value=" <?php echo $SAUVEGARDER;?> " class="btn btn-primary"></section>
+            </div>
         </div>
         
     </form>

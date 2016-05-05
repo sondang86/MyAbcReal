@@ -1,6 +1,6 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries, $EMPLOYER_DOMAIN_NAME;
+global $db, $commonQueries, $EMPLOYER_DOMAIN_NAME, $employer_data;
 //If employer using free subscription, not allow them to see jobseeker CVs
 
 //Check if employer is allowed to see this CV
@@ -15,7 +15,7 @@ $jobseeker_locations = $commonQueries->getJobseeker_locations($jobseeker_profile
 $jobseeker_data = $db->where('username', "$jobseeker_username")->getOne("jobseeker_resumes");
 
 //Count view to the database
-$commonQueries->Insert_View($jobseeker_data['id'], $AuthUserName, $jobseeker_username);
+$commonQueries->Insert_View($jobseeker_data['id'], $AuthUserName, $jobseeker_username, $employer_data['id']);
 
 ?>
 

@@ -35,16 +35,6 @@ $commonQueries = new CommonsQueries($db);
 
 //Default user session will expire in 1 hour
 $commonQueries->CheckSession("3600");
-    
-//Common tables
-$categories         = $db->get ('categories');
-$job_types          = $db->get ('job_types');
-$locations          = $db->get ('locations');
-$salaries           = $db->get ('salary');
-$all_jobs           = $db->get('jobs');   
-$experience_list    = $db->get('job_experience');
-$positions          = $db->get('positions');
-$education          = $db->get('education');
 
 $website = new SiteManager();
 $website->isAdminPanel = true;
@@ -82,6 +72,17 @@ $employerInfo = $commonQueries->getSingleValue('employers', NULL, 'username', "$
 $currentUser = new AdminUser($AuthUserName, $AuthGroup);
 $currentUser->LoadPermissions();
 $lang = $currentUser->GetLanguage();
+
+//Common tables
+$categories         = $db->get ('categories');
+$job_types          = $db->get ('job_types');
+$locations          = $db->get ('locations');
+$salaries           = $db->get ('salary');
+$all_jobs           = $db->get('jobs');   
+$experience_list    = $db->get('job_experience');
+$positions          = $db->get('positions');
+$education          = $db->get('education');
+$employer_data = $db->where('username', "$AuthUserName")->getOne('employers');
     
 if(file_exists("../ADMIN/texts_".$lang.".php"))
 {

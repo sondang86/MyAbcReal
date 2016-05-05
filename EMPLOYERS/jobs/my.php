@@ -85,10 +85,10 @@ $job_by_employer = $commonQueries->job_by_id('jobs','employer',"$AuthUserName");
                         </tbody>
                     </table>
                 </div>
-                <div class="form-submit">
+<!--                <div class="form-submit">
                     <input type="hidden" name="delete">
                     <input type="submit" value="Xóa" id="delete" disabled>
-                </div>
+                </div>-->
             </form>
         </div>
     </div>

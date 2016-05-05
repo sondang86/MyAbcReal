@@ -5,175 +5,72 @@
 // http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-?>
-<div class="fright">
-	<?php
-	echo LinkTile
-		 (
-			"home",
-			"welcome",
-			$M_DASHBOARD,
-			"",
-			"blue"
-		 );
-		 
-		 
-	echo LinkTile
-	 (
-		"profile",
-		"edit",
-		$EDIT_YOUR_PROFILE,
-		"",
-		"green"
-	 );
-	 
+global $db;
+$cols = array('employer', 'date_seen', 'views_count', 'employer_id');
+$statistics = $db->get('jobseekers_stat', NULL, $cols);
 
-?>
-</div>
-<div class="clear"></div>
-<?php
-$strWhereQuery = "WHERE jobseeker='".$AuthUserName."'";
-
-if(get_param("selected_mode") == "custom")
-{
-	$start_time = mktime(0,0,0,get_param("month_from"),get_param("day_from"),get_param("year_from"));
-	
-	$end_time = mktime(0,0,0,get_param("month_to"),get_param("day_to"),get_param("year_to"));
-	
-	$strWhereQuery .= " AND date>".$start_time." AND date<".$end_time;
-}
-
+echo "<pre>";
+print_r($statistics);
+echo "</pre>";
 ?>
 <style>
-.small-drop-down
-{
-	width:100px !important;
-}
+    .navigation-items a {
+        float: right;
+    }
+    
+    .navigation-items {
+        margin-bottom: 25px;
+    }
+    
+    .search-form {
+        margin-top: 35px;
+        margin-bottom: 10px;
+    }
+    
+    .search-form ul li{
+        display: inline-block;
+        list-style-type: none;
+        margin-right: 5px;
+    }
 </style>
-		
-		<form action="index.php" method="post">
-		<input type="hidden" name="category" value="<?php echo $category;?>">
-		<input type="hidden" name="action" value="<?php echo $action;?>">
+<div class="nav">
+    <section class="col-md-12 navigation-items">
+    <?php 
+        echo LinkTile("home","welcome",$M_DASHBOARD,"","blue");       
+        echo LinkTile("profile","edit",$EDIT_YOUR_PROFILE,"","green");           
+    ?>
+    </section>
+</div>
 
-		<h4><?php echo $M_SHOW_STATISTICS;?></h4>
-	
-		<input type="radio" name="selected_mode" value="" <?php echo (get_param("selected_mode")==""?"checked":"");?>> <?php echo $M_ALL;?>
-		<br><br>
-		<input type="radio" name="selected_mode" value="custom" <?php echo (get_param("selected_mode")=="custom"?"checked":"");?>>
-		
-		<?php echo $M_FROM;?>:   
-		<select name="day_from" class="small-drop-down">
-		<?php
-			for($i=1;$i<=31;$i++)
-			{
-				echo "<option ".(get_param("day_from") == $i?"selected":"").">".$i."</option>";
-			}
-		?>
-		</select>
-		/
-		<select name="month_from" class="small-drop-down">
-		<?php
-			for($i=1;$i<=12;$i++)
-			{
-				echo "<option ".(get_param("month_from") == $i?"selected":"").">".$i."</option>";
-			}
-		?>
-		</select>
-		/
-		<select name="year_from" class="small-drop-down">
-		<?php
-			for($i=15;$i<=25;$i++)
-			{
-				echo "<option ".(get_param("year_from") == ($i+2000)?"selected":"").">".(2000 + $i)."</option>";
-			}
-		?>
-		</select>
-		
-		<br/><br/>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<?php echo $M_TO;?>:
-		
-			<select name="day_to" class="small-drop-down">
-		<?php
-			for($i=1;$i<=31;$i++)
-			{
-				echo "<option ".(get_param("day_to") == $i?"selected":"").">".$i."</option>";
-			}
-		?>
-		</select>
-		/
-		<select name="month_to" class="small-drop-down">
-		<?php
-			for($i=1;$i<=12;$i++)
-			{
-				echo "<option ".(get_param("month_to") == $i?"selected":"").">".$i."</option>";
-			}
-		?>
-		</select>
-		/
-		<select name="year_to" class="small-drop-down">
-		<?php
-			for($i=15;$i<=25;$i++)
-			{
-				echo "<option ".(get_param("year_to") == ($i+2000)?"selected":"").">".(2000 + $i)."</option>";
-			}
-		?>
-		</select>
-		<br><br>
-		
-		<input type="submit" class="btn btn-primary" value="<?php echo $M_SHOW;?>">
-		
-		</form>
-		
-		<br><br><br>
-		
-		<?php echo $PROFILE_SELECTED;?>
-		<b>
-		<?php
-		echo $database->SQLCount_Query("SELECT * FROM ".$DBprefix."jobseekers_stat ".$strWhereQuery);
-		?>
-		</b><?php echo $TIMES_FOR_SELECTED;?>
-		<br><br>
-		<br>
-		<i><?php echo $M_DETAILED_REPORT;?></i>
-		<br><br>
-		<center>
-			<?php
-			
-				$QUERY_TO_EXECUTE =
-				"
-					SELECT 
-					".$DBprefix."jobseekers_stat.date,
-					".$DBprefix."employers.id,
-					".$DBprefix."employers.company,
-					".$DBprefix."jobseekers_stat.ip
-					FROM ".$DBprefix."jobseekers_stat,
-					".$DBprefix."employers
-					".$strWhereQuery."
-					AND
-					".$DBprefix."jobseekers_stat.employer=
-					".$DBprefix."employers.username
-					ORDER BY ".$DBprefix."jobseekers_stat.date DESC
-				";
-				RenderTable
-				(
-						"jobseekers_stat,".$DBprefix."employers",
-						array("company","date","ip","EmployerLink"),
-						array($M_COMPANY,$M_DATE,$M_IP,$M_DETAILS),
-						"100%",
-						$strWhereQuery,
-						"",
-						"id",
-						
-						"index.php?category=".$category."&action=".$action,
-						false,
-						20,
-						false,
-						-1,
-						"",
-						$QUERY_TO_EXECUTE
-				);
-				
-				?>
-			</center>
-	
+<form action="" role="form" method="GET" id="form_statistics">
+    
+<!--    <section class="pull-right search-form" id="sort-by">
+        <ul>
+            <li><input type="text" name="query" placeholder="Tiêu đề công việc"></li>
+            <li><input type="submit" value="Tìm kiếm"></li>
+        </ul>        
+    </section>-->
+    
+    <div class="table-responsive">          
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Ngày xem</th>
+                    <th>Nhà tuyển dụng</th>
+                    <th>Số lần xem CV</th>
+                </tr>
+            </thead>
+            <tbody>                               
+                <?php foreach ($statistics as $statistic) :?>
+                <tr id="job_id_101">
+                    <td class="col-md-1"></td>                                 
+                    <td class="col-md-3"><?php echo date("d-m-Y G:m:s",$statistic['date_seen'])?></td>
+                    <td class="col-md-5"><?php echo $statistic['employer']?></td>
+                    <td class="col-md-3"><?php echo $statistic['views_count']?></td>                    
+                </tr>
+                <?php endforeach;?>    
+            </tbody>
+        </table>
+    </div>
+</form>

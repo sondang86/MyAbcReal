@@ -1165,15 +1165,22 @@
         *  @param var resume_id resume's id to be insert
         *  @param var employer employer who viewed jobseeker's CV
         *  @param var jobseeker jobseeker username
+        *  @param var employer_id employer id
         */
-        public function Insert_View($resume_id, $employer, $jobseeker){
+        public function Insert_View($resume_id, $employer, $jobseeker, $employer_id){
             //Count view to the database
             $view_data = array(
                 "date_seen"     => time(),
                 "resume_id"     => $resume_id,
                 "employer"      => "$employer",
-                "jobseeker"     => "$jobseeker"
+                "jobseeker"     => "$jobseeker",
+                "employer_id"   => $employer_id,
+                "views_count"   => $this->_db->inc(1)
             );
+            
+            $updateColumns = Array ("date_seen","views_count");
+            $lastInsertId = "employer_id";
+            $this->_db->onDuplicate($updateColumns, $lastInsertId);
             $insert_id = $this->_db->insert('jobseekers_stat', $view_data);
             if(!$insert_id){echo 'there was a problem when insert data';}
         }

@@ -1,6 +1,6 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries;
+global $db, $commonQueries, $employer_data;
 $data_sanitize = new GUMP;
 $GET = $data_sanitize->sanitize($_GET);
     
@@ -22,7 +22,7 @@ $jobseeker_username = $arrPostingApply["jobseeker"];
 //Get the current jobseeker data
 $jobseeker_data = $db->where('username', "$jobseeker_username")->getOne("jobseeker_resumes");
 //Count view to the database
-$commonQueries->Insert_View($jobseeker_data['id'], $AuthUserName, $jobseeker_username);
+$commonQueries->Insert_View($jobseeker_data['id'], $AuthUserName, $jobseeker_username, $employer_data['id']);
 
 $jobseeker_resume_columns = array(
     $DBprefix."jobseeker_resumes.id as resume_id",$DBprefix."jobseeker_resumes.username",
