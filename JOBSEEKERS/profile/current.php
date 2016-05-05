@@ -1,14 +1,9 @@
 <?php
 // Jobs Portal
-// http://www.netartmedia.net/jobsportal
-// Copyright (c) All Rights Reserved NetArt Media
-// Find out more about our products and services on:
-// http://www.netartmedia.net
-?><?php
+// http://www.vieclambanthoigian.com.vn
+// Copyright (c) All Rights Reserved Vieclambanthoigian
 if(!defined('IN_SCRIPT')) die("");
 global $db, $commonQueries, $current_language, $gender, $jobseeker_profile;
-
-print_r($jobseeker_profile['date_of_birth']);
 ?>
 <div class="row">
     <div class="fright">

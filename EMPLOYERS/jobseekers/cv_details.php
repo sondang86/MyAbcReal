@@ -14,9 +14,9 @@ $jobseeker_categories = $commonQueries->getJobseeker_categories($jobseeker_profi
 $jobseeker_locations = $commonQueries->getJobseeker_locations($jobseeker_profile['jobseeker_id']);
 $jobseeker_data = $db->where('username', "$jobseeker_username")->getOne("jobseeker_resumes");
 
-//echo "<pre>";
-//print_r($jobseeker_resumes);
-//echo "</pre>";
+//Count view to the database
+$commonQueries->Insert_View($jobseeker_data['id'], $AuthUserName, $jobseeker_username);
+
 ?>
 
 <div class="row">

@@ -19,11 +19,9 @@ $selected_columns = array(
 $db->join('apply_status', $DBprefix."apply.status =".$DBprefix."apply_status.status_id", "LEFT");
 $apply_details = $db->where('jobseeker', "$AuthUserName")->withTotalCount()->get('apply', NULL, $selected_columns);
     
-//echo "<pre>";
-//print_r($apply_details);
-//echo "</pre>";
+
 ?>
-<div class="row">
+<div class="row main-nav">
     <section class="col-md-9"></section>
     <section class="col-md-3">
         <?php echo LinkTile("home","welcome",	$M_DASHBOARD,"","blue");?>

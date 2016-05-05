@@ -41,23 +41,7 @@ if(isset($_REQUEST["bn"]))
 	
 }
 ?>
-<br/>
-<script type="text/javascript">
- /*
-$(init);
 
-String.prototype.trim=function(){return this.replace(/^\s+|\s+$/g, '');};
-*/
-function CallBack()
-{
-
-	document.getElementById("main_container").innerHTML =
-	top.frames['ajax-ifr'].document.body.innerHTML.trim();
-	
-	$(init);
-
-}
-</script>
 <div class="row">
 	<div class="col-md-3 welcome-left-block">
 	
@@ -118,99 +102,34 @@ function CallBack()
 		?>
 		<br/><br/>
 	</div>
-	<div id="home-links-area" class="col-md-9">
-		
-		<div class="row" style="padding:10px">
-		<?php
-		
-		
-		$arr_cache_texts=array();
-		$arr_box_sizes = array("","3","3","3","3","3","3","3","3");
-			
-		
-		if($AdminUser["box_1"]==""&&$AdminUser["box_2"]==""&&$AdminUser["box_3"]==""&&$AdminUser["box_4"]==""&&$AdminUser["box_5"]==""&&$AdminUser["box_6"]==""&&$AdminUser["box_7"]==""&&$AdminUser["box_8"]=="")
-		{
-			$arr_box_names = array();
-			$arr_set_perms = array();
-			for($i=1;$i<=6;$i++)
-			{
-								
-					$p_items = explode("@",$currentUser->arrPermissions[$i]);
-					
-					if(sizeof($p_items) != 4) continue;
-					if($p_items[3]=="welcome") continue;
-					array_push($arr_box_names,"box_".$i);
-					array_push($arr_set_perms,$p_items[2]."#".$p_items[3]."#".$i);
-				
-			}
-			
-			
-			$database->SQLUpdate("jobseekers",$arr_box_names,$arr_set_perms,"id=".$AdminUser["id"]);
-			$AdminUser=$database->DataArray("jobseekers","id=".$AdminUser["id"]);
-		}
-		
-		for($i=1;$i<=6;$i++)
-		{
-			$p_items = explode("#",$AdminUser["box_".$i]);
-			if(sizeof($p_items)==1) continue;
-				
-				$str_arr_texts = $p_items[0]."_oLinkTexts";
-				$str_arr_actions = $p_items[0]."_oLinkActions";
-				
-				if(!isset($$str_arr_texts)||!isset($$str_arr_actions)) continue;
-				
-				$arr_texts = $$str_arr_texts;
-				$arr_actions = $$str_arr_actions;
-				$key = array_search($p_items[1], $arr_actions); 
-				
-				?>
-				<div class="col-md-4 col-sm-6 col-xs-12 t-padding" id="box-<?php echo $i;?>">
-					<div class="tile-p" id="b-<?php echo $i;?>">
-					<?php
-					$show_text = $arr_texts[$key];
-					$b_pos = strpos($show_text, ' ');
-					if($b_pos===false)
-					{
-						$t_key = array_search($p_items[0], $oLinkActions); 
-						if(isset($oLinkTexts[$t_key]))
-						{
-							$show_text = $oLinkTexts[$t_key]." / ".$show_text;
-						}
-					}
-					
-					
-					
-					
-					if($p_items[0]=="home"&&$p_items[1]=="messages")
-					{
-						$show_text.=" (".$new_messages.")";
-					}
-					
-					echo LinkTile
-					 (
-						$p_items[0],
-						$p_items[1],
-						$show_text,
-						"",
-						"box-".(isset($p_items[2])?$p_items[2]:$i),
-						"home"
-					 );
-					?>
-					</div>
-				</div>
-				
-				<?php
-				
-			
-		}
-		
-		
-		
-		?>
-			
-		</div>
-	
-	</div>
+    <div id="home-links-area" class="col-md-9">
+        
+        <div class="row" style="padding:10px">
+            
+            <section class="col-md-4 col-sm-6 col-xs-12 t-padding ui-droppable" id="box-1">
+                <div class="tile-p ui-draggable" id="b-1" style="position: relative;">
+                    <a class="home-tile box-1-back" href="index.php?category=profile&amp;action=edit"><img class="pull-right" src="images/icons/edit.png">
+                        <h3 class="h3-tile">Sửa thông tin cá nhân</h3>
+                    </a>					
+                </div>
+            </section>
+                
+            <section class="col-md-4 col-sm-6 col-xs-12 t-padding ui-droppable" id="box-2">
+                <div class="tile-p ui-draggable" id="b-2" style="position: relative;">
+                    <a class="home-tile box-2-back" href="index.php?category=cv&amp;action=resume_creator"><img class="pull-right" src="images/icons/job_preferences.png"><h3 class="h3-tile">Tạo/Sửa CV</h3></a></div>
+            </section>
+                            
+            <section class="col-md-4 col-sm-6 col-xs-12 t-padding ui-droppable" id="box-4">
+                <div class="tile-p ui-draggable" id="b-4" style="position: relative;">
+                    <a class="home-tile box-4-back" href="index.php?category=home&amp;action=apply">
+                        <img class="pull-right" src="images/icons/apply.png"><h3 class="h3-tile">Lịch sử công việc</h3>
+                    </a>
+                </div>
+            </section>                
+            
+        </div>
+            
+    </div>
 </div>
 <div class="clear"></div>
 <br/>

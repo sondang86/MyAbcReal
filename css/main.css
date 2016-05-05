@@ -1211,6 +1211,11 @@ form#main ol li
 .main-nav{
     padding:0;
 }
+
+.main-nav section a{
+    float: right;
+}
+
 nav{
     display:block;
 }
@@ -2823,29 +2828,7 @@ div.upload input:hover {
         margin: 0;        
     }
     
-    .js-forms span {
-        float: left;
-        width: 20%;
-        /*text-align: right;*/
-        padding-right: 10px;
-        margin-top: 10px;
-        color: #888;
-    }
-    
-    .js-forms input[type="text"], .js-forms select{
-        border: 1px solid #DADADA;
-        color: #888;
-        height: 30px;
-        margin: 2px 6px 16px 0;
-        outline: 0 none;
-        padding: 3px 3px 3px 5px;
-        width: 75%;
-        font-size: 12px;
-        line-height: 15px;
-        box-shadow: inset 0px 1px 4px #ECECEC;
-        -moz-box-shadow: inset 0px 1px 4px #ECECEC;
-        -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
-    }
+
     
     .cv-details label{
         width: 100%;

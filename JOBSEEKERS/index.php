@@ -89,20 +89,20 @@ $jobseeker_profile = $db->where('username', "$AuthUserName")->getOne('jobseekers
 
 
 $website->LoadTemplate(-1);
-$website->TemplateHTML=str_replace('"css/','"../css/',$website->TemplateHTML);
-$website->TemplateHTML=str_replace('"images/','"../images/',$website->TemplateHTML);
-$website->TemplateHTML=str_replace('</head>','<link rel="stylesheet" href="css/main.css"/></head>',$website->TemplateHTML);
+$website->TemplateHTML=str_replace('"css/','"/vieclambanthoigian.com.vn/css/',$website->TemplateHTML);
+$website->TemplateHTML=str_replace('"images/','"/vieclambanthoigian.com.vn/images/',$website->TemplateHTML);
+$website->TemplateHTML=str_replace('</head>','<link rel="stylesheet" href="/vieclambanthoigian.com.vn/JOBSEEKERS/css/main.css"/></head>',$website->TemplateHTML);
 $website->TemplateHTML=str_replace
 ('</body>','
-  <script type="text/javascript" src="js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="js/admin.js"></script>
+  <script type="text/javascript" src="/vieclambanthoigian.com.vn/JOBSEEKERS/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/vieclambanthoigian.com.vn/JOBSEEKERS/js/admin.js"></script>
 <script>
 $(init);
 
 String.prototype.trim=function(){return this.replace(/^\s+|\s+$/g, \'\');};
 
 </script>
-<iframe id="ajax-ifr" name="ajax-ifr" src="include/empty-page.php" style="position:absolute;top:0px;left:0px;visibility:hidden" width="1" height="1"></iframe></body>',$website->TemplateHTML);
+<iframe id="ajax-ifr" name="ajax-ifr" src="/vieclambanthoigian.com.vn/JOBSEEKERS/include/empty-page.php" style="position:absolute;top:0px;left:0px;visibility:hidden" width="1" height="1"></iframe></body>',$website->TemplateHTML);
 
 
 include("include/page_functions.php");
@@ -120,6 +120,11 @@ $website->Render();
 <!--<script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>-->
 
+<!--https://github.com/craftpip/jquery-confirm-->
+<link href="/vieclambanthoigian.com.vn/css/jquery-confirm.min.css" rel="stylesheet" type="text/css"/>
+<script src="/vieclambanthoigian.com.vn/js/jquery-confirm.min.js" type="text/javascript"></script>
+<!--https://github.com/craftpip/jquery-confirm-->
+
 <script src="/vieclambanthoigian.com.vn/js/jquery.serializeObject.min.js" type="text/javascript"></script>
 <script src="/vieclambanthoigian.com.vn/js/jquery.validate.min.js" type="text/javascript"></script>
 <script src="/vieclambanthoigian.com.vn/js/additional-methods.min.js" type="text/javascript"></script>
@@ -128,6 +133,7 @@ $website->Render();
 <script src="../include/select2/js/select2.min.js" type="text/javascript"></script>
 
 <script>
+    /*Date picker*/
     jQuery(document).ready(function(){
         jQuery("#datePicker").datepicker({
             dateFormat: 'dd-mm-yy',

@@ -1,14 +1,14 @@
 <?php
 $ProductName="Jobs Portal";
 
-$oLinkTexts=array($M_HOME,$M_PROFILE2,$M_CV,$M_DOCUMENTS2);
-$oLinkActions=array("home","profile","cv","documents");
+$oLinkTexts=array($M_HOME,$M_PROFILE2,$M_CV,$M_DOCUMENTS2,$M_JOB_ALERTS2);
+$oLinkActions=array("home","profile","cv","documents","jobmail");
 
 $profile_oLinkTexts=array($M_VIEW,$MODIFY,$M_JOB_PREFERENCES,$M_STATISTICS);
 $profile_oLinkActions=array("current","edit","job_preferences","statistics");
 
-$cv_oLinkTexts=array($DESCRIPTION,$M_RESUME_CREATOR);
-$cv_oLinkActions=array("description","resume_creator");
+$cv_oLinkTexts=array($DESCRIPTION,$M_RESUME_CREATOR,$M_VIDEO_RESUME);
+$cv_oLinkActions=array("description","resume_creator","video_resume");
 
 $documents_oLinkTexts=array($ADD_A_NEW,$M_MY_FILES);
 $documents_oLinkActions=array("add","list");

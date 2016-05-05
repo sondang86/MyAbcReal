@@ -1159,5 +1159,24 @@
             return $resumes;
         }
         
+        /**
+        *  insert CV views to the database
+        * 
+        *  @param var resume_id resume's id to be insert
+        *  @param var employer employer who viewed jobseeker's CV
+        *  @param var jobseeker jobseeker username
+        */
+        public function Insert_View($resume_id, $employer, $jobseeker){
+            //Count view to the database
+            $view_data = array(
+                "date_seen"     => time(),
+                "resume_id"     => $resume_id,
+                "employer"      => "$employer",
+                "jobseeker"     => "$jobseeker"
+            );
+            $insert_id = $this->_db->insert('jobseekers_stat', $view_data);
+            if(!$insert_id){echo 'there was a problem when insert data';}
+        }
+        
     }
 ?>

@@ -87,16 +87,17 @@ if (isset($_POST['request_type']) && $_POST['request_type'] == "save_expected_ar
     }
 }
 
-//Expected area 1
+//Expected area 2
 if (isset($_POST['request_type']) && $_POST['request_type'] == "save_expected_area2"){ 
     $data = array (
-        "career_objective"      => filter_var($_POST['data']['js-careerObjective'], FILTER_SANITIZE_STRING),
-        "experiences"      => filter_var($_POST['data']['js-experience'], FILTER_SANITIZE_STRING), 
-        "skills"                => filter_var($_POST['data']['skills'], FILTER_SANITIZE_STRING), 
-        "IT_skills"     => filter_var($_POST['data']['js-IT_skill'], FILTER_SANITIZE_NUMBER_INT), 
-        "group_skills"       => filter_var($_POST['data']['js-group_skill'], FILTER_SANITIZE_NUMBER_INT), 
-        "pressure_skill"          => filter_var($_POST['data']['js-pressure_skill'], FILTER_SANITIZE_NUMBER_INT), 
-        "facebook_URL"              => filter_var($_POST['data']['js-facebookURL'], FILTER_SANITIZE_STRING)
+        "career_objective"  => filter_var($_POST['data']['js-careerObjective'], FILTER_SANITIZE_STRING),
+        "experiences"       => filter_var($_POST['data']['js-experience'], FILTER_SANITIZE_STRING), 
+        "skills"            => filter_var($_POST['data']['skills'], FILTER_SANITIZE_STRING),
+        "referrers"         => filter_var($_POST['data']['referrers'], FILTER_SANITIZE_STRING),
+        "IT_skills"         => filter_var($_POST['data']['js-IT_skill'], FILTER_SANITIZE_NUMBER_INT), 
+        "group_skills"      => filter_var($_POST['data']['js-group_skill'], FILTER_SANITIZE_NUMBER_INT), 
+        "pressure_skill"    => filter_var($_POST['data']['js-pressure_skill'], FILTER_SANITIZE_NUMBER_INT), 
+        "facebook_URL"      => filter_var($_POST['data']['js-facebookURL'], FILTER_SANITIZE_STRING)
     );
         
     $db->where ('username', filter_input(INPUT_POST,'username', FILTER_SANITIZE_STRING));

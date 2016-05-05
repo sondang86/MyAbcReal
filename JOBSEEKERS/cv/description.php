@@ -7,41 +7,21 @@
     if(!defined('IN_SCRIPT')) die("");
 ?>
 <div class="fright">
-<?php 
-//    echo LinkTile("cv","edit",$M_TEXT_EDITOR,"","yellow");	 
-    echo LinkTile("cv","resume_creator",$M_RESUME_CREATOR,"","green");
-?>
+<?php echo LinkTile("cv","resume_creator",$M_RESUME_CREATOR,"","green"); ?>
 </div>
-<h3><?php echo $M_CREATE_ONLINE_RESUME;?></h3>
+<h4><?php echo $M_CREATE_ONLINE_RESUME;?></h4>
+<p></p>
 
-<?php 
-$M_OFFER_TWO_OPTIONS=str_replace("{upload_link}","<a class=\"underline-link\" href=\"index.php?category=documents&action=add&resume=1\">",$M_OFFER_TWO_OPTIONS);
-$M_OFFER_TWO_OPTIONS=str_replace("{end_upload_link}","</a>",$M_OFFER_TWO_OPTIONS);
-echo $M_OFFER_TWO_OPTIONS;
-?>:
-<br><br><br>
 
-<div class="row">
-<!--	<div class="col-md-6">
-		<b>1. <a href="index.php?category=cv&action=edit"><?php echo $M_TEXT_EDITOR;?></a></b>
-		<br><br>
-		
-		<i><?php echo $M_TEXT_EDITOR_EXPL;?></i>
-		<br/><br/>
-		
-		<a class="img-responsive" href="index.php?category=cv&action=edit"><img src="images/cv_text.gif" width="300" height="253" alt="" border="0"></a>
-	</div>-->
-			
-	<div class="col-md-12">
-		<b>2. <a href="index.php?category=cv&action=resume_creator"><?php echo $M_RESUME_CREATOR;?></a></b>
-		
-		<br><br>
-		<i><?php echo $M_RESUME_CREATOR_EXPL;?></i>
-		
-		<br><br>
-	
-		<a class="img-responsive" href="index.php?category=cv&action=resume_creator"><img src="images/creator.gif" width="300" height="254" alt="" border="0"></a>
-	</div>
-  </div>
+<div class="row">			
+    <div class="col-md-12 CVcreator-description">
+        <b>Tạo hồ sơ tìm việc: </b>
+
+        <p><i>- Dễ dàng trong 5 phút </i></p>
+        <p><i>- Các doanh nghiệp truy cập hàng ngày tìm thấy bạn </i></p>
+        <p><i>- Có việc làm ngay trong thời gian ngắn </i></p>
+        <p><i>- Chủ động lựa chọn những công việc mình yêu thích và ứng tuyển miễn phí</i></p>
+    </div>
+</div>
 		
 	

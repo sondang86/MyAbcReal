@@ -16,12 +16,13 @@ $arrPostingApply = $database->DataArray("apply","id=".$apply_id);
     
 if($arrPostingApply["posting_id"]!=$posting_id) die("");
     
-$id = $arrPostingApply["jobseeker"];
+$jobseeker_username = $arrPostingApply["jobseeker"];
 
        
 //Get the current jobseeker data
-$jobseeker_data = $db->where('username', "$id")->getOne("jobseeker_resumes");
-
+$jobseeker_data = $db->where('username', "$jobseeker_username")->getOne("jobseeker_resumes");
+//Count view to the database
+$commonQueries->Insert_View($jobseeker_data['id'], $AuthUserName, $jobseeker_username);
 
 $jobseeker_resume_columns = array(
     $DBprefix."jobseeker_resumes.id as resume_id",$DBprefix."jobseeker_resumes.username",
@@ -61,15 +62,12 @@ $db->join("skills as IT_skill", $DBprefix."jobseeker_resumes.IT_skills=IT_skill.
 $db->join("skills as group_skill", $DBprefix."jobseeker_resumes.group_skills=group_skill.skill_id", "LEFT");
 $db->join("skills as pressure_skill", $DBprefix."jobseeker_resumes.pressure_skill=pressure_skill.skill_id", "LEFT");
 
-$db->where ($DBprefix."jobseeker_resumes.username", "$id");                
+$db->where ($DBprefix."jobseeker_resumes.username", "$jobseeker_username");                
 $jobseeker_resume = $db->getOne("jobseeker_resumes", $jobseeker_resume_columns);
 $jobseeker_profile = $commonQueries->getJobseeker_profile($jobseeker_resume['username']);
 $jobseeker_categories = $commonQueries->getJobseeker_categories($jobseeker_profile['jobseeker_id']);
 $jobseeker_locations = $commonQueries->getJobseeker_locations($jobseeker_profile['jobseeker_id']);
 
-//echo '<pre>';
-//print_r($jobseeker_resume);
-//echo "</pre>";
 
 $questionnaire_answers_columns = array(
     $DBprefix."questionnaire_answers.questionnaire_id as QA_questionnaire_id",
@@ -88,7 +86,7 @@ $answers = $db->withTotalCount()->get("questionnaire_answers", NULL, $questionna
 ?>
 <div class="row">
     <section class="col-md-9 col-sm-6 col-xs-12">
-        <h4><label>Chi tiết hồ sơ ứng viên: <?php echo $id;?></label></h4>
+        <h4><label>Chi tiết hồ sơ ứng viên: <?php echo $jobseeker_username;?></label></h4>
     </section>
     <div class="col-md-3 col-sm-6 col-xs-12 fright">
         <?php echo LinkTile("","",$M_GO_BACK,"","red","small","true","window.history.back");?>

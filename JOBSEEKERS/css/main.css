@@ -1233,7 +1233,7 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
 }
 
 
-/*Language forms*/
+/*CV resume creator*/
 
 .addbutton {
     margin-top: 10px ;
@@ -1245,6 +1245,7 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
 
 .language-form select {
     margin-right: 5px;
+    display: inline-block;
 }
 
 .language-form span select{
@@ -1267,13 +1268,29 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
     /*text-align: right;*/
 }
 
+.modify {
+    margin-top: 15px;
+    border-top: 1px solid rgba(113, 108, 76, 0.2);
+    padding-top: 15px;
+}
+
 .navigation-tabs a{
     float: right;
 }
 
-/*.navigation-tabs {
-    margin: 15px 0;
-}*/
+.save_cancel {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.navigation-tabs {
+    margin-top:15px;
+    margin-bottom: 20px;
+}
+
+.CVcreator-description {
+    margin-top: 15px;
+}
 
 /* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {
@@ -1318,10 +1335,57 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
         border-radius: 5px;
         background: rgba(170, 170, 170, 0.15);
     }
+    
+    .js-forms span {
+        width: 100%;
+        text-align: center;
+        padding-right: 10px;
+        margin-top: 10px;
+        color: #888;
+    }
+    
+    .js-forms input[type="text"], .js-forms select{
+        border: 1px solid #DADADA;
+        color: #888;
+        height: 30px;
+        margin: 2px 6px 16px 0;
+        outline: 0 none;
+        padding: 3px 3px 3px 5px;
+        width: 100%;
+        font-size: 12px;
+        line-height: 15px;
+        box-shadow: inset 0px 1px 4px #ECECEC;
+        -moz-box-shadow: inset 0px 1px 4px #ECECEC;
+        -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+    }
 }
  
 /* D?nh cho m?y t?nh b?ng chi?u d?c */
 @media all and (min-width: 600px) {
+    .js-forms span {
+        float: left;
+        width: 20%;
+        text-align: left;
+        padding-right: 10px;
+        margin-top: 10px;
+        color: #888;
+    }
+    
+    .js-forms input[type="text"], .js-forms select{
+        border: 1px solid #DADADA;
+        color: #888;
+        height: 30px;
+        margin: 2px 6px 16px 0;
+        outline: 0 none;
+        padding: 3px 3px 3px 5px;
+        width: 75%;
+        font-size: 12px;
+        line-height: 15px;
+        box-shadow: inset 0px 1px 4px #ECECEC;
+        -moz-box-shadow: inset 0px 1px 4px #ECECEC;
+        -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+    }
+    
     .js-editForm label select {
         width: 15%;
         border: 1px solid #DADADA;

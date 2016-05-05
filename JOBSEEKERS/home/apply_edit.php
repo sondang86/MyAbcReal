@@ -84,9 +84,9 @@ $employer = $db->where('username', $Posting['employer'])->getOne('employers');
             </p>
         </section>
     </div>
-            
-    <section class="col-md-12 info-description">
-        <label><?php echo $DESCRIPTION?></label>
+      
+    <h4><?php echo $DESCRIPTION?></h4>
+    <section class="col-md-12 info-description">        
         <p><?php echo nl2br($Posting["message"])?></p>
     </section>
 </div>
