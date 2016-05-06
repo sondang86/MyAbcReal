@@ -14,9 +14,9 @@ $cols = array(
 $db->join('employers', $DBprefix."jobseekers_stat.employer_id = " .$DBprefix ."employers.id");
 $statistics = $db->get('jobseekers_stat', NULL, $cols);
 
-echo "<pre>";
-print_r($statistics);
-echo "</pre>";
+//echo "<pre>";
+//print_r($statistics);
+//echo "</pre>";
 ?>
 <style>
     .navigation-items a {

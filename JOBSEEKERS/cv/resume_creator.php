@@ -398,8 +398,8 @@ if(isset($_POST["ProceedSaveResume"])){
                 <!--END LANGUAGES AREA-->
                 
                 <script>   
-                    /** Languages area*/    
-                    var Count = $('.language-form').length; //Count total current language tabs
+                    /** Add/Remove languages*/    
+                    var Count = $('.language-form').length; //total current language tabs
 
                     //Hide add more language button
                     if (Count > 2) {
@@ -411,7 +411,7 @@ if(isset($_POST["ProceedSaveResume"])){
                         if (Count > 0) {
                             $('#removebutton').show("slow");
                         }
-                        //Clone select options slowly
+                        //Clone select options
                         $('.language-form:first').clone().find('option').prop('selected', false).end().appendTo('.wrapper');
 
                         //Show add button while < 3 elements only
@@ -440,6 +440,8 @@ if(isset($_POST["ProceedSaveResume"])){
                             if(Count <= "2"){
                                 $("#addbutton").show("slow");
                             }
+                        } else {
+                            $.alert('Phải có it nhất 1 ngôn ngữ','Thông báo');
                         }
 
                         //Prevent form click
