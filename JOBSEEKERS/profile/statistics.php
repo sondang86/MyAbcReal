@@ -6,7 +6,12 @@
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
 global $db;
-$cols = array('employer', 'date_seen', 'views_count', 'employer_id');
+$cols = array(
+    $DBprefix."jobseekers_stat.employer",$DBprefix."jobseekers_stat.resume_id", 
+    $DBprefix."jobseekers_stat.date_seen", $DBprefix."jobseekers_stat.views_count", $DBprefix."jobseekers_stat.employer_id",
+    $DBprefix."employers.company",$DBprefix."employers.contact_person",
+);
+$db->join('employers', $DBprefix."jobseekers_stat.employer_id = " .$DBprefix ."employers.id");
 $statistics = $db->get('jobseekers_stat', NULL, $cols);
 
 echo "<pre>";
@@ -53,6 +58,7 @@ echo "</pre>";
     
     <div class="table-responsive">          
         <table class="table">
+            
             <thead>
                 <tr>
                     <th>#</th>
@@ -61,12 +67,17 @@ echo "</pre>";
                     <th>Số lần xem CV</th>
                 </tr>
             </thead>
+            
             <tbody>                               
                 <?php foreach ($statistics as $statistic) :?>
                 <tr id="job_id_101">
                     <td class="col-md-1"></td>                                 
                     <td class="col-md-3"><?php echo date("d-m-Y G:m:s",$statistic['date_seen'])?></td>
-                    <td class="col-md-5"><?php echo $statistic['employer']?></td>
+                    <td class="col-md-5">
+                        <a href="http://<?php echo $DOMAIN_NAME;?>/thong-tin-cong-ty/<?php echo $statistic['employer_id']?>/<?php echo $website->seoUrl($statistic['company'])?>" target="blank">
+                            <?php echo $statistic['company']?>
+                        </a>
+                    </td>
                     <td class="col-md-3"><?php echo $statistic['views_count']?></td>                    
                 </tr>
                 <?php endforeach;?>    

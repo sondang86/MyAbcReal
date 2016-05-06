@@ -2,16 +2,22 @@
     if(!defined('IN_SCRIPT')) die("");
     global $db, $commonQueries, $SEO_setting;
     $company_id = $commonQueries->check_present_id("id",$SEO_setting);
+    
     $website->ms_i($company_id); //validate first    
     $company_jobs = $commonQueries->jobs_by_employerId($company_id, array(0,5)); //get 5 jobs only
     $company_info = $db->where("id", $company_id)->get("employers");    
         
+    echo "<pre>";
+    print_r($_SESSION);
+    echo "</pre>";
+    
     //if user is logged in, store data
-    if(!empty($_COOKIE["AuthJ"])){
-        $jobseeker_data = explode("~",$_COOKIE["AuthJ"]);
-        $jobseeker_email = $jobseeker_data[0];
-        $jobseeker_id = $jobseeker_data[3];
-        $user_review = $db->where('company_id', $company_id)->where('jobseeker_id', $jobseeker_id)->withTotalCount()->get('company_reviews');
+    if($_SESSION['user_type'] == "jobseeker"){
+        $jobseeker_username = filter_var($_SESSION['username'], FILTER_SANITIZE_STRING);
+        
+        $user_review = $db->where('company_id', $company_id)
+                ->where('email', "$jobseeker_username")
+                ->withTotalCount()->get('company_reviews');        
         
         //Check if user has already reviewed
         if ($db->totalCount > 0) {
@@ -99,8 +105,8 @@
                     
                 <!--REVIEWS-->
                 <?php   
-                    //Show review form if user logged in and hasn't submitted before yet
-                    if(!empty($_COOKIE["AuthJ"]) && ($user_reviewed == FALSE)){ 
+                    //Show review form if user logged in (jobseeker) and hasn't submitted before yet
+                    if(($_SESSION['user_type'] == "jobseeker") && ($user_reviewed == FALSE)){ 
                 ?>
                 <script type="text/javascript">
                     $(document).ready(function(){
@@ -195,7 +201,7 @@
                     </section>
                 </div>
                  <?php } //User already reviewed
-                        elseif(!empty($_COOKIE["AuthJ"]) && ($user_reviewed == TRUE)){ 
+                        elseif(!empty($_SESSION['username']) && ($user_reviewed == TRUE)){ 
                     ?>                    
                 <div id="danh-gia" class="tab-pane fade">
                     <section class="row contactForm" id="reviewForm">
@@ -277,7 +283,7 @@
     
     <!--List reviews-->
     <h4 id="reviews">Đánh giá: </h4>    
-    <?php if($company_reviews_totalCount !== "0"){
+    <?php if($company_reviews_totalCount !== "0"){ //List reviews
         foreach ($company_reviews as $company_review) :
     ?>
     <div class="list-reviews hvr-underline-reveal">        

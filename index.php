@@ -46,6 +46,7 @@ $website->SetDatabase($database);
     
 $commonQueries = new CommonsQueries($db);
 
+//Track user inactivity
 $commonQueries->CheckSession();
     
 //Common tables
@@ -146,6 +147,7 @@ $website->Statistics();
             e.preventDefault();
         });
 
+        //Slider
         $('.bxslider').bxSlider({
             slideWidth: 150,
             minSlides: 2,

@@ -2200,7 +2200,7 @@ class SiteManager
             
             
         /**
-        * Convert strings to SEO friendly
+        * Convert strings to SEO friendly URL
         *
         */
         function seoUrl($string) {
