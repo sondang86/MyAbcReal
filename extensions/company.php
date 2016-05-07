@@ -2,25 +2,25 @@
     if(!defined('IN_SCRIPT')) die("");
     global $db, $commonQueries, $SEO_setting;
     $company_id = $commonQueries->check_present_id("id",$SEO_setting);
-    
+        
     $website->ms_i($company_id); //validate first    
     $company_jobs = $commonQueries->jobs_by_employerId($company_id, array(0,5)); //get 5 jobs only
     $company_info = $db->where("id", $company_id)->getOne("employers");    
         
     //Default user is not review the company
     $user_reviewed = FALSE;
-    
-   
+        
+        
     //Is jobseeker profile
     if($_SESSION['user_type'] == "jobseeker"){
         $jobseeker_username = filter_var($_SESSION['username'], FILTER_SANITIZE_STRING);
         $jobseeker_id = $db->where('username', "$jobseeker_username")->getOne('jobseekers', array('id'));
-        
-        
+            
+            
         $user_review = $db->where('company_id', $company_id)
                 ->where('email', "$jobseeker_username")
                 ->withTotalCount()->get('company_reviews');        
-        
+                    
         //Check if user has already reviewed
         if ($db->totalCount > 0) {
             $user_reviewed = TRUE;
@@ -29,30 +29,48 @@
     }
         
     $reviews = $db->rawQuery("SELECT count(id) as number,avg(vote) as vote FROM ".$DBprefix."company_reviews WHERE company_id=$company_id");            
-    
+        
     //Company reviews
-    
+        
     $cols = array(
         $DBprefix."company_reviews.date",$DBprefix."company_reviews.title",$DBprefix."company_reviews.html",
         $DBprefix."company_reviews.company_id",$DBprefix."company_reviews.vote",$DBprefix."company_reviews.jobseeker_id",
+        $DBprefix."company_reviews.review_reliable",$DBprefix."company_reviews.review_professional",
+        $DBprefix."company_reviews.review_overall",
         $DBprefix."jobseekers.first_name",$DBprefix."jobseekers.last_name",
     );
     $db->join('jobseekers', $DBprefix."company_reviews.jobseeker_id = ".$DBprefix."jobseekers.id");
     $company_reviews = $db->withTotalCount()->where("company_id", $company_id)->get("company_reviews", NULL, $cols);
     $company_reviews_totalCount = $db->totalCount;
-        
-//    echo "<pre>";
-//    print_r($company_reviews);
-//    echo "</pre>";
+    
+    //calculate average overall scores
+    $cols_overall = array('AVG(review_reliable)', 'AVG(review_professional)', 'AVG(review_overall)');
+    $overall_scores = $db->where('company_id', $company_id)->get('company_reviews', NULL, $cols_overall);
 ?>
-
+    
 <div class="page-wrap">
     <div class="row">
         <section class="col-md-8 companyTitle">
             <h2><?php echo $company_info['company']?></h2>
-            <span><?php echo $website->show_stars($reviews[0]['vote']);?></span>
-            <span>(<a href="#reviews"><?php echo $company_reviews_totalCount;?> Nhận xét</a>)</span>        
-        </section>        
+            <span>(<a href="#reviews"><?php echo $company_reviews_totalCount;?> Nhận xét</a>)</span>             
+            
+            <fieldset class="row">
+                <section class="col-xs-4">
+                    <p>Độ tin cậy:</p>
+                    <p><?php echo $website->show_stars($overall_scores[0]['AVG(review_reliable)']);?></p>
+                </section>
+                <section class="col-xs-4">
+                    <p>Độ chuyên nghiệp:</p>
+                    <p><?php echo $website->show_stars($overall_scores[0]['AVG(review_professional)']);?></p>
+                </section>
+                <section class="col-xs-4">
+                    <p>Tổng quan:</p>
+                    <p><?php echo $website->show_stars($overall_scores[0]['AVG(review_overall)']);?></p>
+                </section>
+            </fieldset>
+            
+        </section> 
+        
         <figure class="col-md-4">
             <img src="http://localhost/vieclambanthoigian.com.vn/uploaded_images/90945453.jpg" width="300" class="img-responsive" alt="Prudential">
         </figure>
@@ -83,7 +101,7 @@
                         </form>
                     </section>                        
                 </div>
-                
+                    
                 <!--JOBS-->
                 <div id="viec-lam" class="tab-pane fade">
                     <section class="row same_height">
@@ -98,7 +116,7 @@
                                 </ul>
                             </section>
                             <p><a href="<?php $website->check_SEO_link("jobs_by_companyId",$SEO_setting,$company_id, $website->seoUrl($company_job['company']))?>">Xem toàn bộ</a></p>
-                            
+                                
                             <?php } else { //Not found any jobs?>
                             <h4>Chưa có việc làm nào</h4>                                
                             <?php }?>
@@ -111,108 +129,184 @@
                     //Show review form if user logged in (jobseeker) and hasn't submitted before yet
                     if(($_SESSION['user_type'] == "jobseeker") && ($user_reviewed == FALSE)){ 
                 ?>
-                <script type="text/javascript">
-                    $(document).ready(function(){
-                        $("#reviewSubmit").on('click', function(event) { //processing data
-                            if($("#danh-gia")[0].checkValidity()){
-                                
-                                var anonymous = ($("#anonymous").prop('checked')? '1' : '0'); 
-                                var jobseeker_email = $("#jobseeker-email").attr("value");
-                                var jobseeker_id = <?php echo $jobseeker_id['id'];?>;
-                                var company_id = <?php echo $company_id;?>;                            
+                <script type="text/javascript">                    
+                    
+                    $(function(){
+                        // Validation
+                        $("#danh-gia").validate({					
+                            // Rules for form validation
+                            rules:{
+                                review_name:{
+                                    required: true  
+                                },
+                                review:{
+                                    required: true,
+                                    minlength: 20
+                                },
+                                review_reliable:{
+                                    required: true
+                                },
+                                review_professional:{
+                                    required: true
+                                },
+                                review_overall:{
+                                    required: true
+                                }
+                            },
+
+                            // Messages for form validation
+                            messages:{
+                                review_name: {
+                                  required: 'Chưa nhập tên'  
+                                },
+                                review:{
+                                        required: 'Chưa có đánh giá',
+                                        minlength: 'Tối thiểu 20 ký tự'
+                                },
+                                review_reliable:{
+                                        required: 'Chưa đánh giá'
+                                },
+                                review_professional:{
+                                        required: 'Chưa đánh giá'
+                                },
+                                review_overall:{
+                                        required: 'Chưa đánh giá'
+                                }
+                            },
+
+                            // Ajax form submition					
+                            submitHandler: function(form){
+                                var anonymous = $('#review_anonymous').is(':checked') ? '1' : '0';
                                 $.ajax({
                                     type: "POST",
                                     url: "http://<?php echo $DOMAIN_NAME?>/extensions/handleReview.php",
+                                    dataType: 'JSON',
                                     data: {
-                                        rating: $(".br-current-rating").text(),
-                                        title: $("#review-title").val(),
-                                        review: $("#review-content").val(),
-                                        anonymous: anonymous,
-                                        jobseeker_email: jobseeker_email,
-                                        jobseeker_id: jobseeker_id,
-                                        company_id: company_id
+                                        review_name: $("#review_name").val(),
+                                        review: $("#review").val(),
+                                        review_email: $("#review_email").val(),
+                                        review_reliable: $(".review_reliable input[type='radio']:checked").val(),
+                                        review_professional: $(".review_professional input[type='radio']:checked").val(),
+                                        review_overall: $(".review_overall input[type='radio']:checked").val(),
+                                        employer_email: "<?php echo $company_info['username'];?>",
+                                        company_id: <?php echo $company_info['id'];?>,
+                                        jobseeker_id: <?php echo $jobseeker_id['id'];?>,
+                                        anonymous : anonymous,
+                                        request_type: 'reviews_employer'
                                     },
-                                    success: function(response) { 
-                                        if (response == 'already reviewed'){
-                                            $("#reviewForm").hide("1");
-                                            $("#alreadyReviewed").show("1");
-                                            $.alert('Bạn đã đánh giá công ty này');
-                                        } else { //show thanks message
-                                            $("#reviewForm").hide("1");
-                                            $("#reviewed").show("1");
-                                            $.alert('Cảm ơn bạn đã đánh giá');
+                                    success: function(data) { //show thanks message
+                                        $("#reviews_form").hide("1");
+                                        $("#reviewed").show("1");
+                                        if(data.status == 1){
+                                            $.alert(data.message);
+                                        } else {
+                                            $.alert(data.message);
                                         }
                                     }
                                 });
+                            },
                             
-                            } else {
-                                $.alert('vui lòng kiểm tra và nhập những ô còn thiếu');                            
+                            // Do not change code below
+                            errorPlacement: function(error, element)
+                            {
+                                    error.insertAfter(element.parent());
                             }
-                            event.preventDefault();
                         });
-                    });                   
-                    
-                    //Bar rating stars
-                    $(function() {
-                        $('#star-rating').barrating({
-                            theme: 'fontawesome-stars',
-                            initialRating: 3, //Default value
-                            showSelectedRating: true,
-                            onSelect: function(value, text, event) {
-                                if (typeof(event) !== 'undefined') {
-                                    // rating was selected by a user
-                                    var value = $('.br-current-rating').text();
-                                    //                              alert(value);                              
-                                } 
-                            }                         
-                        });
-                    });                    
+                    });		
                 </script>
-                
-                
-                
+                    
+                    
+                    
                 <!--REVIEW-->
-                <form id="danh-gia" class="tab-pane fade">
-                    <section class="row contactForm" id="reviewForm">
-                        <fieldset class="col-md-12">
-                            <label>Đánh giá: </label>
-                            <select id="star-rating">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                            </select>
-                        </fieldset>
-                        <fieldset class="col-md-12">
-                            <label>Email: </label>
-                            <input type="text" name="email" id="jobseeker-email" value="<?php echo filter_var($_SESSION['username'], FILTER_SANITIZE_STRING);?>" disabled>
-                        </fieldset>
-                        <fieldset class="col-md-12">
-                            <label>Tiêu đề: </label>
-                            <input type="text" name="title" id="review-title" required>
-                        </fieldset>
-                        <fieldset class="col-md-12">
-                            <label>Review của bạn về công ty (tối thiểu 30 ký tự): (*)</label>
-                            <textarea name="review-content" id="review-content" minlength="30" required></textarea>
-                        </fieldset>
-                        <fieldset class="col-md-12">
-                            <label>Ẩn danh</label>
-                            <input type="checkbox" name="anonymous" id="anonymous" checked="checked">
-                        </fieldset>
-                        <fieldset class="col-md-12">
-                            <label></label>
-                            <input type="submit" name="reviewSubmit" id="reviewSubmit" value="Gửi">
-                        </fieldset>
-                    </section>                        
-                        
-                    <section id="reviewed" style="display:none">
-                        <h4>Cảm ơn bạn đã viết đánh giá.</h4>
-                    </section> 
-                    <section id="alreadyReviewed" style="display:none">
-                        <h4>Bạn đã đánh giá rồi.</h4>
-                    </section>
+                <form id="danh-gia" class="tab-pane fade sky-form">
+                    <header>Review form</header>
+
+                    <fieldset>	
+
+                        <section>
+                            <label class="input">
+                                <i class="icon-append fa fa-envelope-o"></i>
+                                <input type="email" name="review_email" id="review_email" placeholder="Email" value="<?php echo $jobseeker_username;?>" disabled>
+                            </label>
+                        </section>
+
+                        <section>
+                            <label class="input">
+                                <i class="icon-append fa fa-user"></i>
+                                <input type="text" name="review_name" id="review_name" placeholder="Tên">
+                            </label>
+                        </section>
+
+                        <section>
+                            <label class="label"></label>
+                            <label class="textarea">
+                                <i class="icon-append fa fa-comment"></i>
+                                <textarea rows="3" name="review" id="review" placeholder="Nhận xét"></textarea>
+                            </label>
+                        </section>
+
+                        <section>
+                            <div class="rating review_reliable">
+                                <input type="radio" name="review_reliable" value="5" id="reliable-5">
+                                <label for="reliable-5"><i class="fa fa-star"></i></label>
+                                <input type="radio" name="review_reliable" value="4" id="reliable-4">
+                                <label for="reliable-4"><i class="fa fa-star"></i></label>
+                                <input type="radio" name="review_reliable" value="3" id="reliable-3">
+                                <label for="reliable-3"><i class="fa fa-star"></i></label>
+                                <input type="radio" name="review_reliable" value="2" id="reliable-2">
+                                <label for="reliable-2"><i class="fa fa-star"></i></label>
+                                <input type="radio" name="review_reliable" value="1" id="reliable-1">
+                                <label for="reliable-1"><i class="fa fa-star"></i></label>
+                                Độ tin cậy
+                            </div>						
+
+                            <div class="rating review_professional">
+                                <input type="radio" name="review_professional" value="5" id="professional-5">
+                                <label for="professional-5"><i class="fa fa-star"></i></label>
+                                <input type="radio" name="review_professional" value="4" id="professional-4">
+                                <label for="professional-4"><i class="fa fa-star"></i></label>
+                                <input type="radio" name="review_professional" value="3" id="professional-3">
+                                <label for="professional-3"><i class="fa fa-star"></i></label>
+                                <input type="radio" name="review_professional" value="2" id="professional-2">
+                                <label for="professional-2"><i class="fa fa-star"></i></label>
+                                <input type="radio" name="review_professional" value="1" id="professional-1">
+                                <label for="professional-1"><i class="fa fa-star"></i></label>
+                                Tính chuyên nghiệp
+                            </div>				
+
+                            <div class="rating review_overall">
+                                <input type="radio" name="review_overall" class="review_overall" value="5" id="overall-5">
+                                <label for="overall-5"><i class="fa fa-star"></i></label>
+                                <input type="radio" name="review_overall" class="review_overall" value="4" id="overall-4">
+                                <label for="overall-4"><i class="fa fa-star"></i></label>
+                                <input type="radio" name="review_overall" class="review_overall" value="3" id="overall-3">
+                                <label for="overall-3"><i class="fa fa-star"></i></label>
+                                <input type="radio" name="review_overall" class="review_overall" value="2" id="overall-2">
+                                <label for="overall-2"><i class="fa fa-star"></i></label>
+                                <input type="radio" name="review_overall" class="review_overall" value="1" id="overall-1">
+                                <label for="overall-1"><i class="fa fa-star"></i></label>
+                                Tổng thể
+                            </div>
+
+                            <div class="review_anonymous clearfix">
+                                <!--<span>Select</span>-->
+                                <label class="checkbox">
+                                    <input type="checkbox" name="checkbox" id="review_anonymous" checked><i></i>Ẩn danh                                     
+                                </label>                                
+                            </div>
+                        </section>
+                    </fieldset>
+                    <footer>
+                        <button type="submit" id="submit" class="button">Submit a review</button>
+                    </footer>                        
                 </form>
+                <section id="reviewed" style="display:none">
+                    <h4>Cảm ơn bạn đã viết đánh giá.</h4>
+                </section> 
+                <section id="alreadyReviewed" style="display:none">
+                    <h4>Bạn đã đánh giá rồi.</h4>
+                </section>
+                
                  <?php } //User already reviewed
                         elseif(!empty($_SESSION['username']) && ($user_reviewed == TRUE)){ 
                     ?>                    
@@ -226,7 +320,7 @@
                     <?php } //User not yet logged in
                             elseif ($_SESSION['user_type'] == "guest") { 
                     ?>
-                
+                        
                 <div id="danh-gia" class="tab-pane fade">
                     
                     <section class="row contactForm" id="reviewForm">
@@ -236,9 +330,9 @@
                         </fieldset>
                     </section>
                 </div>                    
-                
+                    
                     <?php } else { //Employer restricted?>
-                
+                        
                 <div id="danh-gia" class="tab-pane fade">                    
                     <section class="row contactForm" id="reviewForm">
                         <fieldset class="col-md-12">
@@ -246,77 +340,146 @@
                         </fieldset>
                     </section>
                 </div>
-                
+                    
                     <?php }?>
-                <!--CONTACT-->
+                <!--CONTACT EMPLOYER SCRIPT-->
                 <script type="text/javascript">                    
                     $(document).ready(function(){
                         //Contact form submit
-                        $("#contactSubmit").on('click', function(event){ 
-                            //Validation combine with html5
-                            if($("#lien-he")[0].checkValidity()) {
+                        $("#lien-he").validate({
+                            rules:{
+                                contact_username:{
+                                    required: true
+                                },
+                                contact_title:{
+                                    required: true
+                                },
+                                contact_company:{
+                                    required: true
+                                },
+                                contact_email:{
+                                    required: true
+                                },
+                                contact_phone:{
+                                    required: true
+                                },
+                                comment:{
+                                    required: true
+                                }
+                                
+                            },
+                            messages:{
+                                contact_username:{
+                                    required: 'Vui lòng điền thông tin'
+                                },
+                                contact_title:{
+                                    required: 'Vui lòng điền thông tin'
+                                },
+                                contact_company:{
+                                    required: 'Vui lòng điền thông tin'
+                                },
+                                contact_email:{
+                                    required: 'Vui lòng điền thông tin'
+                                },
+                                contact_phone:{
+                                    required: 'Vui lòng điền thông tin'
+                                },
+                                comment:{
+                                    required: 'Vui lòng điền thông tin'
+                                },
+                                
+                            },
+                            submitHandler: function(form) {
                                 var employer_email = "<?php echo $company_info['username']?>";
-                                //Send data to process
                                 $.ajax({
                                     type: "POST",
-                                        url: "http://<?php echo $DOMAIN_NAME?>/extensions/handleReview.php",
-                                        data: {
-                                            title: $("#contactTitle").val(),
-                                            content: $("#contactContent").val(),
-                                            email: $("#contactEmail").val(),
-                                            employer_email: employer_email
+                                    url: "http://<?php echo $DOMAIN_NAME?>/extensions/handleReview.php",
+                                    data: {
+                                        contact_username: $("#contact_username").val(),
+                                        contact_company: $("#contact_company").val(),
+                                        contact_email: $("#contact_email").val(),
+                                        contact_phone: $("#contact_phone").val(),
+                                        contact_title: $("#contact_title").val(),
+                                        contact_comment: $("#contact_comment").val(),
+                                        employer_email: employer_email,
+                                        request_type: 'contact_employer'
                                     },
                                     success: function() { //show thanks message
                                         $("#contactForm").hide("1");
                                         $("#reviewed").show("1");
-                                        $.alert('Bạn đã gửi email đến nhà tuyển dụng');
+                                        $.alert('Đã gửi tin nhắn đến nhà tuyển dụng');
                                     }
                                 });
-                                
-                            } else {
-                                console.log("invalid form");
-                                $.alert('vui lòng kiểm tra và nhập những ô còn thiếu');
-                            };
-                            
-                            
-                            
-                            event.preventDefault();
-                        });
+                            }
+                        });                        
                     });
                 </script>
-                
-                
+                    
+                    
                 <form id="lien-he" class="tab-pane fade">
-                    <section class="row contactForm" id="contactForm">
-                        <fieldset class="col-md-12">
-                            <label>Tiêu đề (*)</label>
-                            <input type="text" name="contactTitle" id="contactTitle" required>
+                    <section class="row sky-form" id="contactForm">
+                        <fieldset>					
+                            <div class="row">
+                                <section class="col col-6">
+                                    <label class="input">
+                                        <i class="icon-append fa fa-user"></i>
+                                        <input type="text" name="contact_username" id="contact_username" placeholder="Tên bạn (*)">
+                                    </label>
+                                </section>
+                                <section class="col col-6">
+                                    <label class="input">
+                                        <i class="icon-append fa fa-briefcase"></i>
+                                        <input type="text" name="contact_company" id="contact_company" placeholder="Công ty">
+                                    </label>
+                                </section>
+                            </div>
+                                
+                            <div class="row">
+                                <section class="col col-6">
+                                    <label class="input">
+                                        <i class="icon-append fa fa-envelope-o"></i>
+                                        <input type="email" name="contact_email" id="contact_email" placeholder="E-mail (*)">
+                                    </label>
+                                </section>
+                                <section class="col col-6">
+                                    <label class="input">
+                                        <i class="icon-append fa fa-phone"></i>
+                                        <input type="tel" name="contact_phone" id="contact_phone" placeholder="Phone">
+                                    </label>
+                                </section>
+                            </div>
                         </fieldset>
-                        
-                        <fieldset class="col-md-12">
-                            <label>Nội dung (*)</label>
-                            <textarea name="contactContent" id="contactContent" required></textarea>
+                            
+                        <fieldset>
+                            <section>
+                                <label class="input">
+                                    <i class="icon-append fa fa-comment"></i>
+                                    <input type="text" name="contact_title" id="contact_title" placeholder="Tiêu đề (*)">
+                                </label>
+                            </section>
+                                
+                            <section>
+                                <label class="textarea">
+                                    <i class="icon-append fa fa-comment"></i>
+                                    <textarea rows="5" name="contact_comment" id="contact_comment" placeholder="Lời nhắn (*)"></textarea>
+                                </label>
+                            </section>					
                         </fieldset>
-                        
-                        <fieldset class="col-md-12">
-                            <label>Email của bạn * (abc@mail.com)</label>
-                            <input type="email" name="username" id="contactEmail" value="<?php if(!empty($jobseeker_email)){echo $jobseeker_email;}?>" <?php if(!empty($jobseeker_email)){echo "disabled";}?> required>
-                        </fieldset>
-                        
-                        <fieldset class="col-md-12">
-                            <label></label>
-                            <input type="submit" name="contact" id="contactSubmit" class="submit" value="Gửi">
-                        </fieldset>
+                        <footer>
+                            <button type="submit" id="submit" class="button">Gửi</button>
+                            <div class="progress"></div>
+                        </footer>				
+                        <div class="message">
+                            <i class="fa fa-check"></i>
+                            <p>Thanks for your order!<br>We'll contact you very soon.</p>
+                        </div>
                     </section>
-                    <section id="reviewed" style="display:none">
-                        <h4>Bạn đã gửi tin nhắn thành công đến nhà tuyển dụng.</h4>
-                    </section>
-                </form>
-                
+                </form>	    
+                    
             </section>
         </div>
     </div>
-    
+        
     <!--List reviews-->
     <h4 id="reviews">Đánh giá: </h4>    
     <?php if($company_reviews_totalCount !== "0"){ //List reviews
@@ -324,17 +487,25 @@
     ?>
     <div class="list-reviews hvr-underline-reveal">        
         <form class="row">
-            <section class="col-md-8 col-xs-12 review-user">
+            <section class="col-md-6 col-xs-12 review-user">
                 <img src="http://www.prometheanworld.me/img/default/userAvatar.png" height="50" width="50">
                 <p><?php echo $company_review['first_name'] . " " . $company_review['last_name']?> vào lúc <?php echo date("M d, Y",$company_review['date'])?></p>
                 <p><label><?php echo $company_review['title']?></label> :</p>
             </section>
-            <section class="col-md-4 col-xs-12 satisfaction-rating">
-                <p>Độ hài lòng:</p>
-                <p><?php echo $website->show_stars($company_review['vote']);?></p>
+            <section class="col-md-2 col-sm-4 col-xs-4 satisfaction-rating">
+                <p>Độ tin cậy:</p>
+                <p><?php echo $website->show_stars($company_review['review_reliable']);?></p>
+            </section>
+            <section class="col-md-2 col-sm-4 col-xs-4 satisfaction-rating">
+                <p>Độ chuyên nghiệp:</p>
+                <p><?php echo $website->show_stars($company_review['review_professional']);?></p>
+            </section>
+            <section class="col-md-2 col-sm-4 col-xs-4 satisfaction-rating">
+                <p>Tổng quan:</p>
+                <p><?php echo $website->show_stars($company_review['review_overall']);?></p>
             </section>
         </form>
-        
+            
         <form class="row message">
             <span class="tip tip-up"></span>
             <p class="col-md-12"><?php echo $company_review['html']?></p>
@@ -345,7 +516,22 @@
     <h4>Hiện chưa có đánh giá nào về công ty này</h4>  
     <?php }?>
 </div>
-
+<script>
+    $(function(){
+        $("#lien-he").validate({
+            rules:{
+                contact_title:{
+                    required: true
+                }
+            },
+            messages:{
+                contact_title:{
+                    required: 'sadajdlkas'
+                }
+            }
+        });
+    });    
+</script>
 <!--Bar rating-->
 <!--https://github.com/antennaio/jquery-bar-rating-->
 <link href="/vieclambanthoigian.com.vn/css/fontawesome-stars.css" rel="stylesheet" type="text/css"/>

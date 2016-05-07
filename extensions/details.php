@@ -3,6 +3,9 @@
     global $db,$categories, $categories_subs,$commonQueries,  $SEO_setting, $userId_cookie,$Browser_detection;
     $job_id = $commonQueries->check_present_id($_GET, $SEO_setting, 3);
     $job_details = $commonQueries->jobDetails($job_id, $userId_cookie);
+    
+    if ($job_details !== FALSE){ 
+        $commonQueries->Update_job_views($job_id);//Only count job views if found job
 ?>    
 <a id="go_back_button" class="btn btn-default btn-xs pull-right no-decoration margin-bottom-5" href="javascript:GoBack()">Quay lại</a>    
 <article class="job-details-wrap">
@@ -34,6 +37,10 @@
             <p>
                 <label>Mức lương:</label>
                 <span><strong><?php echo $job_details['salary_range']?></strong></span>
+            </p>
+            <p>
+                <label>Lượt xem:</label>
+                <span><strong><?php echo $job_details['views_count']?></strong></span>
             </p>
         </section>
     </div>
@@ -80,5 +87,10 @@
             
         </figure>
     </footer>
-        
 </article>
+
+<?php } else {?>
+    <article class="job-details-wrap">
+        <h4>Không tìm thấy dữ liệu :(</h4>
+    </article>
+<?php } ?>

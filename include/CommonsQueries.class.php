@@ -473,7 +473,8 @@
                 $this->_dbPrefix."salary.salary_range",$this->_dbPrefix."salary.salary_range_en",
                 $this->_dbPrefix."saved_jobs.user_type as saved_job_userType",$this->_dbPrefix."saved_jobs.date as saved_jobDate",
                 $this->_dbPrefix."saved_jobs.browser", $this->_dbPrefix."saved_jobs.IPAddress",  
-                $this->_dbPrefix."saved_jobs.user_uniqueId as user_uniqueId",$this->_dbPrefix."saved_jobs.job_id as saved_jobId"//saved jobs table
+                $this->_dbPrefix."saved_jobs.user_uniqueId as user_uniqueId",$this->_dbPrefix."saved_jobs.job_id as saved_jobId",//saved jobs table
+                $this->_dbPrefix."job_statistics.views_count"
             );
                 
             $this->_db->join("employers", $this->_dbPrefix."jobs.employer=".$this->_dbPrefix."employers.username", "LEFT");
@@ -485,6 +486,7 @@
             $this->_db->join('saved_jobs', $this->_dbPrefix."jobs.id = ".$this->_dbPrefix."saved_jobs.job_id AND "
                     .$this->_dbPrefix."saved_jobs.user_uniqueId = '$userId_cookie' AND "
                     .$this->_dbPrefix."saved_jobs.IPAddress = '".filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP)."' ", "LEFT");
+            $this->_db->join("job_statistics", $this->_dbPrefix."jobs.id=".$this->_dbPrefix."job_statistics.job_id", "LEFT");
                         
             $this->_db->where($this->_dbPrefix."jobs.id", $id);
             $this->_db->where($this->_dbPrefix."jobs.status", "1");
@@ -1182,6 +1184,26 @@
             $lastInsertId = "employer_id";
             $this->_db->onDuplicate($updateColumns, $lastInsertId);
             $insert_id = $this->_db->insert('jobseekers_stat', $view_data);
+            if(!$insert_id){echo 'there was a problem when insert data';}
+        }
+        
+        /**
+        *  Update total job views count
+        * 
+        *  @param var job_id job id to be insert/update
+        *
+        */
+        public function Update_job_views($job_id){
+            //Count view to the database
+            $view_data = array(
+                "job_id"   => $job_id,
+                "views_count"   => $this->_db->inc(1)
+            );
+            
+            $updateColumns = Array ("views_count");
+            $lastInsertId = "job_id";
+            $this->_db->onDuplicate($updateColumns, $lastInsertId);
+            $insert_id = $this->_db->insert('job_statistics', $view_data);
             if(!$insert_id){echo 'there was a problem when insert data';}
         }
         

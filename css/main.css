@@ -2476,6 +2476,7 @@ div.upload input:hover {
 }
 
 
+/*REVIEWS*/
 
 .review-user img{
     float: left;
@@ -2497,6 +2498,21 @@ div.upload input:hover {
     width: 100%;
     margin-top: 15px;
 }
+
+.review_anonymous {
+    /*overflow: auto;*/
+}
+
+.review_anonymous span {
+    font-size: 15px;
+}
+
+.review_anonymous label {
+    display: block !important;
+    float: right;
+    margin: 0px 5px;
+}
+
 /* Underline Reveal effect*/
 .hvr-underline-reveal {
     display: inline-block;

@@ -16,8 +16,8 @@ $db = new MysqliDb (Array (
 //Common queries 
 $commonQueries = new CommonsQueries($db); 
     
-//Make sure 4 options are not empty for review submit
-if (isset($_POST['review']) && isset($_POST['rating']) && isset($_POST['anonymous']) && isset($_POST['jobseeker_id'])){
+//Reviews handling
+if (isset($_POST['request_type']) && ($_POST['request_type'] == 'reviews_employer')){
     
     $dataaa =   $db->where('company_id', filter_input(INPUT_POST, 'company_id', FILTER_SANITIZE_NUMBER_INT))
                 ->where("jobseeker_id", filter_input(INPUT_POST, 'jobseeker_id', FILTER_SANITIZE_NUMBER_INT))->withTotalCount()->get("company_reviews");
@@ -27,30 +27,41 @@ if (isset($_POST['review']) && isset($_POST['rating']) && isset($_POST['anonymou
         $data = Array (
             "date" => time(),
             "company_id" => filter_input(INPUT_POST, 'company_id', FILTER_SANITIZE_NUMBER_INT),
-            "title" => filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING),
+            "title" => filter_input(INPUT_POST, 'review_name', FILTER_SANITIZE_STRING),
             "jobseeker_id" => filter_input(INPUT_POST, 'jobseeker_id', FILTER_SANITIZE_NUMBER_INT),
             "html" => filter_input(INPUT_POST, 'review', FILTER_SANITIZE_STRING),
-            "email" => filter_input(INPUT_POST, 'jobseeker_email', FILTER_SANITIZE_EMAIL),
-            "vote" => filter_input(INPUT_POST, 'rating', FILTER_SANITIZE_NUMBER_INT),
+            "email" => filter_input(INPUT_POST, 'review_email', FILTER_SANITIZE_EMAIL),
+            "review_reliable" => filter_input(INPUT_POST, 'review_reliable', FILTER_SANITIZE_NUMBER_INT),
+            "review_professional" => filter_input(INPUT_POST, 'review_professional', FILTER_SANITIZE_NUMBER_INT),
+            "review_overall" => filter_input(INPUT_POST, 'review_overall', FILTER_SANITIZE_NUMBER_INT),
             "status" => "1",
             "anonymous" => filter_input(INPUT_POST, 'anonymous', FILTER_SANITIZE_NUMBER_INT),
         );
         $id = $db->insert('company_reviews', $data);
         if($id) {
-            echo "$id record has been created succesfully";
+            $message = array(
+                "message"   => "Cảm ơn bạn đã đánh giá",
+                "status"    => "1", //Success
+            );            
+            echo json_encode($message);
+            
         } else {
-            echo "error occurred";
+            $message = array(
+                "message"   => "Có lỗi xảy ra",
+                "status"    => "0", //Success
+            );            
+            echo json_encode($message);
         }
     }
 } 
-//Contact form handle, make sure 3 required fields is set
-elseif (isset($_POST['title']) && isset($_POST['content']) && isset($_POST['email'])){
+//Contact form handling
+elseif (isset($_POST['request_type']) && ($_POST['request_type'] == 'contact_employer')){
     //Send mail notification to employer
-    mail(filter_input(INPUT_POST, 'employer_email', FILTER_SANITIZE_EMAIL), filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING),filter_input(INPUT_POST, 'content', FILTER_SANITIZE_STRING));    
+    mail(filter_input(INPUT_POST, 'employer_email', FILTER_SANITIZE_EMAIL), filter_input(INPUT_POST, 'contact_title', FILTER_SANITIZE_STRING),filter_input(INPUT_POST, 'contact_comment', FILTER_SANITIZE_STRING));    
 } 
 //Missing required fields
 else { 
-    
+    echo "there was an problem";
 }
 
 
