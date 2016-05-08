@@ -10,6 +10,10 @@ $WORK_LOCATION="Nơi làm việc";
 $M_MINIMUM_SALARY="Mức lương tối thiểu";
 $M_JOBS_BY_FEATURED="Việc làm nổi bật";
 $M_JOBS_BY_LATEST="Việc làm mới nhất";
+$JOB_DESCRIPTION = "Mô tả công việc";
+$REQUIRES_DESCRIPTION = "Yêu cầu công việc";
+$BENEFITS_DESCRIPTION = "Các quyền lợi được hưởng";
+$PROFILECV_DESCRIPTION = "Yêu cầu hồ sơ";
 
 //SonDang
 $M_BROWSE_MAP="Browse by Map";

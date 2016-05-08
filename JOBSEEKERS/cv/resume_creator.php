@@ -474,7 +474,6 @@ if(isset($_POST["ProceedSaveResume"])){
                         var languages_selected = $('.language-form').serializeObject();
 
                         e.preventDefault();
-                        console.log(languages_selected);        
 
                         $.ajax({
                             type: "POST",

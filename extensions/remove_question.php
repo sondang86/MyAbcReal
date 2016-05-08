@@ -16,8 +16,10 @@
             ));
         $commonQueries = new CommonsQueries($db);
     }
+    
+    $DBprefix = "jobsportal_";
 
-    //Remove question process
+    //Remove question
     if ($_POST['proceed'] == "1" && isset($_POST['remove_question'])){        
         //Safety sanitize input data first
         $job_id = filter_input(INPUT_POST, 'job_id', FILTER_SANITIZE_NUMBER_INT);    
@@ -56,15 +58,22 @@
         //Output message
     }
     
-    //Remove job Id process
+    
+    //Remove job
     if ($_POST['proceed'] == "1" && isset($_POST['remove_job'])){
         //Sanitize first
         $job_id = filter_input(INPUT_POST, 'job_id', FILTER_SANITIZE_NUMBER_INT);
         
         //Delete job id
-        $db->where('id', $job_id);
-        if(!$db->delete('jobs')){
-            echo "problem when delete job";die;
+        $cols = array(
+            $DBprefix.'jobs.id as job_id',
+            $DBprefix.'apply.posting_id as job_id',
+        );
+        $db->where($DBprefix.'jobs.id', $job_id);
+        $db->join('apply', $DBprefix.'jobs.id = '.$DBprefix.'apply.posting_id', "INNER");
+       
+        if(!$db->delete("apply, jobsportal_jobs")){
+            echo "problem when delete job";
         } else {
             $message = array(
                 "message"           => "Đã xóa việc làm này",

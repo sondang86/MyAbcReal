@@ -62,7 +62,7 @@ $segment = $website->getURL_segment($website->currentURL());
 </script>
 <section class="row stats top-title">
     <header class="col-md-12">
-        <h4>Việc làm nổi bật: </h4>
+        <h4>Việc làm hấp dẫn: </h4>
     </header>
 </section>
 
@@ -151,8 +151,8 @@ $segment = $website->getURL_segment($website->currentURL());
 <!--STATS-->
 <section class="row stats top-title">
     <header class="col-md-12">
-        <h4>Thống kê: </h4>
-        <p>Here we list our stats and how many people we've helped find a job and companies have found recruits. It's Pretty awesome stats area!</p>
+        <h4>Hiện vieclambanthoigian.com.vn đang có: </h4>
+        <p></p>
     </header>    
     <main>
         <div class="col-xs-3 counter">

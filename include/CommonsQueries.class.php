@@ -464,6 +464,8 @@
            $columns = array(
                 $this->_dbPrefix."jobs.id as job_id",$this->_dbPrefix."jobs.job_category",
                 $this->_dbPrefix."jobs.applications",$this->_dbPrefix."jobs.employer",
+                $this->_dbPrefix."jobs.requires_description",$this->_dbPrefix."jobs.benefits_description",
+                $this->_dbPrefix."jobs.profileCV_description",
                 $this->_dbPrefix."jobs.title",$this->_dbPrefix."jobs.SEO_title",$this->_dbPrefix."jobs.date as date",
                 $this->_dbPrefix."jobs.message",$this->_dbPrefix."employers.company",$this->_dbPrefix."employers.logo",$this->_dbPrefix."employers.id as employer_id",
                 $this->_dbPrefix."categories.category_name_vi",$this->_dbPrefix."categories.category_name",$this->_dbPrefix."categories.id as category_id",

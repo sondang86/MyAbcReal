@@ -10,12 +10,11 @@ global $db, $commonQueries,$categories, $job_types, $locations, $salaries, $expe
 <?php
 $id=$_REQUEST["id"];
 $website->ms_i($id);
-if($database->SQLCount("jobs","WHERE employer='".$AuthUserName."' AND id=".$id." ") == 0)
-{
-	die("");
+if($database->SQLCount("jobs","WHERE employer='".$AuthUserName."' AND id=".$id) == 0){
+    die("404 Not found");
 }
-$db->where ("id", "$id");
-$jobs_by_employer = $db->get("jobs");
+$job = $db->where ("id", "$id")->getOne("jobs");
+ 
 ?>
 
 <?php //Edit data
@@ -27,6 +26,9 @@ $jobs_by_employer = $db->get("jobs");
             "job_type" => filter_input(INPUT_POST, 'post-jobtypes'),
             "title" => filter_input(INPUT_POST, 'employer-post-title', FILTER_SANITIZE_STRING), 
             "message" => filter_input(INPUT_POST,'employer-post-details', FILTER_SANITIZE_STRING),
+            "requires_description"  => filter_input(INPUT_POST, 'employer-post-requires',FILTER_SANITIZE_STRING), 
+            "benefits_description"  => filter_input(INPUT_POST,'employer-post-benefits',FILTER_SANITIZE_STRING),
+            "profileCV_description" => filter_input(INPUT_POST,'employer-post-profileCV',FILTER_SANITIZE_STRING),
             "experience" => filter_input(INPUT_POST,'experience',FILTER_SANITIZE_NUMBER_INT),
             "region" => filter_input(INPUT_POST,'post-locations'),
             "salary" => filter_input(INPUT_POST,'post-salary'),
@@ -40,7 +42,7 @@ $jobs_by_employer = $db->get("jobs");
     $db->where('id', filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT));
     $id = $db->update('jobs', $data);
     if($id){
-        $message = 'Job Id' . $id . ' updated';
+        $commonQueries->flash('message', $commonQueries->messageStyle('info', 'Lưu thay đổi thành công') );
         $website->redirect($_SERVER['REQUEST_URI']);
     } else {
         $message = "there were an error occurred";
@@ -50,9 +52,9 @@ $jobs_by_employer = $db->get("jobs");
 ?>
 
 
-<h3>
-        <?php echo $MODIFY_SELECTED_ADD;?>
-</h3>
+<h3><?php echo $MODIFY_SELECTED_ADD;?></h3>
+<h4><?php $commonQueries->flash('message');?></h4>
+
 <div class="row">
     <div class="col-md-3 col-md-push-9">
         <div class="row top-bottom-margin">
@@ -91,14 +93,30 @@ $jobs_by_employer = $db->get("jobs");
     <form action="index.php?category=jobs&folder=my&page=edit&id=<?php echo $id?>" method="POST">
         <div class="col-md-9 col-md-pull-3">
             <div class="employer-post-form">
-                <?php foreach ($jobs_by_employer as $job):?>
+                
                 <label>
                     <span>Tiêu đề</span>
                     <input type="text" name="employer-post-title" value="<?php echo $job['title']?>">
                 </label>
+                
                 <label>
                     <span>Chi tiết</span>
                     <aside><textarea type="text" name="employer-post-details" required><?php echo $job['message']?></textarea></aside>
+                </label>
+                
+                <label>
+                    <span>Yêu cầu công việc: </span>
+                    <aside><textarea type="text" name="employer-post-requires" required><?php echo $job['requires_description']?></textarea></aside>
+                </label>
+                
+                <label>
+                    <span>Các quyền lợi được hưởng: </span>
+                    <aside><textarea type="text" name="employer-post-benefits" required><?php echo $job['benefits_description']?></textarea></aside>
+                </label>
+                
+                <label>
+                    <span>Yêu cầu hồ sơ: </span>
+                    <aside><textarea type="text" name="employer-post-profileCV" required><?php echo $job['profileCV_description']?></textarea></aside>
                 </label>
                 
                 <label>
@@ -170,7 +188,6 @@ $jobs_by_employer = $db->get("jobs");
                     </select>
                 </label>
             </div>
-                <?php endforeach;?>
             <ul class="inline-buttons">
                 <li><input type="submit" name="submit" value="Lưu"></li>
             </ul>

@@ -30,10 +30,10 @@ if ($db->totalCount == "0"){ //not found any records?>
     </section>
 </div>
 <?php } else {
-$Posting =  $db->join("categories", "jobsportal_jobs.job_category=jobsportal_categories.category_id", "LEFT")
-            ->join("locations", "jobsportal_jobs.region=jobsportal_locations.id", "LEFT")
-            ->join("salary", "jobsportal_jobs.salary=jobsportal_salary.salary_id", "LEFT")
-            ->where('jobsportal_jobs.id', $application['posting_id'])->getOne('jobs');
+$Posting =   $db->join("categories", "jobsportal_jobs.job_category=jobsportal_categories.category_id", "LEFT")
+                ->join("locations", "jobsportal_jobs.region=jobsportal_locations.id", "LEFT")
+                ->join("salary", "jobsportal_jobs.salary=jobsportal_salary.salary_id", "LEFT")
+                ->where('jobsportal_jobs.id', $application['posting_id'])->getOne('jobs');
                 
 $employer = $db->where('username', $Posting['employer'])->getOne('employers');
     
@@ -85,9 +85,24 @@ $employer = $db->where('username', $Posting['employer'])->getOne('employers');
         </section>
     </div>
       
-    <h4><?php echo $DESCRIPTION?></h4>
+    <h4><?php echo $JOB_DESCRIPTION?></h4>
     <section class="col-md-12 info-description">        
         <p><?php echo nl2br($Posting["message"])?></p>
+    </section>
+    
+    <h4><?php echo $REQUIRES_DESCRIPTION?></h4>
+    <section class="col-md-12 info-description">        
+        <p><?php echo nl2br($Posting["requires_description"])?></p>
+    </section>
+    
+    <h4><?php echo $BENEFITS_DESCRIPTION?></h4>
+    <section class="col-md-12 info-description">        
+        <p><?php echo nl2br($Posting["benefits_description"])?></p>
+    </section>
+    
+    <h4><?php echo $PROFILECV_DESCRIPTION?></h4>
+    <section class="col-md-12 info-description">        
+        <p><?php echo nl2br($Posting["profileCV_description"])?></p>
     </section>
 </div>
 <?php }?>

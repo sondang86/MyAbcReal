@@ -1,41 +1,18 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
 global $db, $categories, $job_types, $locations, $salaries,$experience_list, $commonQueries;
+$db->where('employer', "$AuthUserName")->withTotalCount()->get('jobs');
+$jobs_count = $db->totalCount;
+?>
 
-//Ensure that a session exists (just in case)
-if( !session_id() )
-{
-    session_start();
-}
-?>
-<div class="fright">
-    
-<?php
-        echo LinkTile("jobs","my",$MY_JOB_ADS,"","blue");
-?>
+<div class="fright">    
+<?php echo LinkTile("jobs","my",$MY_JOB_ADS,"","blue");?>
 </div>
-<?php
-
-if(!isset($_REQUEST["Step"])||$_REQUEST["Step"]=="")
-{
-	$Step=1;
-}
-else
-{
-	$Step=$_REQUEST["Step"];
-	if(isset($_REQUEST["SpecialProcessAddForm"])&&$_REQUEST["SpecialProcessAddForm"]=="")
-	{
-		$Step--;
-	}
-}
-?>
-
-
 
 <h3>
 	<?php echo $POST_NEW_ADD;?>
 </h3>
-<br/>
+
 <?php
 $show_post_form = true;
 
@@ -86,29 +63,29 @@ elseif($website->GetParam("CHARGE_TYPE") == 2)
     if(isset($_POST['submit'])){
         //Insert data to database
         $data = Array( 
-            "employer"      => "$AuthUserName",
-            "job_category"  => filter_input(INPUT_POST, 'post-category'),
-            "job_type"      => filter_input(INPUT_POST, 'post-jobtypes'),
-            "title"         => filter_input(INPUT_POST, 'employer-post-title',FILTER_SANITIZE_STRING), 
-            "message"       => filter_input(INPUT_POST,'employer-post-details',FILTER_SANITIZE_STRING),
-            "experience"    => filter_input(INPUT_POST,'experience',FILTER_SANITIZE_NUMBER_INT),
-            "region"        => filter_input(INPUT_POST,'post-locations'),
-            "salary"        => filter_input(INPUT_POST,'post-salary'),
-            "date"          => strtotime(filter_input(INPUT_POST,'employer-start-date'). " " . date("G:i:s")),
-            "expires"       => (strtotime(filter_input(INPUT_POST,'employer-start-date')) + (21*86400)), //21 days limitation
-            "status"        => filter_input(INPUT_POST,'post-active'),
-            "SEO_title"     => $db->secure_input($website->seoURL($website->stripVN(filter_input(INPUT_POST,'employer-post-title')))),
+            "employer"              => "$AuthUserName",
+            "job_category"          => filter_input(INPUT_POST, 'post-category'),
+            "job_type"              => filter_input(INPUT_POST, 'post-jobtypes'),
+            "title"                 => filter_input(INPUT_POST, 'employer-post-title',FILTER_SANITIZE_STRING), 
+            "message"               => filter_input(INPUT_POST,'employer-post-details',FILTER_SANITIZE_STRING),
+            "requires_description"  => filter_input(INPUT_POST, 'employer-post-requires',FILTER_SANITIZE_STRING), 
+            "benefits_description"  => filter_input(INPUT_POST,'employer-post-benefits',FILTER_SANITIZE_STRING),
+            "profileCV_description" => filter_input(INPUT_POST,'employer-post-profileCV',FILTER_SANITIZE_STRING),
+            "experience"            => filter_input(INPUT_POST,'experience',FILTER_SANITIZE_NUMBER_INT),
+            "region"                => filter_input(INPUT_POST,'post-locations'),
+            "salary"                => filter_input(INPUT_POST,'post-salary'),
+            "date"                  => strtotime(filter_input(INPUT_POST,'employer-start-date'). " " . date("G:i:s")),
+            "expires"               => (strtotime(filter_input(INPUT_POST,'employer-start-date')) + (21*86400)), //21 days limitation
+            "status"                => filter_input(INPUT_POST,'post-active'),
+            "SEO_title"             => $db->secure_input($website->seoURL($website->stripVN(filter_input(INPUT_POST,'employer-post-title')))),
          );
         
     $id = $db->insert('jobs', $data);
     if($id){
-        $message = 'job was created. Id=' . $id;
-        //Set the first flash message with default class
         $commonQueries->flash('message', '<h4>Thêm việc mới thành công</h4>' );
-        //Redirect back to menu
         $website->redirect("index.php?category=jobs&action=my&result=added");
     } else {
-        $message = "there were an error occurred";
+        echo "there were an error occurred";
         die;
     }
 }
@@ -116,8 +93,7 @@ elseif($website->GetParam("CHARGE_TYPE") == 2)
 
 
 <?php
-if($show_post_form) //Allow employers to post job if they're not reached limit subscription posts
-{    
+    if($show_post_form){ //Allow employers to post job if they're not reached limit subscription posts
 ?>
 
 <div class="container">
@@ -155,8 +131,30 @@ if($show_post_form) //Allow employers to post job if they're not reached limit s
                 
                 <!--Descriptions-->
                 <label>
-                    <span>Chi tiết công việc (*): </span>
-                    <aside><textarea type="text" name="employer-post-details" required></textarea></aside>
+                    <span>Chi tiết công việc: <p>(Hãy mô tả chi tiết nhưng đầu mục công việc để ứng viên có thể hiểu rõ hơn về yêu cầu của công ty bạn với vị trí này.)</p> </span>
+                    <textarea type="text" name="employer-post-details" required></textarea>
+                </label>
+                
+                <!--Job requirements-->
+                <label class="textarea">
+                    <span>Yêu cầu công việc: </span>
+                    <textarea type="text" name="employer-post-requires" required></textarea>
+                </label>
+               
+                <!--Benefits-->
+                <label>
+                    <span>Các quyền lợi được hưởng: </span>
+                    <textarea type="text" name="employer-post-benefits" required></textarea>
+                </label>
+                
+                <!--Yêu cầu hồ sơ-->
+                <label>
+                    <span>Yêu cầu hồ sơ: </span>
+                    <textarea type="text" name="employer-post-profileCV" required>
+- Sơ yếu lý lịch.
+- Hộ khẩu, chứng minh nhân dân và giấy khám sức khỏe photo.
+- Các bằng cấp có liên quan.
+                    </textarea>
                 </label>
                 
                 <!--Location-->

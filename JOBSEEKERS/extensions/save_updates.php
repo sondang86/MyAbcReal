@@ -14,9 +14,12 @@
     //Common queries 
     $commonQueries = new CommonsQueries($db); 
 
-if (isset($_POST['request_type']) && $_POST['request_type'] == "language_update"){    
-    //Convert single value array to multidimension array
-    $languages_selected = $_POST['languages'];
+//Languages update
+if (isset($_POST['request_type']) && $_POST['request_type'] == "language_update"){ 
+    $resume_id = filter_input(INPUT_POST,'resume_id', FILTER_SANITIZE_NUMBER_INT);
+    
+    //Convert single value array to multidimensional array
+    $languages_selected = filter_input(INPUT_POST, 'languages', FILTER_SANITIZE_NUMBER_INT, FILTER_REQUIRE_ARRAY);
     if (!is_array($languages_selected['js_language'])){
         $languages_selected = array(
             'js_language' => array($languages_selected['js_language']),
@@ -24,25 +27,23 @@ if (isset($_POST['request_type']) && $_POST['request_type'] == "language_update"
         );
     }
     
-    
     //Delete records first 
-    $db->where('resume_id', $_POST['resume_id'])->withTotalCount()->get('jobseeker_languages');
+    $db->where('resume_id', $resume_id)->withTotalCount()->get('jobseeker_languages');
     if ($db->totalCount !== "0"){
-        $db->where('resume_id', $_POST['resume_id']);
+        $db->where('resume_id', $resume_id);
         if(!$db->delete('jobseeker_languages')) {echo 'Problem'; die;};
     }
-    
+        
     //Insert selected languages on duplicate update
     foreach ($languages_selected['js_language'] as $key => $language) {
         $data = Array (
             "language_id" => $language,
             "level_id" => $languages_selected['js_language_level'][$key],
-            "resume_id" => $_POST['resume_id']
+            "resume_id" => $resume_id
         );
-        $updateColumns = Array ("language_id");
-        $lastInsertId = "language_id";
-        $db->onDuplicate($updateColumns, $lastInsertId);
-        $id = $db->insert ('jobseeker_languages', $data);
+        $updateColumns = Array ("language_id", "level_id", "resume_id");
+        $db->onDuplicate($updateColumns);
+        $id = $db->insert('jobseeker_languages', $data);
         if(!$id){
             echo 'problem';die;
         }

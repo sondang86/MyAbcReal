@@ -709,7 +709,8 @@ class MysqliDb
         $table = self::$prefix . $tableName;
 
         if (count($this->_join)) {
-            $this->_query = "DELETE " . preg_replace('/.* (.*)/', '$1', $table) . " FROM " . $table;
+//            $this->_query = "DELETE " . preg_replace('/.* (.*)/', '$1', $table) . " FROM " . $table;
+            $this->_query = "DELETE " . $table . " FROM " . preg_replace('/.* (.*)/', '$1', $table);
         } else {
             $this->_query = "DELETE FROM " . $table;
         }

@@ -5,7 +5,7 @@
     $job_details = $commonQueries->jobDetails($job_id, $userId_cookie);
     
     if ($job_details !== FALSE){ 
-        $commonQueries->Update_job_views($job_id);//Only count job views if found job
+        $commonQueries->Update_job_views($job_id);//count job views for every refresh
 ?>    
 <a id="go_back_button" class="btn btn-default btn-xs pull-right no-decoration margin-bottom-5" href="javascript:GoBack()">Quay lại</a>    
 <article class="job-details-wrap">
@@ -25,9 +25,9 @@
     <!--JOB DETAILS-->
     <div class="job-details-info">            
         <section class="col-md-6">
-            <p><label>Thành phố: </label><span><?php echo $job_details['City']?></span></p>
-            <p><label>Đăng vào lúc: </label><span><?php echo date("d/m/Y H:i:s",$job_details['date'])?></span></p>
-            <p><label>Số đơn xin việc đã nộp: </label><span><?php echo $job_details['applications']?></span></p> 				
+            <p><label>Thành phố: </label><span> <?php echo $job_details['City']?></span></p>
+            <p><label>Đăng vào lúc: </label><span> <?php echo date("d/m/Y",$job_details['date'])?></span></p>
+            <p><label>Số đơn xin việc đã nộp: </label><span> <?php echo $job_details['applications']?></span></p> 				
         </section>
         <section class="col-md-6">                    
             <p>
@@ -46,10 +46,22 @@
     </div>
         
     <!--JOB DESCRIPTION-->
-    <section class="row">
+    <section class="job-description">
         <article class="col-md-9">
+            <h4><?php echo $JOB_DESCRIPTION;?></h4>
             <p><?php echo nl2br($job_details['message'])?></p>
+            
+            <h4><?php echo $REQUIRES_DESCRIPTION;?></h4>
+            <p><?php echo nl2br($job_details['requires_description'])?></p>
+            
+            <h4><?php echo $PROFILECV_DESCRIPTION;?></h4>
+            <p><?php echo nl2br($job_details['profileCV_description'])?></p>            
+            
+            <h4><?php echo $BENEFITS_DESCRIPTION;?></h4>
+            <p><?php echo nl2br($job_details['benefits_description'])?></p>
+            
         </article>
+        
         <aside class="col-md-3 job-details-aside">
             <a href="<?php $website->check_SEO_link("companyInfo", $SEO_setting, $job_details['employer_id'],$website->seoUrl($job_details['company']));?>">
                 <img class="logo-border img-responsive" src="http://<?php echo $DOMAIN_NAME;?>/uploaded_images/<?php echo $job_details['logo']?>.jpg" alt="<?php echo $job_details['company']?>">

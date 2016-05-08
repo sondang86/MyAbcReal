@@ -195,10 +195,11 @@
                                         request_type: 'reviews_employer'
                                     },
                                     success: function(data) { //show thanks message
-                                        $("#reviews_form").hide("1");
+                                        $("#danh-gia").attr("disabled", true);
                                         $("#reviewed").show("1");
                                         if(data.status == 1){
                                             $.alert(data.message);
+                                            $("#danh-gia :input").attr("disabled", true);
                                         } else {
                                             $.alert(data.message);
                                         }
@@ -219,7 +220,10 @@
                     
                 <!--REVIEW-->
                 <form id="danh-gia" class="tab-pane fade sky-form">
-                    <header>Review form</header>
+                    <header>
+                        <p>Đánh giá công ty <?php echo $company_info['company']?></p>
+                        <small>Đánh giá khách quan của bạn về công ty, mọi thông tin đánh giá sai lệch sẽ bị xóa và ban nick</small>
+                    </header>
 
                     <fieldset>	
 
@@ -297,7 +301,7 @@
                         </section>
                     </fieldset>
                     <footer>
-                        <button type="submit" id="submit" class="button">Submit a review</button>
+                        <button type="submit" id="submit" class="button">Gửi đánh giá</button>
                     </footer>                        
                 </form>
                 <section id="reviewed" style="display:none">
