@@ -23,13 +23,21 @@ $db = new MysqliDb (Array (
         'charset' => 'utf8'
     ));
 
+$commonQueries = new CommonsQueries($db);
+
 if(isset($_POST['Email']) && isset($_POST['Password'])){
     $email = filter_input(INPUT_POST, 'Email', FILTER_SANITIZE_EMAIL);
     $Password = filter_input(INPUT_POST, 'Password', FILTER_SANITIZE_STRING);
+    
     //Search in employer table first
     $employer = $db->where('username', "$email")
             ->where('password', "$Password")
-            ->withTotalCount()->getOne('employers',array('username', 'password'));
+            ->withTotalCount()->getOne('employers',array('username', 'password', 'active'));
+    
+    if($employer['active'] == "0"){//employer has not active account yet
+        $commonQueries->flash('message', $commonQueries->messageStyle('warning', 'Bạn chưa kích hoạt tài khoản, vui lòng kiểm tra lại email và kích hoạt!'));
+        $website->redirect('index.php?mod=login');
+    }
 
     if ($db->totalCount > 0){ //User is employer
         //Store user data in session
@@ -41,7 +49,12 @@ if(isset($_POST['Email']) && isset($_POST['Password'])){
     } else { //User could be jobseeker
         $jobseekers = $db->where('username', "$email")
             ->where('password', "$Password")
-            ->withTotalCount()->getOne('jobseekers',array('username', 'password'));
+            ->withTotalCount()->getOne('jobseekers',array('username', 'password', 'active'));
+        
+        if($jobseekers['active'] == "0"){//jobseeker has not active account yet
+            $commonQueries->flash('message', $commonQueries->messageStyle('warning', 'Bạn chưa kích hoạt tài khoản, vui lòng kiểm tra lại email và kích hoạt!'));
+            $website->redirect('index.php?mod=login');
+        }
         
         if ($db->totalCount > 0){ //User is jobseeker
             //Store user data in session
@@ -51,7 +64,8 @@ if(isset($_POST['Email']) && isset($_POST['Password'])){
             $website->redirect('JOBSEEKERS/index.php');
             
         } else { //Wrong username or password
-            $website->redirect('index.php?error=expired');
+            $commonQueries->flash('message', $commonQueries->messageStyle('warning', 'Sai tên đăng nhập hoặc mật khẩu! Vui lòng thử lại'));
+            $website->redirect('index.php?mod=login');
         }
     }
 }

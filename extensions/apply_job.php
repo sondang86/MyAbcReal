@@ -16,9 +16,10 @@ if ($SEO_setting == "0" && isset($_REQUEST["posting_id"])){
     die("The job ID wasn't set!");
 }
 $website->ms_i($job_id);
-$job_info = $db->where('id', $job_id)->getOne('jobs');
 $questions =  $db->where('job_id', $job_id)->get("questionnaire", NULL, array('id','question', 'question_type'));
 
+$job_info = $db->withTotalCount()->where('id', $job_id)->getOne('jobs');
+if($db->totalCount !== "0"){ //ensure job must exists
 ?>
 
 
@@ -214,4 +215,7 @@ if (isset($_POST['submit'])){
 $website->Title($APPLY_JOB_OFFER." ".strip_tags(stripslashes($job_info["title"])));
 $website->MetaDescription("");
 $website->MetaKeywords("");
+} else {
+    echo "không tìm thấy việc này, vui lòng thử lại :(";
+}
 ?>

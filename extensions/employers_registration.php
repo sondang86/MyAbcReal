@@ -5,405 +5,354 @@
 // http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-$ProceedSendSuccess = false;
+global $db, $commonQueries, $locations, $gender;
+$company_sizes = $db->get('employers_company_size');
 
-if(is_array(unserialize($website->GetParam("EMPLOYER_FIELDS"))))
-{
-	$arrUserFields = unserialize($website->GetParam("EMPLOYER_FIELDS"));
-}
-else
-{
-	$arrUserFields = array();
-}	
+if (isset($_POST['submit'])){
+    
+    //Verify captcha
+    if (md5($_POST['code']) !== $_SESSION['code']){
+        $commonQueries->flash('message', $commonQueries->messageStyle('warning', 'Sai mã Captcha'));
+    } 
+
+    //Check if user already exists
+    $db->where('username', filter_input(INPUT_POST, 'email',FILTER_SANITIZE_EMAIL))->withTotalCount()->getOne('employers');
+    if ($db->totalCount > 0){
+        $commonQueries->flash('message', $commonQueries->messageStyle('warning', 'Địa chỉ email này đã được đăng ký, vui lòng dùng email khác'));
+
+    } else { // insert new user data to jobseekers, jobseeker_resumes tables
+        $verification_code = $commonQueries->generateConfirmationCode();
+        $data = Array (
+            "date"                  => time(),
+            "registered_on"         => time(),
+            "username"              => filter_input(INPUT_POST,'email', FILTER_SANITIZE_STRING),
+            "active"                => 0, //default is inactive (0) until user verified email (1)
+            "password"              => filter_input(INPUT_POST,'password', FILTER_SANITIZE_STRING),
+            "company"               => filter_input(INPUT_POST,'company_name', FILTER_SANITIZE_STRING),
+            "address"               => filter_input(INPUT_POST,'company_address', FILTER_SANITIZE_STRING),
+            "city"                  => filter_input(INPUT_POST,'company_city', FILTER_SANITIZE_NUMBER_INT),
+            "company_size"          => filter_input(INPUT_POST,'company_size', FILTER_SANITIZE_NUMBER_INT),
+            "company_description"   => filter_input(INPUT_POST,'company_description', FILTER_SANITIZE_STRING),
+            "website"               => filter_input(INPUT_POST,'company_website', FILTER_SANITIZE_STRING),            
+            "contact_person"        => filter_input(INPUT_POST,'contact_person', FILTER_SANITIZE_STRING),
+            "phone"                => filter_input(INPUT_POST,'mobile', FILTER_SANITIZE_NUMBER_INT),
+            "gender"                => filter_input(INPUT_POST,'gender', FILTER_SANITIZE_NUMBER_INT),
+            "newsletter"            => 1, 
+            "verification_code"     => $verification_code
+        );
+        $id = $db->insert ('employers', $data);
+        if ($id) { //Success
+            
+            //Send confirmation link
+            $mail = new PHPMailer;
+
+            //$mail->SMTPDebug = 3;                               // Enable verbose debug output
+            $mail->CharSet = 'UTF-8';                             // Unicode character encode
+            $mail->isSMTP();                                      // Set mailer to use SMTP
+            $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+            $mail->SMTPAuth = true;                               // Enable SMTP authentication
+            $mail->Username = 'dang.viet.son.hp4@gmail.com';                 // SMTP username
+            $mail->Password = 'haiphong@!#123';                           // SMTP password
+            $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+            $mail->Port = 587;                                    // TCP port to connect to
+
+            $mail->setFrom('info@vieclambanthoigian.com.vn', 'Mailer');
+            $mail->addAddress('dang.viet.son.hp@gmail.com', '');     // Add a recipient
+
+            $mail->Subject = 'Xác nhận tài khoản tại vieclambanthoigian.com.vn';
+            $mail->Body    = "Chào bạn!\n"
+                            . "Cảm ơn bạn đã đăng ký tại vieclambanthoigian\n\n"
+                            . "Để hoàn tất đăng ký, bạn vui lòng truy cập vào địa chỉ dưới đây: \n\n"
+                            . "http://localhost/vieclambanthoigian.com.vn/index.php?mod=verifications&register=email&user=employer&id=$id&code=$verification_code \n\n";
+            
+//            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+            if(!$mail->send()) {
+                echo 'Message could not be sent.';
+                echo 'Mailer Error: ' . $mail->ErrorInfo;
+            } else {
+                echo 'Message has been sent';
+            }
+            
+            //Redirect back with message
+            $commonQueries->flash('message', $commonQueries->messageStyle('info', "Cảm ơn bạn đã đăng ký, bạn hãy kiểm tra email và xác nhận tài khoản để hoàn tất"));
+            $website->redirect('http://localhost/vieclambanthoigian.com.vn/index.php?mod=login');
+
+        } else {
+            $commonQueries->flash('message', $commonQueries->messageStyle('error', 'Có lỗi xảy ra, vui lòng liên hệ info@vieclambanthoigian.com.vn'));
+            $website->redirect('http://localhost/vieclambanthoigian.com.vn/mod-vn-employers_registration.html');
+        }
+    }
+}; 
+
+//If user logged in, hide this form
 ?>
-<div class="page-wrap">
-<?php
-if(isset($_POST["ProceedSend"]))
-{
-	$user_email=$website->sanitize($_REQUEST["user_email"]);
-	if($website->GetParam("USE_CAPTCHA_IMAGES") && ( (md5($_POST['code']) != $_SESSION['code'])|| trim($_POST['code']) == "" ) )
-	{
-		echo "<h3 class=\"red_font\">
-		".$M_WRONG_CODE."
-		</h3>";
-		
-	}
-	else
-	if($database->SQLCount("employers","WHERE username='$user_email' ") > 0 || $database->SQLCount("jobseekers","WHERE username='$user_email' ") > 0)
-	{
-		echo "<h3 class=\"red_font\">
-		".$USER_EXISTS."
-		</h3>";
-	}
-	else
-	{
-	
-		$arrPValues = array();
-			
-		$iFCounter = 0;
-			
-		foreach($arrUserFields as $arrUserField)
-		{		
-			$arrPValues[$arrUserField[0]]=get_param("pfield".$iFCounter);
-			$iFCounter++;
-		}	
-	
-			if(!$website->GetParam("NEW_USERS_EMAIL_VALIDATION_ON_SIGNUP"))
-			{
-			
-					$database->SQLInsert
-					("employers",
-					
-					
-						array("date","employer_fields","active","username","password","company","contact_person","company_description","address","phone","website","newsletter"),
-						array(time(),serialize($arrPValues),"1",$user_email,$_POST["password"],$_POST["company"],$_POST["contact_person"],$_POST["company_description"],$_POST["address"],$_POST["phone"],$_POST["website"],(isset($_POST["newsletter"])?"1":"0"))
-					
-					);
-					
-					if($website->params[104]==1)
-					{
-						$headers  = "From: \"".$website->GetParam("SYSTEM_EMAIL_FROM")."\"<".$website->GetParam("SYSTEM_EMAIL_ADDRESS").">\n";
-					
-						mail($user_email, $website->params[105], $website->params[106], $headers);
-					}
-					
-					echo "<h3>
-					".$M_ACCOUNT_CREATED_SUCCESS."
-					</h3>";
-					?>
-					<br/><br/>
-					<form class="no-margin" action="loginaction.php" method="post">
-						<input type="hidden" name="Email" value="<?php echo $user_email;?>"/>
-						<input type="hidden" name="Password" value="<?php echo $_POST["password"];?>"/>
-						<input type="submit" class="btn btn-primary" value="<?php echo $M_CLICK_LOGIN_ADMIN;?>"/></td>
-						<?php
-						if($MULTI_LANGUAGE_SITE)
-						{
-						?>
-						<input type="hidden" name="lang" value="<?php echo $website->lang;?>"/>
-						<?php
-						}
-						?>
-					</form>
-					<?php
-					
-			}
-			else
-			{
-					$arrChars = array("A","F","B","C","O","Q","W","E","R","T","Z","X","C","V","N");
-							
-					$code = $arrChars[rand(0,(sizeof($arrChars)-1))]."".rand(1000,9999)
-					.$arrChars[rand(0,(sizeof($arrChars)-1))].rand(1000,9999);
-				
-					
-					$database->SQLInsert
-					(
-						"employers",
-						array("date","employer_fields","code","username","password","company","contact_person","company_description","address","phone","website","newsletter"),
-						array(time(),serialize($arrPValues),$code,$user_email,$_POST["password"],$_POST["company"],$_POST["contact_person"],$_POST["company_description"],$_POST["address"],$_POST["phone"],$_POST["website"],$_POST["newsletter"])
-					);
-					
-					$headers  = "From: \"".$website->GetParam("SYSTEM_EMAIL_FROM")."\"<".$website->GetParam("SYSTEM_EMAIL_ADDRESS").">\n";
-										
-					$message=str_replace("[ACTIVATE_LINK]",
-					"http://".$DOMAIN_NAME."/activate.php?id=".$code,
-					aParameter(814));
-					
-					mail($user_email, "".aParameter(815)."", $message, $headers);
-					
-					echo "<h3>".$MESSAGE_SENT_ACTIVATION." ".$user_email."
-					
-					".$CLICK_ACTIVATE."
-					</h3>";
-			}
-						
-					$ProceedSendSuccess = true;
-	}
+<h5><?php $commonQueries->flash('message')?></h5>
+<form action="" id="register-form" class="sky-form" method="POST">
+    <header>Nhà tuyển dụng đăng ký</header>    
+    <fieldset>					
+        <section>
+            <label class="input">
+                <i class="icon-append fa fa-envelope-o"></i>
+                <input type="email" name="email" placeholder="Địa chỉ email" value="<?php if(isset($_POST['email'])){echo $_POST['email'];}?>">
+                <b class="tooltip tooltip-bottom-right">Địa chỉ email của bạn</b>
+            </label>
+        </section>
+        
+        <div class="row">
+            <section class="col col-6">
+                <label class="input">
+                    <i class="icon-append fa fa-lock"></i>
+                    <input type="password" name="password" placeholder="Mật khẩu" id="password">
+                    <b class="tooltip tooltip-bottom-right">Nhập mật khẩu mong muốn</b>
+                </label>
+            </section>
 
-}
-?>
+            <section class="col col-6">
+                <label class="input">
+                    <i class="icon-append fa fa-lock"></i>
+                    <input type="password" name="passwordConfirm" placeholder="Xác nhận lại mật khẩu">
+                    <b class="tooltip tooltip-bottom-right">Xác nhận lại mật khẩu</b>
+                </label>
+            </section>
+        </div>
+        
+        <div class="row">
+            <section class="col col-6">
+                <label class="input">
+                    <i class="icon-append fa fa-home"></i>
+                    <input type="text" name="company_name" placeholder="Tên công ty" value="<?php if(isset($_POST['company_name'])){echo $_POST['company_name'];}?>">
+                    <b class="tooltip tooltip-bottom-right">Tên công ty của bạn</b>
+                </label>
+            </section>
 
+            <section class="col col-6">
+                <label class="input">
+                    <i class="icon-append fa fa-location-arrow"></i>
+                    <input type="text" name="company_address" placeholder="Địa chỉ" value="<?php if(isset($_POST['company_address'])){echo $_POST['company_address'];}?>">
+                    <b class="tooltip tooltip-bottom-right">Địa chỉ công ty</b>
+                </label>
+            </section>
+        </div>
+        
+        <div class="row">
+            <section class="col col-6">
+                <label class="select">
+                    <select name="company_city">
+                        <option value="0" selected="" disabled="">Thành phố</option>
+                        <?php foreach ($locations as $location) :?>
+                        <option value="<?php echo $location['id']?>" <?php if(isset($_POST['company_city']) && ($_POST['company_city'] == $location['id'])){echo "selected";}?>><?php echo $location['City']?></option>
+                        <?php endforeach;?>
+                    </select>
+                    <i></i>
+                </label>
+            </section>
+            
+            <section class="col col-6">
+                <label class="select">
+                    <select name="company_size">
+                        <option value="0" selected="" disabled="">Quy mô công ty</option>
+                        <?php foreach ($company_sizes as $company_size) :?>
+                        <option value="<?php echo $company_size['company_size_id']?>" <?php if(isset($_POST['company_size']) && ($_POST['company_size'] == $company_size['company_size_id'])){echo "selected";}?>><?php echo $company_size['company_size_name']?></option>
+                        <?php endforeach;?>
+                    </select>
+                    <i></i>
+                </label>
+            </section>            
+        </div>    
+        
+        <div class="row">
+            <section class="col col-6">
+                <label class="textarea">
+                    <i class="icon-append fa fa-file-text"></i>
+                    <textarea type="text" name="company_description" placeholder="Giới thiệu"><?php if(isset($_POST['company_description'])){echo $_POST['company_description'];}?></textarea>
+                    <b class="tooltip tooltip-bottom-right">Giới thiệu về công ty</b>
+                </label>
+            </section>
+        
+            <section class="col col-6">
+                <label class="input">
+                    <i class="icon-append fa fa-external-link"></i>
+                    <input type="text" name="company_website" placeholder="Website" value="<?php if(isset($_POST['company_website'])){echo $_POST['company_website'];}?>">
+                    <b class="tooltip tooltip-bottom-right">Website công ty</b>
+                </label>
+            </section>
+            
+        </div>
+        
+    </fieldset>
+    
+    <fieldset>
+        <div class="row">
+            
+            <section class="col col-6">
+                <label class="input">
+                    <input type="text" name="contact_person" placeholder="Người đại diện" required value="<?php if(isset($_POST['contact_person'])){echo $_POST['contact_person'];}?>">
+                </label>
+            </section>
+            
+            <section class="col col-3">
+                <label class="input">
+                    <i class="icon-append fa fa-phone"></i>
+                    <input type="text" name="mobile" placeholder="Số điện thoại" value="<?php if(isset($_POST['mobile'])){echo $_POST['mobile'];}?>">
+                    <b class="tooltip tooltip-bottom-right">Số điện thoại của bạn</b>
+                </label>
+            </section>
+            
+            <section class="col col-3">
+                <label class="select">
+                    <select name="gender">
+                        <option value="0" selected disabled>Giới tính</option>
+                        <?php foreach ($gender as $value) :?>
+                        <option value="<?php echo $value['gender_id']?>" <?php if(isset($_POST['gender']) && ($_POST['gender'] == $value['gender_id'])){echo "selected";}?>><?php echo $value['name']?></option>
+                        <?php endforeach;?>
+                    </select>
+                    <i></i>
+                </label>
+            </section>
+            
+        </div>
+        
+        <section>
+            <label class="checkbox"><input type="checkbox" name="subscription" id="subscription"><i></i>Tôi muốn nhận tin tức từ vieclambanthoigian.com.vn</label>
+            <label class="checkbox"><input type="checkbox" name="terms" id="terms"><i></i>Tôi đồng ý với các điều khoản của vieclambanthoigian.com.vn</label>
+        </section>
+        
+        <section class="pull-right">
+            <p>Mã Captcha</p>
+            <span><input type="text" required name="code" value="" size="8"></span>
+            <span><img src="/vieclambanthoigian.com.vn/include/sec_image.php" width="150" height="30" ></span>
+        </section>
+        
+    </fieldset>
+    <footer>
+        <button type="submit" class="button" name="submit">Submit</button>
+    </footer>
+</form>
 
-<?php
-if(!$ProceedSendSuccess)
-{
-?>
-
-
-<?php
-	echo "<h3>".$SIGNUP_NOTICE."</h3>";
-?>
-
-
-
-
-<form id="main" action="index.php" method="post" onsubmit="return ValidateSignupForm(this)">
-<?php
-if($MULTI_LANGUAGE_SITE)
-{
-?>
-<input type="hidden" name="lang" value="<?php echo $website->lang;?>"/>
-<?php
-}
-?>
-<?php
-if(isset($_REQUEST["mod"]))
-{
-?>
-<input type="hidden" name="mod" value="<?php echo $_REQUEST["mod"];?>">
-<?php
-}
-else
-{
-?>
-<input type="hidden" name="page" value="<?php echo $_REQUEST["page"];?>">
-<?php
-}
-?>
-<input type="hidden" name="ProceedSend" value="1"/>
- 	
-<br>
-
-		<fieldset>
-	
-		<ol>
-			<li>
-		
-				<label>
-				<?php echo $EMAIL;?>: (*) 
-				</label>
-			
-				<input type="text" name="user_email" id="ser_email" value="<?php echo get_param("user_email");?>"/> 
-				
-			</li>
-		
-			
-		
-		<li>
-		
-				<label>
-				<?php echo $M_PASSWORD;?>: (*) 
-				</label>
-			
-				<input type="password" name="password" id="password"/> 
-		
-			
-			</li>
-		
-		<li>
-		
-				<label>
-				<?php echo $M_COMPANY;?>: (*) 
-				</label>
-		
-					<input type="text" name="company" id="company" required value="<?php echo get_param("company");?>">
-			
-			</li>
-			<li>
-		
-				<label>
-				<?php echo $CONTACT_PERSON;?>: (*) 
-				</label>
-		
-					<input type="text" name="contact_person" id="contact_person" required value="<?php echo get_param("contact_person");?>"/>
-			
-			</li>
-		
-			<li>
-				<label>
-				<?php echo $M_COMPANY_DESCRIPTION;?>:
-				</label>
-					<textarea name="company_description" cols=32 rows=3><?php echo get_param("company_description");?></textarea>
-			<li>
-				<label>
-
-				<?php echo $M_ADDRESS;?>:
-				</label>
-					<textarea name="address" cols=32 rows=3><?php echo get_param("address");?></textarea>
-			</li>
-			<li>
-				<label>
-				<?php echo $M_PHONE;?>:
-				</label>
-			
-					<input type="text" name="phone" id="phone" value="<?php echo get_param("phone");?>">
-			</li>
-			<li>
-				<label>
-					<?php echo $M_WEBSITE;?>:
-				</label>
-		
-					<input type="text" name="website" id="website" value="<?php echo get_param("website");?>">
-			</li>
-			
-			<?php
-			$iFCounter = 0;	
-
-			
-			foreach($arrUserFields as $arrUserField)
-			{
-				
-				echo "<li>";
-				
-				echo  "<label>".str_show($arrUserField[0], true).":</label>";	
-				
-				
-				if(trim($arrUserField[2]) != "")
-				{
-						echo  "<select  name=\"pfield".$iFCounter."\" class=\"280px-field\">";
-						
-						
-						$arrFieldValues = explode("\n", trim($arrUserField[2]));
-								
-									
-						if(sizeof($arrFieldValues) > 0)
-						{
-							foreach($arrFieldValues as $strFieldValue)
-							{
-								$strFieldValue = trim($strFieldValue);
-								if(strstr($strFieldValue,"{"))
-								{
-								
-									$strVName = substr($strFieldValue,1,strlen($strFieldValue)-2);
-									
-									echo  "<option ".(trim($$strVName)==$arrPropFields[$arrUserField[0]]?"selected":"").">".trim($$strVName)."</option>";
-									
-								}
-								else
-								{
-									echo  "<option ".(isset($arrPropFields[$arrUserField[0]])&&trim($strFieldValue)==$arrPropFields[$arrUserField[0]]?"selected":"").">".trim($strFieldValue)."</option>";
-								}		
-							
-							}
-						}
-						
-						echo  "</select>";
-				}
-				else
-				{
-						echo  "<input value=\"".(get_param("pfield".$iFCounter)!=""?get_param("pfield".$iFCounter):"")."\" type=text name=\"pfield".$iFCounter."\" class=\"280px-field\">";
-				}
-				
-				echo  "</li>";
-				
-				
-				$iFCounter++;		
-			}
-					
-			?>
-			
-			
-			<?php
-			if($website->GetParam("USE_CAPTCHA_IMAGES"))
-			{
-			?>
-			<li>
-				<label>&nbsp;</label>
-				<img src="include/sec_image.php" width="150" height="30" >
-				<div class="clearfix"></div>
-			
-				<label><?php echo $M_CODE;?>:</label>
-				<input type="text" required name="code" value="" size="8"/>
-			
-			 </li>
-				
-			<?php
-			}
-			?>
-			<li>
-				<input type="checkbox" name="newsletter" value="1"/>
-				<?php echo $M_I_WOULD_LIKE_SUBSCRIBE;?>
-				<?php echo $DOMAIN_NAME;?>
-				<?php echo $M_NEWSLETTER;?>							
-			</li>
-			
-			</ol>
-			</fieldset>
-			<div class="clearfix"></div>
-			<span class="l-margin-35">(*) <?php echo $OBLIGATORY_FIELDS;?></span>
-			<br/>
-			<button type="submit" class="btn btn-primary pull-right"><?php echo $M_SUBMIT;?></button>
-			<div class="clearfix"></div>		
-			
-			<br/>
-			
-					
-			</form>
-			
-		<script>
-
-		function CheckValidEmail(strEmail) 
-		{
- 			   	if (strEmail.search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/) != -1)
-			   	{
-        			return true;
-				}
-   				else
-				{
-        			return false;
-				}
-		}
-		
-		function ValidateForm(x)
-		{
-		
-		
-			if(x.user_email.value==""){
-				alert("<?php echo $PLEASE_ENTER_YOUR_EMAIL;?>");
-				x.user_email.focus();
-				return false;
-			}	
-			
-			if(!CheckValidEmail(x.user_email.value) )
-			{
-				alert(x.user_email.value+" <?php echo $IS_NOT_VALID;?>");
-				x.user_email.focus();
-				return false;
-			}
-			
-			return true;
-		}
-		function ValidateSignupForm(x){
-		
-		
-			if(x.user_email.value==""){
-				alert("<?php echo $PLEASE_ENTER_YOUR_EMAIL;?>");
-				x.user_email.focus();
-				return false;
-			}	
-			
-			if(!CheckValidEmail(x.user_email.value) )
-			{
-				alert(x.user_email.value+" <?php echo $IS_NOT_VALID;?>");
-				x.user_email.focus();
-				return false;
-			}
-			
-			
-			if(x.password.value==""){
-				alert("<?php echo $PASSWORD_EMPTY_FIELD_MESSAGE;?>");
-				x.password.focus();
-				return false;
-			}	
-		
-			
-			if(x.company.value==""){
-				alert("<?php echo $ENTER_COMPANY_NAME;?>");
-				x.company.focus();
-				return false;
-			}	
-			
-			
-			return true;
-		}
+<script type="text/javascript">
+    $(function()
+    {
+        // Validation		
+        $("#register-form").validate({					
+            // Rules for form validation
+            rules:
+                {                         
+                    email:{
+                        required: true,
+                email: true
+                },
+                password:{
+                    required: true,
+                    minlength: 3,
+                    maxlength: 20
+                },
+                passwordConfirm:{
+                    required: true,
+                    minlength: 3,
+                    maxlength: 20,
+                    equalTo: '#password'
+                },
+                
+                company_name: {
+                    required: true
+                },
+                
+                company_address: {
+                    required: true
+                },
+                
+                company_city : {
+                    required: true
+                },
+                
+                company_size : {
+                    required: true
+                },
+                    
+                mobile: {
+                    required: true,
+                    minlength: 6,
+                    number: true
+                },
+                firstname:
+                        {
+                            required: true
+                },
+                lastname:
+                        {
+                            required: true
+                },
+                gender:
+                        {
+                            required: true
+                },
+                terms:
+                        {
+                            required: true
+                }
+            },
+                
+            // Messages for form validation
+            messages:{                            
+                email:{
+                    required: 'Vui lòng nhập chính xác địa chỉ email (ví dụ: abc@mail.com)',
+                    email: 'Vui lòng nhập chính xác địa chỉ email (ví dụ: abc@mail.com)'
+                },
+                password:{
+                    required: 'Vui lòng nhập mật khẩu',
+                    minlength: 'Tối thiểu 3 ký tự'
+                },
+                passwordConfirm:{
+                    required: 'Xác nhận lại mật khẩu',
+                    equalTo: 'Mật khẩu xác nhận phải giống như mật khẩu đã viết',
+                    minlength: 'Tối thiểu 3 ký tự'
+                },
+                
+                company_name: {
+                    required: 'Bạn chưa điền tên công ty'
+                },
+                
+                company_address: {
+                    required: 'Bạn chưa điền tên công ty'
+                },
+                
+                company_city : {
+                    required: 'Vui lòng chọn thành phó'
+                },
+                
+                company_size : {
+                    required: 'Vui lòng chọn số nhân viên'
+                },
+                    
+                mobile: {
+                    required: 'Vui lòng nhập chính xác số điện thoại',
+                    minlength: 'Số điện thoại phải có tối thiểu 6 ký tự',
+                    number: 'Vui lòng nhập số điện thoại chính xác'
+                },
+                    
+                firstname:{
+                    required: 'Họ của bạn'
+                },
+                lastname:{
+                    required: 'Tên bạn'
+                },
+                gender:{
+                    required: 'Vui lòng lựa chọn giới tính'
+                },
+                terms:{
+                    required: 'Bạn phải đồng ý với các điều khoản của vieclambanthoigian.com.vn mới có thể tiếp tục'
+                }
+            },					
+                
+            // Do not change code below
+            errorPlacement: function(error, element)
+            {
+                error.insertAfter(element.parent());
+            }
+        });
+    });			
 </script>
-
-<?php
-}
-?>														
-
-</div>
-
 <?php
 $website->Title($M_SIGNUP_EMPLOYER);
 $website->MetaDescription("");

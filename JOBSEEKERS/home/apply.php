@@ -18,7 +18,6 @@ $selected_columns = array(
 );
 $db->join('apply_status', $DBprefix."apply.status =".$DBprefix."apply_status.status_id", "LEFT");
 $apply_details = $db->where('jobseeker', "$AuthUserName")->withTotalCount()->get('apply', NULL, $selected_columns);
-    
 
 ?>
 <div class="row main-nav">
@@ -49,12 +48,12 @@ $apply_details = $db->where('jobseeker', "$AuthUserName")->withTotalCount()->get
         </thead>
         <tbody>                                
             <?php foreach ($apply_details as $apply_detail) :?>                                
-            <tr id="apply_id_<?php echo $apply_detail['apply_id']?>">                            
+            <tr id="apply_id_<?php echo $apply_detail['posting_id']?>">                            
                 <td class="col-md-1"><?php echo date('Y-m-d', $apply_detail['date'])?></td>
                 <td class="col-md-2"><?php echo $apply_detail['status_name'];?></td>
                 <td class="col-md-7"><?php echo $apply_detail['employer_reply'];?></td>
                 <td class="col-md-2" style="text-align: center">
-                    <a href="index.php?category=home&amp;folder=apply&amp;page=edit&amp;apply_id=<?php echo $apply_detail['apply_id']?>">
+                    <a href="index.php?category=home&amp;folder=apply&amp;page=edit&amp;apply_id=<?php echo $apply_detail['posting_id']?>">
                         <img src="../images/job-details.png">
                     </a>
                 </td>            

@@ -1,56 +1,84 @@
 <?php
 // Jobs Portal, copyright vieclambanthoigian.com.vn 2016
-    
-?> <?php
+
  if(!defined('IN_SCRIPT')) die("");
  global $db, $commonQueries;
 
-if (isset($_POST['submit'])):
+if (isset($_POST['submit'])){
     
-//Verify captcha
-if (md5($_POST['code']) !== $_SESSION['code']){
-    $commonQueries->flash('message', $commonQueries->messageStyle('warning', 'Sai mã Captcha'));
-    $website->redirect('http://localhost/vieclambanthoigian.com.vn/vn_Ng%C6%B0%E1%BB%9Di+t%C3%ACm+vi%E1%BB%87c.html');
-} 
+    //Verify captcha
+    if (md5($_POST['code']) !== $_SESSION['code']){
+        $commonQueries->flash('message', $commonQueries->messageStyle('warning', 'Sai mã Captcha'));
+        $website->redirect('http://localhost/vieclambanthoigian.com.vn/vn_Ng%C6%B0%E1%BB%9Di+t%C3%ACm+vi%E1%BB%87c.html');
+    } 
 
-//Check if user already exists
-$db->where('username', $_POST['email'])->withTotalCount()->getOne('jobseekers');
-if ($db->totalCount > 0){
-    $commonQueries->flash('message', $commonQueries->messageStyle('warning', 'Địa chỉ email này đã được đăng ký, vui lòng dùng email khác'));
-    $website->redirect('http://localhost/vieclambanthoigian.com.vn/vn_Ng%C6%B0%E1%BB%9Di+t%C3%ACm+vi%E1%BB%87c.html');
-    
-} else { // insert new user data to jobseekers, jobseeker_resumes tables
-    $data = Array (
-        "date"              => time(),
-        "username"          => filter_input(INPUT_POST,'email', FILTER_SANITIZE_STRING),
-        "active"            => 1,
-        "password"          => filter_input(INPUT_POST,'password', FILTER_SANITIZE_STRING),
-        "mobile"            => filter_input(INPUT_POST,'mobile', FILTER_SANITIZE_NUMBER_INT),
-        "first_name"        => filter_input(INPUT_POST,'firstname', FILTER_SANITIZE_STRING),
-        "last_name"         => filter_input(INPUT_POST,'lastname', FILTER_SANITIZE_STRING),
-        "newsletter"        => 1, 
-        "gender"            => filter_input(INPUT_POST,'gender', FILTER_SANITIZE_NUMBER_INT),
-    );
-    $id = $db->insert ('jobseekers', $data);
-    if ($id) { //Success
-        $db->insert('jobseeker_resumes', array('username' => filter_input(INPUT_POST,'email', FILTER_SANITIZE_STRING)));
-        $commonQueries->flash('message', $commonQueries->messageStyle('info', "Cảm ơn bạn đã đăng ký, bạn hãy kiểm tra email và xác nhận tài khoản nhé"));
+    //Check if user already exists
+    $db->where('username', $_POST['email'])->withTotalCount()->getOne('jobseekers');
+    if ($db->totalCount > 0){
+        $commonQueries->flash('message', $commonQueries->messageStyle('warning', 'Địa chỉ email này đã được đăng ký, vui lòng dùng email khác'));
         $website->redirect('http://localhost/vieclambanthoigian.com.vn/vn_Ng%C6%B0%E1%BB%9Di+t%C3%ACm+vi%E1%BB%87c.html');
-        
-    } else {
-        $commonQueries->flash('message', $commonQueries->messageStyle('error', 'Có lỗi xảy ra, vui lòng liên hệ info@vieclambanthoigian.com.vn'));
-        $website->redirect('http://localhost/vieclambanthoigian.com.vn/vn_Ng%C6%B0%E1%BB%9Di+t%C3%ACm+vi%E1%BB%87c.html');
+
+    } else { // insert new user data to jobseekers, jobseeker_resumes tables
+        $verification_code = $commonQueries->generateConfirmationCode();
+        $data = Array (
+            "date"              => time(),
+            "registered_on"     => time(),
+            "username"          => filter_input(INPUT_POST,'email', FILTER_SANITIZE_STRING),
+            "active"            => 0, //default is inactive (0) until user verified email (1)
+            "password"          => filter_input(INPUT_POST,'password', FILTER_SANITIZE_STRING),
+            "mobile"            => filter_input(INPUT_POST,'mobile', FILTER_SANITIZE_NUMBER_INT),
+            "first_name"        => filter_input(INPUT_POST,'firstname', FILTER_SANITIZE_STRING),
+            "last_name"         => filter_input(INPUT_POST,'lastname', FILTER_SANITIZE_STRING),
+            "newsletter"        => 1, 
+            "gender"            => filter_input(INPUT_POST,'gender', FILTER_SANITIZE_NUMBER_INT),
+            "verification_code" => $verification_code
+        );
+        $id = $db->insert ('jobseekers', $data);
+        if ($id) { //Success
+            $db->insert('jobseeker_resumes', array('username' => filter_input(INPUT_POST,'email', FILTER_SANITIZE_STRING)));
+            
+            //Send email confirmation link
+            $mail = new PHPMailer;
+
+            //$mail->SMTPDebug = 3;                               // Enable verbose debug output
+            $mail->CharSet = 'UTF-8';                             // Unicode character encode
+            $mail->isSMTP();                                      // Set mailer to use SMTP
+            $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+            $mail->SMTPAuth = true;                               // Enable SMTP authentication
+            $mail->Username = 'dang.viet.son.hp4@gmail.com';                 // SMTP username
+            $mail->Password = 'haiphong@!#123';                           // SMTP password
+            $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+            $mail->Port = 587;                                    // TCP port to connect to
+
+            $mail->setFrom('info@vieclambanthoigian.com.vn', 'Mailer');
+            $mail->addAddress('dang.viet.son.hp@gmail.com', '');     // Add a recipient
+
+            $mail->Subject = 'Xác nhận tài khoản tại vieclambanthoigian.com.vn';
+            $mail->Body    = "Chào bạn!\n"
+                            . "Cảm ơn bạn đã đăng ký tại vieclambanthoigian\n\n"
+                            . "Để hoàn tất đăng ký, bạn vui lòng truy cập vào địa chỉ dưới đây: \n\n"
+                            . "http://localhost/vieclambanthoigian.com.vn/index.php?mod=verifications&register=email&user=jobseeker&id=$id&code=$verification_code \n\n";
+            
+//            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+            if(!$mail->send()) {
+                echo 'Message could not be sent.';
+                echo 'Mailer Error: ' . $mail->ErrorInfo;
+            } else {
+                echo 'Message has been sent';
+            }
+            
+            //Redirect back with message
+            $commonQueries->flash('message', $commonQueries->messageStyle('info', "Cảm ơn bạn đã đăng ký, bạn hãy kiểm tra email và xác nhận tài khoản để hoàn tất"));
+            $website->redirect('http://localhost/vieclambanthoigian.com.vn/vn_Ng%C6%B0%E1%BB%9Di+t%C3%ACm+vi%E1%BB%87c.html');
+
+        } else {
+            $commonQueries->flash('message', $commonQueries->messageStyle('error', 'Có lỗi xảy ra, vui lòng liên hệ info@vieclambanthoigian.com.vn'));
+            $website->redirect('http://localhost/vieclambanthoigian.com.vn/vn_Ng%C6%B0%E1%BB%9Di+t%C3%ACm+vi%E1%BB%87c.html');
+        }
     }
-}
-?>
+}; ?>
 
-Check if user exists
-
-if not exists -> insert to jobseekers, jobseeker_resumes tables
-
-Send email to user for confirmation
-    
-<?php endif; ?>
 <?php echo $commonQueries->flash('message');?>
 <div class="page-wrap">        
     <form action="" id="register-form" class="sky-form" method="POST">
@@ -83,7 +111,7 @@ Send email to user for confirmation
             
             <section>
                 <label class="input">
-                    <i class="icon-append fa fa-lock"></i>
+                    <i class="icon-append fa fa-phone"></i>
                     <input type="text" name="mobile" placeholder="Số điện thoại">
                     <b class="tooltip tooltip-bottom-right">Số điện thoại của bạn</b>
                 </label>
@@ -125,7 +153,7 @@ Send email to user for confirmation
             <section class="pull-right">
                 <p>Mã Captcha</p>
                 <span><input type="text" required name="code" value="" size="8"></span>
-                <span><img src="include/sec_image.php" width="150" height="30" ></span>
+                <span><img src="/vieclambanthoigian.com.vn/include/sec_image.php" width="150" height="30" ></span>
             </section>
             
         </fieldset>

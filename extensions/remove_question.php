@@ -64,15 +64,13 @@
         //Sanitize first
         $job_id = filter_input(INPUT_POST, 'job_id', FILTER_SANITIZE_NUMBER_INT);
         
-        //Delete job id
-        $cols = array(
-            $DBprefix.'jobs.id as job_id',
-            $DBprefix.'apply.posting_id as job_id',
-        );
+        //Delete all job infos in apply, job_statistics, saved_jobs, jobs tables
         $db->where($DBprefix.'jobs.id', $job_id);
-        $db->join('apply', $DBprefix.'jobs.id = '.$DBprefix.'apply.posting_id', "INNER");
+        $db->join('apply', $DBprefix.'jobs.id = '.$DBprefix.'apply.posting_id', "LEFT");
+        $db->join('job_statistics', $DBprefix.'jobs.id = '.$DBprefix.'job_statistics.job_id', "LEFT");
+        $db->join('saved_jobs', $DBprefix.'jobs.id = '.$DBprefix.'saved_jobs.job_id', "LEFT");
        
-        if(!$db->delete("apply, jobsportal_jobs")){
+        if(!$db->delete("apply, jobsportal_job_statistics, jobsportal_saved_jobs, jobsportal_jobs")){
             echo "problem when delete job";
         } else {
             $message = array(

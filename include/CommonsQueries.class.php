@@ -1209,5 +1209,21 @@
             if(!$insert_id){echo 'there was a problem when insert data';}
         }
         
+        /**
+        * A random code generator
+        */
+       public function generateConfirmationCode() {
+         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+         $code = '';
+         for ($i = 0; $i < 60; $i++) {
+           $code .= $chars[ rand( 0, strlen( $chars ) - 1 ) ];
+         }
+         return $code;
+       }
+
+       // Example output
+       // jAWrOD1mFaHXjkt9dm28BmVctHP5E6aOwX6brXnWYVJ75369fZ8HbTKvrqqV
+
+        
     }
 ?>

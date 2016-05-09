@@ -59,6 +59,7 @@ $locations = $db->get ('locations');
 $salaries = $db->get ('salary');
 $all_jobs = $db->get('jobs');
 $companies = $db->get('employers');
+$gender = $db->get('gender');
 
 //Set default user ID if their cookie empty
 if (empty($_COOKIE['userId'])){
@@ -66,8 +67,8 @@ if (empty($_COOKIE['userId'])){
 } else {
     $userId_cookie = filter_input(INPUT_COOKIE,'userId', FILTER_SANITIZE_STRING);
 }
-    
-    
+
+
 //Get SEO setting 
 $db->where('id', 99);
 $SEO_setting = $db->get('settings')[0]['value'];

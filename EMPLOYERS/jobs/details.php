@@ -30,16 +30,8 @@ $job = $db->where("id", "$id")->getOne("jobs");
             <?php echo LinkTile("jobs","questionnaire&id=".$id,$M_QUESTIONNAIRE." (".$database->SQLCount("questionnaire","WHERE job_id=".$id).")","","blue");?>
             </div>
             
-            <div class="col-md-12 col-sm-6 col-xs-12 top-bottom-margin">    
-            <?php 
-                echo LinkTile(
-                    "jobs",
-                    "my_stat&id=".$id,
-                    $M_VISITS." (".$database->SQLCount("jobs_stat","WHERE posting_id=".$id).")",
-                    "",
-                    "gray"
-                 );
-            ?> 
+            <div class="col-md-12 col-sm-6 col-xs-12 top-bottom-margin">   
+
             </div>    
             <div class="col-md-12 col-sm-6 col-xs-12 top-bottom-margin">
             <?php
@@ -113,6 +105,6 @@ $job = $db->where("id", "$id")->getOne("jobs");
     </div>
         
 </div>
-<div class="row">
+<!--<div class="row">
     <div class="col-md-12"><button><a href="index.php?category=jobs&action=my"><?php echo $GO_BACK_TO." <strong>\"".$MY_JOB_ADS."\"</strong>";?></a></button></div>
-</div>
+</div>-->

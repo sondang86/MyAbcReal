@@ -56,19 +56,7 @@ $job = $db->where ("id", "$id")->getOne("jobs");
 <h4><?php $commonQueries->flash('message');?></h4>
 
 <div class="row">
-    <div class="col-md-3 col-md-push-9">
-        <div class="row top-bottom-margin">
-            <?php
-                    echo LinkTile
-                     (
-                            "jobs",
-                            "my_stat&id=".$id,
-                            $M_VISITS." (".$database->SQLCount("jobs_stat","WHERE posting_id=".$id).")",
-                            "",
-                            "gray"
-                     );
-            ?>
-        </div>
+    <div class="col-md-3 col-md-push-9">  
         <div class="row top-bottom-margin">
             <?php echo LinkTile
                      (
