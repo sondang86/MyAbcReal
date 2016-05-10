@@ -22,12 +22,14 @@ if (isset($_POST['submit'])){
 
     } else { // insert new user data to jobseekers, jobseeker_resumes tables
         $verification_code = $commonQueries->generateConfirmationCode();
+        $password = password_hash(filter_input(INPUT_POST,'password', FILTER_SANITIZE_STRING), PASSWORD_DEFAULT, ['cost' => 12]);        
+        
         $data = Array (
             "date"                  => time(),
             "registered_on"         => time(),
             "username"              => filter_input(INPUT_POST,'email', FILTER_SANITIZE_STRING),
             "active"                => 0, //default is inactive (0) until user verified email (1)
-            "password"              => filter_input(INPUT_POST,'password', FILTER_SANITIZE_STRING),
+            "password"              => $password,
             "company"               => filter_input(INPUT_POST,'company_name', FILTER_SANITIZE_STRING),
             "address"               => filter_input(INPUT_POST,'company_address', FILTER_SANITIZE_STRING),
             "city"                  => filter_input(INPUT_POST,'company_city', FILTER_SANITIZE_NUMBER_INT),

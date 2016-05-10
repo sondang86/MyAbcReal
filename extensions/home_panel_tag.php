@@ -140,7 +140,7 @@ if(
                         <input type="button" class="OrangeButton" value="Đăng ký nhanh">
                     </a>
                     <p>Hoặc</p>
-                    <a href="#">
+                    <a href="http://<?php echo $DOMAIN_NAME;?>/index.php?mod=login">
                         <input type="button" class="BlueButton" value="Đăng nhập">
                     </a>
                 </fieldset>

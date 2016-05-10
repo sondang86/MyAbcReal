@@ -3,8 +3,9 @@
 
  if(!defined('IN_SCRIPT')) die("");
  global $db, $commonQueries;
-
+ 
 if (isset($_POST['submit'])){
+    $email = filter_input(INPUT_POST,'email', FILTER_SANITIZE_STRING);
     
     //Verify captcha
     if (md5($_POST['code']) !== $_SESSION['code']){
@@ -12,20 +13,27 @@ if (isset($_POST['submit'])){
         $website->redirect('http://localhost/vieclambanthoigian.com.vn/vn_Ng%C6%B0%E1%BB%9Di+t%C3%ACm+vi%E1%BB%87c.html');
     } 
 
-    //Check if user already exists
-    $db->where('username', $_POST['email'])->withTotalCount()->getOne('jobseekers');
-    if ($db->totalCount > 0){
+    //Check if user already exists on both employers and jobseeker tables
+    $db->where('username', $email)->withTotalCount()->getOne('jobseekers');
+    $jobseeker_found = $db->totalCount;
+    $db->where('username', $email)->withTotalCount()->getOne('employers');
+    $employer_found = $db->totalCount;
+    
+    //Make sure username is not registered
+    if (($jobseeker_found > 0) || ($employer_found > 0)){
         $commonQueries->flash('message', $commonQueries->messageStyle('warning', 'Địa chỉ email này đã được đăng ký, vui lòng dùng email khác'));
         $website->redirect('http://localhost/vieclambanthoigian.com.vn/vn_Ng%C6%B0%E1%BB%9Di+t%C3%ACm+vi%E1%BB%87c.html');
 
     } else { // insert new user data to jobseekers, jobseeker_resumes tables
         $verification_code = $commonQueries->generateConfirmationCode();
+        $password = password_hash(filter_input(INPUT_POST,'password', FILTER_SANITIZE_STRING), PASSWORD_DEFAULT, ['cost' => 12]);        
+        
         $data = Array (
             "date"              => time(),
             "registered_on"     => time(),
-            "username"          => filter_input(INPUT_POST,'email', FILTER_SANITIZE_STRING),
+            "username"          => $email,
             "active"            => 0, //default is inactive (0) until user verified email (1)
-            "password"          => filter_input(INPUT_POST,'password', FILTER_SANITIZE_STRING),
+            "password"          => $password,
             "mobile"            => filter_input(INPUT_POST,'mobile', FILTER_SANITIZE_NUMBER_INT),
             "first_name"        => filter_input(INPUT_POST,'firstname', FILTER_SANITIZE_STRING),
             "last_name"         => filter_input(INPUT_POST,'lastname', FILTER_SANITIZE_STRING),
@@ -40,7 +48,6 @@ if (isset($_POST['submit'])){
             //Send email confirmation link
             $mail = new PHPMailer;
 
-            //$mail->SMTPDebug = 3;                               // Enable verbose debug output
             $mail->CharSet = 'UTF-8';                             // Unicode character encode
             $mail->isSMTP();                                      // Set mailer to use SMTP
             $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
@@ -57,9 +64,8 @@ if (isset($_POST['submit'])){
             $mail->Body    = "Chào bạn!\n"
                             . "Cảm ơn bạn đã đăng ký tại vieclambanthoigian\n\n"
                             . "Để hoàn tất đăng ký, bạn vui lòng truy cập vào địa chỉ dưới đây: \n\n"
-                            . "http://localhost/vieclambanthoigian.com.vn/index.php?mod=verifications&register=email&user=jobseeker&id=$id&code=$verification_code \n\n";
+                            . "http://$DOMAIN_NAME/index.php?mod=verifications&register=email&user=jobseeker&id=$id&code=$verification_code \n\n";
             
-//            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
             if(!$mail->send()) {
                 echo 'Message could not be sent.';
@@ -70,16 +76,19 @@ if (isset($_POST['submit'])){
             
             //Redirect back with message
             $commonQueries->flash('message', $commonQueries->messageStyle('info', "Cảm ơn bạn đã đăng ký, bạn hãy kiểm tra email và xác nhận tài khoản để hoàn tất"));
-            $website->redirect('http://localhost/vieclambanthoigian.com.vn/vn_Ng%C6%B0%E1%BB%9Di+t%C3%ACm+vi%E1%BB%87c.html');
+            $website->redirect("http://$DOMAIN_NAME/vn_Ng%C6%B0%E1%BB%9Di+t%C3%ACm+vi%E1%BB%87c.html");
 
         } else {
             $commonQueries->flash('message', $commonQueries->messageStyle('error', 'Có lỗi xảy ra, vui lòng liên hệ info@vieclambanthoigian.com.vn'));
-            $website->redirect('http://localhost/vieclambanthoigian.com.vn/vn_Ng%C6%B0%E1%BB%9Di+t%C3%ACm+vi%E1%BB%87c.html');
+            $website->redirect("http://$DOMAIN_NAME/vn_Ng%C6%B0%E1%BB%9Di+t%C3%ACm+vi%E1%BB%87c.html");
         }
     }
 }; ?>
 
-<?php echo $commonQueries->flash('message');?>
+<?php 
+    if(!isset($_SESSION['username'])){ //Only show this form if user is guest.
+        echo $commonQueries->flash('message');
+?>
 <div class="page-wrap">        
     <form action="" id="register-form" class="sky-form" method="POST">
         <header>Người tìm việc đăng ký</header>
@@ -92,58 +101,61 @@ if (isset($_POST['submit'])){
                     <b class="tooltip tooltip-bottom-right">Địa chỉ email của bạn</b>
                 </label>
             </section>
-                
-            <section>
-                <label class="input">
-                    <i class="icon-append fa fa-lock"></i>
-                    <input type="password" name="password" placeholder="Mật khẩu" id="password">
-                    <b class="tooltip tooltip-bottom-right">Nhập mật khẩu mong muốn</b>
-                </label>
-            </section>
-                
-            <section>
-                <label class="input">
-                    <i class="icon-append fa fa-lock"></i>
-                    <input type="password" name="passwordConfirm" placeholder="Xác nhận lại mật khẩu">
-                    <b class="tooltip tooltip-bottom-right">Xác nhận lại mật khẩu</b>
-                </label>
-            </section>
-            
-            <section>
-                <label class="input">
-                    <i class="icon-append fa fa-phone"></i>
-                    <input type="text" name="mobile" placeholder="Số điện thoại">
-                    <b class="tooltip tooltip-bottom-right">Số điện thoại của bạn</b>
-                </label>
-            </section>
+          
+            <div class="row">
+                <section class="col col-6">
+                    <label class="input">
+                        <i class="icon-append fa fa-lock"></i>
+                        <input type="password" name="password" placeholder="Mật khẩu" id="password">
+                        <b class="tooltip tooltip-bottom-right">Nhập mật khẩu mong muốn</b>
+                    </label>
+                </section>
+
+                <section class="col col-6">
+                    <label class="input">
+                        <i class="icon-append fa fa-lock"></i>
+                        <input type="password" name="passwordConfirm" placeholder="Xác nhận lại mật khẩu">
+                        <b class="tooltip tooltip-bottom-right">Xác nhận lại mật khẩu</b>
+                    </label>
+                </section>
+            </div>
             
         </fieldset>
             
         <fieldset>
-            <div class="row">
-                <section class="col col-6">
+            <div class="row">                
+                <section class="col col-3">
+                    <label class="input">
+                        <i class="icon-append fa fa-phone"></i>
+                        <input type="text" name="mobile" placeholder="Số điện thoại">
+                        <b class="tooltip tooltip-bottom-right">Số điện thoại của bạn</b>
+                    </label>
+                </section>
+                
+                <section class="col col-3">
                     <label class="input">
                         <input type="text" name="firstname" placeholder="Họ" required>
                     </label>
                 </section>
-                <section class="col col-6">
+                <section class="col col-3">
                     <label class="input">
                         <input type="text" name="lastname" placeholder="Tên" required>
                     </label>
                 </section>
+                <section class="col col-3">
+                    <label class="select">
+                        <select name="gender">
+                            <option value="0" selected disabled>Giới tính</option>
+                            <option value="1">Nam</option>
+                            <option value="2">Nữ</option>
+                            <option value="3">Khác</option>
+                        </select>
+                        <i></i>
+                    </label>
+                </section>
             </div>
                 
-            <section>
-                <label class="select">
-                    <select name="gender">
-                        <option value="0" selected disabled>Giới tính</option>
-                        <option value="1">Nam</option>
-                        <option value="2">Nữ</option>
-                        <option value="3">Khác</option>
-                    </select>
-                    <i></i>
-                </label>
-            </section>
+            
                 
             <section>
                 <label class="checkbox"><input type="checkbox" name="subscription" id="subscription"><i></i>Tôi muốn nhận tin tức từ vieclambanthoigian.com.vn</label>
@@ -256,7 +268,8 @@ if (isset($_POST['submit'])){
 </div>
     
 <?php
-$website->Title($M_ARE_YOU_JOBSEEKER);
-$website->MetaDescription("");
-$website->MetaKeywords(""); 
+    $website->Title($M_ARE_YOU_JOBSEEKER);
+    $website->MetaDescription("");
+    $website->MetaKeywords(""); 
+}
 ?>

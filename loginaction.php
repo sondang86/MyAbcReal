@@ -28,10 +28,9 @@ $commonQueries = new CommonsQueries($db);
 if(isset($_POST['Email']) && isset($_POST['Password'])){
     $email = filter_input(INPUT_POST, 'Email', FILTER_SANITIZE_EMAIL);
     $Password = filter_input(INPUT_POST, 'Password', FILTER_SANITIZE_STRING);
-    
-    //Search in employer table first
+
+   //Search in employer table first
     $employer = $db->where('username', "$email")
-            ->where('password', "$Password")
             ->withTotalCount()->getOne('employers',array('username', 'password', 'active'));
     
     if($employer['active'] == "0"){//employer has not active account yet
@@ -40,15 +39,19 @@ if(isset($_POST['Email']) && isset($_POST['Password'])){
     }
 
     if ($db->totalCount > 0){ //User is employer
-        //Store user data in session
-        $_SESSION['username'] = $employer['username'];
-        $_SESSION['user_password'] = $employer['password'];
-        $_SESSION['user_type'] = 'employer';
-        $website->redirect('EMPLOYERS/index.php');
+        if (password_verify($Password, $employer['password'])){ //Password matched
+            //Store user data in session
+            $_SESSION['username'] = $employer['username'];
+            $_SESSION['user_password'] = $employer['password'];
+            $_SESSION['user_type'] = 'employer';
+            $website->redirect('EMPLOYERS/index.php');
+        } else {//Wrong username or password
+            $commonQueries->flash('message', $commonQueries->messageStyle('warning', 'Sai tên đăng nhập hoặc mật khẩu! Vui lòng thử lại'));
+            $website->redirect('index.php?mod=login');
+        }
         
     } else { //User could be jobseeker
         $jobseekers = $db->where('username', "$email")
-            ->where('password', "$Password")
             ->withTotalCount()->getOne('jobseekers',array('username', 'password', 'active'));
         
         if($jobseekers['active'] == "0"){//jobseeker has not active account yet
@@ -57,16 +60,18 @@ if(isset($_POST['Email']) && isset($_POST['Password'])){
         }
         
         if ($db->totalCount > 0){ //User is jobseeker
-            //Store user data in session
-            $_SESSION['username'] = $jobseekers['username'];
-            $_SESSION['user_password'] = $jobseekers['password'];
-            $_SESSION['user_type'] = 'jobseeker';
-            $website->redirect('JOBSEEKERS/index.php');
-            
-        } else { //Wrong username or password
-            $commonQueries->flash('message', $commonQueries->messageStyle('warning', 'Sai tên đăng nhập hoặc mật khẩu! Vui lòng thử lại'));
-            $website->redirect('index.php?mod=login');
-        }
+            if (password_verify($Password, $jobseekers['password'])){ //Password matched
+                //Store user data in session
+                $_SESSION['username'] = $jobseekers['username'];
+                $_SESSION['user_password'] = $jobseekers['password'];
+                $_SESSION['user_type'] = 'jobseeker';
+                $website->redirect('JOBSEEKERS/index.php');
+                
+            } else {//Wrong username or password
+                $commonQueries->flash('message', $commonQueries->messageStyle('warning', 'Sai tên đăng nhập hoặc mật khẩu! Vui lòng thử lại'));
+                $website->redirect('index.php?mod=login');
+            }
+        } 
     }
 }
 ?>
