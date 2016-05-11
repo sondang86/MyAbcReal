@@ -25,9 +25,9 @@ $db = new MysqliDb (Array (
 
 $commonQueries = new CommonsQueries($db);
 
-if(isset($_POST['Email']) && isset($_POST['Password'])){
-    $email = filter_input(INPUT_POST, 'Email', FILTER_SANITIZE_EMAIL);
-    $Password = filter_input(INPUT_POST, 'Password', FILTER_SANITIZE_STRING);
+if(isset($_POST['email']) && isset($_POST['password'])){
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+    $Password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
 
    //Search in employer table first
     $employer = $db->where('username', "$email")

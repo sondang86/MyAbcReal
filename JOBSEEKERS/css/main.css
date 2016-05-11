@@ -1253,12 +1253,15 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
 }
 
 .language-form section span {
-    margin-right: 30px;
+    margin-right: 10px;
 }                    
 
-.language-form section select {
-    width: 75%;
+
+.js_language_level {
+    position: relative;
 }
+
+
 
 .navmenu a {
     float: right;
@@ -1294,6 +1297,16 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
 
 /* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {
+    .js_language_level span button {
+        right: 5px;
+        margin-top: 15px;
+        float: right;
+    }
+    
+    .language-form section select {
+        width: 100%;
+    }
+    
     .locationCheckbox {
         position: relative;
     }
@@ -1362,6 +1375,17 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
  
 /* D?nh cho m?y t?nh b?ng chi?u d?c */
 @media all and (min-width: 600px) {
+    .js_language_level span button {
+        position: absolute;
+        right: 5px;
+        margin-top: 0px;
+        float: none;
+    }
+    
+    .language-form section select {
+        width: 75%;
+    }    
+    
     .js-forms span {
         float: left;
         width: 20%;

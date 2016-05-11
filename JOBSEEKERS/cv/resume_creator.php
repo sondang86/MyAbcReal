@@ -333,7 +333,7 @@ if(isset($_POST["ProceedSaveResume"])){
                     
                     <fieldset class="row language-form">
                         
-                        <section class="col-md-4 col-sm-12">
+                        <section class="col-md-4 col-sm-12 js_language">
                             <span>Trình độ</span>
                             <select name="js_language" class="form-control">
                                 <?php foreach ($languages as $value) :?>
@@ -342,7 +342,7 @@ if(isset($_POST["ProceedSaveResume"])){
                             </select>
                         </section>
                         
-                        <section class="col-md-6 col-sm-11">
+                        <section class="col-md-6 col-sm-11 js_language_level">
                             <span>Trình độ</span>
                             <select name="js_language_level" class="form-control">
                                 <?php foreach ($language_levels as $value) :?>
