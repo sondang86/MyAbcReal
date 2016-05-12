@@ -14,7 +14,8 @@ $handler = new Handler($uploader);
 // Configuration
 
 $config['debug'] = true;
-$config['upload_dir'] = __DIR__.'/../files';
+$config['upload_dir'] = 'C:\wamp\www\vieclambanthoigian.com.vn\extensions\filepicker\files';
+//$config['upload_url'] = 'http://localhost/vieclambanthoigian.com.vn/extensions/filepicker/files';
 // $config['upload_url'] = 'files';
 $config['image_versions.thumb'] = array(
     'width' => 120,

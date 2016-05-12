@@ -7,10 +7,12 @@
 if(!defined('IN_SCRIPT')) die("");
 ?>
 <link href="/vieclambanthoigian.com.vn/css/filepicker.css" rel="stylesheet" type="text/css"/>
-<script src="/vieclambanthoigian.com.vn/js/filepicker.min.js" type="text/javascript"></script>
+
 
 <body>
-    <?php require_once('/extensions/filepicker/_navbar.php') ?>
+    <?php require __DIR__.'/../../extensions/filepicker/_navbar.php'; ?>
+    
+   <?php // print_r(__DIR__.'/../files');?>
 
     <div class="container">
         <div class="demo-container col-md-9 col-md-offset-2">
@@ -20,12 +22,20 @@ if(!defined('IN_SCRIPT')) die("");
                 <!-- Button Bar -->
                 <div class="button-bar">
                     <div class="btn btn-success fileinput">
-                        <i class="fa fa-arrow-circle-o-up"></i> Upload
+                        <i class="fa fa-plus"></i> Add files
                         <input type="file" name="files[]" multiple>
                     </div>
 
                     <button type="button" class="btn btn-primary camera-show">
                         <i class="fa fa-camera"></i> Camera
+                    </button>
+
+                    <button type="button" class="btn btn-info start-all">
+                        <i class="fa fa-arrow-circle-o-up"></i> Start all
+                    </button>
+
+                    <button type="button" class="btn btn-warning cancel-all">
+                        <i class="fa fa-ban"></i> Cancel all
                     </button>
 
                     <button type="button" class="btn btn-danger delete-all">
@@ -122,19 +132,24 @@ if(!defined('IN_SCRIPT')) die("");
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.5.2/jquery.timeago.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropper/2.3.0/cropper.min.js"></script>
 
-    <script src="/vieclambanthoigian.com.vn/JOBSEEKERS/extensions/filepicker/assets/js/filepicker.js"></script>
-    <script src="/vieclambanthoigian.com.vn/JOBSEEKERS/extensions/filepicker/assets/js/filepicker-ui.js"></script>
-    <script src="/vieclambanthoigian.com.vn/JOBSEEKERS/extensions/filepicker/assets/js/filepicker-drop.js"></script>
-    <script src="/vieclambanthoigian.com.vn/JOBSEEKERS/extensions/filepicker/assets/js/filepicker-crop.js"></script>
-    <script src="/vieclambanthoigian.com.vn/JOBSEEKERS/extensions/filepicker/assets/js/filepicker-camera.js"></script>
+    <script src="/vieclambanthoigian.com.vn/extensions/filepicker/assets/js/filepicker.js"></script>
+    <script src="/vieclambanthoigian.com.vn/extensions/filepicker/assets/js/filepicker-ui.js"></script>
+    <script src="/vieclambanthoigian.com.vn/extensions/filepicker/assets/js/filepicker-drop.js"></script>
+    <script src="/vieclambanthoigian.com.vn/extensions/filepicker/assets/js/filepicker-crop.js"></script>
+    <script src="/vieclambanthoigian.com.vn/extensions/filepicker/assets/js/filepicker-camera.js"></script>
 
     <script>
         /*global $*/
-
         $('#filepicker').filePicker({
-            url: '/vieclambanthoigian.com.vn/JOBSEEKERS/extensions/filepicker/uploader/index.php',
-            plugins: ['ui', 'drop', 'camera', 'crop']
+            url: '/vieclambanthoigian.com.vn/extensions/filepicker/uploader/index.php',
+            ui: {
+                autoUpload: false
+            },
+            plugins: ['ui', 'drop', 'camera', 'crop'],
+            
+            
         });
+        
 
         // Replace timeago strings.
         if ($.fn.timeago) {
@@ -186,8 +201,8 @@ if(!defined('IN_SCRIPT')) die("");
             <td class="column-preview">
                 <div class="preview">
                     {% if (o.file.versions && o.file.versions.thumb) { %}
-                        <a href="{%= o.file.url %}" target="_blank">
-                            <img src="{%= o.timestamp(o.file.versions.thumb.url) %}" width="64" height="64"></a>
+                        <a href="/vieclambanthoigian.com.vn/extensions/filepicker/{%= o.file.url %}" target="_blank">
+                            <img src="/vieclambanthoigian.com.vn/extensions/filepicker/{%= o.timestamp(o.file.versions.thumb.url) %}" width="64" height="64"></a>
                         </a>
                     {% } else { %}
                         <span class="fa file-icon-{%= o.file.extension %}"></span>
@@ -197,7 +212,7 @@ if(!defined('IN_SCRIPT')) die("");
             <td class="column-name">
                 <p class="name">
                     {% if (o.file.url) { %}
-                        <a href="{%= o.file.url %}" target="_blank">{%= o.file.name %}</a>
+                        <a href="/vieclambanthoigian.com.vn/extensions/filepicker/{%= o.file.url %}" target="_blank">{%= o.file.name %}</a>
                     {% } else { %}
                         {%= o.file.name %}
                     {% } %}
@@ -269,7 +284,6 @@ if(!defined('IN_SCRIPT')) die("");
     </script><!-- end of #paginationTemplate -->
 
 </body>
-
 
 
 <div class="row">
