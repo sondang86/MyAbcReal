@@ -1146,7 +1146,7 @@ body {
 }
 
 
-input:not([type=checkbox]):not([type=radio]),select,textarea
+/*input:not([type=checkbox]):not([type=radio]):not([type=submit]),select,textarea
 {
 	min-width:240px;
 	border:1px solid #dddddd;
@@ -1155,7 +1155,7 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
 	-webkit-border-radius: 3px;
 	-khtml-border-radius: 3px;
 	padding:6px;
-}
+}*/
 
 .small-font
 {

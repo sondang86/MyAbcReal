@@ -170,7 +170,7 @@ if(isset($_POST["Export"])) ob_end_flush();
     
     $(document).ready(function(){
         $('.confirm').confirm({
-            content: 'Xóa câu hỏi đã chọn?',
+            content: 'Xóa mục đã chọn?',
             title: 'Vui lòng xác nhận'
         });
     });
