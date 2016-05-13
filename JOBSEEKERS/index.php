@@ -68,6 +68,7 @@ $locations = $db->get('locations');
 $language_levels = $db->get('language_levels');
 $languages = $db->get('skill_languages');
 $skills = $db->get('skills');
+$user_info = $db->where('username', "$AuthUserName")->getOne('jobseekers');
 
 $job_experience = $db->get_data('job_experience');
 $job_availability = $db->get_data('job_availability');

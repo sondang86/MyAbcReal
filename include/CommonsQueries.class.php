@@ -41,7 +41,7 @@
                 return NULL;
             }
         }
-        
+            
         /**
         *  Check if value empty will output n/a message instead
         * 
@@ -56,7 +56,7 @@
                 echo "N/A";
             }
         }
-        
+            
             
         /**
         *  Output "Yes 1" or "No 0" texts based on language id
@@ -229,7 +229,7 @@
             //Order by featured first
             $this->_db->orderBy("featured", "DESC");
             $this->_db->orderBy("date", "DESC");
-            
+                
             //Pagination options
             //Set current page to 1 if empty
             if (isset($_GET['trang'])){
@@ -243,7 +243,7 @@
             $jobs_list['totalCount'] = $this->_db->totalCount; 
             $jobs_list['current_page'] = $current_page;
             $jobs_list['total_pages'] = $this->_db->totalPages;
-
+                
             if ($this->_db->totalCount > 0){
                 return $jobs_list;
             } else {
@@ -489,7 +489,7 @@
                     .$this->_dbPrefix."saved_jobs.user_uniqueId = '$userId_cookie' AND "
                     .$this->_dbPrefix."saved_jobs.IPAddress = '".filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP)."' ", "LEFT");
             $this->_db->join("job_statistics", $this->_dbPrefix."jobs.id=".$this->_dbPrefix."job_statistics.job_id", "LEFT");
-                        
+                
             $this->_db->where($this->_dbPrefix."jobs.id", $id);
             $this->_db->where($this->_dbPrefix."jobs.status", "1");
                 
@@ -523,23 +523,23 @@
                 $this->_dbPrefix."questionnaire_type.name_en as questionnaire_typeName_en",
             );
             $this->_db->join("questionnaire_type", $this->_dbPrefix."questionnaire.question_type =".$this->_dbPrefix."questionnaire_type.questionnaire_type", "LEFT");
-            
+                
             $this->_db->where('job_id', $job_id);
-            
+                
             if ($questionnaire_id !== ""){ 
                 $this->_db->where($this->_dbPrefix.'questionnaire.id', $questionnaire_id);
             }
-            
+                
             if ($username !== ""){ 
                 $this->_db->where('employer', "$username");
             }
-            
+                
             if ($getall == TRUE){
                $data = $this->_db->withTotalCount()->get('questionnaire', NULL, $columns);
             } else {
                 $data = $this->_db->withTotalCount()->getOne('questionnaire', NULL, $columns);
             }
-
+                
             if ($this->_db->totalCount > 0) {
                 return $data;
             } else {
@@ -572,15 +572,15 @@
              $data = $this->_db->where($this->_dbPrefix."questionnaire_questions.job_id", $job_id)
                      ->where($this->_dbPrefix."questionnaire_questions.questionnaire_id", $questionnaire_id)
                      ->withTotalCount()->get('questionnaire_questions', NULL, $columns);
-                 
+                         
              if ($this->_db->totalCount > 0) {
                  return $data;
              } else {
                  return FALSE;
              }    
         }
-        
-        
+            
+            
         /**
          *  get single value in specific table
          * 
@@ -602,15 +602,15 @@
                 $this->_db->where('featured', $featured); 
             }
             $data = $this->_db->withTotalCount()->getOne($table, $show_column);
-            
+                
             if ($this->_db->totalCount > 0) {//featured record
                 return $data;
             } else {
                 return FALSE;
             }
         }
-        
-        
+            
+            
         /**
          *  update single value in specific table
          * 
@@ -627,7 +627,7 @@
                     'featured' => '1',
                 )
             ) {           
-            
+                
             $this->_db->where($where_column, $where_clause);
             if ($this->_db->update ($table, $data)){
                 return TRUE;
@@ -636,8 +636,8 @@
                 echo 'update failed: ' . $db->getLastError();
             }
         }
-        
-        
+            
+            
         /**
         * Function to create and display error and success messages
         * http://www.phpdevtips.com/2013/05/simple-session-based-flash-messages/
@@ -664,7 +664,7 @@
                    {
                        unset( $_SESSION[$name.'_class'] );
                    }
-
+                       
                    $_SESSION[$name] = $message;
                    $_SESSION[$name.'_class'] = $class;
                }
@@ -678,7 +678,7 @@
                }
            }
        }
-       
+           
        /**
         * customize the flash messages or messages
         * http://www.tutorialrepublic.com/twitter-bootstrap-tutorial/bootstrap-alerts.php
@@ -691,10 +691,10 @@
            $data = "<div class='alert alert-$type fade in'>"
                    ."<a href='#' class='close' data-dismiss='alert'>&times;</a>"
                    ."<strong>$message</strong></div>";
-           
+                       
            return $data;
         }       
-        
+            
         /**
         * Find jobs by username/employer
         * 
@@ -725,7 +725,7 @@
             $this->_db->join("employers", $this->_dbPrefix."jobs.employer=".$this->_dbPrefix."employers.username", "LEFT");
             $this->_db->join("questionnaire", $this->_dbPrefix."jobs.id=".$this->_dbPrefix."questionnaire.job_id AND "
                             .$this->_dbPrefix."jobs.employer=".$this->_dbPrefix."questionnaire.employer", "LEFT"); 
-            
+                                
             $this->_db->where ($this->_dbPrefix."jobs.employer", "$username");
                 
             $data = $this->_db->withTotalCount()->get("jobs", $limit, $selected_columns);
@@ -736,7 +736,7 @@
                 return FALSE;
             }
         }
-        
+            
         /**
         * Check whether user is employer or jobseeker
         * 
@@ -752,7 +752,7 @@
                 return FALSE;
             }
         }
-        
+            
         /**
         * Check if user inactivity for specific time
         * 
@@ -768,8 +768,8 @@
             }
             $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
         }
-        
-        
+            
+            
         /**
         * A simple pagination using Bootstrap
         * 
@@ -786,7 +786,7 @@
             }
             echo "</ul></div>";
         }
-        
+            
         protected function paginate($reload, $page, $totalPages, $SEO_setting, $adjacents=5) {
             //Remove page= and allow integer numbef only if SEO setting enabled (1)
             if ($SEO_setting == "1"){
@@ -817,7 +817,7 @@
                     $out.= "<li><a href=\"".$reload. "$additional_page_word".$i."\">".$i. "</a>\n</li>";
                 }
             }
-
+                
             if ($page<($totalPages - $adjacents)) {
                 $out.= "<li><a >..</a>\n</li>";
                 $out.= "<li><a href=\"" . $reload."$additional_page_word".$totalPages."\">" .$totalPages."</a>\n</li>";
@@ -831,8 +831,8 @@
             $out.= "";
             return $out;
         }
-        
-        
+            
+            
         /**
         * A simple function that track execution time of Mysql's query
         * 
@@ -848,8 +848,8 @@
              echo "Query execution time in ". $msc_new . ' seconds'; // in seconds
          //    echo ($msc * 1000) . ' milliseconds'; // in millseconds
         }
-        
-        
+            
+            
         /**
         * A simple function that get jobseeker desired categories
         * 
@@ -863,8 +863,8 @@
             $jobseeker_categories = $this->_db->withTotalCount()->where('jobseeker_id', $jobseeker_id)->get('jobseeker_categories');
             return $jobseeker_categories;
         }
-        
-        
+            
+            
         /**
         * A simple function that get jobseeker desired locations
         * 
@@ -878,7 +878,7 @@
             $jobseeker_locations = $this->_db->withTotalCount()->where('jobseeker_id', $jobseeker_id)->get('jobseeker_locations');
             return $jobseeker_locations;
         }
-        
+            
         /**
         * A function that get jobseeker profile details
         * 
@@ -896,15 +896,15 @@
                 $this->_dbPrefix."marital_status.name as marital_status_name",$this->_dbPrefix."marital_status.name_en as marital_status_name_en",
                 $this->_dbPrefix."gender.name as gender_name",$this->_dbPrefix."gender.name_en as gender_name_en"
             );
-
+                
             $this->_db->join("marital_status", $this->_dbPrefix."jobseekers.marital_status=".$this->_dbPrefix."marital_status.marital_id", "LEFT");
             $this->_db->join("gender", $this->_dbPrefix."jobseekers.gender=".$this->_dbPrefix."gender.gender_id", "LEFT");
             $jobseeker_profile = $this->_db->where('username', "$username")->getOne('jobseekers', $selected_columns);
-            
+                
             return $jobseeker_profile;
         }
-        
-        
+            
+            
         /**
         * A function that get jobseeker profile details
         * 
@@ -922,11 +922,11 @@
             $data['languages'] = $this->_db->get('languages');
             $data['language_levels'] = $this->_db->get('language_levels');
             $data['skills'] = $this->_db->get('skills');
-            
+                
             return $data[$table];
         }
-        
-        
+            
+            
         /**
         *  Search jobseeker resumes function
         * 
@@ -973,7 +973,7 @@
             //Order by featured first
             $this->_db->orderBy("featured", "DESC");
             $this->_db->orderBy("date", "DESC");
-            
+                
             //Pagination options
             //Set current page to 1 if empty
             if (isset($_GET['trang'])){
@@ -987,15 +987,15 @@
             $jobs_list['totalCount'] = $this->_db->totalCount; 
             $jobs_list['current_page'] = $current_page;
             $jobs_list['total_pages'] = $this->_db->totalPages;
-
+                
             if ($this->_db->totalCount > 0){
                 return $jobs_list;
             } else {
                 return FALSE;
             }
         }
-        
-        
+            
+            
         /**
         *  Add + before every words
         * 
@@ -1006,7 +1006,7 @@
             $sql_search = '+' . implode(" +", $search_words);
             return $sql_search;
         }
-        
+            
         /**
         *  Add + before every words and before "" double quotes
         * 
@@ -1019,7 +1019,7 @@
             $result = preg_replace($regex, '+$0', $string);
             return $result;
         }
-        
+            
         /**
         *  Check if variable1 presents and equal with second variable, then output desired text
         * 
@@ -1032,8 +1032,8 @@
                 echo $desired_text;                
             }
         }
-        
-        
+            
+            
         /**
         *  get jobseeker resume details or all resumes
         * 
@@ -1064,7 +1064,7 @@
                 "group_skill.name as group_skill_name","group_skill.name_en as group_skill_name_en",
                 "pressure_skill.name as pressure_skill_name","pressure_skill.name_en as pressure_skill_name_en",
             );
-
+                
             $this->_db->join("job_experience", $this->_dbPrefix."jobseeker_resumes.experience_level=".$this->_dbPrefix."job_experience.experience_id", "LEFT");
             $this->_db->join("education", $this->_dbPrefix."jobseeker_resumes.education_level=".$this->_dbPrefix."education.education_id", "LEFT");
             $this->_db->join("languages", $this->_dbPrefix."jobseeker_resumes.language=".$this->_dbPrefix."languages.id", "LEFT");
@@ -1079,18 +1079,18 @@
             $this->_db->join("skills as IT_skill", $this->_dbPrefix."jobseeker_resumes.IT_skills=IT_skill.skill_id", "LEFT");
             $this->_db->join("skills as group_skill", $this->_dbPrefix."jobseeker_resumes.group_skills=group_skill.skill_id", "LEFT");
             $this->_db->join("skills as pressure_skill", $this->_dbPrefix."jobseeker_resumes.pressure_skill=pressure_skill.skill_id", "LEFT");
-
+                
             $this->_db->where ($this->_dbPrefix."jobseeker_resumes.id", $resume_id);                
             $jobseeker_resumes['jobseeker_resumes'] = $this->_db->withTotalCount()->getOne("jobseeker_resumes", $jobseeker_resume_columns);
             $jobseeker_resumes['totalCount'] = $this->_db->totalCount;
-            
+                
             if ($this->_db->totalCount > 0){ //Found record
                 return $jobseeker_resumes;
             } else {
                 return FALSE;
             }
         }
-        
+            
         /**
         *  search jobseeker resumes based by conditions or all resumes
         * 
@@ -1119,7 +1119,7 @@
                 $this->_dbPrefix."locations.City",$this->_dbPrefix."locations.City_en",$this->_dbPrefix."locations.id as location_id",
                 $this->_dbPrefix."jobseekers.first_name",$this->_dbPrefix."jobseekers.last_name",
             );
-
+                
             $this->_db->join('positions', $this->_dbPrefix."jobseeker_resumes.current_position =".$this->_dbPrefix."positions.position_id", "LEFT");
             $this->_db->join('education', $this->_dbPrefix."jobseeker_resumes.education_level =".$this->_dbPrefix."education.education_id", "LEFT");
             $this->_db->join('salary', $this->_dbPrefix."jobseeker_resumes.expected_salary =".$this->_dbPrefix."salary.salary_id", "LEFT");
@@ -1128,41 +1128,41 @@
             $this->_db->join('locations', $this->_dbPrefix."jobseeker_resumes.location =".$this->_dbPrefix."locations.id", "LEFT");
             $this->_db->join('job_experience', $this->_dbPrefix."jobseeker_resumes.experience_level =".$this->_dbPrefix."job_experience.experience_id", "LEFT");
             $this->_db->join('jobseekers', $this->_dbPrefix."jobseeker_resumes.username =".$this->_dbPrefix."jobseekers.username", "LEFT");
-
+                
             //perform search by conditions   
             if ($condition == TRUE){
                 if ($queryString !== ""){ //title search with keywords included
                     $this->_db->where("MATCH(".$this->_dbPrefix."jobseeker_resumes.title) AGAINST ('$queryString*' IN BOOLEAN MODE)");
                 }
-
+                    
                 if ($by_category !== ""){  
                     $this->_db->where('job_category', $by_category);
                 }
-
+                    
                 if ($by_location !== ""){ 
                     $this->_db->where('location', $by_location);
                 }
-
+                    
                 if ($by_education !== ""){ 
                     $this->_db->where('education_level', $by_education);
                 }
-
+                    
                 if ($by_experience_level !== ""){
                     $this->_db->where('experience_level', $by_experience_level);
                 }
-
+                    
                 if ($by_expected_position !== ""){ //expected position included
                     $this->_db->where('expected_position', $by_expected_position);
                 }  
-                
+                    
             }
-
+                
             //Get the data
             $resumes['resumes'] = $this->_db->withTotalCount()->get('jobseeker_resumes', NULL, $jobsInfo_columns);
             $resumes['totalCount'] = $this->_db->totalCount; 
             return $resumes;
         }
-        
+            
         /**
         *  insert CV views to the database
         * 
@@ -1181,14 +1181,14 @@
                 "employer_id"   => $employer_id,
                 "views_count"   => $this->_db->inc(1)
             );
-            
+                
             $updateColumns = Array ("date_seen","views_count");
             $lastInsertId = "employer_id";
             $this->_db->onDuplicate($updateColumns, $lastInsertId);
             $insert_id = $this->_db->insert('jobseekers_stat', $view_data);
             if(!$insert_id){echo 'there was a problem when insert data';}
         }
-        
+            
         /**
         *  Update total job views count
         * 
@@ -1201,29 +1201,64 @@
                 "job_id"   => $job_id,
                 "views_count"   => $this->_db->inc(1)
             );
-            
+                
             $updateColumns = Array ("views_count");
             $lastInsertId = "job_id";
             $this->_db->onDuplicate($updateColumns, $lastInsertId);
             $insert_id = $this->_db->insert('job_statistics', $view_data);
             if(!$insert_id){echo 'there was a problem when insert data';}
         }
-        
+            
         /**
         * A random code generator
         */
-       public function generateConfirmationCode() {
-         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-         $code = '';
-         for ($i = 0; $i < 60; $i++) {
-           $code .= $chars[ rand( 0, strlen( $chars ) - 1 ) ];
-         }
-         return $code;
-       }
-
+        public function generateConfirmationCode() {
+            $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            $code = '';
+            for ($i = 0; $i < 60; $i++) {
+              $code .= $chars[ rand( 0, strlen( $chars ) - 1 ) ];
+            }
+            return $code;
+        }
+           
        // Example output
        // jAWrOD1mFaHXjkt9dm28BmVctHP5E6aOwX6brXnWYVJ75369fZ8HbTKvrqqV
-
+           
+        /**
+        *  PHP filesize MB/KB conversion
+        * 
+        *  @param var bytes input bytes number to be conversion
+        *
+        */
         
+         function formatSizeUnits($bytes){
+            if ($bytes >= 1073741824)
+            {
+                $bytes = number_format($bytes / 1073741824, 2) . ' GB';
+            }
+            elseif ($bytes >= 1048576)
+            {
+                $bytes = number_format($bytes / 1048576, 2) . ' MB';
+            }
+            elseif ($bytes >= 1024)
+            {
+                $bytes = number_format($bytes / 1024, 2) . ' KB';
+            }
+            elseif ($bytes > 1)
+            {
+                $bytes = $bytes . ' bytes';
+            }
+            elseif ($bytes == 1)
+            {
+                $bytes = $bytes . ' byte';
+            }
+            else
+            {
+                $bytes = '0 bytes';
+            }
+                
+            return $bytes;
+        }
+            
     }
 ?>

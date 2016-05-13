@@ -1295,6 +1295,28 @@ input:not([type=checkbox]):not([type=radio]),select,textarea
     margin-top: 15px;
 }
 
+/*FILE UPLOAD*/
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+}
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+
+.uploadForm label{
+    display: block;
+}
+
 /* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {
     .js_language_level span button {
