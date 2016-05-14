@@ -21,7 +21,7 @@
         }
             
         $AdminUser = $arrUser = $LoginInfo = $db->where('username', $_SESSION['username'])
-            ->where('password', $_SESSION['user_password'])
+//            ->where('password', $_SESSION['user_password'])
             ->withTotalCount()->getOne($user_type);
                 
         if ($db->totalCount == "0"){// User not matched

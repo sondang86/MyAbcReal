@@ -6,13 +6,13 @@
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
 global $DOMAIN_NAME,$db, $commonQueries;
+
+//Redirect if user already logged in
+if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == TRUE){
+    $website->redirect('index.php');
+}
 ?>
-<?php
-    // Jobs Portal All Rights Reserved
-?><?php
-    if(!defined('IN_SCRIPT')) die("");
-    global $DOMAIN_NAME;
-?>
+
 <br/>
 <div class="page-wrap">
     <h5><?php $commonQueries->flash('message');?></h5>

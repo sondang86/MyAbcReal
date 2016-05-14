@@ -471,6 +471,7 @@ if(isset($_POST["ProceedSaveResume"])){
                     //Save data to db
                     $(document).on("click", "#save_language", function(e){
                         var resume_id = <?php echo $jobseeker_data['id'] ?>;
+                        var jobseeker_id = <?php echo $jobseeker_profile['jobseeker_id']?>;
                         var languages_selected = $('.language-form').serializeObject();
 
                         e.preventDefault();
@@ -479,7 +480,12 @@ if(isset($_POST["ProceedSaveResume"])){
                             type: "POST",
                             dataType: "json",
                             url: "http://<?php echo $DOMAIN_NAME;?>/jobseekers/extensions/save_updates.php",
-                            data: { languages: languages_selected , resume_id: resume_id, request_type: "language_update"},
+                            data: { 
+                                languages: languages_selected ,
+                                resume_id: resume_id, 
+                                jobseeker_id: jobseeker_id,
+                                request_type: "language_update"
+                            },
                             success:  function(data){
                                 if(data.status == "1"){ //success, we will disable button
                                     $("#language_choice").hide("slow");

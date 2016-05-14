@@ -1520,9 +1520,9 @@ input[type="submit"]{
     color: grey;
 }
 
-::-webkit-input-placeholder {
-    color: red;
-}
+/*::-webkit-input-placeholder {
+    color: #cccccc;
+}*/
 
 .search-form div select {
     width: 100% !important;

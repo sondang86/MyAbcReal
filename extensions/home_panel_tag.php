@@ -9,7 +9,7 @@ if(
 )
 {
     //Check if user is guests or logged in    
-    if(empty($_COOKIE["AuthJ"])){
+    if(empty($_SESSION["logged_in"])){
         $guest = TRUE;
     } else {
         $guest = FALSE;

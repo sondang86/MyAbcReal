@@ -1317,6 +1317,21 @@ body {
     display: block;
 }
 
+.submit {
+    margin-top: 15px;
+    text-align: right;
+    display: inline-flex; 
+    float: right; 
+    /*width: 110px;*/
+}
+
+.submit input{
+    box-sizing: border-box;
+    width: 100%;
+    margin-right: 10px;
+    display: inline-block;
+}
+
 /* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {
     .js_language_level span button {

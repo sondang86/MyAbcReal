@@ -1,113 +1,128 @@
 <?php
-// Jobs Portal, http://www.netartmedia.net/jobsportal
-// A software product of NetArt Media, All Rights Reserved
-// Find out more about our products and services on:
-// http://www.netartmedia.net
-?><?php
+// Jobs Portal 
+// Copyright (c) All Rights Reserved, 
+
 if(!defined('IN_SCRIPT')) die("");
-?>
-	<div class="fright">
+global $db, $commonQueries, $employer_data;
 
-	<?php
-		echo LinkTile
-		 (
-			"home",
-			"welcome",
-			$M_DASHBOARD,
-			"",
-			"blue"
-		 );
-	
-	?>
+//Password changing handle
+if (isset($_POST['submit'])){
+    $current_password = filter_input(INPUT_POST,'current_password', FILTER_SANITIZE_STRING);        
+    $new_password = password_hash(filter_input(INPUT_POST,'password', FILTER_SANITIZE_STRING), PASSWORD_DEFAULT, ['cost' => 12]);        
+    
+    if (password_verify($current_password, $employer_data['password'])){//Password matched
+        //Change user password
+        if(!$db->where('username', "$AuthUserName")->update('employers', array('password' => "$new_password"))){
+            echo 'There was a problem while update password';  
+        } else {
+            //Redirect back with message
+            $commonQueries->flash('message', $commonQueries->messageStyle('info', "Bạn đã thay đổi mật khẩu thành công"));
+            $website->redirect('index.php?category=home&action=password');
+        };  
 
-</div>
-<div class="clear"></div>
-
-<?php
-
-if(isset($_POST["ProceedNewPassword"]))
-{
-	
-	$oArr=$database->DataArray("employers","username='$AuthUserName'");
-	
-	if($oArr["password"]!=$_POST["oldpassword"])
-	{
-		echo '<i class="red-text">
-			'.$PWD_WRONG.'
-			</i>';
-	}
-	else
-	if($_POST["newpassword1"]!=$_POST["newpassword2"])
-	{
-			echo '<i>
-			'.$PWD_MISMATCH.'
-			</i>';
-			
-		
-	}
-	else
-	{
-	
-		$database->SQLUpdate_SingleValue(
-				"employers",
-				"username",
-				"'".$AuthUserName."'",
-				"password",
-				$_POST["newpassword1"]
-			);
-			
-			echo '<i>
-			'.$PWD_CHANGED.'
-			</i><br><br>';
-			
-
-			
-			echo "
-						<script>
-							setTimeout(\"document.location.href='logout.php?show_login=1'\",1000);
-						</script>
-			";
-	}
-
+    } else {
+        $commonQueries->flash('message', $commonQueries->messageStyle('warning', "Mật khẩu không chính xác, vui lòng kiểm tra lại"));
+        $website->redirect('index.php?category=home&action=password');
+    }    
+    
 }
 
 ?>
 
-<h3>
-	<?php echo $CHANGE_PWD_FOR_USER; ?>
-</h3>
-<br>
-		<form action="index.php" method=post>
-		<input type="hidden" name="ProceedNewPassword"/>
-		<input type="hidden" name="category" value="home"/>
-		<input type="hidden" name="action" value="password"/>
-		
-		<table summary="" border="0">
-  	<tr>
-  		<td><?php echo $CURRENT_PWD;?>:</td>
-  		<td><input type="password" name="oldpassword" size="20"/></td>
-  	</tr>
-	<tr height=30>
-  		<td>&nbsp;</td>
-  		<td>&nbsp;</td>
-  	</tr>
-  	<tr>
-  		<td><?php echo $NEW_PWD;?>:</td>
-  		<td><input type="password" name="newpassword1" size="20"/></td>
-  	</tr>
-  	<tr>
-  		<td><?php echo $CONFIRM_PWD;?>: </td>
-  		<td><input type="password" name="newpassword2" size="20"/></td>
-  	</tr>
-  </table>
-  
-		<br><br>
-	
-		<input class="btn btn-primary" type="submit" value=" <?php echo $M_SAVE;?> " class="adminButton"/>
-		</form>
-		
-		</td>
-	</tr>
-</table>
+<div class="row main-nav">
+    <section class="col-md-9">
+        <?php $commonQueries->flash('message')?>
+    </section>
+    <section class="col-md-3">
+        <?php echo LinkTile("home","welcome",$M_DASHBOARD,"","blue");?>
+    </section>
+</div>
 
+<div class="body body-s">		
+    <form action="" method="POST" id="sky-form" class="sky-form">
+        <header>Thay đổi mật khẩu</header>
+        
+        <fieldset>					
+            <section>
+                <label class="input">
+                    <i class="icon-append fa fa-lock"></i>
+                    <input type="password" name="current_password" placeholder="Mật khẩu hiện tại của bạn" id="current_password" required>
+                    <b class="tooltip tooltip-bottom-right">Mật khẩu hiện tại</b>
+                </label>
+            </section>
+            
+            <section>
+                <label class="input">
+                    <i class="icon-append fa fa-lock"></i>
+                    <input type="password" name="password" placeholder="Mật khẩu mới" id="password" required>
+                    <b class="tooltip tooltip-bottom-right">Mật khẩu mới</b>
+                </label>
+            </section>
+            
+            <section>
+                <label class="input">
+                    <i class="icon-append fa fa-lock"></i>
+                    <input type="password" name="password_confirm" placeholder="Xác nhận mật khẩu mới" required>
+                    <b class="tooltip tooltip-bottom-right">Xác nhận mật khẩu mới</b>
+                </label>
+            </section>
+        </fieldset>
+        
+        <footer>
+            <button type="submit" name="submit" class="button">Lưu thay đổi</button>
+        </footer>
+    </form>			
+</div>
 
+<script type="text/javascript">
+    $(function()
+    {
+        // Validation		
+        $("#sky-form").validate(
+        {					
+            // Rules for form validation
+            rules:
+            {
+                current_password:{
+                    required: true,
+                    minlength: 3
+                },
+                password:{
+                    required: true,
+                    minlength: 3,
+                    maxlength: 20
+                },
+                password_confirm:{
+                    required: true,
+                    maxlength: 20,
+                    equalTo: '#password'
+                }                
+            },
+					
+            // Messages for form validation
+            messages:
+            {
+                current_password:{
+                    required: 'Không để trống ô này',
+                    minlength: 'Mật khẩu tối thiểu phải là 3 ký tự'
+                },                
+                password:
+                {
+                    required: 'Mật khẩu mới không được để trống',
+                    minlength: 'Mật khẩu tối thiểu phải là 3 ký tự'
+                },
+                password_confirm:
+                {
+                    required: 'Xác nhận lại mật khẩu mới',
+                    equalTo: 'Mật khẩu xác nhận phải giống nhau'
+                }
+            },					
+					
+            // Do not change code below
+            errorPlacement: function(error, element)
+            {
+                error.insertAfter(element.parent());
+            }
+        });
+    });			
+</script>

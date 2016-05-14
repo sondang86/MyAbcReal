@@ -12,15 +12,18 @@ global $db, $commonQueries, $current_language, $gender, $jobseeker_profile;
         echo LinkTile("cv","resume_creator",$M_RESUME_CREATOR,"","green");
     ?>
     </div>
-    <div class="clear"></div>
-    <h3>
-            <?php echo $VIEW_CURRENT_PROFILE;?>
-    </h3>
+    <h3><?php echo $VIEW_CURRENT_PROFILE;?></h3>
     <br/>
 </div>
 
+<style>
+    .js-profile span{
+        width: 15%;
+    }
+</style>
+
 <div class="row">
-    <div class="col-md-12 js-editForm">
+    <div class="col-md-12 js-editForm js-profile">
         <section>
             <span>Ảnh cá nhân: </span>
             

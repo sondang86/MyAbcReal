@@ -14,9 +14,11 @@
         } else {
             $user_type = "jobseekers";
         }
-
-        $AdminUser = $arrUser = $LoginInfo = $db->where('username', $_SESSION['username'])
-            ->where('password', $_SESSION['user_password'])
+        
+        $username = $_SESSION['username'];
+        
+        $AdminUser = $arrUser = $LoginInfo = $db->where('username', "$username")
+//            ->where('password', $_SESSION['user_password'])
             ->withTotalCount()->getOne($user_type);
 
         if ($db->totalCount == "0"){// User not matched

@@ -22,13 +22,13 @@ $jobseekers_oLinkActions=array("search","list");
 
 if($website->GetParam("CHARGE_TYPE")==0||$website->GetParam("CHARGE_TYPE")==3)
 {
-	$home_oLinkTexts=array($M_WELCOME,$M_SUB_ACCOUNTS,$M_CHANGE_PASSWORD,$M_MESSAGES2);
-	$home_oLinkActions=array("welcome","sub_accounts","password","received");
+	$home_oLinkTexts=array($M_WELCOME,$M_CHANGE_PASSWORD,$M_MESSAGES2);
+	$home_oLinkActions=array("welcome","password","received");
 }
 else
 {
-	$home_oLinkTexts=array($M_WELCOME,($website->GetParam("CHARGE_TYPE")==2?$M_CREDITS:$M_SUBSCRIPTIONS),$M_SUB_ACCOUNTS,$M_CHANGE_PASSWORD,$M_MESSAGES2);
-	$home_oLinkActions=array("welcome","credits","sub_accounts","password","received");
+	$home_oLinkTexts=array($M_WELCOME,($website->GetParam("CHARGE_TYPE")==2?$M_CREDITS:$M_SUBSCRIPTIONS),$M_CHANGE_PASSWORD,$M_MESSAGES2);
+	$home_oLinkActions=array("welcome","credits","password","received");
 }
 
 $exit_oLinkTexts=array($M_THANK_YOU);

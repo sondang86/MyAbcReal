@@ -17,6 +17,7 @@
 //Languages update
 if (isset($_POST['request_type']) && $_POST['request_type'] == "language_update"){ 
     $resume_id = filter_input(INPUT_POST,'resume_id', FILTER_SANITIZE_NUMBER_INT);
+    $jobseeker_id = filter_input(INPUT_POST,'jobseeker_id', FILTER_SANITIZE_NUMBER_INT);
     
     //Convert single value array to multidimensional array
     $languages_selected = filter_input(INPUT_POST, 'languages', FILTER_SANITIZE_NUMBER_INT, FILTER_REQUIRE_ARRAY);
@@ -37,11 +38,12 @@ if (isset($_POST['request_type']) && $_POST['request_type'] == "language_update"
     //Insert selected languages on duplicate update
     foreach ($languages_selected['js_language'] as $key => $language) {
         $data = Array (
-            "language_id" => $language,
-            "level_id" => $languages_selected['js_language_level'][$key],
-            "resume_id" => $resume_id
+            "language_id"   => $language,
+            "jobseeker_id"  => $jobseeker_id,
+            "level_id"      => $languages_selected['js_language_level'][$key],
+            "resume_id"     => $resume_id
         );
-        $updateColumns = Array ("language_id", "level_id", "resume_id");
+        $updateColumns = Array ("language_iddsa","level_id","resume_id");        
         $db->onDuplicate($updateColumns);
         $id = $db->insert('jobseeker_languages', $data);
         if(!$id){

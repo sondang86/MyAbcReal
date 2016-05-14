@@ -7,9 +7,11 @@ $GET = $data_sanitize->sanitize($_GET);
 $posting_id=$_REQUEST["posting_id"];
 $website->ms_i($posting_id);
 $arrPosting = $db->where('employer', "$AuthUserName")->getOne('jobs');    
+
 if(!isset($arrPosting["id"])) {
     die("");
 };
+
 $apply_id=$_REQUEST["apply_id"];
 $website->ms_i($apply_id);
 $arrPostingApply = $database->DataArray("apply","id=".$apply_id);

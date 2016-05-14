@@ -76,7 +76,8 @@ $current_language = $db->get_data('languages','id',"WHERE default_language=1")[0
 
 $profile_columns = array(
     $DBprefix."jobseekers.id as jobseeker_id",$DBprefix."jobseekers.username",$DBprefix."jobseekers.first_name",
-    $DBprefix."jobseekers.last_name",$DBprefix."jobseekers.address",$DBprefix."jobseekers.phone",
+    $DBprefix."jobseekers.password",$DBprefix."jobseekers.last_name",
+    $DBprefix."jobseekers.address",$DBprefix."jobseekers.phone",
     $DBprefix."jobseekers.marital_status",$DBprefix."jobseekers.description",$DBprefix."jobseekers.dob as date_of_birth",
     $DBprefix."jobseekers.mobile",$DBprefix."jobseekers.gender",$DBprefix."jobseekers.profile_pic",
     $DBprefix."jobseekers.date as date_joined",$DBprefix."jobseekers.profile_description",

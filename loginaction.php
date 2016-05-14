@@ -42,7 +42,8 @@ if(isset($_POST['email']) && isset($_POST['password'])){
         if (password_verify($Password, $employer['password'])){ //Password matched
             //Store user data in session
             $_SESSION['username'] = $employer['username'];
-            $_SESSION['user_password'] = $employer['password'];
+//            $_SESSION['user_password'] = $employer['password'];
+            $_SESSION['logged_in'] = TRUE;
             $_SESSION['user_type'] = 'employer';
             $website->redirect('EMPLOYERS/index.php');
         } else {//Wrong username or password
@@ -63,7 +64,8 @@ if(isset($_POST['email']) && isset($_POST['password'])){
             if (password_verify($Password, $jobseekers['password'])){ //Password matched
                 //Store user data in session
                 $_SESSION['username'] = $jobseekers['username'];
-                $_SESSION['user_password'] = $jobseekers['password'];
+//                $_SESSION['user_password'] = $jobseekers['password'];
+                $_SESSION['logged_in'] = TRUE;
                 $_SESSION['user_type'] = 'jobseeker';
                 $website->redirect('JOBSEEKERS/index.php');
                 

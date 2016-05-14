@@ -2634,7 +2634,11 @@ div.upload input:hover {
 
 /*Pagination*/
 
+/*SKY FORMS*/
 
+#sky-form {
+    margin: 25px 0;
+}
 
 /* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {
@@ -2773,14 +2777,14 @@ div.upload input:hover {
     
     .js-editForm section{
         /*display: block;*/
-        margin: 0; 
         text-align: left;
-        margin: 10px 0;
+        /*margin: 10px 0;*/
+        margin: 20px 0 !important;
     }
     
     .js-editForm section span{
         float: left;
-        width: 15%;
+        /*width: 15%;*/
         /* text-align: right; */
         padding-right: 10px;
         margin-top: 10px;
