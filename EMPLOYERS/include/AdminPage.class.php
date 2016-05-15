@@ -20,16 +20,13 @@ class AdminPage
 	
 	function Process($is_mobile=false)
 	{
-		global $is_mobile;
-		global $DOMAIN_NAME,$website,$lang,$AdminUser,$arrUser,$LoginInfo,$currentUser;
-
+		global $is_mobile,$DOMAIN_NAME,$website,$lang,$AdminUser,$arrUser,$LoginInfo,$currentUser,$AuthUserName,$database, $_REQUEST, $DBprefix,$employer_data;
 		
 		include("../include/texts_".$lang.".php");
 		
 		include("pages_structure.php");
-		include("wysiwyg/detect_browser.php");
-		
-		global $AuthUserName,$lang,$website,$database, $_REQUEST, $DBprefix;
+		include("wysiwyg/detect_browser.php");		
+                
 		$iKEY = "AZ8007";
 		$DN=2;
 		$this->pageHTML=$website->TemplateHTML;
@@ -123,8 +120,9 @@ class AdminPage
 			$logo_html .= '<a class="navbar-brand text-logo admin-user-text-logo custom-color" href="http://'.$DOMAIN_NAME.'/EMPLOYERS/index.php">'.stripslashes($main_admin["logo_text"]).'</a>';
 		}
 		else
-		{
-			$logo_html .= '<img src="../images/logo.png" class="img-responsive site-logo"/>';
+		{ //Company logo
+                        $logo = $employer_data['logo'];
+			$logo_html .= '<img src="../images/employers/logo/' . $logo .'" class="img-responsive site-logo"/>';
 		}
 		
 		$this->pageHTML = str_replace("<site logo/>",$logo_html,$this->pageHTML);

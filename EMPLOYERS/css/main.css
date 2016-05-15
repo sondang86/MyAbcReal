@@ -975,6 +975,8 @@ body {
 {
     position:relative;
     top:-10px;
+    left: -15px;
+    width: 130px;
 }
 
 .no-left-padding
