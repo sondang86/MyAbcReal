@@ -17,8 +17,8 @@ $application_management_oLinkActions=array("list","approved","rejected");
 $jobs_oLinkTexts=array($M_NEW_JOB,$MY_JOB_ADS,$M_COURSES,$M_BANNERS,$EXPIRED_ADS);
 $jobs_oLinkActions=array("add","my","courses","banners","expired_ads");
 
-$jobseekers_oLinkTexts=array($SEARCH);
-$jobseekers_oLinkActions=array("search");
+$jobseekers_oLinkTexts=array($SEARCH,$M_BROWSE);
+$jobseekers_oLinkActions=array("search","list");
 
 if($website->GetParam("CHARGE_TYPE")==0||$website->GetParam("CHARGE_TYPE")==3)
 {

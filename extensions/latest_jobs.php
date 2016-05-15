@@ -30,7 +30,7 @@ $db->orderBy($DBprefix."jobs.date", "DESC");
 
 
 //Pagination options
-$reload="http://localhost/vieclambanthoigian.com.vn/viec-lam-moi-nhat/?";//Link href
+$reload="http://$DOMAIN_NAME/viec-lam-moi-nhat/?";//Link href
 //Set current page to 1 if empty
 if (isset($_GET['trang'])){
     $current_page = filter_input(INPUT_GET, 'trang', FILTER_SANITIZE_NUMBER_INT);
@@ -54,7 +54,7 @@ $latest_jobs = $db->arraybuilder()->paginate("jobs", $current_page,$latest_jobs_
     <div class="col-md-12 category-details">
         <section class="row">
             <figure class="col-md-3">
-                <img src="http://<?php echo $DOMAIN_NAME?>/uploaded_images/<?php echo $job['logo']?>.jpg">
+                <img src="http://<?php echo $DOMAIN_NAME?>/images/employers/logo/<?php echo $job['logo']?>">
                 <p><a href="<?php echo $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $job["employer_id"], $website->seoURL($job['company']));?>" class="sub-text underline-link"><?php echo $M_MORE_JOBS_FROM;?> <?php echo stripslashes($job["company"]);?></a></p>
                 <p><a href="<?php echo $website->check_SEO_link("companyInfo", $SEO_setting, $job["employer_id"]), $website->seoURL($job['company']);?>" class="sub-text underline-link"><?php echo $M_COMPANY_DETAILS;?></a></p>
             </figure>

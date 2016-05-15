@@ -150,10 +150,12 @@ $website->Statistics();
 
         //Slider
         $('.bxslider').bxSlider({
+            auto: true,
             slideWidth: 150,
             minSlides: 2,
             maxSlides: 8,
-            slideMargin: 30
+            slideMargin: 30,
+            pager: false
         });
 
     });

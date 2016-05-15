@@ -21,16 +21,8 @@ if
 	echo '</a>';
 }
 else
-if
-(
-	$this->admin_settings["logo_text"]!=""
-)
-{
-//	echo '<a class="navbar-brand text-logo custom-color" href="http://'.$this->domain.'">'.stripslashes($this->admin_settings["logo_text"]).'</a>';
-}
-else
-{
-	echo '<img src="images/logo.png" class="img-responsive site-logo"/>';
+if ( $this->admin_settings["logo_text"]== "" ){
+	echo '<a href="/vieclambanthoigian.com.vn/index.php"><img src="/vieclambanthoigian.com.vn/images/logo.png" class="img-responsive site-logo"/></a>';
 }
 
 

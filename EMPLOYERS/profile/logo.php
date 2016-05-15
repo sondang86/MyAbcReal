@@ -35,7 +35,7 @@ if (isset($_POST['submit'])){
 
     // resize the image to exactly 100x100 pixels by using the "crop from center" method
     //  and if there is an error, check what the error is about
-    if (!$image->resize(250, 150, ZEBRA_IMAGE_CROP_CENTER)) {
+    if (!$image->resize(250, 0, ZEBRA_IMAGE_CROP_CENTER)) {
 
         // if there was an error, let's see what the error is about
         switch ($image->error) {
@@ -93,7 +93,7 @@ if (isset($_POST['submit'])){
         <div class="row">                        
             <section class="col col-6">
                 <label class="logo">                    
-                    <img src="/vieclambanthoigian.com.vn/images/employers/logo/<?php echo $employer_data['logo']?>" height="125" width="250">
+                    <img src="/vieclambanthoigian.com.vn/images/employers/logo/<?php echo $employer_data['logo']?>" id="preview" height="125" width="250">
                 </label>
             </section>
         </div>
@@ -102,7 +102,7 @@ if (isset($_POST['submit'])){
             <section class="col col-6 uploadForm">
                 <input id="uploadFile" placeholder="Tên tập tin" name="upload_name" disabled="disabled"/>
                 <p class="btn btn-default btn-file">
-                    Chọn <input id="uploadBtn" type="file" name="file" class="upload" required/>
+                    Chọn <input id="logo" type="file" name="file" class="upload" required/>
                 </p>
             </section>
         </div>
@@ -164,5 +164,14 @@ if (isset($_POST['submit'])){
         });
         
     });   
+    
+    /*file upload validation*/
+    
+    
+    /*Preview image before upload*/
+    $("#logo").change(function() {
+        previewImage(this);
+    });
+    /*Preview image before upload*/
     
 </script>

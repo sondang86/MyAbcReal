@@ -38,46 +38,9 @@ if(
 	");
 ?>
 <!--http://bxslider.com/options-->
-<script>
-    /**Slide show list featured jobs home page*/
-//    $(document).ready(function(){
-//        $('.bxslider').bxSlider({
-//            slideWidth: 250,
-//            minSlides: 2,
-//            maxSlides: 4,
-//            moveSlides: 4,
-//            slideMargin: 10,
-//            adaptiveHeight: true,
-//            nextSelector: '#bx-next',
-//            prevSelector: '#bx-prev',
-//            nextText: 'Trang kế tiếp →',
-//            prevText: '← Trang sau',
-//            pager: true,
-//            pagerType: 'short',
-//        });
-//    });
-</script>
+
 <div class="home-panel">
-    <section class="container">
-        <!--FEATURED JOBS-->
-        <!--    <div class="bxslider">
-        <?php // foreach ($featured_jobs as $featured_job) :?>
-                <div class="item slide">
-                    <div class="thumbnail">
-                        <img src="thumbnails/<?php // echo $featured_job['logo']?>.jpg" alt="nyc subway">
-                        <span class="postdate"><?php // echo date('M d Y',$featured_job['date'])?></span>
-                    </div>
-                        
-                    <h5><strong><a href="index.php?mod=details&id=<?php // echo $featured_job['id']?>&lang=vn"><?php // echo $website->limitCharacters($featured_job['title'],50)?></a></strong></h5>
-                        
-                    <p><small><?php // echo $website->limitCharacters($featured_job['message'], 100)?></small> </p>
-                        
-                    <p class="readmore"><a href="index.php?mod=details&id=<?php // echo $featured_job['id']?>&lang=vn">Chi tiết &raquo;</a></p>
-                </div>
-                 post #1  
-        <?php // endforeach;?>
-            </div>-->
-                
+    <section class="container">                
         <div class="outside">
             <p><span id="bx-prev"></span> | <span id="bx-next"></span></p>
         </div>
@@ -148,13 +111,15 @@ if(
             <?php endif;?>
             
         </div>
-    </section>   
+    </section> 
+    
+    <!--BROWSE JOBS-->
     <section class="browser-jobs">
         <div class="container">
             <nav class="row">
                 <ul class="col-md-12 nav navbar-nav navbar-left">
                     <li>Browse jobs :</li> 
-                    <li class="active"><a href="#"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/all-jobs-icon.png"> All jobs</a></li>
+                    <li class="active"><a href="http://<?php echo $DOMAIN_NAME?>/viec-lam-moi-nhat/"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/all-jobs-icon.png"> All jobs</a></li>
                     <li><a href="#"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/jobs-by-company-icon.png"> Job by Company</a></li>
                     <li><a href="#"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/jobs-by-category-icon.png"> Job by Category</a></li>
                     <li><a href="#"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/jobs-by-location-icon.png"> Job by Location</a></li>

@@ -651,17 +651,23 @@ class SiteManager
                     
 		if(isset($_REQUEST["mod"])||isset($_REQUEST["page"]))
 		{
-			$this->TemplateHTML = str_replace('<a href="http://www.netartmedia.net/jobsportal','<a rel="nofollow" href="http://www.netartmedia.net/jobsportal',$this->TemplateHTML);
-		}
-		else
-		{
-                    
+			$this->TemplateHTML = str_replace('<a href="#','<a rel="nofollow" href="#',$this->TemplateHTML);
 		}
                     
-		if(!isset($_REQUEST["mod"])&&(!isset($_REQUEST["page"])||(isset($_REQUEST["page"])&&$_REQUEST["page"]=="en_Home")))
-		{
-			array_push($arrTags, array("carousel","carousel_tag.php"));
-		}
+//		if(!isset($_REQUEST["mod"])&&(!isset($_REQUEST["page"])||(isset($_REQUEST["page"])&&$_REQUEST["page"]=="en_Home")))
+//		{
+//			array_push($arrTags, array("carousel","carousel_tag.php"));
+//		}
+                
+                if(     
+                    //Display this only in home page
+                    !isset($_REQUEST["mod"])&&!isset($_REQUEST["page"]) 
+                    ||( isset($_REQUEST["page"]) &&( $_REQUEST["page"]=="en_Home" 
+                    || $_REQUEST["page"]=="vn_Trang chủ" ))
+                ) {
+                    array_push($arrTags, array("carousel","carousel_tag.php"));
+                }
+                
 		array_push($arrTags, array("logo","logo_tag.php"));
 		array_push($arrTags, array("home_panel","home_panel_tag.php"));
 		array_push($arrTags, array("saved_jobs","saved_jobs_tag.php"));

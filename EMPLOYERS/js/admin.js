@@ -211,3 +211,19 @@ function CheckAll(source)
         checkboxes[i].checked = source.checked;
         }
 }
+
+/*
+* Preview image before upload
+* http://stackoverflow.com/questions/18694437/how-to-preview-image-before-uploading-in-jquery
+*/
+
+function previewImage(input) {
+   if (input.files && input.files[0]) {
+       var reader = new FileReader();
+       reader.onload = function(e) {
+           $('#preview').attr('src', e.target.result);
+       };
+
+       reader.readAsDataURL(input.files[0]);
+   }
+}

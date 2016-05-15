@@ -72,7 +72,7 @@
         </section> 
         
         <figure class="col-md-4">
-            <img src="http://localhost/vieclambanthoigian.com.vn/uploaded_images/90945453.jpg" width="300" class="img-responsive" alt="Prudential">
+            <img src="http://<?php echo $DOMAIN_NAME;?>/images/employers/logo/<?php echo $company_info['logo']?>" width="300" class="img-responsive" alt="Prudential">
         </figure>
     </div>     
     <div class="tabbable row">
@@ -200,6 +200,7 @@
                                         if(data.status == 1){
                                             $.alert(data.message);
                                             $("#danh-gia :input").attr("disabled", true);
+                                            $("#form-danh-gia").hide("1");    
                                         } else {
                                             $.alert(data.message);
                                         }
@@ -220,93 +221,96 @@
                     
                 <!--REVIEW-->
                 <form id="danh-gia" class="tab-pane fade sky-form">
-                    <header>
-                        <p>Đánh giá công ty <?php echo $company_info['company']?></p>
-                        <small>Đánh giá khách quan của bạn về công ty, mọi thông tin đánh giá sai lệch sẽ bị xóa và ban nick</small>
-                    </header>
+                    <div id="form-danh-gia">
+                        <header>
+                            <p>Đánh giá công ty <?php echo $company_info['company']?></p>
+                            <small>Đánh giá khách quan của bạn về công ty, mọi thông tin đánh giá sai lệch sẽ bị xóa và ban nick không cần báo trước</small>
+                        </header>
 
-                    <fieldset>	
+                        <fieldset>	
 
-                        <section>
-                            <label class="input">
-                                <i class="icon-append fa fa-envelope-o"></i>
-                                <input type="email" name="review_email" id="review_email" placeholder="Email" value="<?php echo $jobseeker_username;?>" disabled>
-                            </label>
-                        </section>
+                            <section>
+                                <label class="input">
+                                    <i class="icon-append fa fa-envelope-o"></i>
+                                    <input type="email" name="review_email" id="review_email" placeholder="Email" value="<?php echo $jobseeker_username;?>" disabled>
+                                </label>
+                            </section>
 
-                        <section>
-                            <label class="input">
-                                <i class="icon-append fa fa-user"></i>
-                                <input type="text" name="review_name" id="review_name" placeholder="Tên">
-                            </label>
-                        </section>
+                            <section>
+                                <label class="input">
+                                    <i class="icon-append fa fa-user"></i>
+                                    <input type="text" name="review_name" id="review_name" placeholder="Tên">
+                                </label>
+                            </section>
 
-                        <section>
-                            <label class="label"></label>
-                            <label class="textarea">
-                                <i class="icon-append fa fa-comment"></i>
-                                <textarea rows="3" name="review" id="review" placeholder="Nhận xét"></textarea>
-                            </label>
-                        </section>
+                            <section>
+                                <label class="label"></label>
+                                <label class="textarea">
+                                    <i class="icon-append fa fa-comment"></i>
+                                    <textarea rows="3" name="review" id="review" placeholder="Nhận xét"></textarea>
+                                </label>
+                            </section>
 
-                        <section>
-                            <div class="rating review_reliable">
-                                <input type="radio" name="review_reliable" value="5" id="reliable-5">
-                                <label for="reliable-5"><i class="fa fa-star"></i></label>
-                                <input type="radio" name="review_reliable" value="4" id="reliable-4">
-                                <label for="reliable-4"><i class="fa fa-star"></i></label>
-                                <input type="radio" name="review_reliable" value="3" id="reliable-3">
-                                <label for="reliable-3"><i class="fa fa-star"></i></label>
-                                <input type="radio" name="review_reliable" value="2" id="reliable-2">
-                                <label for="reliable-2"><i class="fa fa-star"></i></label>
-                                <input type="radio" name="review_reliable" value="1" id="reliable-1">
-                                <label for="reliable-1"><i class="fa fa-star"></i></label>
-                                Độ tin cậy
-                            </div>						
+                            <section>
+                                <div class="rating review_reliable">
+                                    <input type="radio" name="review_reliable" value="5" id="reliable-5">
+                                    <label for="reliable-5"><i class="fa fa-star"></i></label>
+                                    <input type="radio" name="review_reliable" value="4" id="reliable-4">
+                                    <label for="reliable-4"><i class="fa fa-star"></i></label>
+                                    <input type="radio" name="review_reliable" value="3" id="reliable-3">
+                                    <label for="reliable-3"><i class="fa fa-star"></i></label>
+                                    <input type="radio" name="review_reliable" value="2" id="reliable-2">
+                                    <label for="reliable-2"><i class="fa fa-star"></i></label>
+                                    <input type="radio" name="review_reliable" value="1" id="reliable-1">
+                                    <label for="reliable-1"><i class="fa fa-star"></i></label>
+                                    Độ tin cậy
+                                </div>						
 
-                            <div class="rating review_professional">
-                                <input type="radio" name="review_professional" value="5" id="professional-5">
-                                <label for="professional-5"><i class="fa fa-star"></i></label>
-                                <input type="radio" name="review_professional" value="4" id="professional-4">
-                                <label for="professional-4"><i class="fa fa-star"></i></label>
-                                <input type="radio" name="review_professional" value="3" id="professional-3">
-                                <label for="professional-3"><i class="fa fa-star"></i></label>
-                                <input type="radio" name="review_professional" value="2" id="professional-2">
-                                <label for="professional-2"><i class="fa fa-star"></i></label>
-                                <input type="radio" name="review_professional" value="1" id="professional-1">
-                                <label for="professional-1"><i class="fa fa-star"></i></label>
-                                Tính chuyên nghiệp
-                            </div>				
+                                <div class="rating review_professional">
+                                    <input type="radio" name="review_professional" value="5" id="professional-5">
+                                    <label for="professional-5"><i class="fa fa-star"></i></label>
+                                    <input type="radio" name="review_professional" value="4" id="professional-4">
+                                    <label for="professional-4"><i class="fa fa-star"></i></label>
+                                    <input type="radio" name="review_professional" value="3" id="professional-3">
+                                    <label for="professional-3"><i class="fa fa-star"></i></label>
+                                    <input type="radio" name="review_professional" value="2" id="professional-2">
+                                    <label for="professional-2"><i class="fa fa-star"></i></label>
+                                    <input type="radio" name="review_professional" value="1" id="professional-1">
+                                    <label for="professional-1"><i class="fa fa-star"></i></label>
+                                    Tính chuyên nghiệp
+                                </div>				
 
-                            <div class="rating review_overall">
-                                <input type="radio" name="review_overall" class="review_overall" value="5" id="overall-5">
-                                <label for="overall-5"><i class="fa fa-star"></i></label>
-                                <input type="radio" name="review_overall" class="review_overall" value="4" id="overall-4">
-                                <label for="overall-4"><i class="fa fa-star"></i></label>
-                                <input type="radio" name="review_overall" class="review_overall" value="3" id="overall-3">
-                                <label for="overall-3"><i class="fa fa-star"></i></label>
-                                <input type="radio" name="review_overall" class="review_overall" value="2" id="overall-2">
-                                <label for="overall-2"><i class="fa fa-star"></i></label>
-                                <input type="radio" name="review_overall" class="review_overall" value="1" id="overall-1">
-                                <label for="overall-1"><i class="fa fa-star"></i></label>
-                                Tổng thể
-                            </div>
+                                <div class="rating review_overall">
+                                    <input type="radio" name="review_overall" class="review_overall" value="5" id="overall-5">
+                                    <label for="overall-5"><i class="fa fa-star"></i></label>
+                                    <input type="radio" name="review_overall" class="review_overall" value="4" id="overall-4">
+                                    <label for="overall-4"><i class="fa fa-star"></i></label>
+                                    <input type="radio" name="review_overall" class="review_overall" value="3" id="overall-3">
+                                    <label for="overall-3"><i class="fa fa-star"></i></label>
+                                    <input type="radio" name="review_overall" class="review_overall" value="2" id="overall-2">
+                                    <label for="overall-2"><i class="fa fa-star"></i></label>
+                                    <input type="radio" name="review_overall" class="review_overall" value="1" id="overall-1">
+                                    <label for="overall-1"><i class="fa fa-star"></i></label>
+                                    Tổng thể
+                                </div>
 
-                            <div class="review_anonymous clearfix">
-                                <!--<span>Select</span>-->
-                                <label class="checkbox">
-                                    <input type="checkbox" name="checkbox" id="review_anonymous" checked><i></i>Ẩn danh                                     
-                                </label>                                
-                            </div>
-                        </section>
-                    </fieldset>
-                    <footer>
-                        <button type="submit" id="submit" class="button">Gửi đánh giá</button>
-                    </footer>                        
+                                <div class="review_anonymous clearfix">
+                                    <!--<span>Select</span>-->
+                                    <label class="checkbox">
+                                        <input type="checkbox" name="checkbox" id="review_anonymous" checked><i></i>Ẩn danh                                     
+                                    </label>                                
+                                </div>
+                            </section>
+                        </fieldset>
+                        <footer>
+                            <button type="submit" id="submit" class="button">Gửi đánh giá</button>
+                        </footer>  
+                    </div>
+                    <fieldset id="reviewed" style="display:none">
+                        <h4>Cảm ơn bạn đã viết đánh giá.</h4>
+                    </fieldset> 
                 </form>
-                <section id="reviewed" style="display:none">
-                    <h4>Cảm ơn bạn đã viết đánh giá.</h4>
-                </section> 
+                
                 <section id="alreadyReviewed" style="display:none">
                     <h4>Bạn đã đánh giá rồi.</h4>
                 </section>

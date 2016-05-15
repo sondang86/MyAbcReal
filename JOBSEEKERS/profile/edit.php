@@ -199,7 +199,6 @@
             
             <section class="submit">
                 <input class="btn btn-primary" type="submit" name="update_form" value="Save">
-                <!--<input class="btn btn-primary" type="submit" name="update_form" value="Save">-->
             </section>
         </fieldset>
     </form>		

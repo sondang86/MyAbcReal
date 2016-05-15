@@ -33,9 +33,9 @@
     <div class="row recruiterDetails">
         <!--COMPANY INFO-->
         <section class="col-md-3 col-xs-12">
-            <p><a href="<?php $website->check_SEO_link("companyInfo",$SEO_setting, $company['id'], $website->seoUrl($company['company']))?>"><?php echo $company['company']?></a></p>
+            <!--<p><a href="<?php $website->check_SEO_link("companyInfo",$SEO_setting, $company['id'], $website->seoUrl($company['company']))?>"><?php echo $company['company']?></a></p>-->
             <a href="<?php $website->check_SEO_link("companyInfo",$SEO_setting, $company['id'], $website->seoUrl($company['company']))?>">
-                <img align="left" class="img-right-margin img-responsive" src="http://<?php echo $DOMAIN_NAME?>/uploaded_images/<?php echo $company['logo']?>.jpg">
+                <img align="left" class="img-right-margin img-responsive" src="http://<?php echo $DOMAIN_NAME?>/images/employers/logo/<?php echo $company['logo']?>">
             </a>
         </section>
         

@@ -117,7 +117,6 @@ if(isset($_POST['delete_submitted']) && ($_POST['delete_submitted'] == '1')){
     <section class="col-md-2 navigation-tabs">
         <?php 
             echo LinkTile("home","welcome",$M_DASHBOARD,"","blue");
-//            echo LinkTile("documents","list",$M_MY_FILES,"","green");
         ?>
     </section>
 </div>

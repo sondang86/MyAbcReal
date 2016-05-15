@@ -3,10 +3,17 @@
     global $db, $commonQueries, $categories, $salaries,$experience_list, $positions, $locations, $education;
 ?>
 <!--NAVIGATION TAB-->
+
 <div class="row">
-    <section class="col-md-9"></section>
-    <section class="col-md-3 pull-right">
-        <?php echo LinkTile("jobseekers","list",$M_BROWSE,"","yellow");?>
+    <section class="col-md-10">
+        <h4><?php $commonQueries->flash('message');?></h4>
+        <p></p>
+        <h5></h5>            
+    </section>
+    <section class="col-md-2 navigation-tabs">
+        <?php 
+            echo LinkTile("home","welcome",$M_DASHBOARD,"","blue");
+        ?>
     </section>
 </div>
 

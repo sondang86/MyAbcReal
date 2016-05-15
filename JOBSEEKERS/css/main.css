@@ -1277,10 +1277,6 @@ body {
     padding-top: 15px;
 }
 
-.navigation-tabs a{
-    float: right;
-}
-
 .save_cancel {
     margin-top: 10px;
     margin-bottom: 20px;
@@ -1289,6 +1285,10 @@ body {
 .navigation-tabs {
     margin-top:15px;
     margin-bottom: 20px;
+}
+
+.navigation-tabs a{
+    float: right;
 }
 
 .CVcreator-description {

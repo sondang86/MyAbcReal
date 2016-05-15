@@ -977,6 +977,7 @@ body {
     top:-10px;
     left: -15px;
     width: 130px;
+    height: 70px;
 }
 
 .no-left-padding
@@ -1370,6 +1371,15 @@ input[type="submit"]{
 
 .navigation-tab {
     width: 100% !important;
+}
+
+.navigation-tabs {
+    margin-top:15px;
+    margin-bottom: 20px;
+}
+
+.navigation-tabs a{
+    float: right;
 }
 
 .inline-buttons {

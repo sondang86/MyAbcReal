@@ -29,7 +29,7 @@ $jobs_by_employerId = $commonQueries->jobs_by_employerId($employerId);
                 <div class="col-md-12 category-details">
                     <section class="row">
                         <figure class="col-md-3">
-                            <img src="http://<?php echo $DOMAIN_NAME?>/uploaded_images/<?php echo $job['logo']?>.jpg">
+                            <img src="http://<?php echo $DOMAIN_NAME?>/images/employers/logo/<?php echo $job['logo']?>">
                             <!--<p><a href="<?php echo $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $job["employer_id"],$website->seoURL($job["company"]));?>" class="sub-text underline-link"><?php echo $M_MORE_JOBS_FROM;?> <?php echo stripslashes($job["company"]);?></a></p>-->
                             <p><a href="<?php echo $website->check_SEO_link("companyInfo", $SEO_setting, $job["employer_id"],$website->seoURL($job['company']));?>" class="sub-text underline-link"><?php echo $M_COMPANY_DETAILS;?></a></p>
                         </figure>

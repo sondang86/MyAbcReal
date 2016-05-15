@@ -79,7 +79,7 @@ $segment = $website->getURL_segment($website->currentURL());
             <div class="col-md-12 joblist">
                 <a href="<?php $website->check_SEO_link("details", $SEO_setting, $featured_job['job_id'],$featured_job['SEO_title']);?>">
                     <section class="banner">
-                        <img alt="SKP Business Consulting LLP" src="http://<?php echo $DOMAIN_NAME;?>/uploaded_images/<?php echo $featured_job['logo']?>.jpg" width="120" height="50">
+                        <img alt="SKP Business Consulting LLP" src="http://<?php echo $DOMAIN_NAME;?>/images/employers/logo/<?php echo $featured_job['logo']?>" width="120" height="50">
                     </section>
                     <p title="<?php echo $featured_job['title']?>" class="desig"><?php echo $featured_job['title']?></p>
                     <p class="company">

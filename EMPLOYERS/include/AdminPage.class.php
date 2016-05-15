@@ -120,9 +120,15 @@ class AdminPage
 			$logo_html .= '<a class="navbar-brand text-logo admin-user-text-logo custom-color" href="http://'.$DOMAIN_NAME.'/EMPLOYERS/index.php">'.stripslashes($main_admin["logo_text"]).'</a>';
 		}
 		else
-		{ //Company logo
+		{       //Company logo
                         $logo = $employer_data['logo'];
-			$logo_html .= '<img src="../images/employers/logo/' . $logo .'" class="img-responsive site-logo"/>';
+                        if (($logo) !== ""){
+                            $logo_html .= '<img src="../images/employers/logo/' . $logo .'" class="img-responsive site-logo"/>';
+                            
+                        } else { //Default logo sample will be set
+                            $logo_html .= '<img src="../images/employers/logo/sample.jpg" class="img-responsive site-logo"/>';
+                        }
+                        
 		}
 		
 		$this->pageHTML = str_replace("<site logo/>",$logo_html,$this->pageHTML);
