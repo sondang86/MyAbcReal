@@ -3,17 +3,26 @@ if(!defined('IN_SCRIPT')) die("");
 global $db, $commonQueries;
 ?>
 <div class="row">
-    <section class="col-md-8 col-sm-4 col-xs-12">
+    <section class="col-md-6 col-sm-3 col-xs-12">
         <h4><?php $commonQueries->flash('message');?></h4>
         <p></p>
-        <h5><?php echo $CONSULT_LIST_APPLIED;?></h5>            
+        <h5><?php echo $CONSULT_LIST_APPLIED;?></h5>   
     </section>
     
-    <section class="col-md-2 col-sm-4 col-xs-6">
-        <?php echo LinkTile("application_management","approved",$M_APPROVED_APPLICATIONS,"","green");?>
+    <section class="col-md-2 col-sm-3 col-xs-4">
+        <?php 
+            echo LinkTile( "application_management","approved",$M_APPROVED_APPLICATIONS,"","green");
+        ?>
     </section>
-    <section class="col-md-2 col-sm-4 col-xs-6">
-        <?php echo LinkTile("application_management","rejected",$M_REJECTED_APPLICATIONS,"","red");?>
+    <section class="col-md-2 col-sm-3 col-xs-4">
+        <?php 
+            echo LinkTile( "application_management","list",$JOBSEEKERS_APPLIED,"","blue");
+        ?>
+    </section>
+    <section class="col-md-2 col-sm-3 col-xs-4">
+        <?php 
+            echo LinkTile("application_management","rejected",$M_REJECTED_APPLICATIONS,"","red");
+        ?>
     </section>
 </div>
 

@@ -8,8 +8,8 @@
 $oLinkTexts=array($M_HOME,$M_PROFILE2,$M_MY_LISTINGS,$M_APPLICATIONS,$M_JOBSEEKERS);
 $oLinkActions=array("home","profile","jobs","application_management","jobseekers");
 
-$profile_oLinkTexts=array($M_VIEW,$M_EDIT,$M_LOGO,$M_VIDEO_PRESENTATION);
-$profile_oLinkActions=array("current","edit","logo","video");
+$profile_oLinkTexts=array($M_VIEW,$M_EDIT,$M_LOGO);
+$profile_oLinkActions=array("current","edit","logo");
 
 $application_management_oLinkTexts=array($JOBSEEKERS_APPLIED,$M_APPROVED_APPLICATIONS,$M_REJECTED_APPLICATIONS);
 $application_management_oLinkActions=array("list","approved","rejected");

@@ -1,20 +1,16 @@
 <?php
 // Jobs Portal 
-// Copyright (c) All Rights Reserved, NetArt Media 2003-2015
-// Check http://www.netartmedia.net/jobsportal for demos and information
-?><?php
 if(!defined('IN_SCRIPT')) die("");
 global $db;
 //Get company info
-$company_info = $db->where('username', "$AuthUserName")->getOne('employers');
-    
+$company_info = $db->where('username', "$AuthUserName")->getOne('employers');    
 ?>
 <div class="row">
     <div class="col-md-3 col-md-push-9">        
 <?php
     echo LinkTile("profile","edit",$M_EDIT,"","green");
     echo LinkTile("profile","logo",$M_LOGO,"","yellow");
-    echo LinkTile("profile","video",$M_VIDEO_PRESENTATION,"","lila");        
+//    echo LinkTile("profile","video",$M_VIDEO_PRESENTATION,"","lila");        
 ?>              
     </div>        
     <div class="col-md-9 col-md-pull-3">
@@ -54,6 +50,10 @@ $company_info = $db->where('username', "$AuthUserName")->getOne('employers');
                 <tr height="38">
                     <td width="120" valign="middle"><label>Trang web:</label></td>
                     <td valign="middle"><p><?php echo $company_info['website']?></p></td>
+                </tr>
+                <tr height="38">
+                    <td width="120" valign="middle"><label>Video giới thiệu:</label></td>
+                    <td valign="middle"><p><?php echo $company_info['video_id']?></p></td>
                 </tr>
             </tbody>
         </table>

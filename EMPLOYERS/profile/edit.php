@@ -34,7 +34,7 @@ if (isset($_POST['submit'])){
     <div class="col-md-3 col-md-push-9">        
 <?php
     echo LinkTile("profile","logo",$M_LOGO,"","yellow");
-    echo LinkTile("profile","video",$M_VIDEO_PRESENTATION,"","lila");        
+//    echo LinkTile("profile","video",$M_VIDEO_PRESENTATION,"","lila");        
 ?>              
     </div>        
     <div class="col-md-9 col-md-pull-3">
@@ -76,6 +76,10 @@ if (isset($_POST['submit'])){
                     <tr height="38">
                         <td width="120"><label>Trang web:</label></td>
                         <td><input type="text" name="website" value="<?php echo $company_info['website']?>"></td>
+                    </tr>
+                    <tr height="38">
+                        <td width="120"><label>Video giới thiệu:</label></td>
+                        <td><input type="text" name="video_id" value="<?php echo $company_info['video_id']?>"></td>
                     </tr>
                     <tr height="38">
                         <td width="120"></td>

@@ -7,38 +7,30 @@ if(!defined('IN_SCRIPT')) die("");
 global $db;
 ?>
 
-<div class="fright">
+<div class="row">
+    <section class="col-md-6 col-sm-3 col-xs-12"></section>
     
-	<?php
-	
-	echo LinkTile
-		 (
-			"application_management",
-			"approved",
-			$M_APPROVED_APPLICATIONS,
-			"",
-			"green"
-		 );
-		 
-		 
-			echo LinkTile
-		 (
-			"application_management",
-			"list",
-			$JOBSEEKERS_APPLIED,
-			"",
-			"blue"
-		 );
-	
-	
-	?>
-    
+    <section class="col-md-2 col-sm-3 col-xs-4">
+        <?php 
+            echo LinkTile( "application_management","approved",$M_APPROVED_APPLICATIONS,"","green");
+        ?>
+    </section>
+    <section class="col-md-2 col-sm-3 col-xs-4">
+        <?php 
+            echo LinkTile( "application_management","list",$JOBSEEKERS_APPLIED,"","blue");
+        ?>
+    </section>
+    <section class="col-md-2 col-sm-3 col-xs-4">
+        <?php 
+            echo LinkTile("application_management","rejected",$M_REJECTED_APPLICATIONS,"","red");
+        ?>
+    </section>
 </div>
-<div class="clear"></div>
+
 <h3>
 	<?php echo $M_REJECTED_JOBSEEKERS;?>
 </h3>
-<br/>
+
 <?php
 	
 	$QueryListCVs_Rejected ="

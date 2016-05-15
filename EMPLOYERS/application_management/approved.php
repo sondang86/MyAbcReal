@@ -2,60 +2,71 @@
 if(!defined('IN_SCRIPT')) die("");
 global $db;
 ?>
+
 <div class="row">
-    <div class="col-md-4 col-sm-6 col-xs-12 fright">        
-    <?php   
-        echo LinkTile("application_management","rejected",$M_REJECTED_APPLICATIONS,"","red");
-        echo LinkTile("application_management","list",$JOBSEEKERS_APPLIED,"","blue");
-    ?>
-    </div>
-</div>    
+    <section class="col-md-6 col-sm-3 col-xs-12"></section>
+    
+    <section class="col-md-2 col-sm-3 col-xs-4">
+        <?php 
+            echo LinkTile( "application_management","approved",$M_APPROVED_APPLICATIONS,"","green");
+        ?>
+    </section>
+    <section class="col-md-2 col-sm-3 col-xs-4">
+        <?php 
+            echo LinkTile( "application_management","list",$JOBSEEKERS_APPLIED,"","blue");
+        ?>
+    </section>
+    <section class="col-md-2 col-sm-3 col-xs-4">
+        <?php 
+            echo LinkTile("application_management","rejected",$M_REJECTED_APPLICATIONS,"","red");
+        ?>
+    </section>
+</div>
 
 <h3><?php echo $M_JOBSEEKERS_APPROVED;?></h3>
 
 
-<?php
-        
+<?php        
     $QueryListCVs_Approved ="
-			(SELECT ".
-			 $DBprefix."jobseekers.first_name,"
-			.$DBprefix."jobseekers.last_name,"
-			.$DBprefix."jobseekers.id,"
-			.$DBprefix."apply.id id2,"
-			.$DBprefix."apply.posting_id,"
-			.$DBprefix."apply.jobseeker,"
-			.$DBprefix."apply.date
-			FROM
-			".$DBprefix."apply,".$DBprefix."jobseekers,".$DBprefix."jobs
-			WHERE 
-			".$DBprefix."jobseekers.username=".$DBprefix."apply.jobseeker 
-			AND
-			".$DBprefix."jobs.id=".$DBprefix."apply.posting_id 
-			AND
-			".$DBprefix."jobs.employer='".$AuthUserName."'
-			AND
-			".$DBprefix."apply.status = '1')
-			UNION 
-			(SELECT ".
-			 $DBprefix."jobseekers_guests.first_name,"
-			.$DBprefix."jobseekers_guests.last_name,"
-			.$DBprefix."jobseekers_guests.id,"
-			.$DBprefix."apply.id id2,"
-			.$DBprefix."apply.posting_id,"
-			.$DBprefix."apply.jobseeker,"
-			.$DBprefix."apply.date
-			FROM
-			".$DBprefix."apply,".$DBprefix."jobseekers_guests,".$DBprefix."jobs
-			WHERE 
-			".$DBprefix."jobseekers_guests.id=".$DBprefix."apply.guest_id 
-			AND
-			".$DBprefix."jobs.id=".$DBprefix."apply.posting_id 
-			AND
-			".$DBprefix."jobs.employer='".$AuthUserName."'
-			AND 
-			guest=1
-			AND
-			".$DBprefix."apply.status = '1')
+            (SELECT ".
+             $DBprefix."jobseekers.first_name,"
+            .$DBprefix."jobseekers.last_name,"
+            .$DBprefix."jobseekers.id,"
+            .$DBprefix."apply.id id2,"
+            .$DBprefix."apply.posting_id,"
+            .$DBprefix."apply.jobseeker,"
+            .$DBprefix."apply.date
+            FROM
+            ".$DBprefix."apply,".$DBprefix."jobseekers,".$DBprefix."jobs
+            WHERE 
+            ".$DBprefix."jobseekers.username=".$DBprefix."apply.jobseeker 
+            AND
+            ".$DBprefix."jobs.id=".$DBprefix."apply.posting_id 
+            AND
+            ".$DBprefix."jobs.employer='".$AuthUserName."'
+            AND
+            ".$DBprefix."apply.status = '1')
+            UNION 
+            (SELECT ".
+             $DBprefix."jobseekers_guests.first_name,"
+            .$DBprefix."jobseekers_guests.last_name,"
+            .$DBprefix."jobseekers_guests.id,"
+            .$DBprefix."apply.id id2,"
+            .$DBprefix."apply.posting_id,"
+            .$DBprefix."apply.jobseeker,"
+            .$DBprefix."apply.date
+            FROM
+            ".$DBprefix."apply,".$DBprefix."jobseekers_guests,".$DBprefix."jobs
+            WHERE 
+            ".$DBprefix."jobseekers_guests.id=".$DBprefix."apply.guest_id 
+            AND
+            ".$DBprefix."jobs.id=".$DBprefix."apply.posting_id 
+            AND
+            ".$DBprefix."jobs.employer='".$AuthUserName."'
+            AND 
+            guest=1
+            AND
+            ".$DBprefix."apply.status = '1')
 	";
 
     $CVs_approved = $db->withTotalCount()->rawQuery($QueryListCVs_Approved); 
