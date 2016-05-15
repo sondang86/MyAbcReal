@@ -863,6 +863,26 @@
             $jobseeker_categories = $this->_db->withTotalCount()->where('jobseeker_id', $jobseeker_id)->get('jobseeker_categories');
             return $jobseeker_categories;
         }
+        
+        /**
+        * Get jobseeker languages skills
+        * 
+        * @access public
+        * @param jobseeker_id jobseeker id
+        * 
+        *         
+        */        
+        public function getJobseeker_languages($jobseeker_id){
+            $selected_cols = array(
+                $this->_dbPrefix."jobseeker_languages.updated_at",
+                $this->_dbPrefix."skill_languages.language_name",$this->_dbPrefix."skill_languages.language_name_en",
+                $this->_dbPrefix."language_levels.level_name",$this->_dbPrefix."language_levels.level_name_en"
+            );
+            $this->_db->join("language_levels", $this->_dbPrefix."jobseeker_languages.level_id=".$this->_dbPrefix."language_levels.level", "LEFT");
+            $this->_db->join("skill_languages", $this->_dbPrefix."jobseeker_languages.language_id=".$this->_dbPrefix."skill_languages.language_id", "LEFT");
+            $jobseeker_languagues = $this->_db->withTotalCount()->where('jobseeker_id', $jobseeker_id)->get('jobseeker_languages', NULL, $selected_cols);
+            return $jobseeker_languagues;
+        }
             
             
         /**

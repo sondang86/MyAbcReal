@@ -12,6 +12,7 @@ $jobseeker_username = $jobseeker_resume['username'];
 $jobseeker_profile = $commonQueries->getJobseeker_profile($jobseeker_resume['username']);
 $jobseeker_categories = $commonQueries->getJobseeker_categories($jobseeker_profile['jobseeker_id']);
 $jobseeker_locations = $commonQueries->getJobseeker_locations($jobseeker_profile['jobseeker_id']);
+$jobseeker_languagues = $commonQueries->getJobseeker_languages($jobseeker_profile['jobseeker_id']);
 $jobseeker_data = $db->where('username', "$jobseeker_username")->getOne("jobseeker_resumes");
 
 //Count view to the database
@@ -88,13 +89,16 @@ $commonQueries->Insert_View($jobseeker_data['id'], $AuthUserName, $jobseeker_use
                     </aside>
                 </label>
                 
+                <!--LANGUAGES-->
+                <?php foreach ($jobseeker_languagues as $jobseeker_languague) :?>
                 <label>
-                    <span><b><?php echo $M_FOREIGN_LANGUAGE;?>/Level: </b></span>
+                    <span><b><?php echo $M_FOREIGN_LANGUAGE;?>/Trình độ: </b></span>
                     <aside>
-                        <?php echo $jobseeker_resume['language_name']?>
-                        <?php echo $jobseeker_resume['language_level_name']?>
+                        <?php echo $jobseeker_languague['language_name']?>/
+                        <?php echo $jobseeker_languague['level_name']?>
                     </aside>
                 </label>
+                <?php endforeach;?>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-12 cv-details">
                 <label>
@@ -172,6 +176,11 @@ $commonQueries->Insert_View($jobseeker_data['id'], $AuthUserName, $jobseeker_use
                 <?php echo nl2br($jobseeker_data['skills']);?>
         </div>        
         
+        <!--REFERENCER INFORMATION-->
+        <div class="jobseeker-messageArea" name="js-careerObjective" class="jobseeker-messageArea" rows="5" style="width: 100%">
+            <div class="jobseeker-title"><h4><?php echo $M_CAREER_OBJECTIVE;?></h4></div>
+                <?php echo nl2br($jobseeker_data['referrers']);?>
+        </div>
         
                 
         <!--LIST ATTACHED FILES-->        

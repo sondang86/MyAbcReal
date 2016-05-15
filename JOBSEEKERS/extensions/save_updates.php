@@ -41,10 +41,11 @@ if (isset($_POST['request_type']) && $_POST['request_type'] == "language_update"
             "language_id"   => $language,
             "jobseeker_id"  => $jobseeker_id,
             "level_id"      => $languages_selected['js_language_level'][$key],
-            "resume_id"     => $resume_id
+            "resume_id"     => $resume_id,
+            "updated_at"    => time()
         );
-        $updateColumns = Array ("language_iddsa","level_id","resume_id");        
-        $db->onDuplicate($updateColumns);
+//        $updateColumns = Array ("language_id","level_id","resume_id");        
+//        $db->onDuplicate($updateColumns);
         $id = $db->insert('jobseeker_languages', $data);
         if(!$id){
             echo 'problem';die;

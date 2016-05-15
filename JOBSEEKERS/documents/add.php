@@ -122,38 +122,6 @@ if(isset($_POST['delete_submitted']) && ($_POST['delete_submitted'] == '1')){
     </section>
 </div>
 
-<style>
-    .uploadForm {
-        position: relative;
-    }
-    
-    #uploadFile {
-        display: block;
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        width: 80%;
-        height: 39px;
-        padding: 6px 10px;
-        outline: none;
-        border-width: 2px;
-        border-style: solid;
-        border-radius: 0;
-        background: #fff;
-        font: 15px/23px 'Open Sans', Helvetica, Arial, sans-serif;
-        color: #CCCCCC;
-        appearance: normal;
-        -moz-appearance: none;
-        -webkit-appearance: none;
-        margin-bottom: 10px;
-    }
-    
-    .fileUpload {
-        position: absolute;
-        top: -7px;
-        right: 5px;
-        width: 10%;
-    }
-</style>
 
 <form action="" method="POST" enctype="multipart/form-data" id="sky-form" class="sky-form">
     <header>Tùy chỉnh tập tin cá nhân của bạn</header>
