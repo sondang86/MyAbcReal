@@ -2,7 +2,7 @@
 if(!defined('IN_SCRIPT')) die("");
 global $db, $commonQueries;
 ?>
-<script src="../js/jquery.modal.js" type="text/javascript"></script>
+
 
 <div class="row">
     <section class="col-md-10">
@@ -39,7 +39,7 @@ global $db, $commonQueries;
                 </ul>
                 <div class="pricing-footer">
                     
-                    <a href="#sky-form" class="btn btn-default btn-lg modal-opener">CHỌN <i class="glyphicon glyphicon-play-circle"></i></a>
+                    <a href="#" class="btn btn-default btn-lg">CHỌN <i class="glyphicon glyphicon-play-circle"></i></a>
                 </div>
             </section>
         </div>
@@ -59,9 +59,9 @@ global $db, $commonQueries;
                     <li>Tài khoản đóng dấu "Tài khoản xác thực", tin đóng dấu tin xác thực nhằm gia tăng sự tin tưởng của ứng viên</li>
                     <li>Tin hiển thị tại tối đa 3 ngành nghề.</li>                    
                 </ul>
-                <div class="pricing-footer">
-                    
-                    <a href="#sky-form" class="btn btn-default btn-lg modal-opener">CHỌN<i class="glyphicon glyphicon-play-circle"></i></a>
+                
+                <div class="pricing-footer">                    
+                    <a href="index.php?category=home&action=credit_selection&type=2" class="btn btn-default btn-lg">CHỌN<i class="glyphicon glyphicon-play-circle"></i></a>
                 </div>
             </section>
         </div>
@@ -83,59 +83,15 @@ global $db, $commonQueries;
                     <li>Tin hiển thị tối đa trong 5 ngành nghề (3 ngành nghề khách chọn, 2 ngành nghề CSKH hỗ trợ)</li>
                     <li>Quảng cáo CPM hiển thị luân phiên trong box Tuyển dụng nhanh ở tất cả các việc làm chi tiết</li>
                 </ul>
-                <div class="pricing-footer">
-                    
-                    <a href="#sky-form" class="btn btn-default btn-lg modal-opener">CHỌN <i class="glyphicon glyphicon-play-circle"></i></a>
+                
+                <div class="pricing-footer">                    
+                    <a href="index.php?category=home&action=credit_selection&type=3" class="btn btn-default btn-lg">CHỌN <i class="glyphicon glyphicon-play-circle"></i></a>
                 </div>
             </section>
         </div>
     </div>        
 </div>
-    
-<form action="" id="sky-form" class="sky-form sky-form-modal">
-    <header>Login form</header>
-        
-    <fieldset>					
-        <section>
-            <div class="row">
-                <label class="label col col-4">E-mail</label>
-                <div class="col col-8">
-                    <label class="input">
-                        <i class="icon-append fa fa-user"></i>
-                        <input type="email" name="email" id="email">
-                    </label>
-                </div>
-            </div>
-        </section>
-            
-        <section>
-            <div class="row">
-                <label class="label col col-4">Password</label>
-                <div class="col col-8">
-                    <label class="input">
-                        <i class="icon-append fa fa-lock"></i>
-                        <input type="password" name="password" id="password">
-                    </label>
-                    <div class="note"><a href="#">Forgot password?</a></div>
-                </div>
-            </div>
-        </section>
-            
-        <section>
-            <div class="row">
-                <div class="col col-4"></div>
-                <div class="col col-8">
-                    <label class="checkbox"><input type="checkbox" name="checkbox-inline" checked><i></i>Keep me logged in</label>
-                </div>
-            </div>
-        </section>
-    </fieldset>
-    <footer>
-        <button type="submit" class="button">Log in</button>
-        <a href="#" class="button button-secondary modal-closer">Close</a>
-    </footer>
-</form>
-    
+
 <style>    
     .db-pricing-seven:hover {
         margin-top: 5px;

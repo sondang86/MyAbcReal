@@ -82,6 +82,7 @@ $all_jobs           = $db->get('jobs');
 $experience_list    = $db->get('job_experience');
 $positions          = $db->get('positions');
 $education          = $db->get('education');
+$gender             = $db->get('gender');
 $employer_data = $db->where('username', "$AuthUserName")->getOne('employers');
     
 if(file_exists("../ADMIN/texts_".$lang.".php"))

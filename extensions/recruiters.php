@@ -19,8 +19,7 @@
     //Count total jobs of employer
     $db->where("employer", $company['username'])->withTotalCount()->get("jobs");    
 ?>
-<div class="recruiter">
-    
+<div class="recruiter">    
     <!--TOTAL JOBS-->
     <div class="row recruiterTitle">
         <section class="col-md-12">
