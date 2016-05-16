@@ -46,6 +46,9 @@
     //calculate average overall scores
     $cols_overall = array('AVG(review_reliable)', 'AVG(review_professional)', 'AVG(review_overall)');
     $overall_scores = $db->where('company_id', $company_id)->get('company_reviews', NULL, $cols_overall);
+    
+    //Set to default logo if empty
+    $company_logo = $commonQueries->setDefault_logoIfEmpty($company_info['logo'], "employers");
 ?>
     
 <div class="page-wrap">
@@ -72,7 +75,7 @@
         </section> 
         
         <figure class="col-md-4">
-            <img src="http://<?php echo $DOMAIN_NAME;?>/images/employers/logo/<?php echo $company_info['logo']?>" width="300" class="img-responsive" alt="Prudential">
+            <img src="<?php echo $company_logo?>" width="300" class="img-responsive">
         </figure>
     </div>     
     <div class="tabbable row">

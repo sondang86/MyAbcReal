@@ -1,6 +1,6 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
-global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,$featured_jobs,$SEO_setting;
+global $db,$categories, $categories_subs,$commonQueries, $locations, $companies, $SEO_setting;
 $website->Title("Việc làm nổi bật");
 $website->MetaDescription("abc");
 $website->MetaKeywords("def");
@@ -37,7 +37,7 @@ if (isset($_GET['trang'])){
 }
 // set page limit to 2 results per page. 20 by default
 $db->pageLimit = 3;
-$featured_jobs = $db->arraybuilder()->paginate("jobs", $current_page,$featured_jobs_columns);    
+$featured_jobs = $db->arraybuilder()->paginate("jobs", $current_page,$featured_jobs_columns);  
 ?>
     
 <div class="row">
@@ -48,10 +48,13 @@ $featured_jobs = $db->arraybuilder()->paginate("jobs", $current_page,$featured_j
         
     <!--LIST JOBS-->
         <?php foreach ($featured_jobs as $job) :?>
+        <?php //Set to default logo if empty
+            $company_logo = $commonQueries->setDefault_logoIfEmpty($job['logo'], "employers");
+        ?>
     <div class="col-md-12 category-details">
         <section class="row">
             <figure class="col-md-3">
-                <img src="http://<?php echo $DOMAIN_NAME?>/uploaded_images/<?php echo $job['logo']?>.jpg">
+                <img src="<?php echo $company_logo;?>">
                 <p>Việc làm khác từ TEK</p>
                 <p>Thông tin công ty</p>
             </figure>

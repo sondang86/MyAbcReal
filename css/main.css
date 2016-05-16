@@ -2642,6 +2642,15 @@ div.upload input:hover {
     margin: 25px 0;
 }
 
+.site-logo {
+    position:relative;
+    top:-10px;
+    left: -15px;
+    width: 130px;
+    height: 70px;
+}
+
+
 /* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {
     .jobseeker-info li{

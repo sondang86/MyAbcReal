@@ -25,7 +25,7 @@ if (isset($_GET['id'])){
             <div class="col-md-12 category-details">
                 <section class="row">
                     <figure class="col-md-3">
-                        <img src="http://<?php echo $DOMAIN_NAME?>/uploaded_images/<?php echo $job['company_logo']?>.jpg">
+                        <img src="<?php echo $commonQueries->setDefault_logoIfEmpty($job['company_logo'], "employers")?>">
                         <p><a href="<?php echo $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $job["employer_id"], $website->seoURL($job["company"]));?>">Việc làm khác từ <?php echo $job["company"]?></a></p>
                         <p><a href="<?php echo $website->check_SEO_link("companyInfo", $SEO_setting, $job["employer_id"], $website->seoURL($job["company"]));?>">Thông tin công ty</a></p>
                     </figure>

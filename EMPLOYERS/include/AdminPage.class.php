@@ -123,10 +123,10 @@ class AdminPage
 		{       //Company logo
                         $logo = $employer_data['logo'];
                         if (($logo) !== ""){
-                            $logo_html .= '<img src="../images/employers/logo/' . $logo .'" class="img-responsive site-logo"/>';
+                            $logo_html .= '<a href="http://'.$DOMAIN_NAME.'/EMPLOYERS"><img src="../images/employers/logo/' . $logo .'" class="img-responsive site-logo"/></a>';
                             
                         } else { //Default logo sample will be set
-                            $logo_html .= '<img src="../images/employers/logo/sample.jpg" class="img-responsive site-logo"/>';
+                            $logo_html .= '<a href="http://'.$DOMAIN_NAME.'/EMPLOYERS"><img src="../images/employers/logo/sample.jpg" class="img-responsive site-logo"/></a>';
                         }
                         
 		}

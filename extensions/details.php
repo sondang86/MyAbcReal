@@ -6,6 +6,9 @@
     
     if ($job_details !== FALSE){ 
         $commonQueries->Update_job_views($job_id);//count job views for every refresh
+        
+    //Set to default logo if empty
+    $company_logo = $commonQueries->setDefault_logoIfEmpty($job_details['logo'], "employers");
 ?>    
 <a id="go_back_button" class="btn btn-default btn-xs pull-right no-decoration margin-bottom-5" href="javascript:GoBack()">Quay lại</a>    
 <article class="job-details-wrap">
@@ -64,7 +67,7 @@
         
         <aside class="col-md-3 job-details-aside">
             <a href="<?php $website->check_SEO_link("companyInfo", $SEO_setting, $job_details['employer_id'],$website->seoUrl($job_details['company']));?>">
-                <img class="logo-border img-responsive" src="http://<?php echo $DOMAIN_NAME;?>/images/employers/logo/<?php echo $job_details['logo']?>" alt="<?php echo $job_details['company']?>">
+                <img class="logo-border img-responsive" src="<?php echo $company_logo;?>" alt="<?php echo $job_details['company']?>">
             </a>
             <a href="<?php $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $job_details['employer_id'],$website->seoUrl($job_details['company']));?>" class="sub-text underline-link">Việc làm khác từ <?php echo $job_details['company']?></a>            
             <a href="<?php $website->check_SEO_link("companyInfo", $SEO_setting, $job_details['employer_id'],$website->seoUrl($job_details['company']));?>" class="sub-text underline-link">Thông tin công ty</a>

@@ -1279,6 +1279,22 @@
                 
             return $bytes;
         }
+        
+        /**
+        *   set to a default logo if the value is empty
+        *   @param var logo logo's name
+        *   @param var user_type could be employers or jobseekers, default is employers
+        */
+        public function setDefault_logoIfEmpty($logo="", $user_type="employers"){
+            global $DOMAIN_NAME;
+            if ($logo !== ""){
+                $company_logo = "http://$DOMAIN_NAME/images/$user_type/logo/" . $logo;
+            } else {
+                $company_logo = "http://$DOMAIN_NAME/images/commons/jobs_portal_logo_demo.jpg";
+            }
+            
+            return $company_logo;
+        }
             
     }
 ?>

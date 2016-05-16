@@ -127,8 +127,8 @@ class AdminPage
 			$logo_html .= '<a class="navbar-brand text-logo admin-user-text-logo custom-color" href="http://'.$DOMAIN_NAME.'/JOBSEEKERS/index.php">'.stripslashes($main_admin["logo_text"]).'</a>';
 		}
 		else
-		{
-			$logo_html .= '<img src="../images/logo.png" class="img-responsive site-logo"/>';
+		{   //Default is vieclambanthoigian.com.vn logo if blank logo
+                    $logo_html .= '<a href="http://'.$DOMAIN_NAME.'/JOBSEEKERS"><img src="../images/commons/jobs_portal_logo_demo.jpg" class="img-responsive site-logo"/></a>';
 		}
 		
 		$this->pageHTML = str_replace("<site logo/>",$logo_html,$this->pageHTML);

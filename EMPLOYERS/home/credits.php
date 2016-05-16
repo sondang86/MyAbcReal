@@ -1,10 +1,28 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
+global $db, $commonQueries;
 ?>
+<script src="../js/jquery.modal.js" type="text/javascript"></script>
 
-<?php echo LinkTile("home","welcome",$M_DASHBOARD,"","blue");?> 
+<div class="row">
+    <section class="col-md-10">
+        <h4><?php $commonQueries->flash('message');?></h4>
+        <p></p>
+        <h5></h5>            
+    </section>
+        
+    <section class="col-md-2 navigation-tabs">
+        <?php echo LinkTile("home","welcome",$M_DASHBOARD,"","blue");?>
+    </section>
+</div>
     
-<div class="row ">
+<div class="row subscription-main">
+    <div class="col-xs-12">
+        <h4>Bạn đang sử dụng gói tuyển dụng Free</h4>
+        <h5>Để đăng ký gói dịch vụ mới, bạn vui lòng chọn gói đăng ký rồi làm theo form hướng dẫn nhoa</h5>
+        <h5>Vui lòng gọi hotline 0984363189 nếu bạn có bất kỳ vướng mắc gì</h5>
+    </div>
+        
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
         <div class="db-wrapper">
             <section class="db-pricing-seven">
@@ -16,12 +34,12 @@ if(!defined('IN_SCRIPT')) die("");
                         
                     <li>Đăng tối đa 3 tin</li>
                     <li>Xem 100 hồ sơ ứng viên/ ngày</li>
-                    <li>Sửa, đóng, làm mới tin</li>
+                    <li>Sửa, đóng, làm mới tin sau 3 ngày</li>
                     <li>Tin hiển thị tại tối đa 1 ngành nghề.</li>  
                 </ul>
                 <div class="pricing-footer">
                     
-                    <a href="#" class="btn btn-default btn-lg">BUY <i class="glyphicon glyphicon-play-circle"></i></a>
+                    <a href="#sky-form" class="btn btn-default btn-lg modal-opener">CHỌN <i class="glyphicon glyphicon-play-circle"></i></a>
                 </div>
             </section>
         </div>
@@ -43,7 +61,7 @@ if(!defined('IN_SCRIPT')) die("");
                 </ul>
                 <div class="pricing-footer">
                     
-                    <a href="#" class="btn btn-default btn-lg">BUY<i class="glyphicon glyphicon-play-circle"></i></a>
+                    <a href="#sky-form" class="btn btn-default btn-lg modal-opener">CHỌN<i class="glyphicon glyphicon-play-circle"></i></a>
                 </div>
             </section>
         </div>
@@ -67,13 +85,57 @@ if(!defined('IN_SCRIPT')) die("");
                 </ul>
                 <div class="pricing-footer">
                     
-                    <a href="#" class="btn btn-default btn-lg">BUY <i class="glyphicon glyphicon-play-circle"></i></a>
+                    <a href="#sky-form" class="btn btn-default btn-lg modal-opener">CHỌN <i class="glyphicon glyphicon-play-circle"></i></a>
                 </div>
             </section>
         </div>
     </div>        
 </div>
-
+    
+<form action="" id="sky-form" class="sky-form sky-form-modal">
+    <header>Login form</header>
+        
+    <fieldset>					
+        <section>
+            <div class="row">
+                <label class="label col col-4">E-mail</label>
+                <div class="col col-8">
+                    <label class="input">
+                        <i class="icon-append fa fa-user"></i>
+                        <input type="email" name="email" id="email">
+                    </label>
+                </div>
+            </div>
+        </section>
+            
+        <section>
+            <div class="row">
+                <label class="label col col-4">Password</label>
+                <div class="col col-8">
+                    <label class="input">
+                        <i class="icon-append fa fa-lock"></i>
+                        <input type="password" name="password" id="password">
+                    </label>
+                    <div class="note"><a href="#">Forgot password?</a></div>
+                </div>
+            </div>
+        </section>
+            
+        <section>
+            <div class="row">
+                <div class="col col-4"></div>
+                <div class="col col-8">
+                    <label class="checkbox"><input type="checkbox" name="checkbox-inline" checked><i></i>Keep me logged in</label>
+                </div>
+            </div>
+        </section>
+    </fieldset>
+    <footer>
+        <button type="submit" class="button">Log in</button>
+        <a href="#" class="button button-secondary modal-closer">Close</a>
+    </footer>
+</form>
+    
 <style>    
     .db-pricing-seven:hover {
         margin-top: 5px;
@@ -81,7 +143,7 @@ if(!defined('IN_SCRIPT')) die("");
         -ms-transition: margin-top 0.25s ease 0s;
         transition: margin-top 0.25s ease 0s;
     }
-    
+        
     .db-pricing-seven {
         margin-bottom: 30px;
         margin-top: 30px;
@@ -89,14 +151,14 @@ if(!defined('IN_SCRIPT')) die("");
         border: 1px solid #C5C2C2;
         background-color: #EDEDED;
     }
-    
+        
     .db-pricing-seven ul {
         list-style: none;
         margin: 0;
         text-align: center;
         padding-left: 0px;
     }
-    
+        
     .db-pricing-seven ul li.price {
         background-color: #fff;
         padding: 40px 20px 20px 20px;
@@ -105,7 +167,7 @@ if(!defined('IN_SCRIPT')) die("");
         color: #353c3e;
         font-weight: 900;
     }
-
+        
     .db-pricing-seven ul li {
         border-bottom: solid 1px #D8D8D8;
         padding-top: 20px;
@@ -113,9 +175,13 @@ if(!defined('IN_SCRIPT')) die("");
         cursor: pointer;
         text-transform: uppercase;
     }
-    
+        
     .db-pricing-seven .pricing-footer {
         padding: 20px;
     }
     
+    .subscription-main {
+        background-color: #f1f4f4;
+    }
+        
 </style>

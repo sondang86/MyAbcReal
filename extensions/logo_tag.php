@@ -22,7 +22,7 @@ if
 }
 else
 if ( $this->admin_settings["logo_text"]== "" ){
-	echo '<a href="/vieclambanthoigian.com.vn/index.php"><img src="/vieclambanthoigian.com.vn/images/logo.png" class="img-responsive site-logo"/></a>';
+	echo '<a href="/vieclambanthoigian.com.vn/index.php"><img src="/vieclambanthoigian.com.vn/images/commons/jobs_portal_logo_demo.jpg" class="img-responsive site-logo"/></a>';
 }
 
 

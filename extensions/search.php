@@ -66,13 +66,15 @@
 <div class="contentArea">
     <?php if($jobs_found['totalCount'] > 0){
         foreach ($jobs_found['data'] as $job):
+            //Set to default logo if empty
+             $company_logo = $commonQueries->setDefault_logoIfEmpty($job['company_logo'], "employers");
     ?>
     <article class="row joblistArea">
         <!--JOB DETAILS-->
         <header class="col-md-12 joblist">            
             <a href="<?php $website->check_SEO_link("details", $SEO_setting, $job['job_id'],$job['SEO_title'])?>">
                 <section class="banner">
-                    <img src="http://<?php echo $DOMAIN_NAME;?>/uploaded_images/<?php echo $job['company_logo']?>.jpg" width="120" height="50">
+                    <img src="<?php echo $company_logo;?>" width="120" height="50">
                 </section>
                 <p title="<?php echo $job['title']?>" class="desig"><?php echo $job['title']?></p>
                 <p class="company">
