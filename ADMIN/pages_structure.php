@@ -12,8 +12,8 @@ $oLinkActions=array("home","jobs","users","settings","site_management","template
 $jobs_oLinkTexts=array($M_ADS_LIST,$M_NEW_JOB_AD,$M_USER_MESSAGES,$M_JOB_ALERTS2,$M_FIELDS,$M_APPLICATIONS,$M_UPLOADED_FILES);
 $jobs_oLinkActions=array("list","add","messages","job_alerts","fields","applications","uploaded_files");
 
-$users_oLinkTexts=array($M_EMPLOYERS,$M_JOBSEEKERS,$M_JOBSEEKER_FIELDS,$M_EMPLOYER_FIELDS,$M_REVIEWS);
-$users_oLinkActions=array("employers","jobseekers","fields","empl_fields","reviews");
+$users_oLinkTexts=array($M_EMPLOYERS,$M_JOBSEEKERS,$M_JOBSEEKER_FIELDS,$M_EMPLOYER_FIELDS,$M_REVIEWS, 'Manage subscription requests');
+$users_oLinkActions=array("employers","jobseekers","fields","empl_fields","reviews", 'subscription_requests');
 	
 $home_oLinkTexts=array($M_DASHBOARD,$M_MESSAGES,$M_LOGIN_REPORT,$M_CHANGE_PWD);
 $home_oLinkActions=array("welcome","messages","connections","password");

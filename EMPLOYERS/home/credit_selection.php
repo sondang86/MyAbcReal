@@ -1,19 +1,38 @@
 <?php
     if(!defined('IN_SCRIPT')) die("");
     global $db, $commonQueries, $locations, $gender, $employer_data;
+    $subscriptions = $db->get('subscriptions');
     $company_sizes = $db->get('employers_company_size');
-
+   
+if (isset($_POST['submit'])){
+    //Insert on duplicate update    
+    $data = array(
+        'employer_id'           => $employer_data['id'],
+        'subscription_status'   => $_POST['subscription_status'],
+        'date'                  => time(),
+        'employer_message'      => $_POST['employer_message'],
+        'is_processed'          => 0, //Default is not processed, until admin approved 
+    );
+    
+    $updateColumns = Array ("subscription_status", "date", "employer_message", "employer_id");
+    $db->onDuplicate($updateColumns);
+    $id = $db->insert ('subscription_employer_request', $data);
+    
+    if (!$id){
+        echo 'problem';die;
+    }
+    
+    //Succeed, back to question page
+    $commonQueries->flash('message', $commonQueries->messageStyle('info', "Yêu cầu của bạn đang được xử lý..."));
+    $website->redirect("index.php?category=home&action=credit_selection");    
+}  
+    
 //If credit id not exists, redirect back to credits area with message
     
 //Show register form
 
 ?>
-<style>
-    .captcha label{
-        display: block;
-        margin-top: 15px;
-    }
-</style>
+
 <h5><?php $commonQueries->flash('message')?></h5>
 
 <form action="" id="credit-selection" class="sky-form" method="POST">
@@ -91,17 +110,17 @@
             <section class="col col-3">
                 <label class="input">
                     <i class="icon-append fa fa-phone"></i>
-                    <input type="text" name="mobile" placeholder="Số điện thoại" value="<?php echo $employer_data['phone'];?>">
+                    <input type="text" placeholder="Số điện thoại" value="<?php echo $employer_data['phone'];?>" readonly>
                     <b class="tooltip tooltip-bottom-right">Số điện thoại của bạn</b>
                 </label>
             </section>
             
             <section class="col col-3">
                 <label class="select">
-                    <select disabled>
-                        <option value="0" selected disabled>Giới tính</option>
-                        <?php foreach ($gender as $value) :?>
-                        <option value="<?php echo $value['gender_id']?>" <?php if($employer_data['gender'] == $value['gender_id']){echo "selected";}?>><?php echo $value['name']?></option>
+                    <select name="subscription_status">
+                        <option value="0" disabled>Gói đăng ký</option>
+                        <?php foreach ($subscriptions as $subscription) :?>
+                        <option value="<?php echo $subscription['id']?>" <?php if($employer_data['subscription'] == $subscription['id']){echo "selected";}?>><?php echo $subscription['name']?></option>
                         <?php endforeach;?>
                     </select>
                     <i></i>
@@ -116,7 +135,7 @@
             <section class="col col-12">
                 <label class="textarea">
                     <i class="icon-append fa fa-comment"></i>
-                    <textarea type="text" name="another_request" placeholder="Yêu cầu khác"></textarea>
+                    <textarea type="text" name="employer_message" placeholder="Yêu cầu khác"></textarea>
                     <b class="tooltip tooltip-bottom-right">Những yêu cầu bạn chưa rõ về gói đăng ký v.v..</b>
                 </label>
             </section>
@@ -145,6 +164,12 @@
     </footer>
 </form>
 
+<style>
+    .captcha label{
+        display: block;
+        margin-top: 15px;
+    }
+</style>
 
 <script type="text/javascript">
     $(function()
