@@ -8,13 +8,13 @@ if (isset($_POST['submit'])){
     //Insert on duplicate update    
     $data = array(
         'employer_id'           => $employer_data['id'],
-        'subscription_status'   => $_POST['subscription_status'],
+        'subscription_request_type'   => $_POST['subscription_request_type'],
         'date'                  => time(),
         'employer_message'      => $_POST['employer_message'],
         'is_processed'          => 0, //Default is not processed, until admin approved 
     );
     
-    $updateColumns = Array ("subscription_status", "date", "employer_message", "employer_id");
+    $updateColumns = Array ("subscription_request_type", "date", "employer_message", "employer_id");
     $db->onDuplicate($updateColumns);
     $id = $db->insert ('subscription_employer_request', $data);
     
@@ -117,7 +117,7 @@ if (isset($_POST['submit'])){
             
             <section class="col col-3">
                 <label class="select">
-                    <select name="subscription_status">
+                    <select name="subscription_request_type">
                         <option value="0" disabled>Gói đăng ký</option>
                         <?php foreach ($subscriptions as $subscription) :?>
                         <option value="<?php echo $subscription['id']?>" <?php if($employer_data['subscription'] == $subscription['id']){echo "selected";}?>><?php echo $subscription['name']?></option>

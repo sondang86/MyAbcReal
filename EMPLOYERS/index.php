@@ -33,8 +33,8 @@ $db = new MysqliDb (Array (
         
 $commonQueries = new CommonsQueries($db);
 
-//Default user session will expire in 1 hour
-$commonQueries->CheckSession("3600");
+//Default user session will expire in 2 hour
+$commonQueries->CheckSession("7200");
 
 $website = new SiteManager();
 $website->isAdminPanel = true;
