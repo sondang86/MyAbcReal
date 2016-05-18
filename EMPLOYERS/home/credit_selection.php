@@ -4,17 +4,21 @@
     $subscriptions = $db->get('subscriptions');
     $company_sizes = $db->get('employers_company_size');
         
+    $current_subscription_request = $commonQueries_Employers->Employer_Subscriptions_request("0",$AuthUserName);
     $current_subscription = $commonQueries_Employers->getCurrent_Subscriptions($AuthUserName);
         
+//    echo "<pre>";
+//    print_r($current_subscription);
+//    echo "</pre>";
         
 if (isset($_POST['submit'])){
     //Insert on duplicate update    
     $data = array(
-        'employer_id'           => $employer_data['id'],
-        'subscription_request_type'   => $_POST['subscription_request_type'],
-        'date'                  => time(),
-        'employer_message'      => $_POST['employer_message'],
-        'is_processed'          => 0, //Default is not processed, until admin approved 
+        'employer_id'                   => $employer_data['id'],
+        'subscription_request_type'     => $_POST['subscription_request_type'],
+        'date'                          => time(),
+        'employer_message'              => $_POST['employer_message'],
+        'is_processed'                  => 0, //Default is not processed, until admin approved 
     );
         
     $updateColumns = Array ("subscription_request_type", "date", "employer_message", "employer_id", 'is_processed');
@@ -34,25 +38,22 @@ if (isset($_POST['submit'])){
 //Show register form
     
 ?>
-    
+
 <h5><?php $commonQueries->flash('message')?></h5>
     
+<?php if($current_subscription_request['totalCount'] !== "0") :?>
+<!--CURRENT SUBSCRIPTION REQUEST-->
 <div class="table-responsive">
+    <h4>Danh sách</h4>
     <table class="table" style="border-color:#eeeeee;border-width:1px 1px 1px 1px;border-style:solid">
         <tbody>
             <tr class="table-tr header-title">
-                <td class="col-md-1"></td>
-                <td class="col-md-1">                                
+                <td class="col-md-2">                                
                     <a class="header-td underline-link" href="#">
                         Ngày yêu cầu
                     </a>
                 </td>
-                <td class="col-md-1">
-                    <a class="header-td underline-link" href="#">
-                        employer
-                    </a>
-                </td>
-                <td class="col-md-1">                                
+                <td class="col-md-2">                                
                     <a class="header-td underline-link" href="#">
                         Gói đăng ký hiện tại
                     </a>
@@ -64,7 +65,7 @@ if (isset($_POST['submit'])){
                     </a>
                 </td>
                                 
-                <td class="col-md-3">
+                <td class="col-md-5">
                     <a class="header-td underline-link" href="#">
                         Lời nhắn
                     </a>
@@ -74,38 +75,23 @@ if (isset($_POST['submit'])){
                         Trạng thái
                     </a>
                 </td>
-                <td class="col-md-2">
-                    
-                </td>
             </tr>
                             
             <tr bgcolor="#ffffff" class="header-title" height="30">
-                <td nowrap="">
-                    <input type="submit" name="delete" value="Xóa" class="btn btn-danger">
-                    <input type="hidden" name="subscription_id" value="1">
-                </td>
-                <td width="20">
-                    18-05-2016                            </td>
-                <td>
-                    dang.viet.son.hp@gmail.com                                <input type="hidden" name="username" value="dang.viet.son.hp@gmail.com">
-                </td>
-                <td>
-                    Gói Basic                            </td>
-                <td>
-                    Miễn phí                                <input type="hidden" name="current_sucscription" value="2">
-                    <input type="hidden" name="sub_request_id" value="1">
-                    <input type="hidden" name="employer_id" value="1">
-                </td>                            
-                <td>
-                    75675757567                                <input type="hidden" name="employer_message" value="75675757567">
-                </td>
-                <td>
-                    Từ chối                            </td>
+                <td width="20"><?php echo date('d-m-Y',$current_subscription_request['data']['date']);?></td>                
+                <td><?php echo $current_subscription_request['data']['subscription_current']?></td>
+                <td><?php echo $current_subscription_request['data']['request_subscription']?></td>                            
+                <td><?php echo $current_subscription_request['data']['employer_message']?></td>
+                <td><?php echo $current_subscription_request['data']['status_name']?></td>
             </tr>
         </tbody>
     </table>
 </div>
-                
+<!--END OF CURRENT SUBSCRIPTION REQUEST-->
+<?php endif;?>
+
+<?php if ($current_subscription_request['totalCount'] == "0"):?>
+<!--SUBSCRIPTION DETAILS-->
 <form action="" id="credit-selection" class="sky-form" method="POST">
     <header>Chi tiết đăng ký gói tuyển dụng - Basic</header>    
     <fieldset>					
@@ -200,7 +186,7 @@ if (isset($_POST['submit'])){
                 <span>Gói đăng ký hiện tại của bạn: </span>
                 <label class="input">
                     <i class="icon-append fa fa-registered"></i>
-                    <input type="text" placeholder="Số điện thoại" value="<?php echo $current_subscription['name'];?>" readonly>
+                    <input type="text" placeholder="Gói đăng ký hiện tại" value="<?php echo $current_subscription['name'];?>" readonly>
                     <b class="tooltip tooltip-bottom-right">Gói đăng ký hiện tại của bạn</b>
                 </label>
             </section>
@@ -255,11 +241,29 @@ if (isset($_POST['submit'])){
         </div>
     </footer>
 </form>
-    
+<!--SUBSCRIPTION DETAILS-->    
+<?php endif;?>
+
 <style>
     .captcha label{
         display: block;
         margin-top: 15px;
+    }
+    
+    .table-tr {
+        height: 44px;
+        background-color: #62B6F0;
+        background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#62B6F0), to(#0056C2));
+        background-image: -webkit-linear-gradient(top, #62B6F0, #0056C2);
+        background-image: -moz-linear-gradient(top, #62B6F0, #0056C2);
+        background-image: -ms-linear-gradient(top, #62B6F0, #0056C2);
+        background-image: -o-linear-gradient(top, #62B6F0, #0056C2);
+        filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#62B6F0, endColorstr=#0056C2);
+        -ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#00A4E8, endColorstr=#0175b8)";
+    }
+    
+    .table-tr td, .header-title td {
+        text-align: center;
     }
 </style>
     
