@@ -1279,3 +1279,12 @@ td
 {
 	visibility:hidden;
 }
+
+/*NAVIGATIONS*/
+
+.header-title {
+    text-align: center;
+}
+.main-nav section a {
+    float: right;
+}

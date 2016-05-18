@@ -99,7 +99,6 @@ if (isset($_POST['submit'])){
     //Showing form submittion
     if(isset($_SESSION['username']) && $_SESSION['user_type'] == "jobseeker"){ //User must logged in as jobseeker to apply this form
             $username = $_SESSION['username'];
-            $password = $_SESSION['user_password'];
             $userFiles = $db->where('user', $username)->get("files", NULL, "file_name");            
             $userInfo = $db->where('username', "$username")->withTotalCount()->getOne("jobseekers");
             $userExists = $db->totalCount;
@@ -109,7 +108,7 @@ if (isset($_POST['submit'])){
             //User already applied for this job
             if($is_applied > "0" ){	
                 echo "<br><span class=\"red-font\"><strong>".$M_ALREADY_APPLIED."</strong></span><br>";		
-            } elseif(($userExists !== "0") && ($userInfo["password"])== $password){//User authenticated, show submitting form ?>
+            } elseif($userExists !== "0"){//User authenticated, show submitting form ?>
     
     
     <form action="" method="POST">

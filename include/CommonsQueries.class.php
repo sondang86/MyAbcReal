@@ -693,7 +693,22 @@
                    ."<strong>$message</strong></div>";
                        
            return $data;
-        }       
+        }
+        
+        /**
+        * redirect with message
+        * 
+        * @access public
+        * @param url url to be redirected
+        * @param message_indicator class of message (info/warning/danger/alert), default is info
+        * @param message message output
+        * 
+        */
+        public function redirectWith_message($url,$message_indicator ,$message){
+            global $website;
+            $this->flash('message', $this->messageStyle($message_indicator, $message));
+            $website->redirect("$url");   
+        }
             
         /**
         * Find jobs by username/employer

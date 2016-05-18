@@ -2,6 +2,8 @@
 $M_HOME_SLIDER="Home Slider";
 $M_LOGO_EXPLANATION="Upload your logo as an image or set it as a text";
 $M_LOGO_TEXT="Logo Text";
+$APPROVED_REQUESTS = 'Yêu cầu đã xác nhận';
+$REJECTED_REQUESTS = 'Yêu cầu bị từ chối';
 
 $M_GOOGLE_ADSENSE="Google AdSense & Analytics";
 $M_LANGUAGE_FILE="Texts & Words";

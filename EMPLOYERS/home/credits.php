@@ -1,6 +1,10 @@
 <?php
-if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries;
+    if(!defined('IN_SCRIPT')) die("");
+    global $db, $commonQueries, $commonQueries_Employers;
+
+    $current_subscription = $commonQueries_Employers->getCurrent_Subscriptions($AuthUserName);
+    
+    print_r($current_subscription);
 ?>
 
 
@@ -18,8 +22,8 @@ global $db, $commonQueries;
     
 <div class="row subscription-main">
     <div class="col-xs-12">
-        <h4>Bạn đang sử dụng gói tuyển dụng Free</h4>
-        <h5>Để đăng ký gói dịch vụ mới, bạn vui lòng chọn gói đăng ký rồi làm theo form hướng dẫn nhoa</h5>
+        <h4>Bạn đang dùng gói <?php echo $current_subscription['name']?></h4>
+        <h5>Để đăng ký gói dịch vụ mới, bạn vui lòng chọn gói đăng ký rồi làm theo form hướng dẫn. Nếu bạn chưa chọn bất cứ đăng ký nào thì mặc định sẽ là gói miễn phí</h5>
         <h5>Vui lòng gọi hotline 0984363189 nếu bạn có bất kỳ vướng mắc gì</h5>
     </div>
         
@@ -39,7 +43,7 @@ global $db, $commonQueries;
                 </ul>
                 <div class="pricing-footer">
                     
-                    <a href="#" class="btn btn-default btn-lg">CHỌN <i class="glyphicon glyphicon-play-circle"></i></a>
+                    <!--<a href="#" class="btn btn-default btn-lg">CHỌN <i class="glyphicon glyphicon-play-circle"></i></a>-->
                 </div>
             </section>
         </div>

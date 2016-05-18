@@ -146,7 +146,7 @@ if (isset($_GET['tim_kiem']) && $_GET['tim_kiem'] == "1"){
         <header class="col-md-12 joblist">            
             <a href="http://<?php echo $DOMAIN_NAME?>/EMPLOYERS/index.php?category=jobseekers&action=cv_details&id=<?php echo $resume['resume_id']?>" target="_blank" title="Chi tiết hồ sơ ứng viên <?php echo $resume['last_name'] . " " . $resume['first_name'];?>">
                 <section class="banner">
-                    <img src="http://<?php echo $DOMAIN_NAME?>/images/jobseekers/profile_pic/<?php echo $resume['resume_id']?>.jpeg" width="120" height="110px">
+                    <img src="http://<?php echo $DOMAIN_NAME?>/images/jobseekers/profile_pic/<?php echo $resume['resume_id']?>.jpg" width="120" height="110px">
                 </section>
                 <p title="<?php echo $resume['resume_title']?>" class="desig"><?php echo $resume['resume_title']?></p>
                 <p class="company">
@@ -215,7 +215,7 @@ if (isset($_GET['tim_kiem']) && $_GET['tim_kiem'] == "1"){
         <header class="col-md-12 joblist">            
             <a href="http://<?php echo $DOMAIN_NAME?>/EMPLOYERS/index.php?category=jobseekers&action=cv_details&id=<?php echo $resume['resume_id']?>" target="_blank" title="Chi tiết hồ sơ ứng viên <?php echo $resume['last_name'] . " " . $resume['first_name'];?>">
                 <section class="banner">
-                    <img src="http://<?php echo $DOMAIN_NAME?>/images/jobseekers/profile_pic/<?php echo $resume['resume_id']?>.jpeg" width="120" height="110px">
+                    <img src="http://<?php echo $DOMAIN_NAME?>/images/jobseekers/profile_pic/<?php echo $resume['resume_id']?>.jpg" width="120" height="110px">
                 </section>
                 <p title="<?php echo $resume['resume_title']?>" class="desig"><?php echo $resume['resume_title']?></p>
                 <p class="company">

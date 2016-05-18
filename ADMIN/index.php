@@ -34,6 +34,7 @@ $db = new MysqliDb (Array (
     ));
         
 $commonQueries = new CommonsQueries($db);
+$commonQueries_Admin = new CommonsQueries_Admin($db);
 
 //Default user session will expire in 2 hour
 $commonQueries->CheckSession("7200");

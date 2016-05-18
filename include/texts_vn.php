@@ -14,6 +14,8 @@ $JOB_DESCRIPTION = "Mô tả công việc";
 $REQUIRES_DESCRIPTION = "Yêu cầu công việc";
 $BENEFITS_DESCRIPTION = "Các quyền lợi được hưởng";
 $PROFILECV_DESCRIPTION = "Yêu cầu hồ sơ";
+$APPROVED_REQUESTS = 'Yêu cầu đã xác nhận';
+$REJECTED_REQUESTS = 'Yêu cầu bị từ chối';
 
 //SonDang
 $M_BROWSE_MAP="Browse by Map";

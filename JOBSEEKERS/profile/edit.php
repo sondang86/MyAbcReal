@@ -151,7 +151,7 @@
                 <span class="col col-1">Ngày sinh:</span>
                 <div class="col col-2">
                     <input type="text" name="dob" id="datePicker" value="<?php if (!empty($jobseeker_profile['dob'])){
-                            $commonQueries->check_nA($value['dob'], date('d-m-Y',$jobseeker_profile['dob']));
+                            echo date('d-m-Y',$jobseeker_profile['dob']);
                         }
                     ?>">
                 </div>
