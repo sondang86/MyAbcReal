@@ -2650,6 +2650,10 @@ div.upload input:hover {
     height: 70px;
 }
 
+.error {
+    display: block;
+}
+
 
 /* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {

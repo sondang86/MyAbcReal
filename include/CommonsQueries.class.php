@@ -579,6 +579,33 @@
                  return FALSE;
              }    
         }
+        
+        /**
+         *  get questionnaire answers by questionnaire id and job id
+         * 
+         *  @param var jobseeker_username jobseeker's username input
+         *  @param var job_id job id input
+         */
+             
+        public function getQuestionnaireAnswers($jobseeker_username, $job_id){
+            $questionnaire_answers_columns = array(
+                $this->_dbPrefix."questionnaire_answers.questionnaire_id as QA_questionnaire_id",
+                $this->_dbPrefix."questionnaire_answers.questionnaire_question_id",
+                $this->_dbPrefix."questionnaire_answers.short_answer",$this->_dbPrefix."questionnaire_answers.job_id",
+                $this->_dbPrefix."questionnaire.question",$this->_dbPrefix."questionnaire.question_type",
+                $this->_dbPrefix."questionnaire.employer",
+                $this->_dbPrefix."questionnaire_questions.question_ask as question_answered",$this->_dbPrefix."questionnaire.question_type",
+            );
+
+            $this->_db->join("questionnaire", $this->_dbPrefix."questionnaire_answers.questionnaire_id=".$this->_dbPrefix."questionnaire.id", "LEFT");
+            $this->_db->join("questionnaire_questions", $this->_dbPrefix."questionnaire_answers.questionnaire_question_id=".$this->_dbPrefix."questionnaire_questions.id", "LEFT");
+            $this->_db->where ($this->_dbPrefix."questionnaire_answers.user", $jobseeker_username);                
+            $this->_db->where ($this->_dbPrefix."questionnaire_answers.job_id", $job_id);               
+            $answers['answers'] = $this->_db->withTotalCount()->get("questionnaire_answers", NULL, $questionnaire_answers_columns);
+            $answers['totalCount'] = $this->_db->totalCount;
+            
+            return $answers;
+        }
             
             
         /**
@@ -633,7 +660,7 @@
                 return TRUE;
             }
             else {
-                echo 'update failed: ' . $db->getLastError();
+                echo 'update failed: ' . $this->_db->getLastError();
             }
         }
             

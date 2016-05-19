@@ -4,7 +4,6 @@
 
     $current_subscription = $commonQueries_Employers->getCurrent_Subscriptions($AuthUserName);
     
-    print_r($current_subscription);
 ?>
 
 

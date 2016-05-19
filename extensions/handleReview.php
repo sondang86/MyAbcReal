@@ -56,8 +56,28 @@ if (isset($_POST['request_type']) && ($_POST['request_type'] == 'reviews_employe
 } 
 //Contact form handling
 elseif (isset($_POST['request_type']) && ($_POST['request_type'] == 'contact_employer')){
+    $employer_email     = filter_input(INPUT_POST, 'employer_email', FILTER_SANITIZE_EMAIL);
+    $contact_email      = filter_input(INPUT_POST, 'contact_email', FILTER_SANITIZE_EMAIL);
+    $title              = filter_input(INPUT_POST, 'contact_title', FILTER_SANITIZE_STRING);
+    $contact_comment    = filter_input(INPUT_POST, 'contact_comment', FILTER_SANITIZE_STRING);
+    $contact_phone      = filter_input(INPUT_POST, 'contact_phone', FILTER_SANITIZE_EMAIL);
+    
+    //Insert message to the user_messages table
+    $data = Array (
+        "date"          => time(),
+        "user_from"     => "$contact_email",
+        "user_to"       => "$employer_email",
+        "subject"       => $title,
+        'message'       => $contact_comment,
+        'contact_phone' => $contact_phone
+    );
+    $id = $db->insert ('user_messages', $data);
+    if(!$id){
+        echo 'there was a problem!!!!!!!!!!';die;
+    }
+    
     //Send mail notification to employer
-    mail(filter_input(INPUT_POST, 'employer_email', FILTER_SANITIZE_EMAIL), filter_input(INPUT_POST, 'contact_title', FILTER_SANITIZE_STRING),filter_input(INPUT_POST, 'contact_comment', FILTER_SANITIZE_STRING));    
+    mail($employer_email, $title, $contact_comment);    
 } 
 //Missing required fields
 else { 

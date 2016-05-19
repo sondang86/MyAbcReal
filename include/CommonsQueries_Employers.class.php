@@ -35,11 +35,11 @@ class CommonsQueries_Employers {
     *   @param var username employer's username    
     */
     
-    public function Employer_Subscriptions_request($status, $username){
+    public function Employer_Subscriptions_request($username){
         $cols = array(
             $this->_dbPrefix."subscription_employer_request.employer_id as employer_id",$this->_dbPrefix."subscription_employer_request.employer_message",
             $this->_dbPrefix."subscription_employer_request.subscription_request_type as sub_request_id",$this->_dbPrefix."subscription_employer_request.date",
-            $this->_dbPrefix."subscription_employer_request.employer_message",
+            $this->_dbPrefix."subscription_employer_request.employer_message",$this->_dbPrefix."subscription_employer_request.is_processed",
             $this->_dbPrefix."employers.username",$this->_dbPrefix."employers.subscription as current_subscription",
             $this->_dbPrefix."apply_status.name as status_name",$this->_dbPrefix."apply_status.name_en as status_name_en",
             $this->_dbPrefix."subscriptions.name as subscription_current",
@@ -53,12 +53,24 @@ class CommonsQueries_Employers {
         
         
         $this->_db->where('username', "$username");        
-        $this->_db->where('is_processed', $status);
+//        $this->_db->where('is_processed', $status);
         
         $subscription_requests['data'] = $this->_db->withTotalCount()->getOne('subscription_employer_request', $cols);
         $subscription_requests['totalCount'] = $this->_db->totalCount;
 
         return $subscription_requests;       
+    }
+    
+    /**
+    *   get subscriptions name based on username 
+    *   @param var username employer's username    
+    */
+    
+    public function get_user_messages($username){
+        $data['user_messages'] = $this->_db->where('user_to', "$username")->withTotalCount()->get('user_messages'); 
+        $data['totalCount'] = $this->_db->totalCount;
+        
+        return $data;
     }
 }
 

@@ -4,11 +4,11 @@
     $subscriptions = $db->get('subscriptions');
     $company_sizes = $db->get('employers_company_size');
         
-    $current_subscription_request = $commonQueries_Employers->Employer_Subscriptions_request("0",$AuthUserName);
+    $current_subscription_request = $commonQueries_Employers->Employer_Subscriptions_request($AuthUserName);
     $current_subscription = $commonQueries_Employers->getCurrent_Subscriptions($AuthUserName);
         
 //    echo "<pre>";
-//    print_r($current_subscription);
+//    print_r($current_subscription_request);
 //    echo "</pre>";
         
 if (isset($_POST['submit'])){
@@ -44,7 +44,7 @@ if (isset($_POST['submit'])){
 <?php if($current_subscription_request['totalCount'] !== "0") :?>
 <!--CURRENT SUBSCRIPTION REQUEST-->
 <div class="table-responsive">
-    <h4>Danh sách</h4>
+    <h4>Chi tiết yêu cầu của bạn</h4>
     <table class="table" style="border-color:#eeeeee;border-width:1px 1px 1px 1px;border-style:solid">
         <tbody>
             <tr class="table-tr header-title">
@@ -90,7 +90,7 @@ if (isset($_POST['submit'])){
 <!--END OF CURRENT SUBSCRIPTION REQUEST-->
 <?php endif;?>
 
-<?php if ($current_subscription_request['totalCount'] == "0"):?>
+<?php if ($current_subscription_request['data']['is_processed'] !== 0):?>
 <!--SUBSCRIPTION DETAILS-->
 <form action="" id="credit-selection" class="sky-form" method="POST">
     <header>Chi tiết đăng ký gói tuyển dụng - Basic</header>    
@@ -214,7 +214,7 @@ if (isset($_POST['submit'])){
     <fieldset>
         <div class="row">
             <section class="col col-12">
-                <span>Những yêu cầu khác:</span>
+                <span>Lời nhắn:</span>
                 <label class="textarea">
                     <i class="icon-append fa fa-comment"></i>
                     <textarea type="text" name="employer_message" placeholder="Yêu cầu khác"></textarea>

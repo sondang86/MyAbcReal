@@ -226,8 +226,7 @@
                 <form id="danh-gia" class="tab-pane fade sky-form">
                     <div id="form-danh-gia">
                         <header>
-                            <p>Đánh giá công ty <?php echo $company_info['company']?></p>
-                            <small>Đánh giá khách quan của bạn về công ty, mọi thông tin đánh giá sai lệch sẽ bị xóa và ban nick không cần báo trước</small>
+                            <p>Đánh giá công ty <?php echo $company_info['company']?></p>                            
                         </header>
 
                         <fieldset>	
@@ -307,6 +306,7 @@
                         </fieldset>
                         <footer>
                             <button type="submit" id="submit" class="button">Gửi đánh giá</button>
+                            <i>Lưu ý: <small>Đánh giá khách quan của bạn về công ty, mọi thông tin đánh giá sai lệch sẽ bị xóa và khóa tài khoản mà không cần báo trước</small></i>
                         </footer>  
                     </div>
                     <fieldset id="reviewed" style="display:none">
@@ -365,19 +365,19 @@
                                 contact_title:{
                                     required: true
                                 },
-                                contact_company:{
-                                    required: true
-                                },
+                                
                                 contact_email:{
                                     required: true
                                 },
                                 contact_phone:{
                                     required: true
                                 },
-                                comment:{
+                                contact_comment:{
                                     required: true
                                 }
-                                
+//                                code: {
+//                                    required: true
+//                                }                                
                             },
                             messages:{
                                 contact_username:{
@@ -386,21 +386,22 @@
                                 contact_title:{
                                     required: 'Vui lòng điền thông tin'
                                 },
-                                contact_company:{
-                                    required: 'Vui lòng điền thông tin'
-                                },
+                                
                                 contact_email:{
                                     required: 'Vui lòng điền thông tin'
                                 },
                                 contact_phone:{
                                     required: 'Vui lòng điền thông tin'
                                 },
-                                comment:{
+                                contact_comment:{
                                     required: 'Vui lòng điền thông tin'
-                                },
+                                }
+//                                code: {
+//                                    required: 'Bạn chưa nhập mã captcha'
+//                                }
                                 
                             },
-                            submitHandler: function(form) {
+                            submitHandler: function() {
                                 var employer_email = "<?php echo $company_info['username']?>";
                                 $.ajax({
                                     type: "POST",
@@ -434,13 +435,14 @@
                                 <section class="col col-6">
                                     <label class="input">
                                         <i class="icon-append fa fa-user"></i>
-                                        <input type="text" name="contact_username" id="contact_username" placeholder="Tên bạn (*)">
+                                        <input type="text" name="contact_username" id="contact_username" placeholder="Tên bạn (*)" required>
                                     </label>
                                 </section>
+                                
                                 <section class="col col-6">
                                     <label class="input">
-                                        <i class="icon-append fa fa-briefcase"></i>
-                                        <input type="text" name="contact_company" id="contact_company" placeholder="Công ty">
+                                        <i class="icon-append fa fa-envelope-o"></i>
+                                        <input type="email" name="contact_email" id="contact_email" placeholder="E-mail (*)" required>
                                     </label>
                                 </section>
                             </div>
@@ -448,14 +450,15 @@
                             <div class="row">
                                 <section class="col col-6">
                                     <label class="input">
-                                        <i class="icon-append fa fa-envelope-o"></i>
-                                        <input type="email" name="contact_email" id="contact_email" placeholder="E-mail (*)">
+                                        <i class="icon-append fa fa-briefcase"></i>
+                                        <input type="text" name="contact_company" id="contact_company" placeholder="Công ty">
                                     </label>
                                 </section>
+                                
                                 <section class="col col-6">
                                     <label class="input">
                                         <i class="icon-append fa fa-phone"></i>
-                                        <input type="tel" name="contact_phone" id="contact_phone" placeholder="Phone">
+                                        <input type="tel" name="contact_phone" id="contact_phone" placeholder="Phone (*)" required>
                                     </label>
                                 </section>
                             </div>
@@ -465,16 +468,27 @@
                             <section>
                                 <label class="input">
                                     <i class="icon-append fa fa-comment"></i>
-                                    <input type="text" name="contact_title" id="contact_title" placeholder="Tiêu đề (*)">
+                                    <input type="text" name="contact_title" id="contact_title" placeholder="Tiêu đề (*)" required>
                                 </label>
                             </section>
                                 
                             <section>
                                 <label class="textarea">
                                     <i class="icon-append fa fa-comment"></i>
-                                    <textarea rows="5" name="contact_comment" id="contact_comment" placeholder="Lời nhắn (*)"></textarea>
+                                    <textarea rows="5" name="contact_comment" id="contact_comment" placeholder="Lời nhắn (*)" required></textarea>
                                 </label>
-                            </section>					
+                            </section>
+                            
+                            <!--CAPTCHA-->
+<!--                            <section>
+                                <p class="captcha">
+                                    <label for="code">
+                                        <img src="/vieclambanthoigian.com.vn/include/sec_image.php" width="100" height="30">
+                                    </label>
+                                    <input id="code" name="code" placeholder="Vui lòng nhập mã" type="text" required="">
+                                </p>
+                            </section>-->
+                            
                         </fieldset>
                         <footer>
                             <button type="submit" id="submit" class="button">Gửi</button>
@@ -498,7 +512,7 @@
     ?>
     <div class="list-reviews hvr-underline-reveal">        
         <form class="row">
-            <section class="col-md-6 col-xs-12 review-user">
+            <section class="col-md-5 col-xs-12 review-user">
                 <img src="http://www.prometheanworld.me/img/default/userAvatar.png" height="50" width="50">
                 <p><?php echo $company_review['first_name'] . " " . $company_review['last_name']?> vào lúc <?php echo date("M d, Y",$company_review['date'])?></p>
                 <p><label><?php echo $company_review['title']?></label> :</p>
@@ -507,8 +521,8 @@
                 <p>Độ tin cậy:</p>
                 <p><?php echo $website->show_stars($company_review['review_reliable']);?></p>
             </section>
-            <section class="col-md-2 col-sm-4 col-xs-4 satisfaction-rating">
-                <p>Độ chuyên nghiệp:</p>
+            <section class="col-md-3 col-sm-4 col-xs-4 satisfaction-rating">
+                <p>Chuyên nghiệp:</p>
                 <p><?php echo $website->show_stars($company_review['review_professional']);?></p>
             </section>
             <section class="col-md-2 col-sm-4 col-xs-4 satisfaction-rating">

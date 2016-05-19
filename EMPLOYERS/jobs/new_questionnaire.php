@@ -106,6 +106,8 @@ if ($AuthUserName !== $job_info['employer']){//Job question does not belong to c
         });
     });
 </script>    
+
+<!--QUESTIONNAIRES SECTION-->
 <div class="row questionnaire-title">
     <section class="col-md-10"></section>    
     <aside class="col-md-2">
@@ -138,10 +140,10 @@ if ($AuthUserName !== $job_info['employer']){//Job question does not belong to c
         <!--Poll answers-->
         <div class="row answerPollArea" id="answerPollArea" style="margin-top: 20px; display: none;">
             <h5 class="col-md-2">Câu trả lời: </h5>
-            <section class="col-md-8 answerPoll" id="answerPoll">        
+            <section class="col-md-10 answerPoll" id="answerPoll">        
                 <p>
                     <span><input type="text" name="answerPoll[]"></span>
-                    <span><button id="addMore">Thêm câu trả lời +</button></span>
+                    <span><button id="addMore" class="btn btn-green">Thêm câu trả lời +</button></span>
                 </p>        
             </section>  
         </div>
@@ -149,7 +151,7 @@ if ($AuthUserName !== $job_info['employer']){//Job question does not belong to c
         <div class="row">
             <section class="col-md-2"></section>
             <label class="col-md-10 questionnaire-save" style="">
-                <input type="submit" name="submit" value="Lưu">
+                <input type="submit" class="btn btn-primary" name="submit" value="Lưu">
             </label>
         </div>
     </form>
