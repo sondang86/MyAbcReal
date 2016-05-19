@@ -4,16 +4,33 @@
 
 if(!defined('IN_SCRIPT')) die("");
 global $db, $commonQueries, $commonQueries_Employers;
-    
+
+
 $user_messages = $commonQueries_Employers->get_user_messages("$AuthUserName");
+
+//Delete selected message
+if (isset($_POST['delete']) && ($_POST['delete'] == "1")){
+    print_r($_POST);die;
+    $message_id = filter_input(INPUT_POST,'message_id', FILTER_SANITIZE_NUMBER_INT);
     
-//echo "<pre>";
-//print_r($user_messages);
-//echo "</pre>";
+    //Make sure the selected message id does belong to user
+    if(!$db->where('id', $message_id)->withTotalCount()->where('user_to', "$AuthUserName")->delete('user_messages')){
+        //Failed
+        $commonQueries->flash('message', $commonQueries->messageStyle('danger', "Có lỗi, không thể xóa"));
+        $website->redirect('index.php?category=home&action=received');
+    } else { //Success
+        $commonQueries->flash('message', $commonQueries->messageStyle('info', "Xóa thành công"));
+        $website->redirect('index.php?category=home&action=received');
+    };
+    
+}
+$id = 0;
 ?>
     
 <div class="row main-nav">
-    <section class="col-md-9"></section>
+    <section class="col-md-9">
+        <?php $commonQueries->flash('message')?>
+    </section>
     <section class="col-md-3">
         <?php echo LinkTile("home","welcome",$M_DASHBOARD,"","blue");?>
     </section>
@@ -22,7 +39,7 @@ $user_messages = $commonQueries_Employers->get_user_messages("$AuthUserName");
 <h3><?php echo $CONSULT_LIST_RECEIVED;?></h3>
 
 <?php if ($user_messages['totalCount'] !== '0'):?>
-<form action="" method="POST">
+<form action="" method="POST" id="messages">
     <div class="table-responsive">
         <table class="table table-hover table-striped">
             <thead>
@@ -39,14 +56,18 @@ $user_messages = $commonQueries_Employers->get_user_messages("$AuthUserName");
             <tbody>
                 <?php foreach ($user_messages['user_messages'] as $user_message) :?>
                 <tr>
-                    <th scope="row"><button type="submit" name="delete" class="btn btn-danger">Xóa</button></th>
+                    <th scope="row">
+                        <input type="hidden" name="delete" value="1">
+                        <button type="submit" name="message_id" value="<?php echo $user_message['id']?>" class="btn btn-danger confirmation">Xóa</button>
+                    </th>
                     <td><?php echo date('d-m-Y G:h:s',$user_message['date'])?></td>
                     <td><?php echo $user_message['name']?></td>
                     <td><?php echo $user_message['user_to']?></td>
                     <th scope="row"><?php echo $user_message['subject']?></th>
                     <td><?php echo $user_message['message']?></td>
                     <td><?php echo $user_message['contact_phone']?></td>
-                </tr>  
+                    
+                </tr>                
                 <?php endforeach;?>
             </tbody>
         </table>
@@ -59,3 +80,14 @@ $user_messages = $commonQueries_Employers->get_user_messages("$AuthUserName");
 </h5>
 
 <?php endif;?>
+
+<script>
+//    $('.confirmation').confirm({
+//        content: 'Xóa tin nhắn đã chọn?',
+//        title: 'Vui lòng xác nhận',
+//        confirm: function(){
+//            $('#messages').submit();
+//            console.log();
+//        }
+//    });
+</script>

@@ -126,8 +126,7 @@ if(isset($_POST["Export"])) ob_end_flush();
 
 <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'  type='text/css'>
 <!--https://github.com/craftpip/jquery-confirm-->
-<link href="/vieclambanthoigian.com.vn/css/jquery-confirm.min.css" rel="stylesheet" type="text/css"/>
-<script src="/vieclambanthoigian.com.vn/js/jquery-confirm.min.js" type="text/javascript"></script>
+
 <script src="http://jqueryvalidation.org/files/dist/jquery.validate.min.js"></script>
 <script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
 <script>
@@ -169,11 +168,4 @@ if(isset($_POST["Export"])) ob_end_flush();
     
     /*Select all option*/
     $("#checkAll").change(select_all);   
-    
-    $(document).ready(function(){
-        $('.confirm').confirm({
-            content: 'Xóa mục đã chọn?',
-            title: 'Vui lòng xác nhận'
-        });
-    });
 </script>
