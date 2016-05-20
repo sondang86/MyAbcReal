@@ -14,8 +14,8 @@ $profile_oLinkActions=array("current","edit","logo");
 $application_management_oLinkTexts=array($JOBSEEKERS_APPLIED,$M_APPROVED_APPLICATIONS,$M_REJECTED_APPLICATIONS);
 $application_management_oLinkActions=array("list","approved","rejected");
 
-$jobs_oLinkTexts=array($M_NEW_JOB,$MY_JOB_ADS,$M_COURSES,$M_BANNERS,$EXPIRED_ADS);
-$jobs_oLinkActions=array("add","my","courses","banners","expired_ads");
+$jobs_oLinkTexts=array($M_NEW_JOB,$MY_JOB_ADS);
+$jobs_oLinkActions=array("add","my");
 
 $jobseekers_oLinkTexts=array($SEARCH);
 $jobseekers_oLinkActions=array("search");

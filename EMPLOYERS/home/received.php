@@ -10,8 +10,8 @@ $user_messages = $commonQueries_Employers->get_user_messages("$AuthUserName");
 
 //Delete selected message
 if (isset($_POST['delete']) && ($_POST['delete'] == "1")){
-    print_r($_POST);die;
-    $message_id = filter_input(INPUT_POST,'message_id', FILTER_SANITIZE_NUMBER_INT);
+//    print_r($_POST);die;
+    $message_id = filter_input(INPUT_POST,'selected_message', FILTER_SANITIZE_NUMBER_INT);
     
     //Make sure the selected message id does belong to user
     if(!$db->where('id', $message_id)->withTotalCount()->where('user_to', "$AuthUserName")->delete('user_messages')){
@@ -58,7 +58,7 @@ $id = 0;
                 <tr>
                     <th scope="row">
                         <input type="hidden" name="delete" value="1">
-                        <button type="submit" name="message_id" value="<?php echo $user_message['id']?>" class="btn btn-danger confirmation">Xóa</button>
+                        <button type="submit" name="message_id" id="<?php echo $user_message['id']?>" value="<?php echo $user_message['id']?>" class="btn btn-danger confirmation">Xóa</button>
                     </th>
                     <td><?php echo date('d-m-Y G:h:s',$user_message['date'])?></td>
                     <td><?php echo $user_message['name']?></td>
@@ -82,12 +82,13 @@ $id = 0;
 <?php endif;?>
 
 <script>
-//    $('.confirmation').confirm({
-//        content: 'Xóa tin nhắn đã chọn?',
-//        title: 'Vui lòng xác nhận',
-//        confirm: function(){
-//            $('#messages').submit();
-//            console.log();
-//        }
-//    });
+    $('.confirmation').confirm({
+        content: 'Xóa tin nhắn đã chọn?',
+        title: 'Vui lòng xác nhận',
+        confirm: function(){
+            $('<input>').attr('type','hidden').attr('name', 'selected_message').attr('value', this.$target.val()).appendTo('form');
+            $('#messages').submit();
+        }
+    });
+
 </script>

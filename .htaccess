@@ -64,6 +64,7 @@ RewriteRule ^viec-lam-theo-dia-diem/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?mod=loc
 #Search URLs
 RewriteRule ^tim-kiem/?(.*)?$ index.php?mod=search [QSA]
 RewriteRule ^viec-lam-moi-nhat/?(.*)?$ index.php?mod=latest_jobs [QSA]
+RewriteRule ^viec-theo-tinh-chat/?(.*)?$ index.php?mod=jobs_by_type [QSA]
 RewriteRule ^viec-lam-noi-bat/?(.*)?$ index.php?mod=featured
 
 #save URL

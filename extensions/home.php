@@ -207,7 +207,7 @@ $segment = $website->getURL_segment($website->currentURL());
         <div class="row same_height">
             <?php foreach ($locations as $location) :?>
             <span class="col-md-3 main-category">
-                <a href="<?php $website->check_SEO_link("jobs_by_location",$SEO_setting, $location['id'], $website->seoUrl($location['City']))?>" class="main_category_link"><?php echo $location['City']?></a>
+                <a href="<?php $website->check_SEO_link("jobs_by_location",$SEO_setting, $location['id'], $website->seoUrl($location['City']))?>" class="main_category_link"><?php echo $location['City']?></a> (<?php echo $commonQueries->countRecords("region", $location['id'], "jobs")->count?>)
             </span>
             <?php endforeach;?>
         </div>
@@ -218,7 +218,7 @@ $segment = $website->getURL_segment($website->currentURL());
         <div class="row same_height">
             <?php foreach ($companies as $company) :?>
             <span class="col-md-3 main-category">
-                <a href="<?php $website->check_SEO_link("jobs_by_companyId",$SEO_setting, $company['id'], $website->seoUrl($company['company']))?>"><?php echo $company['company']?></a>
+                <a href="<?php $website->check_SEO_link("jobs_by_companyId",$SEO_setting, $company['id'], $website->seoUrl($company['company']))?>"><?php echo $company['company']?></a> (<?php echo $commonQueries->countRecords("employer", $company['username'], "jobs")->count?>)
             </span>
             <?php endforeach;?>
         </div>
