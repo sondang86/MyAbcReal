@@ -11,13 +11,13 @@
     <section class="row">
         <article class="col-md-12">
             <ul>
-                <li><a href="#">Việc làm lương cao</a></li>
-                <li><a href="#">Việc làm IT</a></li>
-                <li><a href="#">Việc làm phổ thông</a></li>
-                <li><a href="#">Việc làm bán thời gian</a></li>
-                <li><a href="#">Việc làm thêm, việc làm cho sinh viên</a></li>
-                <li><a href="#">Việc làm freelance</a></li>
-                <li><a href="#">Việc làm thực tập</a></li>
+                <li><a href="http://<?php echo $DOMAIN_NAME;?>/viec-theo-tinh-chat/">Việc làm lương cao</a></li>
+                <li><a href="http://<?php echo $DOMAIN_NAME;?>/viec-theo-tinh-chat/">Việc làm IT</a></li>
+                <li><a href="http://<?php echo $DOMAIN_NAME;?>/viec-theo-tinh-chat/">Việc làm phổ thông</a></li>
+                <li><a href="http://<?php echo $DOMAIN_NAME;?>/viec-theo-tinh-chat/">Việc làm bán thời gian</a></li>
+                <li><a href="http://<?php echo $DOMAIN_NAME;?>/viec-theo-tinh-chat/">Việc làm thêm, việc làm cho sinh viên</a></li>
+                <li><a href="http://<?php echo $DOMAIN_NAME;?>/viec-theo-tinh-chat/">Việc làm freelance</a></li>
+                <li><a href="http://<?php echo $DOMAIN_NAME;?>/viec-theo-tinh-chat/">Việc làm thực tập</a></li>
             </ul>
         </article>
     </section>

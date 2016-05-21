@@ -182,9 +182,53 @@
                 return FALSE;
             }
         }
-            
+        
+        
         /**
-        *  Search jobs function
+        *  Find jobs by specific types + pagination
+        * 
+        *  @param var column selected column
+        *  @param var id id number to be search
+        *  @param var current_page current page
+        *  @param var page_limit limit per page
+        */
+        public function jobs_by_type_pagination($column="job_type", $id="", $current_page="1", $page_limit='10') {
+            //Find jobs based on specific category
+            $jobsInfo_columns = Array (
+                $this->_dbPrefix."jobs.id as job_id",$this->_dbPrefix."jobs.date", $this->_dbPrefix."jobs.employer", 
+                $this->_dbPrefix."jobs.job_category", $this->_dbPrefix."jobs.region", $this->_dbPrefix."jobs.SEO_title", 
+                $this->_dbPrefix."jobs.title", $this->_dbPrefix."jobs.expires", //
+                $this->_dbPrefix."jobs.message", $this->_dbPrefix."jobs.job_type", $this->_dbPrefix."jobs.salary","jobsportal_jobs.applications", // Main table
+                $this->_dbPrefix."categories.category_name_vi",$this->_dbPrefix."categories.category_id", //Categories table
+                $this->_dbPrefix."salary.salary_id",$this->_dbPrefix."salary.salary_range", //Salary table
+                $this->_dbPrefix."locations.City",$this->_dbPrefix."locations.id as location_id", //Locations table
+                $this->_dbPrefix."employers.id as employer_id",$this->_dbPrefix."employers.company as company",$this->_dbPrefix."employers.logo as company_logo", //Employer table
+                $this->_dbPrefix."job_types.job_name as job_name",$this->_dbPrefix."job_types.job_name_en as job_name_en",
+                );
+            $this->_db->join('categories', "jobsportal_jobs.job_category = jobsportal_categories.category_id", "LEFT");
+            $this->_db->join('salary', "jobsportal_jobs.salary = jobsportal_salary.salary_id", "LEFT");
+            $this->_db->join('locations', "jobsportal_jobs.region = jobsportal_locations.id", "LEFT");
+            $this->_db->join('employers', "jobsportal_jobs.employer = jobsportal_employers.username", "LEFT");
+            $this->_db->join('job_types', "jobsportal_jobs.job_type = jobsportal_job_types.id", "LEFT");
+                        
+            //Limit posts per page 
+            $this->_db->pageLimit = $page_limit;
+            
+            //if no specific id, find all jobs
+            if($id !== ""){
+                $this->_db->where($column, $id);
+            }
+            
+            $jobs_list['jobs_list'] = $this->_db->withTotalCount()->arraybuilder()->paginate('jobs',$current_page, $jobsInfo_columns);            
+            $jobs_list['totalCount'] = $this->_db->totalCount;
+            
+            return $jobs_list;  
+        }
+            
+        
+        
+        /**
+        *  Search jobs function by keywords
         * 
         *  @param var $type id or name of the selected column
         *  @param var $limit limit the number of records to be appear
@@ -1336,6 +1380,30 @@
             }
             
             return $company_logo;
+        }
+        
+        
+        /**
+        *   check whether input is legal/allowed number range or not.
+        *   @param var number number to be input
+        */
+        public function isLegal_Number($input){            
+            if (ctype_digit($input)){ //returns true if all the characters in the string are digits.
+                $number = filter_var($input, FILTER_VALIDATE_INT);
+                
+                if (strlen($number) > 9){//Allowed number length to 9 only
+                    return FALSE;
+                }                
+                
+                if (!is_int($number)){ //Accept only legal number, for example 4000000000000000000000000 is illegal number
+                    return FALSE;
+                }
+                
+            } else {
+                $number = FALSE;
+            }
+            
+            return $number;
         }
             
     }

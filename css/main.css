@@ -2654,6 +2654,70 @@ div.upload input:hover {
     display: block;
 }
 
+/*JOBS BY TYPE*/
+
+.jobsByType_list {
+    background: #F5F5F5;
+    overflow: hidden;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.jobsByType_list section {
+    transition: all 0.3s ease;
+    opacity:0.5;
+    background: #fff;
+    margin-bottom: 20px;
+    border: 1px solid #cccccc;
+}
+
+.jobsByType_list section:hover {
+    background: #53a7ea; 
+    opacity:1;
+}
+
+.jobByType fieldset figure img{
+    float: left;
+    margin-right: 15px;
+    margin-top: 15px;
+}
+
+.jobByType fieldset span{
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.jobByType fieldset footer{
+    text-align: right;
+    margin-bottom: 15px;
+}
+
+.jobByType fieldset article {
+    border-top: 1px solid #cccccc;
+    margin-bottom: 20px;
+}
+
+.jobByType fieldset header {
+    margin-bottom: 10px;
+}
+
+.jobByType fieldset header figure {
+    overflow: auto;
+    float: left;
+    width: 20%;
+    margin-right: 20px;
+}
+
+.jobByType fieldset header span {
+    display: inline-block;
+    margin-top: 10px;
+    width: 70%;
+    overflow: hidden;
+}
+
 
 /* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {

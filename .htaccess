@@ -65,6 +65,12 @@ RewriteRule ^viec-lam-theo-dia-diem/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?mod=loc
 RewriteRule ^tim-kiem/?(.*)?$ index.php?mod=search [QSA]
 RewriteRule ^viec-lam-moi-nhat/?(.*)?$ index.php?mod=latest_jobs [QSA]
 RewriteRule ^viec-theo-tinh-chat/?(.*)?$ index.php?mod=jobs_by_type [QSA]
+
+RewriteRule ^viec-lam-luong-cao/?(.*)?$ index.php?mod=jobs_by_type&name=salary [QSA]
+RewriteRule ^viec-lam-toan-thoi-gian/?(.*)?$ index.php?mod=jobs_by_type&name=job_type&job_type=1 [QSA]
+RewriteRule ^viec-lam-part-time/?(.*)?$ index.php?mod=jobs_by_type&name=job_type&job_type=3 [QSA]
+RewriteRule ^viec-lam-freelancer/?(.*)?$ index.php?mod=jobs_by_type&name=job_type&job_type=6 [QSA]
+
 RewriteRule ^viec-lam-noi-bat/?(.*)?$ index.php?mod=featured
 
 #save URL
