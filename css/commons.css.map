@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAWI,uBAAE,CAEE,UAAU,CAAE,KAAK,CACjB,MAAM,CAAE,iBAAiB,CACzB,gBAAgB,CAAE,IAAI,CACtB,KAAK,CAAE,OAAO,CACd,WAAW,CAAE,IAAI,CACjB,OAAO,CAAE,IAAI,CACb,kBAAkB,CAAE,GAAG,CACvB,qBAAqB,CAAE,GAAG",
+"sources": ["../scss/commons.scss"],
+"names": [],
+"file": "commons.css"
+}

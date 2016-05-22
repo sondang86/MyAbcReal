@@ -16,21 +16,26 @@
         $column = "job_type";
     }
     
-    //Job type value, default is 1 (full time jobs)
+    //Job type value, default is 0 (high salary jobs)
     if (isset($_GET['job_type'])){
         $job_type = filter_input(INPUT_GET,'job_type', FILTER_SANITIZE_NUMBER_INT);
     } else {
-        $job_type = '1';
-    }
-    
+        $job_type = '0';
+    }    
+   
     //Pagination options
     $url = $website->getURL_segment($website->CurrentURL(), 2);
     $reload="http://$DOMAIN_NAME/$url/?";//Link href        
-    $jobs_by_type = $commonQueries->jobs_by_type_pagination("$column", $job_type, "$current_page", 5);
+    $jobs_by_type = $commonQueries->jobs_by_type_pagination("$column", $job_type, "$current_page", 4);
+    
+    //Jobs by high salary
+    if ($job_type == '0'){
+        $jobs_by_type = $commonQueries->jobs_by_type_pagination("salary", '3', "$current_page", 4, ">=");
+    }    
 ?>
 <div class="row">
     <section class="col-md-12">
-        <h4>dsadlkajdlkjs</h4>
+        <h4>Tìm việc theo tính chất</h4>
     </section>
 </div>
 
@@ -49,7 +54,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="http://<?php echo $DOMAIN_NAME;?>/viec-lam-luong-cao">Việc làm lương cao</a></li>
+                    <li <?php if($job_type == '0'){echo 'class="active"';}?>><a href="http://<?php echo $DOMAIN_NAME;?>/viec-lam-luong-cao/">Việc làm lương cao</a></li>
                     <li <?php if($job_type == '1'){echo 'class="active"';}?>><a href="http://<?php echo $DOMAIN_NAME;?>/viec-lam-toan-thoi-gian/">Việc làm toàn thời gian</a></li>
                     <li <?php if($job_type == '3'){echo 'class="active"';}?>><a href="http://<?php echo $DOMAIN_NAME;?>/viec-lam-part-time/">Việc làm bán thời gian</a></li> 
                     <li <?php if($job_type == '6'){echo 'class="active"';}?>><a href="http://<?php echo $DOMAIN_NAME;?>/viec-lam-freelancer">Việc freelancer</a></li>
@@ -94,7 +99,7 @@
     </section>
 </div>
 
-<?php else :?>
+<?php else : // Not found data?>
 <div class="row">
     <section class="col-md-12">
         <nav class="navbar navbar-inverse">
@@ -107,14 +112,22 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="http://<?php echo $DOMAIN_NAME;?>/viec-lam-luong-cao">Việc làm lương cao</a></li>
+                    <li <?php if($job_type == '0'){echo 'class="active"';}?>><a href="http://<?php echo $DOMAIN_NAME;?>/viec-lam-luong-cao">Việc làm lương cao</a></li>
                     <li <?php if($job_type == '1'){echo 'class="active"';}?>><a href="http://<?php echo $DOMAIN_NAME;?>/viec-lam-toan-thoi-gian/">Việc làm toàn thời gian</a></li>
                     <li <?php if($job_type == '3'){echo 'class="active"';}?>><a href="http://<?php echo $DOMAIN_NAME;?>/viec-lam-part-time/">Việc làm bán thời gian</a></li> 
                     <li <?php if($job_type == '6'){echo 'class="active"';}?>><a href="http://<?php echo $DOMAIN_NAME;?>/viec-lam-freelancer">Việc freelancer</a></li>
                 </ul>
             </div>
         </nav>
-        <h5>Không tìm thấy dữ liệu</h5>
+        <h5>Không tìm thấy kết quả nào</h5>
     </section>
 </div>
 <?php endif;?>
+
+<!--Add active class on click-->
+<script>
+    $(".nav a").on("click", function(){
+        $(".nav").find(".active").removeClass("active");
+        $(this).parent().addClass("active");
+    });
+</script>

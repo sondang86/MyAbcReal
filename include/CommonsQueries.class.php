@@ -192,7 +192,7 @@
         *  @param var current_page current page
         *  @param var page_limit limit per page
         */
-        public function jobs_by_type_pagination($column="job_type", $id="", $current_page="1", $page_limit='10') {
+        public function jobs_by_type_pagination($column="job_type", $id="", $current_page="1", $page_limit='10', $operator="") {
             //Find jobs based on specific category
             $jobsInfo_columns = Array (
                 $this->_dbPrefix."jobs.id as job_id",$this->_dbPrefix."jobs.date", $this->_dbPrefix."jobs.employer", 
@@ -216,7 +216,11 @@
             
             //if no specific id, find all jobs
             if($id !== ""){
-                $this->_db->where($column, $id);
+                if ($operator == ""){
+                    $this->_db->where($column, $id);
+                } else {
+                    $this->_db->where($column, $id, "$operator");
+                }
             }
             
             $jobs_list['jobs_list'] = $this->_db->withTotalCount()->arraybuilder()->paginate('jobs',$current_page, $jobsInfo_columns);            
@@ -866,9 +870,14 @@
         * @param SEO_setting default 1 is enabled 
         */
         public function pagination($reload, $page, $totalPages, $SEO_setting="1") {
+            //With no results found
+            if (isset($this->paginate($reload, $page, $totalPages, $SEO_setting)['no_result']) && $this->paginate($reload, $page, $totalPages, $SEO_setting)['no_result'] == '1') {
+                echo "<div class='row'><fieldset class='col-md-12 pagination-noResults'><p>Không tìm thấy kết quả nào</p></fieldset></div>";
+            }                       
+            //Main pagination
             echo '<div><ul class="pagination">';
             if ($totalPages > 1) {
-                echo $this->paginate($reload, $page, $totalPages, $SEO_setting);
+                echo $this->paginate($reload, $page, $totalPages, $SEO_setting)['output'];
             }
             echo "</ul></div>";
         }
@@ -882,39 +891,39 @@
             }
             $prevlabel = "&lsaquo; Prev";
             $nextlabel = "Next &rsaquo;";
-            $out = "";
+            $out['output'] = "";
             // previous
             if ($page == 1) {
-                $out.= "";
+                $out['output'].= "";
             } elseif ($page == 2) {
-                $out.="<li><a href=\"".$reload."$additional_page_word"."1\">".$prevlabel."</a>\n</li>";
+                $out['output'].="<li><a href=\"".$reload."$additional_page_word"."1\">".$prevlabel."</a>\n</li>";
             } else {
-                $out.="<li><a href=\"".$reload."$additional_page_word"."1\">First</a>\n</li>";                
-//                $out.="<li><a href='&page=1'>1</a>\n</li>";
+                $out['no_result'] = 1;
+                $out['output'].="<li><a href=\"".$reload."$additional_page_word"."1\">First</a>\n</li>";                
             }
             $pmin=($page>$adjacents)?($page - $adjacents):2; //Hide page 1
             $pmax=($page<($totalPages - $adjacents))?($page + $adjacents):$totalPages;
             for ($i = $pmin; $i <= $pmax; $i++) {
                 if ($i == $page) {
-                    $out.= "<li class=\"active\"><a href=''>".$i."</a></li>\n";
+                    $out['output'].= "<li class=\"active\"><a href=''>".$i."</a></li>\n";
                 } elseif ($i == 1) {
-                    $out.= "<li><a href=\"".$reload."\">".$i."</a>\n</li>";
+                    $out['output'].= "<li><a href=\"".$reload."\">".$i."</a>\n</li>";
                 } else {
-                    $out.= "<li><a href=\"".$reload. "$additional_page_word".$i."\">".$i. "</a>\n</li>";
+                    $out['output'].= "<li><a href=\"".$reload. "$additional_page_word".$i."\">".$i. "</a>\n</li>";
                 }
             }
                 
             if ($page<($totalPages - $adjacents)) {
-                $out.= "<li><a >..</a>\n</li>";
-                $out.= "<li><a href=\"" . $reload."$additional_page_word".$totalPages."\">" .$totalPages."</a>\n</li>";
+                $out['output'].= "<li><a >..</a>\n</li>";
+                $out['output'].= "<li><a href=\"" . $reload."$additional_page_word".$totalPages."\">" .$totalPages."</a>\n</li>";
             }
             // next
             if ($page < $totalPages) {
-                $out.= "<li><a href=\"".$reload."$additional_page_word".($page + 1)."\">".$nextlabel."</a>\n</li>";
+                $out['output'].= "<li><a href=\"".$reload."$additional_page_word".($page + 1)."\">".$nextlabel."</a>\n</li>";
             } else {
-                $out.= "";
+                $out['output'].= "";
             }
-            $out.= "";
+            $out['output'].= "";
             return $out;
         }
             
@@ -1223,7 +1232,7 @@
                 $this->_dbPrefix."categories.id as category_id",
                 $this->_dbPrefix."job_types.job_name",$this->_dbPrefix."job_types.job_name_en",$this->_dbPrefix."job_types.id as job_type_id",
                 $this->_dbPrefix."locations.City",$this->_dbPrefix."locations.City_en",$this->_dbPrefix."locations.id as location_id",
-                $this->_dbPrefix."jobseekers.first_name",$this->_dbPrefix."jobseekers.last_name",
+                $this->_dbPrefix."jobseekers.first_name",$this->_dbPrefix."jobseekers.last_name",$this->_dbPrefix."jobseekers.profile_pic",
             );
                 
             $this->_db->join('positions', $this->_dbPrefix."jobseeker_resumes.current_position =".$this->_dbPrefix."positions.position_id", "LEFT");
@@ -1264,7 +1273,7 @@
             }
                 
             //Get the data
-            $resumes['resumes'] = $this->_db->withTotalCount()->get('jobseeker_resumes', NULL, $jobsInfo_columns);
+            $resumes['resumes'] = $this->_db->withTotalCount()->orderBy("date_updated","DESC")->get('jobseeker_resumes', NULL, $jobsInfo_columns);
             $resumes['totalCount'] = $this->_db->totalCount; 
             return $resumes;
         }

@@ -128,6 +128,7 @@ if (isset($_GET['tim_kiem']) && $_GET['tim_kiem'] == "1"){
     if(isset($_GET['by_date_updated'])){ $by_date_updated = filter_input(INPUT_GET, 'by_date_updated', FILTER_SANITIZE_NUMBER_INT);} else {$by_date_updated="";} 
     
     $resumes = $commonQueries->Search_Resumes(TRUE,$queryString, $by_category, $by_location, $by_education, $by_expected_position, $by_experience_level);
+    
 
 //    echo "<pre>";
 //    print_r($resumes);
@@ -140,13 +141,20 @@ if (isset($_GET['tim_kiem']) && $_GET['tim_kiem'] == "1"){
     <h4 class="col-md-4">Tìm thấy <?php echo $resumes['totalCount']?> ứng viên</h4>
 </div>
 <div class="contentArea">
-        <?php foreach ($resumes['resumes'] as $resume) :?>
+        <?php foreach ($resumes['resumes'] as $resume) :
+            //Set profile pic to default if user has not been uploaded yet
+            if ($resume['profile_pic'] == NULL){
+                $profile_pic = "http://$DOMAIN_NAME/images/commons/jobs_portal_logo_demo.jpg";
+            } else {
+                $profile_pic = "http://$DOMAIN_NAME/images/jobseekers/profile_pic/" . $resume['profile_pic'];
+            }
+        ?>
     <article class="row joblistArea">
         <!--JOB DETAILS-->
         <header class="col-md-12 joblist">            
             <a href="http://<?php echo $DOMAIN_NAME?>/EMPLOYERS/index.php?category=jobseekers&action=cv_details&id=<?php echo $resume['resume_id']?>" target="_blank" title="Chi tiết hồ sơ ứng viên <?php echo $resume['last_name'] . " " . $resume['first_name'];?>">
                 <section class="banner">
-                    <img src="http://<?php echo $DOMAIN_NAME?>/images/jobseekers/profile_pic/<?php echo $resume['resume_id']?>.jpg" width="120" height="110px">
+                    <img src="<?php echo $profile_pic;?>" width="120" height="110px">
                 </section>
                 <p title="<?php echo $resume['resume_title']?>" class="desig"><?php echo $resume['resume_title']?></p>
                 <p class="company">
@@ -215,7 +223,7 @@ if (isset($_GET['tim_kiem']) && $_GET['tim_kiem'] == "1"){
         <header class="col-md-12 joblist">            
             <a href="http://<?php echo $DOMAIN_NAME?>/EMPLOYERS/index.php?category=jobseekers&action=cv_details&id=<?php echo $resume['resume_id']?>" target="_blank" title="Chi tiết hồ sơ ứng viên <?php echo $resume['last_name'] . " " . $resume['first_name'];?>">
                 <section class="banner">
-                    <img src="http://<?php echo $DOMAIN_NAME?>/images/jobseekers/profile_pic/<?php echo $resume['resume_id']?>.jpg" width="120" height="110px">
+                    <img src="<?php echo $profile_pic;?>" width="120" height="110px">
                 </section>
                 <p title="<?php echo $resume['resume_title']?>" class="desig"><?php echo $resume['resume_title']?></p>
                 <p class="company">

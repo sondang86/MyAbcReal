@@ -11,13 +11,10 @@
     <section class="row">
         <article class="col-md-12">
             <ul>
-                <li><a href="http://<?php echo $DOMAIN_NAME;?>/viec-theo-tinh-chat/">Việc làm lương cao</a></li>
-                <li><a href="http://<?php echo $DOMAIN_NAME;?>/viec-theo-tinh-chat/">Việc làm IT</a></li>
-                <li><a href="http://<?php echo $DOMAIN_NAME;?>/viec-theo-tinh-chat/">Việc làm phổ thông</a></li>
-                <li><a href="http://<?php echo $DOMAIN_NAME;?>/viec-theo-tinh-chat/">Việc làm bán thời gian</a></li>
-                <li><a href="http://<?php echo $DOMAIN_NAME;?>/viec-theo-tinh-chat/">Việc làm thêm, việc làm cho sinh viên</a></li>
-                <li><a href="http://<?php echo $DOMAIN_NAME;?>/viec-theo-tinh-chat/">Việc làm freelance</a></li>
-                <li><a href="http://<?php echo $DOMAIN_NAME;?>/viec-theo-tinh-chat/">Việc làm thực tập</a></li>
+                <li><a href="http://<?php echo $DOMAIN_NAME;?>/viec-lam-luong-cao/">Việc làm lương cao</a></li>
+                <li><a href="http://<?php echo $DOMAIN_NAME;?>/viec-lam-toan-thoi-gian/">Việc làm toàn thời gian</a></li>
+                <li><a href="http://<?php echo $DOMAIN_NAME;?>/viec-lam-part-time/">Việc làm thêm, sinh viên, part-time</a></li>
+                <li><a href="http://<?php echo $DOMAIN_NAME;?>/viec-lam-freelancer/">Việc làm freelance</a></li>
             </ul>
         </article>
     </section>

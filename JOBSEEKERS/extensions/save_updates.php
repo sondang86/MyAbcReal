@@ -44,26 +44,31 @@ if (isset($_POST['request_type']) && $_POST['request_type'] == "language_update"
             "resume_id"     => $resume_id,
             "updated_at"    => time()
         );
-//        $updateColumns = Array ("language_id","level_id","resume_id");        
-//        $db->onDuplicate($updateColumns);
         $id = $db->insert('jobseeker_languages', $data);
         if(!$id){
             echo 'problem';die;
         }
     }
     
+    //Store the updated time     
+    $db->where ('id', $resume_id);
+    if (!$db->update ('jobseeker_resumes', array('date_updated' => time()))){
+        echo 'problemmmm'; die;
+    } 
+    
     //Customize success message
     $message = array(
         "message"   => "Lưu thay đổi thành công",
         "status"    => "1", //Success
-        "resume_id" => $_POST['resume_id']
+        "resume_id" => $resume_id
     );
-    
     echo json_encode($message);
 }
 
 //Expected area 1
 if (isset($_POST['request_type']) && $_POST['request_type'] == "save_expected_area1"){ 
+    $username = filter_input(INPUT_POST,'username', FILTER_SANITIZE_STRING);
+    
     $data = array (
         "title"                 => filter_var($_POST['data']['js-title'], FILTER_SANITIZE_STRING),
         "current_position"      => filter_var($_POST['data']['js-current-position'], FILTER_SANITIZE_NUMBER_INT), 
@@ -76,8 +81,14 @@ if (isset($_POST['request_type']) && $_POST['request_type'] == "save_expected_ar
         "job_type"              => filter_var($_POST['data']['js-jobType'], FILTER_SANITIZE_NUMBER_INT)        
     );
         
-    $db->where ('username', filter_input(INPUT_POST,'username', FILTER_SANITIZE_STRING));
-    if ($db->update ('jobseeker_resumes', $data)){
+    $db->where ('username', "$username");
+    if ($db->update ('jobseeker_resumes', $data)){        
+        //Store the updated time     
+        $db->where ('username', "$username");
+        if (!$db->update ('jobseeker_resumes', array('date_updated' => time()))){
+            echo 'problemmmm'; die;
+        } 
+        
         //Customize success message
         $message = array(
             "message"   => "Lưu thay đổi thành công",
@@ -93,6 +104,8 @@ if (isset($_POST['request_type']) && $_POST['request_type'] == "save_expected_ar
 
 //Expected area 2
 if (isset($_POST['request_type']) && $_POST['request_type'] == "save_expected_area2"){ 
+    $username = filter_input(INPUT_POST,'username', FILTER_SANITIZE_STRING);
+    
     $data = array (
         "career_objective"  => filter_var($_POST['data']['js-careerObjective'], FILTER_SANITIZE_STRING),
         "experiences"       => filter_var($_POST['data']['js-experience'], FILTER_SANITIZE_STRING), 
@@ -104,8 +117,14 @@ if (isset($_POST['request_type']) && $_POST['request_type'] == "save_expected_ar
         "facebook_URL"      => filter_var($_POST['data']['js-facebookURL'], FILTER_SANITIZE_STRING)
     );
         
-    $db->where ('username', filter_input(INPUT_POST,'username', FILTER_SANITIZE_STRING));
+    $db->where ('username', "$username");
     if ($db->update ('jobseeker_resumes', $data)){
+        //Store the updated time     
+        $db->where ('username', "$username");
+        if (!$db->update ('jobseeker_resumes', array('date_updated' => time()))){
+            echo 'problemmmm'; die;
+        } 
+        
         //Customize success message
         $message = array(
             "message"   => "Lưu thay đổi thành công",

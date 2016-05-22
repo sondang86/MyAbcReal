@@ -20,9 +20,8 @@ $db->where('resume_id',$jobseeker_data['id']);
 $jobseeker_languages = $db->withTotalCount()->get('jobseeker_languages');
 $jobseeker_languages_count = $db->totalCount;    
 
-    
-if(isset($_POST["ProceedSaveResume"])){
-   
+//Handle updates    
+if(isset($_POST["ProceedSaveResume"])){ 
 
     //Pre-create resume if empty
     $db->where('username', "$AuthUserName")->withTotalCount()->getOne('jobseeker_resumes');
@@ -88,6 +87,12 @@ if(isset($_POST["ProceedSaveResume"])){
                 echo 'problem while creating records';die;
             }
         }
+    }
+    
+    //Store the updated time     
+    $db->where ('username', "$AuthUserName");
+    if (!$db->update ('jobseeker_resumes', array('date_updated' => time()))){
+        echo 'problemmmm'; die;
     }
     
     $commonQueries->flash('message',$commonQueries->messageStyle('info',"Cập nhật thành công"));

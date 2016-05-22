@@ -72,5 +72,31 @@ class CommonsQueries_Employers {
         
         return $data;
     }
+    
+    
+    /**
+    *   get list of CV applies with status pending/accept/rejected (0/1/2)
+    *   @param var status pending/accept/rejected (0/1/2)
+    */
+    
+    public function getCVApplieds_status($status='0', $username){
+        $selected_columns = array(
+            $this->_dbPrefix."apply.posting_id as job_id",$this->_dbPrefix."apply.jobseeker as jobseeker_email",
+            $this->_dbPrefix."apply.id as apply_id",$this->_dbPrefix."apply.date as apply_date",
+            $this->_dbPrefix."apply.message as jobseeker_message",
+            $this->_dbPrefix."jobs.title",$this->_dbPrefix."jobs.SEO_title",
+            $this->_dbPrefix."jobseekers.first_name",$this->_dbPrefix."jobseekers.last_name",
+        );
+        $this->_db->join('jobs', $this->_dbPrefix."apply.posting_id = " . $this->_dbPrefix . "jobs.id", "LEFT");
+        $this->_db->join('jobseekers', $this->_dbPrefix."apply.jobseeker = " . $this->_dbPrefix . "jobseekers.username", "LEFT");
+        
+        $this->_db->where($this->_dbPrefix.'jobs.employer', "$username")
+                ->where($this->_dbPrefix.'apply.status', $status);
+        
+        $CVs_applied['CVs_applied'] = $this->_db->withTotalCount()->get('apply', NULL, $selected_columns);
+        $CVs_applied['totalCount'] = $this->_db->totalCount;
+        
+        return $CVs_applied;
+    }
 }
 

@@ -74,15 +74,15 @@ if (isset($_POST['submit'])){
 
 <!--MAIN NAVIGATION-->    
 <div class="row main-nav">
-    <section class="col-md-8 col-sm-6">
+    <section class="col-md-9 col-sm-9">
         <?php $commonQueries->flash('message')?>
     </section>
-    <section class="col-md-2 col-sm-3 col-xs-6">
+    <section class="col-md-3 col-sm-3 col-xs-6">
         <?php echo LinkTile("profile","edit",$M_EDIT,"","green");?>
     </section>
-    <section class="col-md-2 col-sm-3 col-xs-6">
+<!--    <section class="col-md-2 col-sm-3 col-xs-6">
         <?php echo LinkTile("profile","video",$M_VIDEO_PRESENTATION,"","lila");?>
-    </section>
+    </section>-->
 </div>
      
 <!--CHANGE LOGO--> 

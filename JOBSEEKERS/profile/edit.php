@@ -150,7 +150,7 @@
             <section class="row input">
                 <span class="col col-1">Ngày sinh:</span>
                 <div class="col col-2">
-                    <input type="text" name="dob" id="datePicker" value="<?php if (!empty($jobseeker_profile['dob'])){
+                    <input type="text" name="dob" id="datePicker" required value="<?php if (!empty($jobseeker_profile['dob'])){
                             echo date('d-m-Y',$jobseeker_profile['dob']);
                         }
                     ?>">
@@ -212,13 +212,19 @@
                 phone:{
                     required: true,
                     minlength: 2
-                }                                
+                },
+                dob:{
+                    required: true
+                }
             },
             // Messages for form validation
             messages:{
                 phone:{
                     required: '<span style="color:red">Vui lòng nhập số điện thoại</span>',
                     minlength: '<span style="color:red">Số điện thoại ít nhất là 5 ký tự</span>'
+                },
+                dob:{
+                    required: '<span style="color:red">Ngày sinh không được để trống</span>'
                 }
             },
             // Do not change code below
