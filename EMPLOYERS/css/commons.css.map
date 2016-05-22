@@ -1,6 +1,6 @@
 {
 "version": 3,
-"mappings": "AAUA,iBAAkB,CACd,UAAU,CAAE,IAAI,CAChB,aAAa,CAAE,IAAI,CAEnB,wCAAuB,CACnB,UAAU,CAAE,MAAM,CAGtB,wCAAuB,CACnB,UAAU,CAAE,MAAM",
+"mappings": "AAUA,iBAAkB,CACd,UAAU,CAAE,IAAI,CAChB,aAAa,CAAE,IAAI,CAEnB,wCAAuB,CACnB,UAAU,CAAE,MAAM,CAGtB,wCAAuB,CACnB,UAAU,CAAE,MAAM,CAI1B,QAAS,CACL,MAAM,CAAE,MAAM",
 "sources": ["../scss/commons.scss"],
 "names": [],
 "file": "commons.css"

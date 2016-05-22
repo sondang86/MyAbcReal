@@ -211,13 +211,20 @@ if (isset($_GET['tim_kiem']) && $_GET['tim_kiem'] == "1"){
     <h4>Không tìm thấy ứng viên phù hợp với tiêu chí, vui lòng tìm kiếm với tiêu chí phù hợp</h4>   
     
 <?php } 
-        } else { //Show newest jobseekers by default        
+        } else { //Show newest jobseekers CVs by default        
             $all_resumes = $commonQueries->Search_Resumes(FALSE);?>
     
     <div class="row">
         <h4 class="col-md-4">Tìm thấy <?php echo $all_resumes['totalCount']?> ứng viên</h4>
     </div>
-            <?php foreach ($all_resumes['resumes'] as $resume) :?>            
+            <?php foreach ($all_resumes['resumes'] as $resume) :
+                //Set profile pic to default if user has not been uploaded yet
+                if ($resume['profile_pic'] == NULL){
+                    $profile_pic = "http://$DOMAIN_NAME/images/commons/jobs_portal_logo_demo.jpg";
+                } else {
+                    $profile_pic = "http://$DOMAIN_NAME/images/jobseekers/profile_pic/" . $resume['profile_pic'];
+                }
+            ?>            
     <article class="row joblistArea">
         <!--JOB DETAILS-->
         <header class="col-md-12 joblist">            

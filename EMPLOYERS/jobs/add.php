@@ -1,65 +1,13 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
 global $db, $categories, $job_types, $locations, $salaries,$experience_list, $commonQueries;
-$db->where('employer', "$AuthUserName")->withTotalCount()->get('jobs');
+$employer_jobs = $db->where('employer', "$AuthUserName")->withTotalCount()->get('jobs');
 $jobs_count = $db->totalCount;
-?>
 
-<div class="fright">    
-<?php echo LinkTile("jobs","my",$MY_JOB_ADS,"","blue");?>
-</div>
+$db->join('subscriptions', $DBprefix."employers.subscription = " . $DBprefix."subscriptions.id", "LEFT");
+$employer_subscription = $db->where('username', "$AuthUserName")->withTotalCount()->getOne('employers', array($DBprefix.'employers.subscription', $DBprefix.'subscriptions.listings', $DBprefix.'subscriptions.featured_listings'));
 
-<h3>
-	<?php echo $POST_NEW_ADD;?>
-</h3>
-
-<?php
-$show_post_form = true;
-
-
-if($website->GetParam("CHARGE_TYPE") == 1)
-{
-	if($arrUser["subscription"]==0)
-	{
-		$show_post_form = false;
-		?>
-<a class="underline-link" href="index.php?category=home&action=credits"><?php echo $M_PLEASE_SELECT_TO_POST;?></a>
-		<?php
-	}
-	else
-	{
-		
-		$arrSubscription = $database->DataArray("subscriptions","id=".$arrUser["subscription"]);
-	
-		if(($database->SQLCount("jobs","WHERE employer='".$AuthUserName."'") + $database->SQLCount("courses","WHERE employer='".$AuthUserName."'"))>= $arrSubscription["listings"])
-		{
-			echo '<h4><span class="red-font">'.$M_REACHED_MAXIMUM_SUBSCR.'</span>';
-			?>
-<br/><br/>
-<a class="underline-link" href="index.php?category=home&action=credits"><?php echo $M_PLEASE_SELECT_TO_POST;?></a></h4>
-			<?php
-			$show_post_form = false;
-		}
-	
-	}
-}
-elseif($website->GetParam("CHARGE_TYPE") == 2)
-{
-	if(($arrUser["credits"]-$website->GetParam("PRICE_LISTING_CREDITS"))<=0)
-	{
-		echo $M_NO_CREDITS_POST;
-		?>
-<br/><br/>
-<a class="underline-link" href="index.php?category=home&action=credits"><?php echo $M_PURCHASE_CREDITS_POST;?></a>
-		<?php
-		$show_post_form = false;
-	}
-}
-
-?>
-
-
-<?php
+    //New job submitted
     if(isset($_POST['submit'])){
         //Insert data to database
         $data = Array( 
@@ -74,7 +22,8 @@ elseif($website->GetParam("CHARGE_TYPE") == 2)
             "experience"            => filter_input(INPUT_POST,'experience',FILTER_SANITIZE_NUMBER_INT),
             "region"                => filter_input(INPUT_POST,'post-locations'),
             "salary"                => filter_input(INPUT_POST,'post-salary'),
-            "date"                  => strtotime(filter_input(INPUT_POST,'employer-start-date'). " " . date("G:i:s")),
+            "date"                  => time(),
+            "date_available"        => strtotime(filter_input(INPUT_POST,'employer-start-date'). " " . date("G:i:s")),
             "expires"               => (strtotime(filter_input(INPUT_POST,'employer-start-date')) + (21*86400)), //21 days limitation
             "status"                => filter_input(INPUT_POST,'post-active'),
             "SEO_title"             => $db->secure_input($website->seoURL($website->stripVN(filter_input(INPUT_POST,'employer-post-title')))),
@@ -91,10 +40,23 @@ elseif($website->GetParam("CHARGE_TYPE") == 2)
 }
 ?>
 
+<!--NAVIGATION-->
+<div class="row">
+    <section class="col-md-9 col-sm-6 col-xs-12">
+        <h4><label>Đăng việc mới</label></h4>
+    </section>
+    <div class="col-md-3 col-sm-6 col-xs-12 fright">
+        <?php echo LinkTile("jobs","my",$MY_JOB_ADS,"","blue");?>
+    </div>
+</div>
 
-<?php
-    if($show_post_form){ //Allow employers to post job if they're not reached limit subscription posts
-?>
+<?php if ($jobs_count >= $employer_subscription['listings']): ?>
+    <h5><?php echo $M_REACHED_MAXIMUM_SUBSCR;?></h5>
+    <a class="underline-link" href="index.php?category=home&action=credits"><?php echo $M_PLEASE_SELECT_TO_POST;?></a>
+    
+<?php else : //New job post form, Allow employers to post job if they're not reached limit subscription posts?>
+
+<h3><?php echo $POST_NEW_ADD;?></h3>
 
 <div class="container">
     <form action="index.php?category=jobs&action=add" method="POST">
@@ -212,9 +174,5 @@ elseif($website->GetParam("CHARGE_TYPE") == 2)
         </div>
     </form>
 </div>
-
-
-<?php
-}
-?>
+<?php endif;?>
 

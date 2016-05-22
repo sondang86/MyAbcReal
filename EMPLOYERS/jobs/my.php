@@ -130,21 +130,7 @@ $job_by_employer = $commonQueries->job_by_id('jobs','employer',"$AuthUserName");
                 console.log('the user clicked cancel');
             }
         });
-                    
-        //Delete confirmation        
-//        $('#delete').confirm({
-//            content: 'bạn có muốn xóa những việc đã chọn?',
-//            title: 'Vui lòng xác nhận',
-//            confirmButton: 'Có',
-//            cancelButton: 'Không',
-//            
-//            confirm: function(){
-//                $('#form_delete').submit();
-//            },
-//            cancel: function(){
-//                console.log('the user clicked cancel');
-//            }            
-//        });
+
         
         /*Confirmation on delete job*/
         $('a.confirm_remove').confirm({
@@ -155,7 +141,7 @@ $job_by_employer = $commonQueries->job_by_id('jobs','employer',"$AuthUserName");
             
             confirm: function(){
                 var question_count = this.$target.data('questionscount');
-                console.log(question_count);
+
                 //Make sure user delete questions first, questions list must be empty to proceed next
                 if(question_count == "0"){
                     $.ajax({ //Sending data to Server side                    
@@ -166,6 +152,7 @@ $job_by_employer = $commonQueries->job_by_id('jobs','employer',"$AuthUserName");
                             proceed: 1,
                             remove_job: 1,
                             user: '<?php echo $AuthUserName;?>',
+                            subscription: '<?php echo $employerInfo['subscription'];?>',
                             job_id: this.$target.data('jobid'),                                    
                             questionnaire_id: this.$target.data('questionnaireid')
                         },
@@ -174,10 +161,10 @@ $job_by_employer = $commonQueries->job_by_id('jobs','employer',"$AuthUserName");
                             //Hide the removed div if success
                             if (response.status == "1"){
                                 $("#job_id_"+response.job_id).hide('fade');
-                            }
+                            } 
                         },
                         error: function(response) {
-                            console.log(response);
+                            console.log(response.message);
                         }
                     });                      
                 } else {                                      
@@ -185,7 +172,7 @@ $job_by_employer = $commonQueries->job_by_id('jobs','employer',"$AuthUserName");
                 }
             },
             cancel: function(){
-                console.log('the user clicked cancel');
+            
             }
         });
                     

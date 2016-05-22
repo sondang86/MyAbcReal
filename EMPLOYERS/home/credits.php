@@ -53,7 +53,7 @@
                 <ul>
                     <li class="price">
                         <i class="glyphicon glyphicon-indent-right"></i>
-                        Gói cơ bản - Basic
+                        Gói cơ bản - 300k/tháng
                     </li>
                         
                     <li>Đăng tin không giới hạn</li>
@@ -75,7 +75,7 @@
                 <ul>
                     <li class="price">
                         <i class="glyphicon glyphicon-list-alt"></i>
-                        ULTIMATE - 99 $
+                        Gói tối ưu/500k tháng
                     </li>
                         
                     <li>Tin hiển thị tại box "Tuyển dụng tiêu điểm" tại trang ngành đăng tuyển (hiển thị logo công ty kèm theo)</li>

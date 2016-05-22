@@ -30,6 +30,7 @@ $jobseeker_locations = $commonQueries->getJobseeker_locations($jobseeker_profile
 //Questionnaire answers list
 $answers = $commonQueries->getQuestionnaireAnswers($jobseeker_data['username'], $job_id);
 ?>
+<!--NAVIGATION-->
 <div class="row">
     <section class="col-md-9 col-sm-6 col-xs-12">
         <h4><label>Chi tiết hồ sơ ứng viên: <?php echo $jobseeker_username;?></label></h4>
@@ -39,7 +40,7 @@ $answers = $commonQueries->getQuestionnaireAnswers($jobseeker_data['username'], 
     </div>
 </div>
 
-<div class="row">
+<div class="row section">
     <div class="col-md-12"> 
     <?php if(trim($arrPostingApply["message"])!=""):?>
         <section class="jobseeker-title">
