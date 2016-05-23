@@ -1,5 +1,6 @@
 <?php
 $DOMAIN_NAME = "localhost/vieclambanthoigian.com.vn";
+$FULL_DOMAIN_NAME = "http://localhost/vieclambanthoigian.com.vn";
 $EMPLOYER_DOMAIN_NAME = "http://$DOMAIN_NAME/EMPLOYERS/";
 $JOBSEEKER_DOMAIN_NAME = "http://$DOMAIN_NAME/JOBSEEKERS/";
 

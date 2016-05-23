@@ -1,7 +1,23 @@
 <?php
     if(!defined('IN_SCRIPT')) die("");
-    global $db, $commonQueries, $categories, $salaries,$experience_list, $positions, $locations, $education;
+    global $db, $commonQueries, $categories, $salaries,$experience_list, $positions, $locations, $education, $FULL_DOMAIN_NAME, $time_range;
 ?>
+
+<?php
+    //Pagination options
+    
+    $new_str = preg_replace('/&trang[=][0-9a-zA-Z\W].*/', '', $website->CurrentURL()); //Remove "trang" word and all of the rest after for pagination
+    
+    print_r($new_str);
+    
+    //Set current page to 1 if empty & validation page format
+    if(!isset($_GET['trang']) || !$commonQueries->isLegal_Number($_GET['trang'])){
+        $current_page = 1;
+    } else {
+        $current_page = filter_input(INPUT_GET,'trang', FILTER_SANITIZE_NUMBER_INT);
+    }
+?>
+
 <!--NAVIGATION TAB-->
 
 <div class="row">
@@ -87,9 +103,9 @@
                         <div class="form-group col-md-2">
                             <select id="pref-orderby" class="form-control" name="by_date_updated">
                                 <option value="">Hồ sơ cập nhật trong vòng</option>
-                                <?php foreach ($categories as $category) :?>
-                                <option value="<?php echo $category['category_id']?>" <?php if(isset($_GET['by_position']) && $_GET['by_position'] == $position['position_id']) echo "selected"?>>
-                                    <?php echo $category['category_name']?>
+                                <?php foreach ($time_range as $range) :?>
+                                <option value="<?php echo $range['day_number']?>" <?php if(isset($_GET['by_date_updated']) && $_GET['by_date_updated'] == $range['day_number']) echo "selected"?>>
+                                    <?php echo $range['time_range_name']?>
                                 </option>
                                 <?php endforeach;?>
                             </select>                                
@@ -101,6 +117,7 @@
                             </button>
                         </div> <!-- Search button --> 
                         
+                        <input type="hidden" name="trang" value="1" />
                     </section>
                 </div>
             </div>
@@ -111,9 +128,11 @@
 
 <?php //Perform search
 if (isset($_GET['tim_kiem']) && $_GET['tim_kiem'] == "1"){
+    $current_url = preg_replace('/&trang[=][0-9a-zA-Z\W].*/', '', $website->CurrentURL()); //Remove "trang" word and all of the rest after for pagination
+    $reload= "$current_url&";//Link href for pagination
+   
     //with keywords search
-    if (isset($_GET['q'])){$queryString = $commonQueries->addPlustoString(filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING));} else {$queryString = "";}    
-    
+    if (isset($_GET['q'])){$queryString = $commonQueries->addPlustoString(filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING));} else {$queryString = "";}        
     // with category option
     if(isset($_GET['by_category'])){ $by_category = filter_input(INPUT_GET, 'by_category', FILTER_SANITIZE_NUMBER_INT);} else {$by_category="";}
     // with location option
@@ -124,31 +143,30 @@ if (isset($_GET['tim_kiem']) && $_GET['tim_kiem'] == "1"){
     if(isset($_GET['by_expected_position'])){ $by_expected_position = filter_input(INPUT_GET, 'by_expected_position', FILTER_SANITIZE_NUMBER_INT);} else {$by_expected_position="";} 
     // with experience_level option
     if(isset($_GET['by_experience_level'])){ $by_experience_level = filter_input(INPUT_GET, 'by_experience_level', FILTER_SANITIZE_NUMBER_INT);} else {$by_experience_level="";} 
+    
     // with date_updated option
-    if(isset($_GET['by_date_updated'])){ $by_date_updated = filter_input(INPUT_GET, 'by_date_updated', FILTER_SANITIZE_NUMBER_INT);} else {$by_date_updated="";} 
+    if(isset($_GET['by_date_updated'])){ 
+        //Get days number
+        $by_date_updated = filter_input(INPUT_GET, 'by_date_updated', FILTER_SANITIZE_NUMBER_INT);
+        
+    } else { //Not found by_date_updated request
+        $by_date_updated="";        
+    } 
     
-    $resumes = $commonQueries->Search_Resumes(TRUE,$queryString, $by_category, $by_location, $by_education, $by_expected_position, $by_experience_level);
+    $resumes = $commonQueries->Search_Resumes(TRUE,$queryString,$current_page, $by_category, $by_location, $by_education, $by_expected_position, $by_experience_level, $by_date_updated);
     
-
-//    echo "<pre>";
-//    print_r($resumes);
-//    echo "</pre>";
-
-
     if ($resumes['totalCount'] > 0) {//Search found records?>
+
+
 <!--LISTING SEARCH RESUMES RESULTS-->        
 <div class="row">
     <h4 class="col-md-4">Tìm thấy <?php echo $resumes['totalCount']?> ứng viên</h4>
 </div>
 <div class="contentArea">
-        <?php foreach ($resumes['resumes'] as $resume) :
-            //Set profile pic to default if user has not been uploaded yet
-            if ($resume['profile_pic'] == NULL){
-                $profile_pic = "http://$DOMAIN_NAME/images/commons/jobs_portal_logo_demo.jpg";
-            } else {
-                $profile_pic = "http://$DOMAIN_NAME/images/jobseekers/profile_pic/" . $resume['profile_pic'];
-            }
-        ?>
+<?php foreach ($resumes['resumes'] as $resume) :
+    //Set profile pic to default if user has not been uploaded it yet
+    $profile_pic = $commonQueries->setDefault_ifEmpty($resume['profile_pic'], "$FULL_DOMAIN_NAME/images/commons/jobs_portal_logo_demo.jpg","$FULL_DOMAIN_NAME/images/jobseekers/profile_pic/" . $resume['profile_pic']);
+?>
     <article class="row joblistArea">
         <!--JOB DETAILS-->
         <header class="col-md-12 joblist">            
@@ -207,24 +225,25 @@ if (isset($_GET['tim_kiem']) && $_GET['tim_kiem'] == "1"){
     </article>
         <?php endforeach;?>
     
+    
+    
 <?php } else { // Not found any matched candidates?>
     <h4>Không tìm thấy ứng viên phù hợp với tiêu chí, vui lòng tìm kiếm với tiêu chí phù hợp</h4>   
+
+    
     
 <?php } 
-        } else { //Show newest jobseekers CVs by default        
-            $all_resumes = $commonQueries->Search_Resumes(FALSE);?>
+        } else { //Show newest jobseekers CVs by default 
+            $reload="$FULL_DOMAIN_NAME/EMPLOYERS/tim-kiem-ung-vien/?";//Link href
+            $resumes = $commonQueries->Search_Resumes(FALSE,$queryString="",$current_page);?>
     
     <div class="row">
-        <h4 class="col-md-4">Tìm thấy <?php echo $all_resumes['totalCount']?> ứng viên</h4>
+        <h4 class="col-md-4">Tìm thấy <?php echo $resumes['totalCount']?> ứng viên</h4>
     </div>
-            <?php foreach ($all_resumes['resumes'] as $resume) :
-                //Set profile pic to default if user has not been uploaded yet
-                if ($resume['profile_pic'] == NULL){
-                    $profile_pic = "http://$DOMAIN_NAME/images/commons/jobs_portal_logo_demo.jpg";
-                } else {
-                    $profile_pic = "http://$DOMAIN_NAME/images/jobseekers/profile_pic/" . $resume['profile_pic'];
-                }
-            ?>            
+    <?php foreach ($resumes['resumes'] as $resume) :
+        //Set profile pic to default if user has not been uploaded yet
+        $profile_pic = $commonQueries->setDefault_ifEmpty($resume['profile_pic'], "$FULL_DOMAIN_NAME/images/commons/jobs_portal_logo_demo.jpg","$FULL_DOMAIN_NAME/images/jobseekers/profile_pic/" . $resume['profile_pic']);
+    ?>            
     <article class="row joblistArea">
         <!--JOB DETAILS-->
         <header class="col-md-12 joblist">            
@@ -277,7 +296,7 @@ if (isset($_GET['tim_kiem']) && $_GET['tim_kiem'] == "1"){
             </section>
             <section class="col-md-6 col-xs-6 rec_details">
                 <span> Lần cập nhật cuối: </span> 
-                <span><i class="fa fa-clock-o"></i> 4 ngày trước  </span>
+                <span><i class="fa fa-clock-o"></i> <?php echo $commonQueries->time_ago($resume['resume_date_updated'])?>  </span>
             </section>
         </footer>    
     </article>
@@ -286,10 +305,13 @@ if (isset($_GET['tim_kiem']) && $_GET['tim_kiem'] == "1"){
     
     
     <?php }?>
+    
     <!--PAGINATION-->
+
     <div class="row">
         <section class="col-md-12 paginationArea">
-            <div><ul class="pagination"></ul></div>        </section>
+            <?php $commonQueries->pagination($reload, $current_page, $resumes['totalPages'], 0);?>
+        </section>
     </div>
 </div>
 

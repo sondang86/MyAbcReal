@@ -1,6 +1,6 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries, $EMPLOYER_DOMAIN_NAME, $employer_data;
+global $db, $commonQueries,$FULL_DOMAIN_NAME, $EMPLOYER_DOMAIN_NAME, $employer_data;
 //If employer using free subscription, not allow them to see jobseeker CVs
 
 //Check if employer is allowed to see this CV
@@ -18,6 +18,8 @@ $jobseeker_data = $db->where('username', "$jobseeker_username")->getOne("jobseek
 //Count view to the database
 $commonQueries->Insert_View($jobseeker_data['id'], $AuthUserName, $jobseeker_username, $employer_data['id']);
 
+//Set default image if empty
+$profile_pic = $commonQueries->setDefault_ifEmpty($jobseeker_profile['profile_pic'],"$FULL_DOMAIN_NAME/images/commons/jobs_portal_logo_demo.jpg","$FULL_DOMAIN_NAME/images/jobseekers/profile_pic/" . $jobseeker_profile['profile_pic']);
 ?>
 
 <div class="row">
@@ -35,7 +37,7 @@ $commonQueries->Insert_View($jobseeker_data['id'], $AuthUserName, $jobseeker_use
         <!--        <h4>Thông tin ứng viên: </h4>-->
         <div class="row">
             <section class="col-md-2 profilePic">
-                <figure><img src="../images/jobseekers/profile_pic/<?php echo $jobseeker_profile['profile_pic'];?>" id="preview" alt="Ảnh cá nhân hiện tại" class="img-responsive"></figure>
+                <figure><img src="<?php echo $profile_pic;?>" id="preview" alt="Ảnh cá nhân hiện tại" class="img-responsive"></figure>
             </section>
             <section class="col-md-10 JS_profile">
                 <p><label>Họ và Tên: </label> <span><?php echo $jobseeker_profile['first_name'] ." ".$jobseeker_profile['last_name']?></span></p>

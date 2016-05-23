@@ -1217,7 +1217,7 @@
         *  @param var by_expected_position search by expected_position included
         *  @param var by_experience_level search by experience_level included
         */
-        public function Search_Resumes($condition=TRUE,$queryString="",$by_category="",$by_location="",$by_education="",$by_expected_position="",$by_experience_level="") {
+        public function Search_Resumes($condition=TRUE,$queryString="",$page_number, $by_category="",$by_location="",$by_education="",$by_expected_position="",$by_experience_level="", $by_date_updated="") {
             $jobsInfo_columns = Array (
                 $this->_dbPrefix."jobseeker_resumes.id as resume_id",$this->_dbPrefix."jobseeker_resumes.username",
                 $this->_dbPrefix."jobseeker_resumes.title as resume_title",$this->_dbPrefix."jobseeker_resumes.skills as resume_skills",
@@ -1269,12 +1269,18 @@
                 if ($by_expected_position !== ""){ //expected position included
                     $this->_db->where('expected_position', $by_expected_position);
                 }  
+                
+                if ($by_date_updated !== ""){ //by date range
+                    $this->_db->where("date_updated >= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL $by_date_updated DAY))");
+                }
                     
             }
                 
             //Get the data
-            $resumes['resumes'] = $this->_db->withTotalCount()->orderBy("date_updated","DESC")->get('jobseeker_resumes', NULL, $jobsInfo_columns);
+            $this->_db->pageLimit = 5;
+            $resumes['resumes'] = $this->_db->withTotalCount()->orderBy("date_updated","DESC")->arraybuilder()->paginate('jobseeker_resumes', $page_number, $jobsInfo_columns);
             $resumes['totalCount'] = $this->_db->totalCount; 
+            $resumes['totalPages'] = $this->_db->totalPages;
             return $resumes;
         }
             
@@ -1413,6 +1419,22 @@
             }
             
             return $number;
+        }
+        
+        /**
+        *   check whether input is empty, then replace with default settings
+        *   @param var data to be input
+        *   @param var default_output In case of data is NULL
+        *   @param var replacement_output intend output in case of data not NULL
+        */
+        public function setDefault_ifEmpty($data,$default_output, $replacement_output){
+            if ($data == NULL){
+                $new_value = $default_output;
+            } else {
+                $new_value = $replacement_output;
+            }
+            
+            return $new_value;
         }
             
     }

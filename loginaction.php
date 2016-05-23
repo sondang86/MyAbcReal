@@ -60,11 +60,11 @@ if(isset($_POST['email']) && isset($_POST['password'])){
             $website->redirect('index.php?mod=login');
         }
         
+        
         if ($db->totalCount > 0){ //User is jobseeker
             if (password_verify($Password, $jobseekers['password'])){ //Password matched
                 //Store user data in session
                 $_SESSION['username'] = $jobseekers['username'];
-//                $_SESSION['user_password'] = $jobseekers['password'];
                 $_SESSION['logged_in'] = TRUE;
                 $_SESSION['user_type'] = 'jobseeker';
                 $website->redirect('JOBSEEKERS/index.php');
@@ -73,7 +73,10 @@ if(isset($_POST['email']) && isset($_POST['password'])){
                 $commonQueries->flash('message', $commonQueries->messageStyle('warning', 'Sai tên đăng nhập hoặc mật khẩu! Vui lòng thử lại'));
                 $website->redirect('index.php?mod=login');
             }
-        } 
+        } else { //Wrong username or password
+            $commonQueries->flash('message', $commonQueries->messageStyle('warning', 'Sai tên đăng nhập hoặc mật khẩu! Vui lòng thử lại'));
+            $website->redirect('index.php?mod=login');
+        }
     }
 }
 ?>

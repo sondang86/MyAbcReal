@@ -84,7 +84,8 @@ $experience_list    = $db->get('job_experience');
 $positions          = $db->get('positions');
 $education          = $db->get('education');
 $gender             = $db->get('gender');
-$employer_data = $db->where('username', "$AuthUserName")->getOne('employers');
+$employer_data      = $db->where('username', "$AuthUserName")->getOne('employers');
+$time_range         = $db->get('time_range');
     
 if(file_exists("../ADMIN/texts_".$lang.".php"))
 {
