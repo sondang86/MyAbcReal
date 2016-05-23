@@ -1,6 +1,6 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
-global $db, $website, $categories, $locations;
+global $db, $website, $categories, $locations, $FULL_DOMAIN_NAME;
 if(     
     //Display this only in home page
     !isset($_REQUEST["mod"])&&!isset($_REQUEST["page"]) 
@@ -96,10 +96,13 @@ if(
             </main>
             
             <!--QUICK REGISTER-->
-            <?php if($guest == TRUE): //SHOW THIS SECTION FOR GUESTS ONLY?>            
+            <?php 
+                    if($guest == TRUE): //SHOW THIS SECTION FOR GUESTS ONLY
+                    include_once ('include/quick_register.php'); //Quick register modal form    
+            ?>            
             <section class="col-md-3 form-group group-3">
                 <fieldset class="quick-register">
-                    <a href="#">
+                    <a href="#quick-register" class="modal-opener">
                         <input type="button" class="OrangeButton" value="Đăng ký nhanh">
                     </a>
                     <p>Hoặc</p>

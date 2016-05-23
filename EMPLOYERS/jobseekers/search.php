@@ -4,11 +4,8 @@
 ?>
 
 <?php
-    //Pagination options
-    
-    $new_str = preg_replace('/&trang[=][0-9a-zA-Z\W].*/', '', $website->CurrentURL()); //Remove "trang" word and all of the rest after for pagination
-    
-    print_r($new_str);
+    //Pagination options    
+//    $new_str = preg_replace('/&trang[=][0-9a-zA-Z\W].*/', '', $website->CurrentURL()); //Remove "trang" word and all of the rest after for pagination
     
     //Set current page to 1 if empty & validation page format
     if(!isset($_GET['trang']) || !$commonQueries->isLegal_Number($_GET['trang'])){
@@ -22,9 +19,7 @@
 
 <div class="row">
     <section class="col-md-10">
-        <h4><?php $commonQueries->flash('message');?></h4>
-        <p></p>
-        <h5></h5>            
+        <h4><?php $commonQueries->flash('message');?></h4>        
     </section>
     <section class="col-md-2 navigation-tabs">
         <?php 

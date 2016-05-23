@@ -2856,9 +2856,7 @@ div.upload input:hover {
 @media all and (min-width: 600px) {
     
     .js-editForm section{
-        /*display: block;*/
         text-align: left;
-        /*margin: 10px 0;*/
         margin: 20px 0 !important;
     }
     
