@@ -14,12 +14,7 @@ class SiteManager
 	public $categories_count;
 	public $default_page_name="en_Home";
             
-            
-	function SiteManager()
-	{
-            
-	}
-            
+
 	/// The website title and meta description and keywords,
 	/// which can be used for SEO purposes
 	public $Title = true;
@@ -89,6 +84,8 @@ class SiteManager
 		if(isset($_REQUEST["page"]))
 		{
 			list($lang,$link)=explode("_",urldecode($_REQUEST["page"]),2);
+                        
+//                        print_r(explode("_",$this->seoURL($this->stripVN($_REQUEST["page"])),2));
                             
 			if(trim($lang)!="" && strlen($lang)==2)
 			{
@@ -166,7 +163,7 @@ class SiteManager
 			$templateArray= $this->db->DataArray("templates","id=".$template_id);
 		}
 		else
-		if(file_exists("template.htm"))
+		if(file_exists("template.php"))
 		{
 			$templateArray=array();
                             
@@ -176,14 +173,14 @@ class SiteManager
 			}
 			else
 			{
-				$templateArray["html"] = file_get_contents('template.htm');
+				$templateArray["html"] = file_get_contents('template.php');
 			}
 		}
 		else
-		if(file_exists("../template.htm"))
+		if(file_exists("../template.php"))
 		{
 			$templateArray=array();
-			$templateArray["html"] = file_get_contents('../template.htm');
+			$templateArray["html"] = file_get_contents('../template.php');
 		}
 		else
 		{
@@ -503,7 +500,7 @@ class SiteManager
                     
 			array_push($this->arrPages, array($row['id'], $row['parent_id'], $row["link_".$this->lang], $row["custom_link_".$this->lang], $row["only_bottom"]));
 		}
-                    
+                
 		$strLinkTemplate = "<li><a class='main-top-link' href=http://$DOMAIN_NAME/[LINK_HREF]>[LINK_TEXT]</a> </li>";
                     
 		foreach($this->arrPages as $arrPage)
@@ -542,15 +539,18 @@ class SiteManager
                                     
 				$strSubResult .= " </ul>\n";
 
-                                    
+                                
 				$strResult .= str_replace("[LINK_TEXT]",stripslashes($arrPage[2]),str_replace("[LINK_HREF]",$this->GenerateLink($this->params[1111],$this->params[1112],$this->lang,stripslashes($arrPage[2])),
 				str_replace("</li>",$strSubResult."</li>",str_replace("<li>","<li class=\"dropdown\">",$strLinkTemplate))
 				));
 			}
 			else
-			{
+			{ //Convert to SEO URL friendly
 				if($arrPage[4]==1) continue;
-				$strResult .= str_replace("[LINK_TEXT]",stripslashes($arrPage[2]),str_replace("[LINK_HREF]",$this->GenerateLink($this->params[1111],$this->params[1112],$this->lang,stripslashes($arrPage[2])),$strLinkTemplate));
+//				$strResult .= str_replace("[LINK_TEXT]",stripslashes($arrPage[2]),str_replace("[LINK_HREF]",$this->GenerateLink($this->params[1111],$this->params[1112],$this->lang,$this->seoURL($this->stripVN(stripslashes($arrPage[2])))),$strLinkTemplate));
+                                $strResult .= str_replace("[LINK_TEXT]",'hoho',str_replace("[LINK_HREF]",$this->GenerateLink($this->params[1111],$this->params[1112],$this->lang,$this->seoURL($this->stripVN(stripslashes($arrPage[2])))),$strLinkTemplate));
+                                echo $this->seoURL($this->stripVN(stripslashes($arrPage[2]))) . "<br>";
+                                print_r($arrPage);
 			}
                             
                             
@@ -570,8 +570,8 @@ class SiteManager
 			else
 			{
 				$path="";
-                                    
-				return $path.(urlencode($lang."_".stripslashes($page))).".html";	
+//                                    $this->seoURL($this->stripVN(stripslashes($page)));
+				return $path.(urlencode($lang."_".$this->seoURL($this->stripVN(stripslashes($page))))).".html"; 
 			}
 		}
 		else
@@ -2375,15 +2375,15 @@ class SiteManager
 	}
         
         
-        function newMenu(){
+        function newMenu($menu_items){
             global $FULL_DOMAIN_NAME, $M_MY_SPACE;
         ?>
-            <div class="col-md-2">
+<!--            <div class="col-md-2">
                 <site logo/>
-            </div>                       
+            </div>                       -->
 
             <!--main navigation menu-->	 
-            <div id="nav_menu" class="pull-right col-md-10">
+            <div id="nav_menu">
                 <nav class="navbar navbar-inverse">
                     <div class="container-fluid">
                         <div class="navbar-header">
@@ -2396,10 +2396,10 @@ class SiteManager
                         </div>
                         <div class="collapse navbar-collapse" id="myNavbar">
                             <ul class="nav navbar-nav">
-                                <li class="active"><a href="#">Home</a></li>
-                                <li><a href="#">Page 1</a></li>
-                                <li><a href="#">Page 2</a></li> 
-                                <li><a href="#">Page 3</a></li> 
+                                <li><a href="#">Home</a></li>
+                                <?php foreach ($menu_items as $menu_item) :?>
+                                <li><a href="#"><?php echo $menu_item['name_vn']?></a></li>
+                                <?php endforeach;?>
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
                                 <!--<li><a href="#"><i class="fa fa-user" aria-hidden="true"></i> Đăng ký</a></li>-->                                

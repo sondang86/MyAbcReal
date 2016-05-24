@@ -8,6 +8,7 @@
 if(!defined('IN_SCRIPT')) die("");
 global $db,$pagination, $categories, $categories_subs,$commonQueries, $locations, $companies,$SEO_setting, $Browser_detection, $userId_cookie;
 
+//Get featured jobs list
 $featured_jobs_columns = array(
     $DBprefix."jobs.id as job_id",$DBprefix."jobs.job_category",
     $DBprefix."jobs.title",$DBprefix."jobs.SEO_title",$DBprefix."jobs.date",

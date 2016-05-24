@@ -60,6 +60,7 @@ $salaries = $db->get ('salary');
 $all_jobs = $db->get('jobs');
 $companies = $db->get('employers');
 $gender = $db->get('gender');
+$menu_items = $db->where('active_vn', '1')->get('pages', NULL, array('name_vn', 'link_vn', 'custom_link_vn'));
 
 //Set default user ID if their cookie empty
 if (empty($_COOKIE['userId'])){
@@ -117,9 +118,6 @@ $website->Render();
 /// Inserting the statistics information in the database
 $website->Statistics();
     
-
-$website->newMenu();
-
 ?>
     
 <script>
@@ -163,3 +161,9 @@ $website->newMenu();
 
     });
 </script>
+
+<?php
+    echo "<pre>";
+    print_r($_REQUEST);
+    echo "</pre>";
+?>

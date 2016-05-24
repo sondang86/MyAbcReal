@@ -283,7 +283,7 @@ form#main ol li
 
 .main-top-link
 {
-    color:#89A2B3 !important;
+    color:#717477 !important;
     font-size:14px !important;
 }
 
@@ -2044,7 +2044,7 @@ nav{
 }
 
 .navbar-nav li a {
-    color: transparent;
+    /*color: transparent;*/
 }
 
 .no-padding
