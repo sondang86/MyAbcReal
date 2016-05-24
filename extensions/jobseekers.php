@@ -1,7 +1,7 @@
 <?php
 // Jobs Portal, copyright vieclambanthoigian.com.vn 2016
  if(!defined('IN_SCRIPT')) die("");
- global $db, $commonQueries;
+ global $db, $commonQueries, $gender;
  
 if (isset($_POST['submit'])){
     $email = filter_input(INPUT_POST,'email', FILTER_SANITIZE_STRING);
@@ -144,10 +144,10 @@ if (isset($_POST['submit'])){
                 <section class="col col-3">
                     <label class="select">
                         <select name="gender">
-                            <option value="0" selected disabled>Giới tính</option>
-                            <option value="1">Nam</option>
-                            <option value="2">Nữ</option>
-                            <option value="3">Khác</option>
+                            <option value="" <?php if(!isset($_POST['gender'])){echo "selected";}?> disabled>Giới tính</option>
+                            <?php foreach ($gender as $value) :?>
+                            <option value="<?php echo $value['gender_id']?>" <?php if(isset($_POST['gender']) && $_POST['gender'] == $value['gender_id']){echo "selected";}?>><?php echo $value['name']?></option>
+                            <?php endforeach;?>
                         </select>
                         <i></i>
                     </label>

@@ -1,6 +1,6 @@
 <?php
     if(!defined('IN_SCRIPT')) die("");
-    global $db,$companies, $commonQueries, $SEO_setting;    
+    global $db,$companies, $commonQueries, $SEO_setting, $FULL_DOMAIN_NAME;    
     $jobs_by_employers = $commonQueries->jobs_by_employerId(NULL);
     
     if ($jobs_by_employers !== FALSE){
@@ -15,6 +15,17 @@
         }
     } 
 ?>
+<div class="row">
+    <section class="col-md-12 ">
+        <h5>Bạn chưa có tài khoản? Đăng ký tại <a href="<?php echo $FULL_DOMAIN_NAME;?>/mod-vn-employers_registration.html">đây</a></h5>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col-md-12 ">
+        <h5><label><strong>Danh sách nhà tuyển dụng nổi bật</strong></label></h5>
+    </section>
+</div>
 <?php foreach ($companies as $company):
     //Count total jobs of employer
     $db->where("employer", $company['username'])->withTotalCount()->get("jobs");    

@@ -541,11 +541,7 @@ class SiteManager
 				}
                                     
 				$strSubResult .= " </ul>\n";
-                                    
-                                    
-				//$strResult .= str_replace("[LINK_TEXT]",stripslashes($arrPage[2]),str_replace("[LINK_HREF]",$this->GenerateLink($this->params[1111],$this->params[1112],$this->lang,stripslashes($arrPage[2])),
-				//str_replace("</li>",$strSubResult."</li>",$strLinkTemplate)
-				//));
+
                                     
 				$strResult .= str_replace("[LINK_TEXT]",stripslashes($arrPage[2]),str_replace("[LINK_HREF]",$this->GenerateLink($this->params[1111],$this->params[1112],$this->lang,stripslashes($arrPage[2])),
 				str_replace("</li>",$strSubResult."</li>",str_replace("<li>","<li class=\"dropdown\">",$strLinkTemplate))
@@ -654,10 +650,6 @@ class SiteManager
 			$this->TemplateHTML = str_replace('<a href="#','<a rel="nofollow" href="#',$this->TemplateHTML);
 		}
                     
-//		if(!isset($_REQUEST["mod"])&&(!isset($_REQUEST["page"])||(isset($_REQUEST["page"])&&$_REQUEST["page"]=="en_Home")))
-//		{
-//			array_push($arrTags, array("carousel","carousel_tag.php"));
-//		}
                 
                 if(     
                     //Display this only in home page
@@ -2382,5 +2374,54 @@ class SiteManager
             }                    
 	}
         
+        
+        function newMenu(){
+            global $FULL_DOMAIN_NAME, $M_MY_SPACE;
+        ?>
+            <div class="col-md-2">
+                <site logo/>
+            </div>                       
+
+            <!--main navigation menu-->	 
+            <div id="nav_menu" class="pull-right col-md-10">
+                <nav class="navbar navbar-inverse">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span> 
+                            </button>
+                            <a class="navbar-brand" href="#"><i class="fa fa-home" aria-hidden="true"></i> Trang chủ</a>
+                        </div>
+                        <div class="collapse navbar-collapse" id="myNavbar">
+                            <ul class="nav navbar-nav">
+                                <li class="active"><a href="#">Home</a></li>
+                                <li><a href="#">Page 1</a></li>
+                                <li><a href="#">Page 2</a></li> 
+                                <li><a href="#">Page 3</a></li> 
+                            </ul>
+                            <ul class="nav navbar-nav navbar-right">
+                                <!--<li><a href="#"><i class="fa fa-user" aria-hidden="true"></i> Đăng ký</a></li>-->                                
+                                <?php if(isset($_SESSION['username']) && ($_SESSION['user_type'] == "jobseeker"))://Jobseekers?>
+                                <li><a href="<?php echo $FULL_DOMAIN_NAME;?>/JOBSEEKERS/index.php"><span class="btn-main-login"><?php echo $M_MY_SPACE;?></span></a></li>
+                                
+                                <?php elseif(isset($_SESSION['username']) && ($_SESSION['user_type'] == "employer"))://Employers?>
+                                <li><a class="login-trigger" href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/index.php"><span class="btn-main-login"><?php echo $M_MY_SPACE;?></span></a></li>
+
+                                <?php else: //User not logged in?>
+                                <li><a href="#" class="login-trigger" data-toggle="modal" data-target="#login-modal"><i class="fa fa-sign-in" aria-hidden="true"></i> Đăng nhập</a></li>
+                                <?php endif;?>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+    <?php }
+    
+    
+    
+    
+    
 }	
 ?>

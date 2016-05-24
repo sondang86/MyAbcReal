@@ -13,12 +13,12 @@ if(!session_id()){
 }
 if (!isset($_SESSION['user_type'])){ $_SESSION['user_type'] = "guest";}
 
-require("config.php");
+require_once("config.php");
 if(!$DEBUG_MODE) error_reporting(0);
     
 function __autoload($classname) {
     $filename = "include/". $classname .".class.php";
-    include($filename);
+    include_once($filename);
 }
     
 $db = new MysqliDb (Array (
@@ -79,20 +79,20 @@ $URL_site = "http://localhost/vieclambanthoigian.com.vn/";
     
 /// Loading the website default settings
 $website->LoadSettings();
-include("include/texts_".$website->lang.".php");
+include_once("include/texts_".$website->lang.".php");
     
-include("include/functions.php");
+include_once("include/functions.php");
     
 $website->GenerateMenu();
-    
+
 if($website->IsExtension)
 {
-	include("include/Extension.class.php");
+	include_once("include/Extension.class.php");
 	$currentExtension = new Extension($website->ExtensionFile);
 }
 else
 {
-	include("include/Page.class.php");
+	include_once("include/Page.class.php");
 	$currentPage = new Page(isset($_REQUEST["page"])?$_REQUEST["page"]:"");
             
 	$currentPage->LoadPageData();
@@ -117,6 +117,9 @@ $website->Render();
 /// Inserting the statistics information in the database
 $website->Statistics();
     
+
+$website->newMenu();
+
 ?>
     
 <script>
