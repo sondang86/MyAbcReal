@@ -29,7 +29,7 @@ class Page
 			$this->page = $website->DefaultPage;
 		}
 	
-		list($lang,$link)=explode("_",urldecode($this->page),2);
+		list($lang,$link)= array_pad(explode("_",urldecode($this->page),2),2,NULL);
 		
 		if(trim($lang)!="" && strlen($lang)==2)
 		{

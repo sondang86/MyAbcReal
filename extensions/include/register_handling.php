@@ -1,4 +1,5 @@
 <?php
+    if(!defined('IN_SCRIPT')) die("");
     global $db, $commonQueries, $FULL_DOMAIN_NAME;
 
     if (isset($_POST['submit'])){

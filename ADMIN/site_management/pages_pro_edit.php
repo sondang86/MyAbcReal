@@ -5,6 +5,7 @@
 // http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
+global $db, $commonQueries, $website;
 ?>
 
 <script>
@@ -111,7 +112,6 @@ if(isset($_REQUEST["Proceed"]))
 	
 	if(isset($_REQUEST["extension"]) && $_REQUEST["extension"] =="NONE")
 	{
-		
 			
 			$database->SQLUpdate_SingleValue
 			(
@@ -138,8 +138,17 @@ if(isset($_REQUEST["Proceed"]))
 		);
 	}
 
+        //Update values
 	$arrNames=array("active_".$language_version,"name_".$language_version,"description_".$language_version,"keywords_".$language_version,"link_".$language_version,"only_bottom","template_id");
-	$arrValues=array($_REQUEST["active"],$_REQUEST["pName"],$_REQUEST["pDescription"],$_REQUEST["pKeywords"],$_REQUEST["pLink"],(isset($_REQUEST["only_bottom"])?$_REQUEST["only_bottom"]:"0"),$_REQUEST["template_name"]);
+	$arrValues=array(
+            filter_input(INPUT_POST, 'active', FILTER_SANITIZE_NUMBER_INT),
+            filter_input(INPUT_POST, 'pName', FILTER_SANITIZE_STRING),
+            filter_input(INPUT_POST, 'pDescription', FILTER_SANITIZE_STRING),
+            filter_input(INPUT_POST, 'pKeywords', FILTER_SANITIZE_STRING),
+            $website->seoURL(filter_input(INPUT_POST, 'pName', FILTER_SANITIZE_STRING)),
+            (isset($_REQUEST["only_bottom"])? filter_input(INPUT_POST, 'only_bottom', FILTER_SANITIZE_NUMBER_INT):"0"),
+            filter_input(INPUT_POST, 'template_name', FILTER_SANITIZE_NUMBER_INT), 
+        );
 	$database->SQLUpdate("pages",$arrNames,$arrValues," id=$id");
 	$HideFormFlag=true;
 }
@@ -179,21 +188,19 @@ $oArr=$database->DataArray("pages"," id=$id");
 <input type="hidden" name="category" value="site_management">
 
 <table border="0" cellspacing="6">
-	<tr>
-		<td><b><?php echo $str_PageLinkPage;?></b></td>
-		<td>
-		<input class="form-edit-field" type="text" name="pLink" size="50" maxlength="256" value="<?php echo stripslashes($oArr['link_'.$language_version]);?>">
-		</td>
-	</tr>
-
-	<tr>
+        <tr>
 		<td width=150><b><?php echo $str_PageNamePage;?></b></td>
 		<td>
 		<input class="form-edit-field" type="text" name="pName" size="50" maxlength="256"  value="<?php echo stripslashes($oArr['name_'.$language_version]);?>">
   		</td>
 	</tr>
-
-	
+    
+	<tr>
+		<td><b><?php echo $str_PageLinkPage;?></b></td>
+		<td>
+                    <input class="form-edit-field" type="text" name="pLink" size="50" maxlength="256" value="<?php echo stripslashes($oArr['link_'.$language_version]);?>" disabled>
+		</td>
+	</tr>	
 
 	<tr>
 		<td valign=top><b><?php echo $str_PageDescriptionPage;?></b></td>

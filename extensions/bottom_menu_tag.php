@@ -20,7 +20,7 @@ if(isset($this->arrPages))
 		{
 			$HTML.="
 				<li>
-					<a href=\"".$this->GenerateLink($this->params[1111],$this->params[1112],$this->lang,stripslashes($arrPage[2]))."\">".stripslashes($arrPage[2])."</a>
+					<a href=\"".$this->GenerateLink($this->params[1111],$this->params[1112],$this->lang,stripslashes($arrPage[2]))."\">".stripslashes($arrPage[5])."</a>
 				</li>
 			";
 		}

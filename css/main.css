@@ -2625,7 +2625,7 @@ div.upload input:hover {
 .social-share ul li{
     list-style-type: none;
     display: inline-block;
-
+    
 }
 
 .job-details-aside {
@@ -2726,6 +2726,63 @@ div.upload input:hover {
     overflow: hidden;
 }
 
+/*APPLY JOB*/
+.messageToEmployer textarea, .questionnaires textarea {        
+    width: 100%; /* the inital width of the textarea */
+    height: 10em; /* the inital height of the textarea */      
+    padding: 1em;        
+    font-family: "Montserrat", "sans-serif";
+    font-size: 1em;        
+    border: 0.1em solid #ccc;
+    border-radius: 0.5em;        
+    background-color: #ffffe6;        
+    padding-bottom: 25px;
+}
+
+.questionnaires {
+    border: 1px solid #ccc;
+    border-radius: 0.5em;  
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.questionnaires section {
+    margin: 25px 0;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 15px;
+}    
+
+.submitButton {
+    text-align: right;
+    margin: 25px 0;
+}
+
+.messageToEmployer {
+    margin-top: 25px;
+}
+
+.captcha {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.job-description-apply {
+    display: block;
+    border: 1px solid #888;
+    border-color: #e5e5e5;
+    -ms-transition: border-color 0.3s;
+    -moz-transition: border-color 0.3s;
+    -webkit-transition: border-color 0.3s;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+.job-description-apply aside a img {
+    border-radius: 5px;
+    border: 1px solid;
+}
+
 
 /* D?nh cho ?i?n tho?i */
 @media all and (min-width: 250px) {
@@ -2757,7 +2814,7 @@ div.upload input:hover {
         margin: 0;
         /*text-align: center;*/
     }
-
+    
     .js-forms span {
         float: left;
         width: 100%;
@@ -2950,7 +3007,7 @@ div.upload input:hover {
         margin: 0;        
     }
     
-
+    
     
     .cv-details label{
         width: 100%;

@@ -109,12 +109,12 @@ if(isset($_POST['delete_submitted']) && ($_POST['delete_submitted'] == '1')){
 }
 ?>
 <div class="row">
-    <section class="col-md-10">
+    <section class="col-md-9">
         <h4><?php $commonQueries->flash('message');?></h4>
         <p>Bạn có thể tải CV của bạn với định dạng PDF/doc hoặc docx để đính kèm khi nộp hồ sơ cho các công việc trên vieclambanthoigian.com.vn</p>
         <h5>Lưu ý: 1 hồ sơ chỉ có thể up tối đa 1 file, file có sẵn sẽ bị ghi đè lên bằng file mới</h5>            
     </section>
-    <section class="col-md-2 navigation-tabs">
+    <section class="col-md-3 navigation-tabs">
         <?php 
             echo LinkTile("home","welcome",$M_DASHBOARD,"","blue");
         ?>

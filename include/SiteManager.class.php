@@ -1,7 +1,7 @@
 <?php
 class SiteManager
 {
-	public $lang="en";
+	public $lang="vn";
 	public $arrPages = array();
 	public $domain = "";
 	public $multi_language = false;
@@ -12,7 +12,7 @@ class SiteManager
 	public $global_categories=array();
 	public $languages=array();
 	public $categories_count;
-	public $default_page_name="en_Home";
+	public $default_page_name="vn_trang-chu";
             
 
 	/// The website title and meta description and keywords,
@@ -80,13 +80,10 @@ class SiteManager
 				echo "<i>Please create a language file for this new language!</i>";
 			}
 		}
-		else
-		if(isset($_REQUEST["page"]))
+		elseif(isset($_REQUEST["page"]))
 		{
-			list($lang,$link)=explode("_",urldecode($_REQUEST["page"]),2);
+			list($lang,$link)= array_pad(explode("_",urldecode($_REQUEST["page"]),2),2,null);
                         
-//                        print_r(explode("_",$this->seoURL($this->stripVN($_REQUEST["page"])),2));
-                            
 			if(trim($lang)!="" && strlen($lang)==2)
 			{
 				$this->lang= substr(preg_replace("/[^a-z]/i", "", $lang), 0, 2); 
@@ -498,7 +495,7 @@ class SiteManager
 		while ($row = mysqli_fetch_array($site_pages))
 		{
                     
-			array_push($this->arrPages, array($row['id'], $row['parent_id'], $row["link_".$this->lang], $row["custom_link_".$this->lang], $row["only_bottom"]));
+			array_push($this->arrPages, array($row['id'], $row['parent_id'], $row["link_".$this->lang], $row["custom_link_".$this->lang], $row["only_bottom"], $row["name_vn"]));
 		}
                 
 		$strLinkTemplate = "<li><a class='main-top-link' href=http://$DOMAIN_NAME/[LINK_HREF]>[LINK_TEXT]</a> </li>";
@@ -540,17 +537,14 @@ class SiteManager
 				$strSubResult .= " </ul>\n";
 
                                 
-				$strResult .= str_replace("[LINK_TEXT]",stripslashes($arrPage[2]),str_replace("[LINK_HREF]",$this->GenerateLink($this->params[1111],$this->params[1112],$this->lang,stripslashes($arrPage[2])),
+				$strResult .= str_replace("[LINK_TEXT]",stripslashes($arrPage[5]),str_replace("[LINK_HREF]",$this->GenerateLink($this->params[1111],$this->params[1112],$this->lang,$this->seoURL($this->stripVN(stripslashes($arrPage[2])))),
 				str_replace("</li>",$strSubResult."</li>",str_replace("<li>","<li class=\"dropdown\">",$strLinkTemplate))
 				));
 			}
 			else
 			{ //Convert to SEO URL friendly
-				if($arrPage[4]==1) continue;
-//				$strResult .= str_replace("[LINK_TEXT]",stripslashes($arrPage[2]),str_replace("[LINK_HREF]",$this->GenerateLink($this->params[1111],$this->params[1112],$this->lang,$this->seoURL($this->stripVN(stripslashes($arrPage[2])))),$strLinkTemplate));
-                                $strResult .= str_replace("[LINK_TEXT]",'hoho',str_replace("[LINK_HREF]",$this->GenerateLink($this->params[1111],$this->params[1112],$this->lang,$this->seoURL($this->stripVN(stripslashes($arrPage[2])))),$strLinkTemplate));
-                                echo $this->seoURL($this->stripVN(stripslashes($arrPage[2]))) . "<br>";
-                                print_r($arrPage);
+				if($arrPage[4]==1) continue; // ignore if this is only_bottom option
+                                $strResult .= str_replace("[LINK_TEXT]",$arrPage[5],str_replace("[LINK_HREF]",$this->GenerateLink($this->params[1111],$this->params[1112],$this->lang,$this->seoURL($this->stripVN(stripslashes($arrPage[2])))),$strLinkTemplate));
 			}
                             
                             

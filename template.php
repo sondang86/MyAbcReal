@@ -24,11 +24,8 @@
         </script>
     </head>
     <body>
-        
         <div id="wrapper">
             <div id="header">
-                
-                
                 <div class="container">
                     <div class="row">
                         <!--MENU AREA-->
@@ -36,7 +33,6 @@
                         <div class="col-md-2 hide-sm">
                             <site logo/>
                         </div>
-                        
                         <!--MENU-->
                         <div class="col-md-10 col-sm-12">
                             <div id="nav_menu">
@@ -48,23 +44,14 @@
                                                 <span class="icon-bar"></span>
                                                 <span class="icon-bar"></span> 
                                             </button>
-                                            <a class="navbar-brand" href="#"><i class="fa fa-home" aria-hidden="true"></i> Trang chủ</a>
+                                            <!--<a class="navbar-brand" href="#"><i class="fa fa-home" aria-hidden="true"></i> Trang chủ</a>-->
                                         </div>
                                         <div class="collapse navbar-collapse" id="myNavbar">
                                             <ul class="nav navbar-nav">
                                                 <site menu/>
                                             </ul>
                                             <ul class="nav navbar-nav navbar-right">
-                                                <!--<li><a href="#"><i class="fa fa-user" aria-hidden="true"></i> Đăng ký</a></li>-->                                
-                                                <?php if(isset($_SESSION['username']) && ($_SESSION['user_type'] == "jobseeker"))://Jobseekers?>
-                                                <li><a href="<?php echo $FULL_DOMAIN_NAME;?>/JOBSEEKERS/index.php"><span class="btn-main-login"><?php echo $M_MY_SPACE;?></span></a></li>
-
-                                                <?php elseif(isset($_SESSION['username']) && ($_SESSION['user_type'] == "employer"))://Employers?>
-                                                <li><a class="login-trigger" href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/index.php"><span class="btn-main-login"><?php echo $M_MY_SPACE;?></span></a></li>
-
-                                                <?php else: //User not logged in?>
-                                                <li><a href="#" class="login-trigger" data-toggle="modal" data-target="#login-modal"><i class="fa fa-sign-in" aria-hidden="true"></i> Đăng nhập</a></li>
-                                                <?php endif;?>
+                                                <li><site login_links/></li>                                                
                                             </ul>
                                         </div>
                                     </div>
@@ -99,8 +86,8 @@
                     
                     <div class="col-md-4 col-sm-12">
                         
-                        <site aside_content/>                            
-                            
+                        <site aside_content/>    
+                           
                         <br/>
                         <h3 class="aside-header">
                             {M_ADVERTISEMENTS}

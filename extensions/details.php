@@ -2,7 +2,7 @@
     if(!defined('IN_SCRIPT')) die("");
     global $db,$categories, $categories_subs,$commonQueries,  $SEO_setting, $userId_cookie,$Browser_detection;
     $job_id = $commonQueries->check_present_id($_GET, $SEO_setting, 3);
-    $job_details = $commonQueries->jobDetails($job_id, $userId_cookie);
+    $job_details = $commonQueries->jobDetails($job_id);
     
     if ($job_details !== FALSE){ 
         $commonQueries->Update_job_views($job_id);//count job views for every refresh
@@ -11,6 +11,7 @@
     $company_logo = $commonQueries->setDefault_logoIfEmpty($job_details['logo'], "employers");
 ?>    
 <a id="go_back_button" class="btn btn-default btn-xs pull-right no-decoration margin-bottom-5" href="javascript:GoBack()">Quay lại</a>    
+
 <article class="job-details-wrap">
     <!--JOB's TITLE-->
     <div class="row">

@@ -6,28 +6,21 @@
 // http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
+global $FULL_DOMAIN_NAME;
 $link_suffix="";
 
-if($MULTI_LANGUAGE_SITE)
-{
-	$link_suffix="lang=".$this->lang;
-}
-
-if(isset($_SESSION['username']) && ($_SESSION['user_type'] == "jobseeker")){
-	?>
-	<li><a class="btn btn-primary custom-back-color" href="http://<?php echo $DOMAIN_NAME;?>/JOBSEEKERS/index.php<?php if($MULTI_LANGUAGE_SITE) echo "?lng=".$this->lang;?>"><span class="btn-main-login"><?php echo $M_MY_SPACE;?></span></a></li>
-	<?php
-}
-elseif(isset($_SESSION['username']) && ($_SESSION['user_type'] == "employer")){
-	?>
-	<li><a class="login-trigger btn btn-primary custom-back-color" href="http://<?php echo $DOMAIN_NAME;?>/EMPLOYERS/index.php<?php if($MULTI_LANGUAGE_SITE) echo "?lng=".$this->lang;?>"><span class="btn-main-login"><?php echo $M_MY_SPACE;?></span></a></li>
-	<?php
-}
-else {
-
+if($MULTI_LANGUAGE_SITE){
+    $link_suffix="lang=".$this->lang;
+} 
 ?>
-	<li><button type="button" class="login-trigger btn btn-primary custom-back-color" data-toggle="modal" data-target="#login-modal"><?php echo $M_LOGIN;?></button></li>
 
-<?php
-}
-?>
+<?php if(isset($_SESSION['username']) && ($_SESSION['user_type'] == "jobseeker"))://Jobseekers?>
+<li><a href="<?php echo $FULL_DOMAIN_NAME;?>/JOBSEEKERS/index.php"><span class="btn-main-login"><?php echo $M_MY_SPACE;?></span></a></li>
+
+<?php elseif(isset($_SESSION['username']) && ($_SESSION['user_type'] == "employer"))://Employers?>
+<li><a class="login-trigger" href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/index.php"><span class="btn-main-login"><?php echo $M_MY_SPACE;?></span></a></li>
+
+<?php else: //User not logged in?>
+<!--<li><a href="#"><i class="fa fa-user" aria-hidden="true"></i> Đăng ký</a></li>-->                                
+<li><a href="#" class="login-trigger" data-toggle="modal" data-target="#login-modal"><i class="fa fa-sign-in" aria-hidden="true"></i> Đăng nhập</a></li>
+<?php endif;?>
