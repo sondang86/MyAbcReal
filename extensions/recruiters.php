@@ -1,6 +1,22 @@
 <?php
     if(!defined('IN_SCRIPT')) die("");
-    global $db,$companies, $commonQueries, $SEO_setting, $FULL_DOMAIN_NAME;    
+    global $db,$commonQueries, $SEO_setting, $FULL_DOMAIN_NAME;   
+    
+    //Pagination options
+    $reload = $FULL_DOMAIN_NAME."/nha-tuyen-dung/?";//Link href
+    //Set current page to 1 if empty
+    if(!isset($_GET['trang']) || !$commonQueries->isLegal_Number($_GET['trang'])){
+        $current_page = 1;
+    } else {
+        $current_page = filter_input(INPUT_GET,'trang', FILTER_SANITIZE_NUMBER_INT);
+    }
+    
+    // set page limit to 2 results per page. 20 by default
+    $db->pageLimit = 5;
+    $companies = $db->arraybuilder()->paginate("employers", $current_page);  
+    
+    
+    
     $jobs_by_employers = $commonQueries->jobs_by_employerId(NULL);
     
     if ($jobs_by_employers !== FALSE){
@@ -78,3 +94,10 @@
     </div>
 </div>
 <?php endforeach;?>
+
+<!--PAGINATION-->
+<div class="row">
+    <section class="col-md-12 paginationArea">
+        <?php $commonQueries->pagination($reload, $current_page, $db->totalPages, 0);?>
+    </section>
+</div>

@@ -720,10 +720,15 @@ if(isset($_POST["ProceedSaveResume"])){
                 <input type="hidden" name="resume_id" value="<?php echo $jobseeker_data['id']; //RESUME ID?>">
             </div>  
             <div class="row">
-                <section class="col-md-3 pull-right"><input type="submit" value=" <?php echo $SAUVEGARDER;?> " class="btn btn-primary"></section>
+                <section class="col-md-12 save-resume"><input type="submit" value=" <?php echo $SAUVEGARDER;?> " class="btn btn-primary"></section>
             </div>
         </div>
         
     </form>
 </div>
 <!--###SonDang modify here###-->
+<style>
+    .save-resume {
+        text-align: right;
+    }
+</style>

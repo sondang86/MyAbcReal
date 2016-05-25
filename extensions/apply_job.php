@@ -123,27 +123,45 @@ if (isset($_POST['submit']) && $_POST['apply_job'] == '1'){ //Update when form s
                 </section>
             </div>
 
-            
-            <!--CAPTCHA-->
-            <section class="col-md-12">                
-                <p class="captcha">
-                    <label for="code">
-                        <img src="http://<?php echo $DOMAIN_NAME?>/include/sec_image.php" width="100" height="30"/>
-                    </label>
-                    <input id="code" name="code" placeholder="<?php echo $M_PLEASE_ENTER_CODE;?>" type="text" required/>
-                </p>
+            <?php 
+                if (isset($_SESSION['logged_in']) && $_SESSION['user_type'] == 'jobseeker'){ //List CV & attachment                   
+                    $attachment = $db->where('user', $_SESSION['username'])->withTotalCount()->getOne('files');
+                    $attachment_found = $db->totalCount;
+                    $jobseeker_resume = $db->where('username', $_SESSION['username'])->getOne('jobseeker_resumes', array('title'));
+                }
+            ?>
+            <div class="sky-form">
+                <!--FILE ATTACHMENTS-->
+                <fieldset class="col col-8">
+                    <h5>Danh sách hồ sơ đính kèm</h5>
+                    <section>
+                        <label class="checkbox">
+                            <input type="checkbox" checked="checked" disabled><i></i><a href="<?php echo $FULL_DOMAIN_NAME?>/JOBSEEKERS/index.php?category=cv&action=resume_creator" target="_blank">CV</a> của bạn (bắt buộc): <strong><?php echo $jobseeker_resume['title'];?></strong>
+                            <img src="<?php echo $FULL_DOMAIN_NAME;?>/images/commons/resume-icon.jpg" alt="resume icon" width="20" height="20"/>
+                        </label>
+                        <?php if($attachment_found > 0):?>
+                        <label class="checkbox">
+                            <input type="checkbox" name="attachment"><i></i><a href="<?php echo $FULL_DOMAIN_NAME?>/JOBSEEKERS/index.php?category=documents&action=add" target="_blank">Tập tin</a> đính kèm (CV bản word hoặc pdf của bạn): <strong><?php echo $attachment['title'];?></strong>
+                            <img src="<?php echo $FULL_DOMAIN_NAME;?>/images/commons/pdf-icon.jpg" alt="resume icon" width="20" height="20"/>
+                        </label>                        
+                        <?php endif;?>
+                    </section>
+                </fieldset>
+                <!--CAPTCHA-->
+                <fieldset class="col col-4">                
+                    <section>
+                        <label for="code">
+                            <img src="http://<?php echo $DOMAIN_NAME?>/include/sec_image.php" width="100" height="30"/>
+                        </label>
+                        <input id="code" name="code" placeholder="<?php echo $M_PLEASE_ENTER_CODE;?>" type="text" required/>
+                    </section>
 
-                <!--SUBMIT-->
-                <input type="hidden" name="apply_job" value="1">
-                <input type="hidden" name="job_id" value="<?php echo $job_id;?>">
-                <p class="submitButton"><input type="submit" name="submit" class="btn btn-default custom-gradient btn-green"></p>
-            </section>
-            
-            
-            <!--FILE ATTACHMENTS-->
-            
-            
-            
+                    <!--SUBMIT-->
+                    <input type="hidden" name="apply_job" value="1">
+                    <input type="hidden" name="job_id" value="<?php echo $job_id;?>">
+                    <p class="submitButton"><input type="submit" name="submit" class="btn btn-default custom-gradient btn-green"></p>
+                </fieldset>
+            </div>
         </form>
         
     <?php }  	

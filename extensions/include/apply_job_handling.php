@@ -6,13 +6,15 @@ if(!defined('IN_SCRIPT')) die("");
         $commonQueries->flash('message', $commonQueries->messageStyle('danger', 'Sai mã Captcha'));
         $website->redirect($website->CurrentURL());
     } else {
+        $attachment = isset($_POST['attachment']) ? '1' : '0'; //Convert to true or false value
         //Insert record to apply table
         $data = Array (
             'message'       => filter_input(INPUT_POST,'message_to_employer',FILTER_SANITIZE_STRING),
             'posting_id'    => $job_id,
             'jobseeker'     => filter_var($_SESSION['username'], FILTER_SANITIZE_EMAIL),
             'status'        => '0', // Awaiting approved (0), Approved (1), Rejected (2)
-            "date"          => strtotime(date("Y-m-d G:i:s"))            
+            "date"          => strtotime(date("Y-m-d G:i:s")),
+            'attachment'    => $attachment,
         );
         $id = $db->insert ('apply', $data);
         if ($id){

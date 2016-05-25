@@ -7,8 +7,8 @@ $apply_id= filter_input(INPUT_GET,'apply_id', FILTER_SANITIZE_NUMBER_INT);
 
 $arrPosting = $db->where('employer', "$AuthUserName")->getOne('jobs');    
 
-$arrPostingApply = $database->DataArray("apply","id=".$apply_id);
-    
+$arrPostingApply = $db->where('id', $apply_id)->getOne("apply");
+
 if($arrPostingApply["posting_id"]!=$job_id) die("");
     
 $jobseeker_username = $arrPostingApply["jobseeker"];
@@ -16,6 +16,8 @@ $jobseeker_username = $arrPostingApply["jobseeker"];
        
 //Get the current jobseeker data
 $jobseeker_data = $db->where('username', "$jobseeker_username")->getOne("jobseeker_resumes");
+$user_file = $db->where('user_id', $jobseeker_data['id'])->withTotalCount()->getOne('files');
+$user_file_count = $db->totalCount;
 
 //Count view to the database
 $commonQueries->Insert_View($jobseeker_data['id'], $AuthUserName, $jobseeker_username, $employer_data['id']);
@@ -238,8 +240,38 @@ $answers = $commonQueries->getQuestionnaireAnswers($jobseeker_data['username'], 
                 <?php echo nl2br($jobseeker_data['referrers']);?>
         </div>
         
-                
-        <!--LIST ATTACHED FILES-->        
+        
+        <?php if ($arrPostingApply['attachment'] == '1') ://User include attached file?>
+        <!--LIST FILE-->        
+        <form action="" method="POST" id="list_files" class="list_files">            
+            <h4>Danh sách tập tin đính kèm</h4>
+            <section class="table-responsive">
+                <table class="table table-hover .table-striped">
+                    <thead>
+                        <tr>
+                            <th>Tiêu đề tập tin</th>
+                            <th>Thông tin tập tin</th>
+                            <th>Kích cỡ (KB)</th>
+                            <th>Định dạng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><?php echo $user_file['title'];?></td>
+                            <td><?php echo $user_file['description'];?></td>
+                            <td><?php echo $commonQueries->formatSizeUnits($user_file['file_size']);?></td>
+                            <td><?php echo $user_file['mime_type'];?></td>
+                            <td class="col-md-1">
+                                <a href="/vieclambanthoigian.com.vn/user_files/jobseekers/<?php echo $user_file['file_name'];?>" class="btn btn-primary btn-block" target="_blank" title="Lưu file">
+                                    <i class="fa fa-download" aria-hidden="true"></i>
+                                </a>
+                            </td>                            
+                        </tr>        
+                    </tbody>
+                </table>
+            </section>
+        </form>
+        <?php endif;?>
     </div>    
     
 </div>

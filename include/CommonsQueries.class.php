@@ -897,10 +897,14 @@
                 $out['output'].= "";
             } elseif ($page == 2) {
                 $out['output'].="<li><a href=\"".$reload."$additional_page_word"."1\">".$prevlabel."</a>\n</li>";
-            } else {
+            } elseif ($page > $totalPages){ //No results
                 $out['no_result'] = 1;
+                $out['output'].="<li><a href=\"".$reload."$additional_page_word"."1\">".$prevlabel."</a>\n</li>";
+            }            
+            else {
                 $out['output'].="<li><a href=\"".$reload."$additional_page_word"."1\">First</a>\n</li>";                
             }
+            
             $pmin=($page>$adjacents)?($page - $adjacents):2; //Hide page 1
             $pmax=($page<($totalPages - $adjacents))?($page + $adjacents):$totalPages;
             for ($i = $pmin; $i <= $pmax; $i++) {

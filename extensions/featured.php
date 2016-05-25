@@ -1,6 +1,6 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
-global $db,$categories, $categories_subs,$commonQueries, $locations, $companies, $SEO_setting;
+global $db,$categories, $categories_subs,$commonQueries, $locations, $companies, $SEO_setting, $FULL_DOMAIN_NAME;
 $website->Title("Việc làm nổi bật");
 $website->MetaDescription("abc");
 $website->MetaKeywords("def");
@@ -28,15 +28,15 @@ $db->where($DBprefix."jobs.featured", "1");
 $db->orderBy('RAND()');
     
 //Pagination options
-$reload="http://localhost/vieclambanthoigian.com.vn/viec-lam-noi-bat/?";//Link href
+$reload= $FULL_DOMAIN_NAME."/viec-lam-noi-bat/?";//Link href
 //Set current page to 1 if empty
-if (isset($_GET['trang'])){
-    $current_page = filter_input(INPUT_GET, 'trang', FILTER_SANITIZE_NUMBER_INT);
-} else {
+if(!isset($_GET['trang']) || !$commonQueries->isLegal_Number($_GET['trang'])){
     $current_page = 1;
+} else {
+    $current_page = filter_input(INPUT_GET,'trang', FILTER_SANITIZE_NUMBER_INT);
 }
 // set page limit to 2 results per page. 20 by default
-$db->pageLimit = 3;
+$db->pageLimit = 5;
 $featured_jobs = $db->arraybuilder()->paginate("jobs", $current_page,$featured_jobs_columns);  
 ?>
     
