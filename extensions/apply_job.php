@@ -5,7 +5,7 @@
 // Find out more about our products and services on:
 // http://www.netartmedia.net
 ?><?php 
-if(!defined('IN_SCRIPT')) die("");
+if(!defined('IN_SCRIPT')) die("Oops! Nothing here");
 global $db, $SEO_setting, $commonQueries, $FULL_DOMAIN_NAME;
 $job_id = $commonQueries->check_present_id($_GET, $SEO_setting, 3);
 $job_details = $commonQueries->jobDetails($job_id);
@@ -40,20 +40,47 @@ if (isset($_POST['submit']) && $_POST['apply_job'] == '1'){ //Update when form s
 
     //Showing form submittion
     if(isset($_SESSION['username']) && $_SESSION['user_type'] == "jobseeker"){ //User must logged in as jobseeker to apply this form
-            $username = $_SESSION['username'];
-            $userFiles = $db->where('user', $username)->get("files", NULL, "file_name");            
-            $userInfo = $db->where('username', "$username")->withTotalCount()->getOne("jobseekers");
-            $userExists = $db->totalCount;
+        $username = $_SESSION['username'];
+        $userFiles = $db->where('user', $username)->get("files", NULL, "file_name");            
+        $userInfo = $db->where('username', "$username")->withTotalCount()->getOne("jobseekers");
+        $userExists = $db->totalCount;
 
-            $is_applied = $db->where('jobseeker', "$username")->withTotalCount()->where('posting_id', $job_id)->getValue("apply", "count(*)");
+        $is_applied = $db->where('jobseeker', "$username")->withTotalCount()->where('posting_id', $job_id)->getValue("apply", "count(*)");
 
-            //User already applied for this job
-            if($is_applied > "0" ){	
-                echo "<br><span class=\"red-font\"><strong>".$M_ALREADY_APPLIED."</strong></span><br>";		
-            } elseif($userExists !== "0"){//User authenticated, show submitting form ?>
+        //User already applied for this job
+        if($is_applied > "0" ){ ?>	
+            <!--JOB DESCRIPTION-->
+            <section class="job-description-apply clearfix">
+                <article class="col-md-9">
+                    <h4><?php echo $JOB_DESCRIPTION;?></h4>
+                    <p><?php echo nl2br($job_details['message'])?></p>
+
+                    <h4><?php echo $REQUIRES_DESCRIPTION;?></h4>
+                    <p><?php echo nl2br($job_details['requires_description'])?></p>
+
+                    <h4><?php echo $PROFILECV_DESCRIPTION;?></h4>
+                    <p><?php echo nl2br($job_details['profileCV_description'])?></p>            
+
+                    <h4><?php echo $BENEFITS_DESCRIPTION;?></h4>
+                    <p><?php echo nl2br($job_details['benefits_description'])?></p>
+
+                </article>
+
+                <aside class="col-md-3 job-details-aside">
+                    <a href="<?php $website->check_SEO_link("companyInfo", $SEO_setting, $job_details['employer_id'],$website->seoUrl($job_details['company']));?>">
+                        <img class="logo-border img-responsive" src="<?php echo $company_logo;?>" alt="<?php echo $job_details['company']?>">
+                    </a>
+                    <a href="<?php $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $job_details['employer_id'],$website->seoUrl($job_details['company']));?>" class="sub-text underline-link">Việc làm khác từ <?php echo $job_details['company']?></a>            
+                    <a href="<?php $website->check_SEO_link("companyInfo", $SEO_setting, $job_details['employer_id'],$website->seoUrl($job_details['company']));?>" class="sub-text underline-link">Thông tin công ty</a>
+                    <h5><span class="red-font"><strong><?php echo $M_ALREADY_APPLIED ?></strong></span></h5>
+                </aside>
+            </section>
+            
+<?php } elseif($userExists !== "0"){//User authenticated, show submitting form ?>
     
     <div class="jobApply">
-        <h4>Nộp hồ sơ cho việc <label>"<?php echo $job_info['title']?>"</label></h4>
+        <h5>Nộp hồ sơ cho việc : </h5>
+        <p><label>"<?php echo $job_info['title']?>"</label></p>
     </div>
     
         <h5 class="col-md-12">Chi tiết công việc</h5>
@@ -132,7 +159,7 @@ if (isset($_POST['submit']) && $_POST['apply_job'] == '1'){ //Update when form s
             ?>
             <div class="sky-form">
                 <!--FILE ATTACHMENTS-->
-                <fieldset class="col col-8">
+                <fieldset class="col col-9">
                     <h5>Danh sách hồ sơ đính kèm</h5>
                     <section>
                         <label class="checkbox">
@@ -143,12 +170,17 @@ if (isset($_POST['submit']) && $_POST['apply_job'] == '1'){ //Update when form s
                         <label class="checkbox">
                             <input type="checkbox" name="attachment"><i></i><a href="<?php echo $FULL_DOMAIN_NAME?>/JOBSEEKERS/index.php?category=documents&action=add" target="_blank">Tập tin</a> đính kèm (CV bản word hoặc pdf của bạn): <strong><?php echo $attachment['title'];?></strong>
                             <img src="<?php echo $FULL_DOMAIN_NAME;?>/images/commons/pdf-icon.jpg" alt="resume icon" width="20" height="20"/>
-                        </label>                        
+                        </label>    
+                        <?php else: //No attachment attached?>
+                        <label class="checkbox">
+                            <input type="checkbox" disabled><i></i><a href="<?php echo $FULL_DOMAIN_NAME?>/JOBSEEKERS/index.php?category=documents&action=add" target="_blank">Tập tin</a> đính kèm (Hiện không có tập tin nào): <strong><?php echo $attachment['title'];?></strong>
+                            <img src="<?php echo $FULL_DOMAIN_NAME;?>/images/commons/pdf-icon.jpg" alt="resume icon" width="20" height="20"/>
+                        </label> 
                         <?php endif;?>
                     </section>
                 </fieldset>
                 <!--CAPTCHA-->
-                <fieldset class="col col-4">                
+                <fieldset class="col col-3">                
                     <section>
                         <label for="code">
                             <img src="http://<?php echo $DOMAIN_NAME?>/include/sec_image.php" width="100" height="30"/>
@@ -165,10 +197,10 @@ if (isset($_POST['submit']) && $_POST['apply_job'] == '1'){ //Update when form s
         </form>
         
     <?php }  	
-        } else {
-            echo "you must be a jobseeker to apply this job";
+        } else { //User is not jobseeker
+            echo '<div class="sky-form"><section class="col col-12">Có lỗi xảy ra, mục này chỉ dành cho người tìm việc</section></div>';
         }
-?>    
+    ?>    
 </div>
 
 <?php

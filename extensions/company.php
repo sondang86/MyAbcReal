@@ -1,5 +1,5 @@
 <?php
-    if(!defined('IN_SCRIPT')) die("");
+    if(!defined('IN_SCRIPT')) die("Oops! Nothing here");
     global $db, $commonQueries, $SEO_setting;
     $company_id = $commonQueries->check_present_id("id",$SEO_setting);
         

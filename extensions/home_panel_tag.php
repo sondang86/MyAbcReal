@@ -5,7 +5,7 @@ if(
     //Display this only in home page
     !isset($_REQUEST["mod"])&&!isset($_REQUEST["page"]) 
     ||( isset($_REQUEST["page"]) &&( $_REQUEST["page"]=="en_Home" 
-    || $_REQUEST["page"]=="vn_Trang chủ" ))
+    || $_REQUEST["page"]=="vn_trang-chu" ))
 )
 {
     //Check if user is guests or logged in    
@@ -122,10 +122,10 @@ if(
             <nav class="row">
                 <ul class="col-md-12 nav navbar-nav navbar-left">
                     <li>Browse jobs :</li> 
-                    <li class="active"><a href="http://<?php echo $DOMAIN_NAME?>/viec-lam-moi-nhat/"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/all-jobs-icon.png"> All jobs</a></li>
-                    <li><a href="#"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/jobs-by-company-icon.png"> Job by Company</a></li>
-                    <li><a href="#"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/jobs-by-category-icon.png"> Job by Category</a></li>
-                    <li><a href="#"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/jobs-by-location-icon.png"> Job by Location</a></li>
+                    <li class="active"><a href="http://<?php echo $DOMAIN_NAME?>/viec-lam-moi-nhat/"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/all-jobs-icon.png"> Việc làm mới nhất</a></li>
+                    <li><a href="#"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/jobs-by-company-icon.png"> Việc tuyển dụng gấp</a></li>
+                    <li><a href="#"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/jobs-by-category-icon.png"> Việc làm theo ngành</a></li>
+                    <li><a href="#"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/jobs-by-location-icon.png"> Việc làm theo địa điểm</a></li>
                 </ul>
             </nav>
         </div>

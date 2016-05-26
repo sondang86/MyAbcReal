@@ -1,6 +1,6 @@
 <?php
 // Jobs Portal, copyright vieclambanthoigian.com.vn 2016
- if(!defined('IN_SCRIPT')) die("");
+ if(!defined('IN_SCRIPT')) die("Oops! Nothing here");
  global $db, $commonQueries, $gender;
  
 if (isset($_POST['submit'])){

@@ -1,5 +1,5 @@
 <?php
-if(!defined('IN_SCRIPT')) die("");
+if(!defined('IN_SCRIPT')) die("Oops! Nothing here");
 if(!isset($_REQUEST["id"]))
 {
 	die("The job ID isn't set");

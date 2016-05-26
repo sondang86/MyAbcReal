@@ -1,12 +1,10 @@
 <?php
 // Jobs Portal
-// http://www.netartmedia.net/jobsportal
-// Copyright (c) All Rights Reserved NetArt Media
-// Find out more about our products and services on:
-// http://www.netartmedia.net
-?><?php
+//Copyright vieclambanthoigian.com.vn 2016
+
 if(!file_exists("config.php")) die("<script>document.location.href='ADMIN/setup.php';</script>");
 define("IN_SCRIPT","1");
+
 //Ensure that a session exists (just in case)
 if(!session_id()){
     session_start();
@@ -117,7 +115,7 @@ $website->Render();
     
 /// Inserting the statistics information in the database
 $website->Statistics();
-    
+
 ?>
     
 <script>
@@ -158,6 +156,9 @@ $website->Statistics();
             slideMargin: 30,
             pager: false
         });
-
+        
+        //scrollbar        
+        //https://github.com/noraesae/perfect-scrollbar
+        $('#by_featured, #by_urgent').perfectScrollbar();    
     });
 </script>

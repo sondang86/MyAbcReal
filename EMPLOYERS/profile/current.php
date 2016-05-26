@@ -4,17 +4,6 @@ if(!defined('IN_SCRIPT')) die("");
 global $db, $commonQueries;
 //Get company info
 $company_info = $db->where('username', "$AuthUserName")->getOne('employers');
-
-$test = $commonQueries->timeCalculation(time(), 1461916363);
-
-
-print_r($test);
-
-if ($test >= 23){
-    echo "<br>lon hon 23";
-} else {
-    echo "<br>smaller than 23";
-}
 ?>
 <div class="row">
     <div class="col-md-3 col-md-push-9">        

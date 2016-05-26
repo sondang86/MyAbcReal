@@ -1,13 +1,13 @@
 <?php
-if(!defined('IN_SCRIPT')) die("");
+if(!defined('IN_SCRIPT')) die("Oops! Nothing here");
     //Update when form submitted
     //Wrong captcha
     if($website->GetParam("USE_CAPTCHA_IMAGES") && ( (md5($_POST['code']) !== $_SESSION['code'])|| trim($_POST['code']) == "" ) ){
         $commonQueries->flash('message', $commonQueries->messageStyle('danger', 'Sai mã Captcha'));
         $website->redirect($website->CurrentURL());
     } else {
-        $attachment = isset($_POST['attachment']) ? '1' : '0'; //Convert to true or false value
         //Insert record to apply table
+        $attachment = isset($_POST['attachment']) ? '1' : '0'; //Convert to true or false value
         $data = Array (
             'message'       => filter_input(INPUT_POST,'message_to_employer',FILTER_SANITIZE_STRING),
             'posting_id'    => $job_id,
@@ -61,6 +61,18 @@ if(!defined('IN_SCRIPT')) die("");
                 }
             }
         }
+        
+        //Email notification to employer        
+        $email_subject = "Một ứng viên vừa nộp hồ sơ cho công việc ". $job_details['title'];
+        $email_body = "Chào bạn!\n"
+                    . "Một ứng viên vừa nộp hồ sơ cho công việc: \n\n"
+                    . "$FULL_DOMAIN_NAME/chi-tiet-cong-viec/$job_id/" .$job_details['SEO_title']. " \n\n"
+                    . "Để xem chi tiết hồ sơ ứng viên, bạn vui lòng truy cập vào địa chỉ dưới đây: \n\n"
+                    . "$FULL_DOMAIN_NAME/EMPLOYERS/index.php \n\n"
+                    . "Vieclambanthoigian xin chúc bạn tìm được người phù hợp sớm nhất \n\n"
+                    . "Trân trọng \n\n Vieclambanthoigian.com.vn";
+        
+        require_once ('email_handling.php');
         
         //Finally, redirect with success message
         $commonQueries->flash('message', $commonQueries->messageStyle('info', 'Hồ sơ đã được nộp, cảm ơn bạn.'));            

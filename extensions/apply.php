@@ -5,7 +5,7 @@
 // Find out more about our products and services on:
 // http://www.netartmedia.net
 ?><?php 
-if(!defined('IN_SCRIPT')) die("");
+if(!defined('IN_SCRIPT')) die("Oops! Nothing here");
 global $db;
 if(isset($_REQUEST["posting_id"]))
 {

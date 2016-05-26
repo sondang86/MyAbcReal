@@ -46,21 +46,15 @@ $featured_jobs = $db->get("jobs", NULL,$featured_jobs_columns);
 $segment = $website->getURL_segment($website->currentURL());
 ?>
 <style>
-    #by_featured {
+    #by_featured, #by_urgent {
         width: 100%;
         height: 500px;
         margin: 50px auto 0 auto;
         position: relative;
         overflow: auto;
-      }
-
+    }
 </style>
-<script>
-    //https://github.com/noraesae/perfect-scrollbar
-    $(document).ready(function(){
-        $('#by_featured').perfectScrollbar();
-    });    
-</script>
+
 <section class="row stats top-title">
     <header class="col-md-12">
         <h4>Việc làm hấp dẫn: </h4>
@@ -68,13 +62,85 @@ $segment = $website->getURL_segment($website->currentURL());
 </section>
 
 <ul class="nav nav-tabs">
-    <li class="active"><a href="#by_featured"><i class="fa fa-eyedropper"></i> <?php echo $M_JOBS_BY_FEATURED;?></a></li>
+    <li class="active"><a href="#by_urgent"><i class="fa fa-eyedropper"></i> Tuyển dụng gấp</a></li>
+    <li><a href="#by_featured"><i class="fa fa-eyedropper"></i> <?php echo $M_JOBS_BY_FEATURED;?></a></li>
 </ul>
 
 <!--CATEGORIES-->
-<section class="tab-content">        
+<section class="tab-content">
+    
+    <!--BY URGENT-->
+    <div id="by_urgent" class="tab-pane fade in active">
+        <?php foreach ($featured_jobs as $key => $featured_job) :?>
+        <div class="row joblistArea">
+            <div class="col-md-12 joblist">
+                <a href="<?php $website->check_SEO_link("details", $SEO_setting, $featured_job['job_id'],$featured_job['SEO_title']);?>">
+                    <section class="banner">
+                        <img alt="SKP Business Consulting LLP" src="http://<?php echo $DOMAIN_NAME;?>/images/employers/logo/<?php echo $featured_job['logo']?>" width="120" height="50">
+                    </section>
+                    <p title="<?php echo $featured_job['title']?>" class="desig"><?php echo $featured_job['title']?></p>
+                    <p class="company">
+                        <i class="fa fa-briefcase"></i>
+                        <span><?php echo $featured_job['company']?></span>
+                    </p>
+                    
+                    <form class="more">
+                        <span class="exp"><i class="fa fa-comments-o"></i> <?php echo $featured_job['experience_name']?></span>
+                        <span class="loc">
+                            <i class="fa fa-location-arrow"></i>
+                            <span><?php echo $featured_job['City']?></span>            
+                        </span> 
+                    </form>
+                    
+                    <form class="more"> 
+                        <i class="fa fa-diamond"></i> <span> Chuyên ngành:</span>
+                        <span class="desc"> 
+                            <p iclass="skill"><?php echo $featured_job['category_name_vi']?></p> 
+                        </span>  
+                    </form>
+                    
+                    <form class="more"> 
+                        <i class="fa fa-money"></i> <span> Mức lương:</span>
+                        <span class="experience"> 
+                            <p><?php echo $featured_job['salary_range']?> $</p> 
+                        </span>  
+                    </form>
+                </a>
+                <span class="featuredjob" title="Tuyển dụng gấp">
+                    <i class="fa fa-fire" aria-hidden="true"></i>
+                </span> 
+            </div>
+            
+            
+            <!--SAVE JOB-->
+            <div class="col-md-12 more-details">           
+                <section class="col-md-6 col-xs-6 other_details">
+                    <span title=" Save this job " class="action savejob fav  favReady">
+
+                    <?php if($featured_job['saved_jobId'] !== $featured_job['job_id'] || $userId_cookie !== $featured_job['user_uniqueId']){ //Show save job button?>                    
+                        
+                        <a href="#" data-browser="<?php echo $Browser_detection->getName();?>" data-category="<?php echo $featured_job["category_id"]?>"  data-jobid="<?php echo $featured_job["job_id"]?>" title="Lưu việc làm này" class="savethisJob" id="<?php echo $featured_job["job_id"]?>" onclick="javascript:saveJob(this, sitePath)"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
+                        
+                    <?php } else { // Show saved ?>
+                        
+                        <a href="#" title="Đã lưu" class="savethisJob" id="<?php echo $featured_job["job_id"]?>"><i class="fa fa-check"></i>Đã lưu việc này</a>                    
+                                            
+                    <?php }?>
+                    </span> 
+                    <span class="salary"><em></em>  Not disclosed </span> 
+                </section>
+                <section class="col-md-6 col-xs-6 rec_details">
+                    <span> Đăng bởi   <a title="việc làm đăng bởi  <?php echo $featured_job['company']?> " class="rec_name">  <?php echo $featured_job['company']?>  </a></span> 
+                    <span><i class="fa fa-clock-o"></i> <?php echo $commonQueries->time_ago($featured_job['date']);?></span>
+                </section>
+            </div>    
+        </div>
+        <?php endforeach;?>
+    </div>
+        
+    
     <!--BY FEATURED-->
-    <div id="by_featured" class="tab-pane fade in active">
+    <div id="by_featured" class="tab-pane fade in">
         <?php foreach ($featured_jobs as $key => $featured_job) :?>
         <div class="row joblistArea">
             <div class="col-md-12 joblist">

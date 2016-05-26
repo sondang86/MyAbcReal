@@ -3,7 +3,7 @@
 // Copyright (c) All Rights Reserved, NetArt Media 2003-2015
 // Check http://www.netartmedia.net/jobsportal for demos and information
 ?><?php
-    if(!defined('IN_SCRIPT')) die("");
+    if(!defined('IN_SCRIPT')) die("Oops! Nothing here");
     global $companies, $SEO_setting;
 ?>
 <div class="container">

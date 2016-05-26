@@ -1,5 +1,5 @@
 <?php
-if(!defined('IN_SCRIPT')) die("");
+if(!defined('IN_SCRIPT')) die("Oops! Nothing here");
 global $db, $SEO_setting, $commonQueries;
 $website->Title("Việc làm");
 $website->MetaDescription("abc");

@@ -44,7 +44,7 @@ RewriteRule ^mod-([^/\.]+).html$ index.php?mod=$1 [L]
 
 
 #Start modify from here
-#ErrorDocument 404 http://localhost/vieclambanthoigian.com.vn/404.php
+ErrorDocument 404 http://localhost/vieclambanthoigian.com.vn/404.php
 
 RewriteRule ^nguoi-tim-viec.html$ index.php?mod=jobseekers&lang=vn
 RewriteRule ^nha-tuyen-dung.html$ index.php?mod=employers_registration&lang=vn
@@ -76,3 +76,14 @@ RewriteRule ^nha-tuyen-dung/?(.*)?$ index.php?mod=recruiters [QSA]
 
 #save URL
 RewriteRule ^luu-viec-lam/?$ index.php?mod=save 
+
+#Only allow access through specific files
+<Files "*.php">
+    Order Deny,Allow
+    Deny from all
+#    Allow from 127.0.0.1
+</Files>
+<FilesMatch "index.php|sec_image.php|login.php|logout.php|loginaction.php|admin_page.php|404.php">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>

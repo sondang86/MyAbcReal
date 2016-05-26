@@ -1,5 +1,5 @@
 <?php
-if(!defined('IN_SCRIPT')) die("");
+if(!defined('IN_SCRIPT')) die("Oops! Nothing here");
 ?>
 	<div class="container">
 			<button  class="btn btn-gradient jobs-location-link pull-right" type="button" data-toggle="collapse" data-target=".cat-collapse">
@@ -11,7 +11,6 @@ if(!defined('IN_SCRIPT')) die("");
 			
 				<br/>
 <?php
-if(!defined('IN_SCRIPT')) die("");
 $NUMBER_OF_CATEGORIES_PER_ROW = $this->GetParam("NUMBER_OF_CATEGORIES_PER_ROW");
 $b_first_sub_category = true;
 $i_sub_counter=0;

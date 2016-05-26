@@ -1,5 +1,5 @@
 <?php
-    if(!defined('IN_SCRIPT')) die("");
+    if(!defined('IN_SCRIPT')) die("Oops! Nothing here");
     global $db,$categories, $categories_subs,$commonQueries,  $SEO_setting, $userId_cookie,$Browser_detection;
     $job_id = $commonQueries->check_present_id($_GET, $SEO_setting, 3);
     $job_details = $commonQueries->jobDetails($job_id);
