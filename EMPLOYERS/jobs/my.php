@@ -5,7 +5,7 @@
 // http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-global $db, $categories, $job_types, $locations, $salaries, $all_jobs, $commonQueries, $employerInfo;
+global $db, $categories, $job_types, $locations, $salaries, $all_jobs, $commonQueries, $employerInfo, $FULL_DOMAIN_NAME;
 $job_by_employer = $commonQueries->job_by_id('jobs','employer',"$AuthUserName");
 
 ?>
@@ -53,7 +53,8 @@ $job_by_employer = $commonQueries->job_by_id('jobs','employer',"$AuthUserName");
                                 <th>Tiêu đề</th>
                                 <th>Nội dung</th>
                                 <th></th>
-                                <th>Ưu tiên</th>
+                                <th class="col-md-1">Ưu tiên</th>
+                                <th class="col-md-2">Tuyển gấp</th>
                             </tr>
                         </thead>
                         <tbody>                                
@@ -72,12 +73,18 @@ $job_by_employer = $commonQueries->job_by_id('jobs','employer',"$AuthUserName");
                                 <td class="col-md-1"><?php echo date('Y-m-d', $value['date'])?></td>
                                 <td class="col-md-1"><?php echo date('Y-m-d', $value['expires'])?></td>
                                 <td class="col-md-2"><?php echo $website->limitCharacters($value['title'],50);?></td>
-                                <td class="col-md-4"><?php echo $website->limitCharacters($value['message'], 200);?></td>
+                                <td class="col-md-3"><?php echo $website->limitCharacters($value['message'], 200);?></td>
                                 <td class="col-md-2"><a href="index.php?category=jobs&amp;action=questionnaire&amp;id=<?php echo $value['id']?>">Bảng câu hỏi (<?php echo $questions_count;?>)</a></td>
-                                <!--<td class="col-md-1"><a href="index.php?category=jobs&amp;action=my_stat&amp;id=<?php echo $value['id']?>">Số liệu thống kê</a></td>-->
+                                
                                 <td>
                                     <a href="#" class="confirm_featured" data-title="Vui lòng xác nhận" data-jobid="<?php echo $value['id']?>" data-featured="<?php echo $value['featured']?>">
-                                        <img border="0" src="../images/active_<?php echo $value['featured']?>.gif" id="image_icon_<?php echo $value['id'];?>">
+                                        <img border="0" src="<?php echo $FULL_DOMAIN_NAME;?>/images/active_<?php echo $value['featured']?>.gif" id="featured_image_icon_<?php echo $value['id'];?>">
+                                    </a>
+                                </td>
+                                
+                                <td>
+                                    <a href="#" class="confirm_urgent" data-title="Vui lòng xác nhận" data-jobid="<?php echo $value['id']?>" data-urgent="<?php echo $value['urgent']?>">
+                                        <img border="0" src="<?php echo $FULL_DOMAIN_NAME;?>/images/active_<?php echo $value['urgent']?>.gif" id="urgent_image_icon_<?php echo $value['id'];?>">
                                     </a>
                                 </td>
                             </tr>
@@ -85,10 +92,6 @@ $job_by_employer = $commonQueries->job_by_id('jobs','employer',"$AuthUserName");
                         </tbody>
                     </table>
                 </div>
-<!--                <div class="form-submit">
-                    <input type="hidden" name="delete">
-                    <input type="submit" value="Xóa" id="delete" disabled>
-                </div>-->
             </form>
         </div>
     </div>
@@ -110,6 +113,7 @@ $job_by_employer = $commonQueries->job_by_id('jobs','employer',"$AuthUserName");
                     dataType: "JSON",
                     data: {
                         proceed: 1,
+                        request: 'set_featured',
                         user: '<?php echo $AuthUserName;?>',
                         subscription: '<?php echo $employerInfo['subscription'];?>',
                         job_id: this.$target.data('jobid'),                                    
@@ -119,15 +123,45 @@ $job_by_employer = $commonQueries->job_by_id('jobs','employer',"$AuthUserName");
                     success: function (response) {
                         $.alert(response.message);
                         //Replace icon respectively
-                        $('#image_icon_'+response.jobid).attr('src',"http://localhost/vieclambanthoigian.com.vn/images/" + response.icon);
+                        $('#featured_image_icon_'+response.jobid).attr('src',"http://localhost/vieclambanthoigian.com.vn/images/" + response.icon);
                     },
                     error: function(response) {
                         console.log(response);
                     }
                 });
-            },
-            cancel: function(){
-                console.log('the user clicked cancel');
+            }
+        });
+        
+        /*Confirmation on set urgent job*/
+        $('a.confirm_urgent').confirm({
+            title: 'Vui lòng xác nhận',
+            content: 'Việc làm này sẽ hiển thị lên danh sách tuyển dụng gấp?',
+            confirmButton: 'Có',
+            cancelButton: 'Không',
+            confirm: function(){
+                $.ajax({ //Sending data to Server side
+                    
+                    url: "http://<?php echo $DOMAIN_NAME?>/extensions/set_featured.php",
+                    type: "post",
+                    dataType: "JSON",
+                    data: {
+                        proceed: 1,
+                        request: 'set_urgent',
+                        user: '<?php echo $AuthUserName;?>',
+                        subscription: '<?php echo $employerInfo['subscription'];?>',
+                        job_id: this.$target.data('jobid'),                                    
+                        title: this.$target.data('title'),
+                        job_featured: this.$target.data('featured')
+                    },
+                    success: function (response) {
+                        $.alert(response.message);
+                        //Replace icon respectively
+                        $('#urgent_image_icon_'+response.jobid).attr('src',"<?php echo $FULL_DOMAIN_NAME;?>/images/" + response.icon);
+                    },
+                    error: function(response) {
+                        console.log(response);
+                    }
+                });
             }
         });
 

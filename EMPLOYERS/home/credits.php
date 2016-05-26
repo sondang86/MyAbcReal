@@ -61,6 +61,8 @@
                     <li>Sửa, đóng, làm mới tin</li>
                     <li>Tài khoản đóng dấu "Tài khoản xác thực", tin đóng dấu tin xác thực nhằm gia tăng sự tin tưởng của ứng viên</li>
                     <li>Tin hiển thị tại tối đa 3 ngành nghề.</li>                    
+                    <li>Số lượng đăng việc hấp dẫn 5</li>   
+                    <li>Số lượng đăng việc tuyển gấp 1</li>
                 </ul>
                 
                 <div class="pricing-footer">                    
@@ -85,6 +87,8 @@
                     <li>Tin được đóng dấu “Tin tiêu điểm” thu hút ứng viên</li>
                     <li>Tin hiển thị tối đa trong 5 ngành nghề (3 ngành nghề khách chọn, 2 ngành nghề CSKH hỗ trợ)</li>
                     <li>Quảng cáo CPM hiển thị luân phiên trong box Tuyển dụng nhanh ở tất cả các việc làm chi tiết</li>
+                    <li>Số lượng đăng việc hấp dẫn 15</li>   
+                    <li>Số lượng đăng việc tuyển gấp 5</li>
                 </ul>
                 
                 <div class="pricing-footer">                    

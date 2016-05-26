@@ -1,1 +1,6 @@
-RewriteEngine off
+RewriteEngine on
+
+#404 error
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /vieclambanthoigian.com.vn/404.php [L]

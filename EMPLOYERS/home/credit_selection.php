@@ -1,7 +1,6 @@
 <?php
     if(!defined('IN_SCRIPT')) die("");
-    global $db, $commonQueries, $locations, $gender, $employer_data, $commonQueries_Employers;
-    $subscriptions = $db->get('subscriptions');
+    global $db, $commonQueries, $locations, $gender, $employer_data, $commonQueries_Employers,$subscriptions;
     $company_sizes = $db->get('employers_company_size');
         
     $current_subscription_request = $commonQueries_Employers->Employer_Subscriptions_request($AuthUserName);

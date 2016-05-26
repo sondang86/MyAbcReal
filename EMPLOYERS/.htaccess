@@ -1,3 +1,7 @@
 RewriteEngine on
 
 RewriteRule ^tim-kiem-ung-vien/?(.*)?$ index.php?category=jobseekers&action=search [QSA]
+#404 error
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /vieclambanthoigian.com.vn/404.php [L]

@@ -36,7 +36,6 @@ if (isset($_GET['query'])):
                 <table class="table">
                     <thead>
                         <tr>
-                            <!--<th><input type="checkbox" name="select_all" id="checkAll"></th>-->
                             <th>Sửa đổi</th>
                             <th>Ngày đăng</th>
                             <th>Hạn đăng</th>

@@ -2,24 +2,25 @@
 <html>
     <head>
         <title>Không tìm thấy trang yêu cầu</title>
-        <meta charset="ISO-8859-1">
-        <meta name="keywords" content="404 iphone web template, Andriod web template, Smartphone web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="Việc làm bán thời gian" />
     </head>
     <body>
         <!--start-wrap--->
         <div class="wrap">
             <!---start-header---->
-            <div class="header">
+<!--            <div class="header">
                 <div class="logo">
                     <h1><a href="#">Ohh</a></h1>
                 </div>
-            </div>
+            </div>-->
             <!---End-header---->
             <!--start-content------>
             <div class="content">
                 <img src="/vieclambanthoigian.com.vn/images/404/error-img.png" title="error" />
-                <p><span><label>O</label>hh.....</span>You Requested the page that is no longer There.</p>
-                <a href="/vieclambanthoigian.com.vn/">Quay lại trang chủ</a>
+                <p><span><label>Xin lỗi</label>.....</span>Trang bạn tìm kiếm đã bị xóa hoặc không tồn tại :( .</p>
+                <a href="#" onclick="goBack()">Về trang trước</a>
+                <a href="/vieclambanthoigian.com.vn/">Trang chủ</a>
                 <div class="copy-right">
                     <p>&#169 vieclambanthoigian.com.vn All rights Reserved</p>
                 </div>
@@ -30,6 +31,12 @@
     </body>
 </html>
     
+<script type="text/javascript">
+    function goBack() {
+        window.history.back();
+    }        
+</script>
+
 <style>
     /* reset */
     html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,dl,dt,dd,ol,nav ul,nav li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;}
