@@ -1,7 +1,7 @@
 <?php
 //    if(!defined('IN_SCRIPT')) die("");
     
-    if ($_POST['proceed'] == "1"){
+    if (isset($_POST['proceed']) && $_POST['proceed'] == "1"){
         //instantiate neccessary classes
         require_once '../include/CommonsQueries.class.php';
         require_once '../include/MysqliDb.class.php';
@@ -115,5 +115,7 @@
             }
         }
         
+    } else {
+        echo "Nothing to see here";
     }
     

@@ -1,13 +1,10 @@
 <?php
-if(!defined('IN_SCRIPT')) die("");
-global $db,$categories, $categories_subs,$commonQueries,$commonQueries_Front, $locations, $companies, $SEO_setting, $FULL_DOMAIN_NAME;
-$website->Title("Việc làm nổi bật");
-$website->MetaDescription("abc");
-$website->MetaKeywords("def");
+    if(!defined('IN_SCRIPT')) die("");
+    global $db,$categories, $categories_subs,$commonQueries, $commonQueries_Front, $locations, $companies, $SEO_setting, $FULL_DOMAIN_NAME;
         
-//Pagination options
-$reload= $FULL_DOMAIN_NAME."/viec-lam-noi-bat/?";//Link href
-//Set current page to 1 if empty
+    //Pagination options
+    $reload= $FULL_DOMAIN_NAME."/viec-tuyen-dung-gap/?";//Link href
+    //Set current page to 1 if empty
     if(!isset($_GET['trang']) || !$commonQueries->isLegal_Number($_GET['trang'])){
         $current_page = 1;
     } else {
@@ -15,20 +12,22 @@ $reload= $FULL_DOMAIN_NAME."/viec-lam-noi-bat/?";//Link href
     }
     // set page limit to 2 results per page. 20 by default
     $pageLimit = '5';    
-    $featured_jobs = $commonQueries_Front->getJobsList_pagination('featured', $current_page, $pageLimit);
+    $urgent_jobs_list = $commonQueries_Front->getJobsList_pagination('urgent', $current_page, $pageLimit);
+        
 ?>
+    
     
 <div class="row">
     <!--TITLE-->
     <section class="col-md-12">
-        <label>Việc làm nổi bật</label>
+        <label>Danh sách việc tuyển dụng gấp</label>
     </section>
         
     <!--LIST JOBS-->
-        <?php foreach ($featured_jobs['pagination_jobslist'] as $job) :?>
-        <?php //Set to default logo if empty
-            $company_logo = $commonQueries->setDefault_logoIfEmpty($job['logo'], "employers");
-        ?>
+    <?php foreach ($urgent_jobs_list['pagination_jobslist'] as $job) :?>
+    <?php //Set to default logo if empty
+        $company_logo = $commonQueries->setDefault_logoIfEmpty($job['logo'], "employers");
+    ?>
     <div class="col-md-12 category-details">
         <section class="row">
             <figure class="col-md-3">
@@ -58,10 +57,10 @@ $reload= $FULL_DOMAIN_NAME."/viec-lam-noi-bat/?";//Link href
     </div>
         <?php endforeach;?>
 </div>
-
+    
 <!--PAGINATION-->
 <div class="row">
     <section class="col-md-12 paginationArea">
-        <?php $commonQueries->pagination($reload, $current_page, $featured_jobs['totalPages'], 0);?>
+        <?php $commonQueries->pagination($reload, $current_page, $urgent_jobs_list['totalPages'], 0);?>
     </section>
 </div>

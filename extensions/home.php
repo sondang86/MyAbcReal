@@ -6,42 +6,11 @@
 // http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-global $db,$pagination, $categories, $categories_subs,$commonQueries, $locations, $companies,$SEO_setting, $Browser_detection, $userId_cookie;
+global $db,$pagination, $categories, $categories_subs,$commonQueries, $commonQueries_Front, $locations, $companies,$SEO_setting, $Browser_detection, $userId_cookie;
 
-//Get featured jobs list
-$featured_jobs_columns = array(
-    $DBprefix."jobs.id as job_id",$DBprefix."jobs.job_category",
-    $DBprefix."jobs.title",$DBprefix."jobs.SEO_title",$DBprefix."jobs.date",
-    $DBprefix."jobs.message",$DBprefix."employers.company",$DBprefix."employers.logo",
-    $DBprefix."categories.category_name_vi",$DBprefix."categories.category_name",$DBprefix."categories.id as category_id",
-    $DBprefix."locations.City",$DBprefix."locations.City_en",$DBprefix."locations.id as location_id",
-    $DBprefix."job_types.job_name",$DBprefix."job_types.job_name_en",
-    $DBprefix."job_experience.name as experience_name",$DBprefix."job_experience.name_en as experience_name_en",
-    $DBprefix."salary.salary_range",$DBprefix."salary.salary_range_en",
-    $DBprefix."saved_jobs.user_type as saved_job_userType",$DBprefix."saved_jobs.date as saved_jobDate",
-    $DBprefix."saved_jobs.browser", $DBprefix."saved_jobs.IPAddress",  
-    $DBprefix."saved_jobs.user_uniqueId as user_uniqueId",$DBprefix."saved_jobs.job_id as saved_jobId"//saved jobs table
-);
+$featured_jobs = $commonQueries_Front->getJobsList('featured', NULL, $userId_cookie);
+$urgent_jobs = $commonQueries_Front->getJobsList('urgent', NULL, $userId_cookie);
 
-$db->join("employers", $DBprefix."jobs.employer=".$DBprefix."employers.username", "LEFT");
-$db->join("categories", $DBprefix."jobs.job_category=".$DBprefix."categories.category_id", "LEFT");
-$db->join("locations", $DBprefix."jobs.region=".$DBprefix."locations.id", "LEFT");
-$db->join("job_types", $DBprefix."jobs.job_type=".$DBprefix."job_types.id", "LEFT");
-$db->join("job_experience", $DBprefix."jobs.experience=".$DBprefix."job_experience.experience_id", "LEFT");
-$db->join("salary", $DBprefix."jobs.salary=".$DBprefix."salary.salary_id", "LEFT");
-$db->join('saved_jobs', $DBprefix."jobs.id = ".$DBprefix."saved_jobs.job_id AND "
-        .$DBprefix."saved_jobs.user_uniqueId = '$userId_cookie' AND "
-        .$DBprefix."saved_jobs.IPAddress = '".filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP)."' ", "LEFT");
-
-$db->where($DBprefix."jobs.active", "YES");
-$db->where($DBprefix."jobs.status", "1");
-$db->where($DBprefix."jobs.expires", time(), ">");
-$db->where($DBprefix."jobs.featured", "1");
-
-$db->orderBy('RAND()');
-
-
-$featured_jobs = $db->get("jobs", NULL,$featured_jobs_columns);
 
 $segment = $website->getURL_segment($website->currentURL());
 ?>
@@ -71,38 +40,38 @@ $segment = $website->getURL_segment($website->currentURL());
     
     <!--BY URGENT-->
     <div id="by_urgent" class="tab-pane fade in active">
-        <?php foreach ($featured_jobs as $key => $featured_job) :?>
+        <?php foreach ($urgent_jobs['jobs_list'] as $key => $urgent_job) :?>
         <div class="row joblistArea">
             <div class="col-md-12 joblist">
-                <a href="<?php $website->check_SEO_link("details", $SEO_setting, $featured_job['job_id'],$featured_job['SEO_title']);?>">
+                <a href="<?php $website->check_SEO_link("details", $SEO_setting, $urgent_job['job_id'],$urgent_job['SEO_title']);?>">
                     <section class="banner">
-                        <img alt="SKP Business Consulting LLP" src="http://<?php echo $DOMAIN_NAME;?>/images/employers/logo/<?php echo $featured_job['logo']?>" width="120" height="50">
+                        <img alt="SKP Business Consulting LLP" src="http://<?php echo $DOMAIN_NAME;?>/images/employers/logo/<?php echo $urgent_job['logo']?>" width="120" height="50">
                     </section>
-                    <p title="<?php echo $featured_job['title']?>" class="desig"><?php echo $featured_job['title']?></p>
+                    <p title="<?php echo $urgent_job['title']?>" class="desig"><?php echo $urgent_job['title']?></p>
                     <p class="company">
                         <i class="fa fa-briefcase"></i>
-                        <span><?php echo $featured_job['company']?></span>
+                        <span><?php echo $urgent_job['company']?></span>
                     </p>
                     
                     <form class="more">
-                        <span class="exp"><i class="fa fa-comments-o"></i> <?php echo $featured_job['experience_name']?></span>
+                        <span class="exp"><i class="fa fa-comments-o"></i> <?php echo $urgent_job['experience_name']?></span>
                         <span class="loc">
                             <i class="fa fa-location-arrow"></i>
-                            <span><?php echo $featured_job['City']?></span>            
+                            <span><?php echo $urgent_job['City']?></span>            
                         </span> 
                     </form>
                     
                     <form class="more"> 
                         <i class="fa fa-diamond"></i> <span> Chuyên ngành:</span>
                         <span class="desc"> 
-                            <p iclass="skill"><?php echo $featured_job['category_name_vi']?></p> 
+                            <p iclass="skill"><?php echo $urgent_job['category_name_vi']?></p> 
                         </span>  
                     </form>
                     
                     <form class="more"> 
                         <i class="fa fa-money"></i> <span> Mức lương:</span>
                         <span class="experience"> 
-                            <p><?php echo $featured_job['salary_range']?> $</p> 
+                            <p><?php echo $urgent_job['salary_range']?> $</p> 
                         </span>  
                     </form>
                 </a>
@@ -117,21 +86,21 @@ $segment = $website->getURL_segment($website->currentURL());
                 <section class="col-md-6 col-xs-6 other_details">
                     <span title=" Save this job " class="action savejob fav  favReady">
 
-                    <?php if($featured_job['saved_jobId'] !== $featured_job['job_id'] || $userId_cookie !== $featured_job['user_uniqueId']){ //Show save job button?>                    
+                    <?php if($urgent_job['saved_jobId'] !== $urgent_job['job_id'] || $userId_cookie !== $urgent_job['user_uniqueId']){ //Show save job button?>                    
                         
-                        <a href="#" data-browser="<?php echo $Browser_detection->getName();?>" data-category="<?php echo $featured_job["category_id"]?>"  data-jobid="<?php echo $featured_job["job_id"]?>" title="Lưu việc làm này" class="savethisJob" id="<?php echo $featured_job["job_id"]?>" onclick="javascript:saveJob(this, sitePath)"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
+                        <a href="#" data-browser="<?php echo $Browser_detection->getName();?>" data-category="<?php echo $urgent_job["category_id"]?>"  data-jobid="<?php echo $urgent_job["job_id"]?>" title="Lưu việc làm này" class="savethisJob" id="<?php echo $urgent_job["job_id"]?>" onclick="javascript:saveJob(this, sitePath)"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
                         
                     <?php } else { // Show saved ?>
                         
-                        <a href="#" title="Đã lưu" class="savethisJob" id="<?php echo $featured_job["job_id"]?>"><i class="fa fa-check"></i>Đã lưu việc này</a>                    
+                        <a href="#" title="Đã lưu" class="savethisJob" id="<?php echo $urgent_job["job_id"]?>"><i class="fa fa-check"></i>Đã lưu việc này</a>                    
                                             
                     <?php }?>
                     </span> 
                     <span class="salary"><em></em>  Not disclosed </span> 
                 </section>
                 <section class="col-md-6 col-xs-6 rec_details">
-                    <span> Đăng bởi   <a title="việc làm đăng bởi  <?php echo $featured_job['company']?> " class="rec_name">  <?php echo $featured_job['company']?>  </a></span> 
-                    <span><i class="fa fa-clock-o"></i> <?php echo $commonQueries->time_ago($featured_job['date']);?></span>
+                    <span> Đăng bởi   <a title="việc làm đăng bởi  <?php echo $urgent_job['company']?> " class="rec_name">  <?php echo $urgent_job['company']?>  </a></span> 
+                    <span><i class="fa fa-clock-o"></i> <?php echo $commonQueries->time_ago($urgent_job['date']);?></span>
                 </section>
             </div>    
         </div>
@@ -141,7 +110,7 @@ $segment = $website->getURL_segment($website->currentURL());
     
     <!--BY FEATURED-->
     <div id="by_featured" class="tab-pane fade in">
-        <?php foreach ($featured_jobs as $key => $featured_job) :?>
+        <?php foreach ($featured_jobs['jobs_list'] as $key => $featured_job) :?>
         <div class="row joblistArea">
             <div class="col-md-12 joblist">
                 <a href="<?php $website->check_SEO_link("details", $SEO_setting, $featured_job['job_id'],$featured_job['SEO_title']);?>">

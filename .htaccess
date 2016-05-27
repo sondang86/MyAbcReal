@@ -72,6 +72,7 @@ RewriteRule ^viec-lam-part-time/?(.*)?$ index.php?mod=jobs_by_type&name=job_type
 RewriteRule ^viec-lam-freelancer/?(.*)?$ index.php?mod=jobs_by_type&name=job_type&job_type=6 [QSA]
 
 RewriteRule ^viec-lam-noi-bat/?(.*)?$ index.php?mod=featured [QSA]
+RewriteRule ^viec-tuyen-dung-gap/?(.*)?$ index.php?mod=urgent [QSA]
 RewriteRule ^nha-tuyen-dung/?(.*)?$ index.php?mod=recruiters [QSA]
 
 #save URL

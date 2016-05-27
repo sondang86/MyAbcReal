@@ -2436,6 +2436,12 @@ div.upload input:hover {
     left: 20px;
 }
 
+.joblist .urgentjob {
+    position: absolute;
+    top: 15px;
+    left: 5px;
+}
+
 .more-details {
     padding: 10px 0 10px 25px;    
 }

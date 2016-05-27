@@ -20,7 +20,7 @@
     $DBprefix = "jobsportal_";
 
     //Remove question
-    if ($_POST['proceed'] == "1" && isset($_POST['remove_question'])){        
+    if (isset($_POST['proceed']) && $_POST['proceed'] == "1" && isset($_POST['remove_question'])){        
         //Safety sanitize input data first
         $job_id = filter_input(INPUT_POST, 'job_id', FILTER_SANITIZE_NUMBER_INT);    
         $questionnaire_id = filter_input(INPUT_POST, 'questionnaire_id', FILTER_SANITIZE_NUMBER_INT);    
@@ -55,12 +55,11 @@
             echo json_encode($message);
         }
         
-        //Output message
     }
     
     
     //Remove job
-    if ($_POST['proceed'] == "1" && isset($_POST['remove_job'])){
+    if (isset($_POST['proceed']) && $_POST['proceed'] == "1" && isset($_POST['remove_job'])){
         //Sanitize first
         $job_id = filter_input(INPUT_POST, 'job_id', FILTER_SANITIZE_NUMBER_INT);
         
@@ -97,5 +96,5 @@
             echo json_encode($message);
         }
         
-    }
+    } 
 ?>

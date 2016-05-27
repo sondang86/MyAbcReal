@@ -45,134 +45,160 @@ $employer_subscription = $db->where('username', "$AuthUserName")->withTotalCount
     <section class="col-md-9 col-sm-6 col-xs-12">
         <h4><label>Đăng việc mới</label></h4>
     </section>
-    <div class="col-md-3 col-sm-6 col-xs-12 fright">
+    <div class="col-md-3 col-sm-6 col-xs-12">
         <?php echo LinkTile("jobs","my",$MY_JOB_ADS,"","blue");?>
     </div>
 </div>
 
 <?php if ($jobs_count >= $employer_subscription['listings']): ?>
-    <h5><?php echo $M_REACHED_MAXIMUM_SUBSCR;?></h5>
-    <a class="underline-link" href="index.php?category=home&action=credits"><?php echo $M_PLEASE_SELECT_TO_POST;?></a>
-    
+<h5><?php echo $M_REACHED_MAXIMUM_SUBSCR;?></h5>
+<a class="underline-link" href="index.php?category=home&action=credits"><?php echo $M_PLEASE_SELECT_TO_POST;?></a>
+
 <?php else : //New job post form, Allow employers to post job if they're not reached limit subscription posts?>
 
-<h3><?php echo $POST_NEW_ADD;?></h3>
+<style>
+    .newJob fieldset section label textarea {
+        min-height: 150px;
+    }
+    
+    .newJob {
+        margin-top: 25px;
+        margin-bottom: 25px;
+    }
+</style>
 
-<div class="container">
-    <form action="index.php?category=jobs&action=add" method="POST">
-        <div class="row">
-            <div class="col-md-12 employer-post-form">
-                
-                <!--Categories-->
-                <label>
-                    <span>Ngành: </span>
-                    <select name="post-category" required>
-                        <option value="">Vui lòng chọn</option>
-                        <?php foreach ($categories as $value) :?>
-                        <option value="<?php echo $value['category_id']?>"><?php echo $value['category_name_vi']?></option>    
-                        <?php endforeach;?>
-                    </select>
-                </label>
-                
-                <!--Job types-->
-                <label>
-                    <span>Loại công việc: </span>
-                    <select name="post-jobtypes" required>
-                        <option value="">Vui lòng chọn</option>
-                        <?php foreach ($job_types as $value) :?>
-                        <option value="<?php echo $value['id']?>"><?php echo $value['job_name']?></option>    
-                        <?php endforeach;?>
-                    </select>
-                </label>
-                
-                <!--Title-->
-                <label>
-                    <span>Tiêu đề (*): </span>
-                    <input type="text" name="employer-post-title" required style="text-align: left">
-                </label>
-                
-                <!--Descriptions-->
-                <label>
-                    <span>Chi tiết công việc: <p>(Hãy mô tả chi tiết nhưng đầu mục công việc để ứng viên có thể hiểu rõ hơn về yêu cầu của công ty bạn với vị trí này.)</p> </span>
+<form action="index.php?category=jobs&action=add" method="POST" class="sky-form newJob"> 
+    <header><?php echo $POST_NEW_ADD;?></header>
+    <fieldset>    
+        <section class="col col-6">
+            <label class="label">Tiêu đề công việc(*): </label>
+            <label class="input"><input type="text" name="employer-post-title" required></label>
+        </section>
+
+        <section class="col col-12">
+            <label class="label">
+                Chi tiết công việc:
+            </label>
+            <label class="textarea">
                     <textarea type="text" name="employer-post-details" required></textarea>
-                </label>
-                
-                <!--Job requirements-->
-                <label class="textarea">
-                    <span>Yêu cầu công việc: </span>
+            </label>
+            <div class="note"><strong>Note:</strong> Hãy mô tả chi tiết nhưng đầu mục công việc để ứng viên có thể hiểu rõ hơn về yêu cầu của công ty bạn với vị trí này.</div>
+        </section>
+
+        <section class="col col-12">
+            <label class="label">
+                Yêu cầu công việc: 
+            </label>
+            <label class="textarea">
                     <textarea type="text" name="employer-post-requires" required></textarea>
-                </label>
-               
-                <!--Benefits-->
-                <label>
-                    <span>Các quyền lợi được hưởng: </span>
+            </label>
+            <div class="note"><strong>Note:</strong> Yêu cầu chi tiết về kỹ năng, thái độ của ứng viên với công việc này.</div>
+        </section>
+
+        <section class="col col-12">
+            <label class="label">
+                Các quyền lợi được hưởng: 
+            </label>
+            <label class="textarea">
                     <textarea type="text" name="employer-post-benefits" required></textarea>
-                </label>
-                
-                <!--Yêu cầu hồ sơ-->
-                <label>
-                    <span>Yêu cầu hồ sơ: </span>
+            </label>
+            <div class="note"><strong>Note:</strong> Liệt kê những quyền lợi hấp dẫn mà ứng viên sẽ được hưởng đối với vị trí này.</div>
+        </section>
+
+        <section class="col col-12">
+            <label class="label">
+                Yêu cầu hồ sơ: 
+            </label>
+            <label class="textarea">
                     <textarea type="text" name="employer-post-profileCV" required>
 - Sơ yếu lý lịch.
 - Hộ khẩu, chứng minh nhân dân và giấy khám sức khỏe photo.
 - Các bằng cấp có liên quan.
                     </textarea>
-                </label>
-                
-                <!--Location-->
-                <label>
-                    <span>Địa điểm: </span>
-                    <select name="post-locations" required>
-                        <option value="">Vui lòng chọn</option>
+            </label>
+            <div class="note"><strong>Note:</strong> Liệt kê hồ sơ ứng viên cần chuẩn bị khi được nhận vào làm.</div>
+        </section>
+
+        <section class="col col-4">
+            <label class="label">Ngành nghề: </label>
+            <label class="select">
+                <select name="post-category" required>
+                    <option value="">Vui lòng chọn</option>
+                                <?php foreach ($categories as $value) :?>
+                    <option value="<?php echo $value['category_id']?>"><?php echo $value['category_name_vi']?></option>    
+                                <?php endforeach;?>
+                </select>
+                <i></i>
+            </label>
+        </section>
+
+        <section class="col col-4">
+            <label class="label">Loại công việc: </label>
+            <label class="select">
+                <select name="post-jobtypes" required>
+                    <option value="">Vui lòng chọn</option>
+                                <?php foreach ($job_types as $value) :?>
+                    <option value="<?php echo $value['id']?>"><?php echo $value['job_name']?></option>    
+                                <?php endforeach;?>
+                </select>
+                <i></i>
+            </label>
+        </section>
+
+        <section class="col col-4">
+            <label class="label">Địa điểm: </label>
+            <label class="select">
+                <select name="post-locations" required>
+                    <option value="">Vui lòng chọn</option>
                         <?php foreach ($locations as $value) :?>
-                        <option value="<?php echo $value['id']?>"><?php echo $value['City']?></option>    
+                    <option value="<?php echo $value['id']?>"><?php echo $value['City']?></option>    
                         <?php endforeach;?>
-                    </select>
-                </label>
-                
-                <!--Salary-->
-                <label>
-                    <span>Lương: </span>
-                    <select name="post-salary" required>
-                        <option value="">Vui lòng chọn</option>
+                </select>
+                <i></i>
+            </label>
+        </section>
+
+        <section class="col col-4">
+            <label class="label">Mức lương: </label>
+            <label class="select">
+                <select name="post-salary" required>
+                    <option value="">Vui lòng chọn</option>
                         <?php foreach ($salaries as $value) :?>
-                        <option value="<?php echo $value['salary_id']?>"><?php echo $value['salary_range']?></option>    
+                    <option value="<?php echo $value['salary_id']?>"><?php echo $value['salary_range']?></option>    
                         <?php endforeach;?>
-                    </select>
-                </label>
-                
-                <!--Experience-->
-                <label>
-                    <span>Yêu cầu kinh nghiệm: </span>
-                    <select name="experience" required>
-                        <option value="">Vui lòng chọn</option>
+                </select>
+                <i></i>
+            </label>
+        </section>
+
+        <section class="col col-4">
+            <label class="label">Yêu cầu kinh nghiệm: </label>
+            <label class="select">
+                <select name="experience" required>
+                    <option value="">Vui lòng chọn</option>
                         <?php foreach ($experience_list as $experience) :?>
-                        <option value="<?php echo $experience['experience_id']?>"><?php echo $experience['name']?></option>    
+                    <option value="<?php echo $experience['experience_id']?>"><?php echo $experience['name']?></option>    
                         <?php endforeach;?>
-                    </select>
-                </label>
-                
-                <!--Date start-->
-                <label>
-                    <span>Ngày bắt đầu: </span>
-                    <input type="text" name="employer-start-date" id="employer-start-date">
-                </label>
-                
-                <!--Active or not?-->
-                <label>
-                    <span>Đang hoạt động : </span>
-                    <select name="post-active">
-                        <option value="1">Có</option>
-                        <option value="0">Không</option>
-                    </select>
-                </label>
-                
-                <div class="submit">
-                    <input type="submit" name="submit" value="Gửi">
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
+                </select>
+                <i></i>
+            </label>
+        </section>
+
+        <section class="col col-4">
+            <label class="label">Ngày bắt đầu: </label>
+            <label class="input">
+                    <i class="icon-append fa fa-calendar"></i>
+                    <input type="text" name="employer-start-date" id="employer-start-date" placeholder="Start date">
+            </label>
+        </section>
+    </fieldset>
+    
+    <footer>
+            <button type="submit" name="submit" class="button">Gửi</button>
+            <button type="button" class="button button-secondary" onclick="window.history.back();">Quay lại trang trước</button>
+    </footer>
+    
+    
+</form>
 <?php endif;?>
 

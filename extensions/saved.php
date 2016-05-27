@@ -1,10 +1,10 @@
 <?php
 if(!defined('IN_SCRIPT')) {die("");}
-global $db, $SEO_setting, $commonQueries;
+global $db, $SEO_setting, $commonQueries, $FULL_DOMAIN_NAME;
 $website->Title("$M_SAVED_LISTINGS");
 $website->MetaDescription("");
 $website->MetaKeywords("");
-$saved_jobs = $commonQueries->getSavedJobs(1);
+$saved_jobs = $commonQueries->getSavedJobs(1); //1 day range
 ?>
 
 <h3 class="no-margin"><?php echo $M_CURRENT_SAVED;?></h3>
@@ -16,7 +16,7 @@ $saved_jobs = $commonQueries->getSavedJobs(1);
             <div class="col-md-12 category-details">
                 <section class="row">
                     <figure class="col-md-3">
-                        <img src="http://<?php echo $DOMAIN_NAME?>/uploaded_images/<?php echo $job['company_logo']?>.jpg">
+                        <img src="<?php echo $FULL_DOMAIN_NAME?>/images/employers/logo/<?php echo $job['company_logo']?>">
                         <p><a href="<?php echo $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $job["employer_id"], $website->seoURL($job["company"]));?>">Việc làm khác từ <?php echo $job["company"]?></a></p>
                         <p><a href="<?php echo $website->check_SEO_link("companyInfo", $SEO_setting, $job["employer_id"], $website->seoURL($job["company"]));?>">Thông tin công ty</a></p>
                     </figure>

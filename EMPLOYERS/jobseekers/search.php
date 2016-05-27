@@ -12,7 +12,7 @@
         $current_page = 1;
     } else {
         $current_page = filter_input(INPUT_GET,'trang', FILTER_SANITIZE_NUMBER_INT);
-    }
+    }    
 ?>
 
 <!--NAVIGATION TAB-->

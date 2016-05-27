@@ -104,11 +104,19 @@
                     </span>  
                 </form>
             </a>
+            
+            <!--FEATURED/URGENT JOB ICONS-->
             <?php if($job['featured'] == "1"):?>
-            <span class="featuredjob" title="Featured Job">
+            <span class="featuredjob" title="Việc làm nổi bật">
                 <i class="fa fa-star"></i>
             </span> 
             <?php endif;?>
+            <?php if($job['urgent'] == "1"):?>
+            <span class="urgentjob" title="Tuyển dụng gấp">
+                <i class="fa fa-fire" aria-hidden="true"></i>
+            </span> 
+            <?php endif;?>
+            
         </header>        
                 
         <!--MORE BOTTOM-->        

@@ -241,7 +241,7 @@
             $jobsInfo_columns = Array (
                 $this->_dbPrefix."jobs.id as job_id",$this->_dbPrefix."jobs.date", $this->_dbPrefix."jobs.employer",
                 $this->_dbPrefix."jobs.SEO_title",$this->_dbPrefix."jobs.job_category", 
-                $this->_dbPrefix."jobs.region",$this->_dbPrefix."jobs.featured",
+                $this->_dbPrefix."jobs.region",$this->_dbPrefix."jobs.featured",$this->_dbPrefix."jobs.urgent",
                 $this->_dbPrefix."jobs.title", $this->_dbPrefix."jobs.expires", //
                 $this->_dbPrefix."jobs.message", $this->_dbPrefix."jobs.job_type", 
                 $this->_dbPrefix."jobs.salary",$this->_dbPrefix."jobs.applications", // Main table
@@ -274,7 +274,8 @@
                 $this->_db->where("region", $location);
             }
                 
-            //Order by featured first
+            //Order by urgent first
+            $this->_db->orderBy("urgent", "DESC");
             $this->_db->orderBy("featured", "DESC");
             $this->_db->orderBy("date", "DESC");
                 
@@ -477,9 +478,9 @@
             //Get user saved jobs in the last 1 days
             //http://dba.stackexchange.com/questions/97211/get-rows-where-lastlogintimestamp-is-in-last-7-days
             $data['saved_jobs'] = $this->_db->where($this->_dbPrefix."saved_jobs.date >= CAST(UNIX_TIMESTAMP(NOW() - INTERVAL $day DAY) AS CHAR(10))")//http://dba.stackexchange.com/questions/97211/get-rows-where-lastlogintimestamp-is-in-last-7-days
-            ->where("user_uniqueId",filter_input(INPUT_COOKIE,'userId', FILTER_SANITIZE_STRING))
-            ->where("IPAddress", filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP))
-            ->withTotalCount()->get("jobs", NULL, $jobsInfo_columns);
+                                ->where("user_uniqueId",filter_input(INPUT_COOKIE,'userId', FILTER_SANITIZE_STRING))
+                                ->where("IPAddress", filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP))
+                                ->withTotalCount()->get("jobs", NULL, $jobsInfo_columns);
                 
             //Total records found
             $data['totalCount'] = $this->_db->totalCount;
@@ -782,7 +783,22 @@
         public function redirectWith_message($url,$message_indicator ,$message){
             global $website;
             $this->flash('message', $this->messageStyle($message_indicator, $message));
-            $website->redirect("$url");   
+            $this->redirect("$url");   
+        }
+        
+        /**
+        * Redirect to specific URL.
+        * @param   none
+        * @return  URL of current page
+        */
+        
+        function redirect($url,$permanent = false){
+            global $FULL_DOMAIN_NAME;
+            if($permanent){
+                    header('HTTP/1.1 301 Moved Permanently');
+            }
+            header('Location: '.$url);
+            exit();
         }
             
         /**
@@ -1410,7 +1426,7 @@
             if (ctype_digit($input)){ //returns true if all the characters in the string are digits.
                 $number = filter_var($input, FILTER_VALIDATE_INT);
                 
-                if (strlen($number) > 9){//Allowed number length to 9 only
+                if (strlen($number) > 8){//Allowed number length to 9 only
                     return FALSE;
                 }                
                 

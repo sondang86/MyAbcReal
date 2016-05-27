@@ -1,4 +1,12 @@
 <?php
+    //Test page generate speeds 
+    //https://www.phpjabbers.com/measuring-php-page-load-time-php17.html
+    $time = microtime();
+    $time = explode(' ', $time);
+    $time = $time[1] + $time[0];
+    $start = $time;
+?>
+<?php
 // Jobs Portal
 //Copyright vieclambanthoigian.com.vn 2016
 
@@ -43,6 +51,7 @@ $website = new SiteManager();
 $website->SetDatabase($database);
     
 $commonQueries = new CommonsQueries($db);
+$commonQueries_Front = new CommonsQueries_Front($db);
 
 //Track user inactivity
 $commonQueries->CheckSession();
@@ -162,3 +171,15 @@ $website->Statistics();
         $('#by_featured, #by_urgent').perfectScrollbar();    
     });
 </script>
+
+
+<?php
+    //Test page generate speeds 
+    //https://www.phpjabbers.com/measuring-php-page-load-time-php17.html
+    $time = microtime();
+    $time = explode(' ', $time);
+    $time = $time[1] + $time[0];
+    $finish = $time;
+    $total_time = round(($finish - $start), 4);
+    echo 'Page generated in '.$total_time.' seconds.';
+?>
