@@ -1,15 +1,17 @@
 <?php
 // Jobs Portal
-// http://www.netartmedia.net/jobsportal
-// Copyright (c) All Rights Reserved NetArt Media
-// Find out more about our products and services on:
-// http://www.netartmedia.net
 ?><?php 
 if(!defined('IN_SCRIPT')) die("Oops! Nothing here");
+
 global $db, $SEO_setting, $commonQueries, $FULL_DOMAIN_NAME;
 $job_id = $commonQueries->check_present_id($_GET, $SEO_setting, 3);
 $job_details = $commonQueries->jobDetails($job_id);
-//Set to default logo if empty
+
+//Check latitude/longitute values for Google Maps
+$latitude = $commonQueries->check_LatitudeLongitude($job_details['latitude'],$job_details['longitude'])['latitude'];
+$longitude = $commonQueries->check_LatitudeLongitude($job_details['latitude'],$job_details['longitude'])['longitude'];
+
+//Check logo
 $company_logo = $commonQueries->setDefault_logoIfEmpty($job_details['logo'], "employers");
 
 //Check SEO setting
@@ -39,7 +41,7 @@ if (isset($_POST['submit']) && $_POST['apply_job'] == '1'){ //Update when form s
 }
 
     //Showing form submittion
-    if(isset($_SESSION['username']) && $_SESSION['user_type'] == "jobseeker"){ //User must logged in as jobseeker to apply this form
+    if(isset($_SESSION['username']) && $_SESSION['user_type'] == "jobseeker"){ //User is jobseeker
         $username = $_SESSION['username'];
         $userFiles = $db->where('user', $username)->get("files", NULL, "file_name");            
         $userInfo = $db->where('username', "$username")->withTotalCount()->getOne("jobseekers");
@@ -109,7 +111,31 @@ if (isset($_POST['submit']) && $_POST['apply_job'] == '1'){ //Update when form s
                 <a href="<?php $website->check_SEO_link("companyInfo", $SEO_setting, $job_details['employer_id'],$website->seoUrl($job_details['company']));?>" class="sub-text underline-link">Thông tin công ty</a>
             </aside>
         </section>
-    
+       
+        <!--JOB EMPLOYER's CONTACT DETAILS-->
+        <fieldset class="job-details-contact">
+            <header>Thông tin liên hệ: </header>
+            <section class="col-md-12">
+                <label><strong>Người liên hệ:</strong> <span><?php echo $job_details['work_location'];?></span></label>
+                
+                <label><strong>Địa điểm nộp hồ sơ/làm việc:</strong>  <span><?php echo $job_details['contact_person'];?></span> </label>
+                
+                <?php if($job_details['contact_person_phone'] !== 0): ?>
+                <label><strong>Số điện thoại liên hệ:</strong> <span><?php echo $job_details['contact_person_phone'];?></span> </label>
+                <?php endif;?>
+                
+                <?php if($job_details['contact_person_email'] !== ''):?>
+                <label><strong>Email liên hệ:</strong>  <span><?php echo $job_details['contact_person_email'];?></span> </label>
+                <?php endif;?>
+            </section>
+        </fieldset>
+        
+        <!--GOOGLE MAPS-->
+        <section class="col-md-12">
+            <?php require_once ('include/google_maps.php');?>
+        </section>
+        
+        
     <!--SEND MESSAGE-->
         <form action="" method="POST" class="clearfix">        
             
@@ -144,7 +170,8 @@ if (isset($_POST['submit']) && $_POST['apply_job'] == '1'){ //Update when form s
             </div>
             <?php endif;?>
             
-            <div class="messageToEmployer">  
+            <!--MESSAGE TO EMPLOYER-->
+            <div class="messageToEmployer col-md-12">  
                 <section>
                     <textarea placeholder="Gửi tin nhắn của bạn tại đây..." name="message_to_employer"></textarea>
                 </section>
@@ -158,6 +185,7 @@ if (isset($_POST['submit']) && $_POST['apply_job'] == '1'){ //Update when form s
                 }
             ?>
             <div class="sky-form">
+                
                 <!--FILE ATTACHMENTS-->
                 <fieldset class="col col-9">
                     <h5>Danh sách hồ sơ đính kèm</h5>
@@ -179,6 +207,7 @@ if (isset($_POST['submit']) && $_POST['apply_job'] == '1'){ //Update when form s
                         <?php endif;?>
                     </section>
                 </fieldset>
+                
                 <!--CAPTCHA-->
                 <fieldset class="col col-3">                
                     <section>
@@ -195,8 +224,8 @@ if (isset($_POST['submit']) && $_POST['apply_job'] == '1'){ //Update when form s
                 </fieldset>
             </div>
         </form>
-        
-    <?php }  	
+    
+      <?php }  	
         } else { //User is not jobseeker
             echo '<div class="sky-form"><section class="col col-12">Có lỗi xảy ra, mục này chỉ dành cho người tìm việc</section></div>';
         }
@@ -211,3 +240,4 @@ if (isset($_POST['submit']) && $_POST['apply_job'] == '1'){ //Update when form s
     echo "không tìm thấy việc này, vui lòng thử lại :(";
 }
 ?>
+

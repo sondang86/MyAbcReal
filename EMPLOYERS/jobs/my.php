@@ -1,8 +1,5 @@
 <?php
 // Jobs Portal All Rights Reserved
-// A software product of NetArt Media, All Rights Reserved
-// Find out more about our products and services on:
-// http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
 global $db, $categories, $job_types, $locations, $salaries, $all_jobs, $commonQueries, $employerInfo, $FULL_DOMAIN_NAME;

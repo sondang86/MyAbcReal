@@ -5,18 +5,15 @@
         
     $current_subscription_request = $commonQueries_Employers->Employer_Subscriptions_request($AuthUserName);
     $current_subscription = $commonQueries_Employers->getCurrent_Subscriptions($AuthUserName);
-        
-//    echo "<pre>";
-//    print_r($current_subscription_request);
-//    echo "</pre>";
+
         
 if (isset($_POST['submit'])){
     //Insert on duplicate update    
     $data = array(
         'employer_id'                   => $employer_data['id'],
-        'subscription_request_type'     => $_POST['subscription_request_type'],
+        'subscription_request_type'     => filter_input(INPUT_POST, 'employer_message' , FILTER_SANITIZE_NUMBER_INT),
         'date'                          => time(),
-        'employer_message'              => $_POST['employer_message'],
+        'employer_message'              => filter_input(INPUT_POST, 'employer_message' , FILTER_SANITIZE_STRING),
         'is_processed'                  => 0, //Default is not processed, until admin approved 
     );
         

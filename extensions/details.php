@@ -4,6 +4,10 @@
     $job_id = $commonQueries->check_present_id($_GET, $SEO_setting, 3);
     $job_details = $commonQueries->jobDetails($job_id);
     
+    //Check latitude/longitute values for Google Maps
+    $latitude = $commonQueries->check_LatitudeLongitude($job_details['latitude'],$job_details['longitude'])['latitude'];
+    $longitude = $commonQueries->check_LatitudeLongitude($job_details['latitude'],$job_details['longitude'])['longitude'];
+    
     if ($job_details !== FALSE){ 
         $commonQueries->Update_job_views($job_id);//count job views for every refresh
         
@@ -50,7 +54,7 @@
     </div>
         
     <!--JOB DESCRIPTION-->
-    <section class="job-description">
+    <section class="job-description clearfix">
         <article class="col-md-9">
             <h4><?php echo $JOB_DESCRIPTION;?></h4>
             <p><?php echo nl2br($job_details['message'])?></p>
@@ -83,26 +87,50 @@
             <?php   }?>
         </aside>
     </section>
-        
     
-    <!--JOB APPLY NAV-->
-    <footer class="row top-bottom-margin">
-        <figure class="col-md-12">            
-           
-            <a href="#" title="Email công việc này" class="emailthisJob" id="<?php echo $job_details["job_id"]?>"><i class="fa fa-inbox" aria-hidden="true"></i>Gửi email</a> 
-            
-            <?php if(($job_details['saved_jobId'] !== $job_details['job_id']) || ($userId_cookie !== $job_details['user_uniqueId']) || ($job_details['IPAddress'] !== filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP))){ //Show save job button?>                    
-                        
-                <a href="#" data-browser="<?php echo $Browser_detection->getName();?>" data-category="<?php echo $job_details["category_id"]?>"  data-jobid="<?php echo $job_details["job_id"]?>" title="Lưu việc làm này" class="savethisJob" id="<?php echo $job_details["job_id"]?>" onclick="javascript:saveJob(this, sitePath)"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
+    <!--JOB EMPLOYER's CONTACT DETAILS-->
+    <fieldset class="job-details-contact clearfix">
+        <header>Thông tin liên hệ: </header>
+        <section class="col-md-12">
+            <label><strong>Người liên hệ:</strong> <span><?php echo $job_details['work_location'];?></span></label>
 
-            <?php } else { // Show saved ?>
+            <label><strong>Địa điểm nộp hồ sơ/làm việc:</strong>  <span><?php echo $job_details['contact_person'];?></span> </label>
 
-                <a href="#" title="Đã lưu" class="savethisJob" id="<?php echo $job_details["job_id"]?>"><i class="fa fa-check"></i>Đã lưu việc này</a>                    
+            <?php if($job_details['contact_person_phone'] !== 0): ?>
+            <label><strong>Số điện thoại liên hệ:</strong> <span><?php echo $job_details['contact_person_phone'];?></span> </label>
+            <?php endif;?>
 
-            <?php }?> 
-            
-        </figure>
-    </footer>
+            <?php if($job_details['contact_person_email'] !== ''):?>
+            <label><strong>Email liên hệ:</strong>  <span><?php echo $job_details['contact_person_email'];?></span> </label>
+            <?php endif;?>
+        </section>
+        
+        <!--GOOGLE MAPS-->
+        <section class="col-md-12">
+            <?php require_once ('include/google_maps.php');?>
+        </section>
+        
+        <!--JOB APPLY NAV-->
+        <section>
+            <figure class="top-bottom-margin col-md-12">            
+
+                <a href="#" title="Email công việc này" class="emailthisJob" id="<?php echo $job_details["job_id"]?>"><i class="fa fa-inbox" aria-hidden="true"></i>Gửi email</a> 
+
+                <?php if(($job_details['saved_jobId'] !== $job_details['job_id']) || ($userId_cookie !== $job_details['user_uniqueId']) || ($job_details['IPAddress'] !== filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP))){ //Show save job button?>                    
+
+                    <a href="#" data-browser="<?php echo $Browser_detection->getName();?>" data-category="<?php echo $job_details["category_id"]?>"  data-jobid="<?php echo $job_details["job_id"]?>" title="Lưu việc làm này" class="savethisJob" id="<?php echo $job_details["job_id"]?>" onclick="javascript:saveJob(this, sitePath)"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
+
+                <?php } else { // Show saved ?>
+
+                    <a href="#" title="Đã lưu" class="savethisJob" id="<?php echo $job_details["job_id"]?>"><i class="fa fa-check"></i>Đã lưu việc này</a>                    
+
+                <?php }?>
+
+            </figure>
+        </section>
+        
+    </fieldset>
+    
 </article>
 
 <?php } else {?>
@@ -110,3 +138,10 @@
         <h4>Không tìm thấy dữ liệu :(</h4>
     </article>
 <?php } ?>
+
+<style>
+    .top-bottom-margin {
+        margin-top: 35px !important;
+        text-align: right;
+    }
+</style>

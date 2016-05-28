@@ -1,2 +1,36 @@
 .pagination-noResults p{min-height:100px;border:1px solid #EAE3E3;background-color:#EEE;color:#428BD2;font-weight:bold;padding:10px;-moz-border-radius:5px;-webkit-border-radius:5px}
 /*# sourceMappingURL=commons.css.map */
+
+.job-details-contact header {
+    font-size: 20px;
+    background: #F5F5F5;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.job-details-contact label{
+    font-weight: normal;
+    display: block;
+    margin-bottom: 15px;
+    font-size: 13px;
+    overflow: auto;
+}
+
+.job-details-contact section label strong{
+    float: left;
+    width: 55%
+}
+
+.job-details-contact {
+    border-bottom: 2px solid rgba(245, 245, 245, 0.83);
+    padding-bottom: 15px;
+}
+
+.job-details-contact section label span {
+    float: left;
+}
+
+#map {
+    height: 350px;
+    width: 100%;
+}    

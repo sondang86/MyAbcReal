@@ -513,6 +513,8 @@
            $columns = array(
                 $this->_dbPrefix."jobs.id as job_id",$this->_dbPrefix."jobs.job_category",
                 $this->_dbPrefix."jobs.applications",$this->_dbPrefix."jobs.employer",
+                $this->_dbPrefix."jobs.work_location",$this->_dbPrefix."jobs.contact_person",
+                $this->_dbPrefix."jobs.contact_person_phone",$this->_dbPrefix."jobs.contact_person_email",
                 $this->_dbPrefix."jobs.requires_description",$this->_dbPrefix."jobs.benefits_description",
                 $this->_dbPrefix."jobs.profileCV_description",
                 $this->_dbPrefix."jobs.title",$this->_dbPrefix."jobs.SEO_title",$this->_dbPrefix."jobs.date as date",
@@ -525,7 +527,8 @@
                 $this->_dbPrefix."saved_jobs.user_type as saved_job_userType",$this->_dbPrefix."saved_jobs.date as saved_jobDate",
                 $this->_dbPrefix."saved_jobs.browser", $this->_dbPrefix."saved_jobs.IPAddress",  
                 $this->_dbPrefix."saved_jobs.user_uniqueId as user_uniqueId",$this->_dbPrefix."saved_jobs.job_id as saved_jobId",//saved jobs table
-                $this->_dbPrefix."job_statistics.views_count"
+                $this->_dbPrefix."job_statistics.views_count",
+                $this->_dbPrefix."jobs_location.latitude",$this->_dbPrefix."jobs_location.longitude"
             );
                 
             $this->_db->join("employers", $this->_dbPrefix."jobs.employer=".$this->_dbPrefix."employers.username", "LEFT");
@@ -538,6 +541,7 @@
                     .$this->_dbPrefix."saved_jobs.user_uniqueId = '$userId_cookie' AND "
                     .$this->_dbPrefix."saved_jobs.IPAddress = '".filter_input(INPUT_SERVER,'REMOTE_ADDR', FILTER_VALIDATE_IP)."' ", "LEFT");
             $this->_db->join("job_statistics", $this->_dbPrefix."jobs.id=".$this->_dbPrefix."job_statistics.job_id", "LEFT");
+            $this->_db->join("jobs_location", $this->_dbPrefix."jobs.id=".$this->_dbPrefix."jobs_location.job_id", "LEFT");
                 
             $this->_db->where($this->_dbPrefix."jobs.id", $id);
             $this->_db->where($this->_dbPrefix."jobs.status", "1");
@@ -1455,6 +1459,25 @@
             }
             
             return $new_value;
+        }
+        
+        /**
+        *   check whether google Maps Latitude/Longitude are neither empty, then replace with default settings
+        *   @param var latitude to be input
+        *   @param var longitude to be input
+        *   @param var default_latitude to be input
+        *   @param var $default_longitude to be input
+        */
+        public function check_LatitudeLongitude($latitude, $longitude, $default_latitude='21.020235',$default_longitude='105.792354'){
+            if (($latitude == '') || ($longitude == '')){
+                $value['latitude'] = $default_latitude;
+                $value['longitude'] = $default_longitude;
+            } else {
+                $value['latitude'] = $latitude;
+                $value['longitude'] = $longitude;
+            }
+            
+            return $value;
         }
             
     }

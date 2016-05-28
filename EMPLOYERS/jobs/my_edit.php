@@ -1,50 +1,72 @@
 <?php
-// Jobs Portal All Rights Reserved
-// A software product of NetArt Media, All Rights Reserved
-// Find out more about our products and services on:
-// http://www.netartmedia.net
+// Vieclambanthoigian 2016 Copyright All Rights Reserved
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries,$categories, $job_types, $locations, $salaries, $experience_list,$jobs_by_employerId;
+global $db, $commonQueries, $FULL_DOMAIN_NAME, $categories, $job_types, $locations, $salaries, $experience_list,$jobs_by_employerId, $employerInfo;
 ?>
 <?php
-$id=$_REQUEST["id"];
-$website->ms_i($id);
-if($database->SQLCount("jobs","WHERE employer='".$AuthUserName."' AND id=".$id) == 0){
-    die("404 Not found");
+$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+
+if($database->SQLCount("jobs","WHERE employer='".$AuthUserName."' AND id=".$id) == 0){ //Prevent access to job that does not belong to user
+    $website->redirect($FULL_DOMAIN_NAME.'/404.php');
 }
+
+
+$db->join('jobs_location', $DBprefix."jobs.id = ".$DBprefix."jobs_location.job_id", "LEFT");
 $job = $db->where ("id", "$id")->getOne("jobs");
- 
+
+//Get latitude/longitute values
+$latitude = $commonQueries->check_LatitudeLongitude($job['latitude'],$job['longitude'])['latitude'];
+$longitude = $commonQueries->check_LatitudeLongitude($job['latitude'],$job['longitude'])['longitude'];
+
 ?>
 
 <?php //Edit data
     if(isset($_POST['submit'])){
+ 
         //Insert data to database
         $data = Array( 
-            "employer" => "$AuthUserName",
-            "job_category" => filter_input(INPUT_POST, 'post-category'),
-            "job_type" => filter_input(INPUT_POST, 'post-jobtypes'),
-            "title" => filter_input(INPUT_POST, 'employer-post-title', FILTER_SANITIZE_STRING), 
-            "message" => filter_input(INPUT_POST,'employer-post-details', FILTER_SANITIZE_STRING),
+            "employer"              => "$AuthUserName",
+            "job_category"          => filter_input(INPUT_POST, 'post-category', FILTER_SANITIZE_NUMBER_INT),
+            "job_type"              => filter_input(INPUT_POST, 'post-jobtypes', FILTER_SANITIZE_NUMBER_INT),
+            "title"                 => filter_input(INPUT_POST, 'employer-post-title',FILTER_SANITIZE_STRING), 
+            "message"               => filter_input(INPUT_POST,'employer-post-details',FILTER_SANITIZE_STRING),
             "requires_description"  => filter_input(INPUT_POST, 'employer-post-requires',FILTER_SANITIZE_STRING), 
             "benefits_description"  => filter_input(INPUT_POST,'employer-post-benefits',FILTER_SANITIZE_STRING),
             "profileCV_description" => filter_input(INPUT_POST,'employer-post-profileCV',FILTER_SANITIZE_STRING),
-            "experience" => filter_input(INPUT_POST,'experience',FILTER_SANITIZE_NUMBER_INT),
-            "region" => filter_input(INPUT_POST,'post-locations'),
-            "salary" => filter_input(INPUT_POST,'post-salary'),
-            "date_available" => strtotime(filter_input(INPUT_POST,'employer-start-date')),
-            "date_updated" => time(),
-            "expires" => (strtotime(filter_input(INPUT_POST,'employer-start-date')) + 30*86400), //30 days limitation
-            "status" => filter_input(INPUT_POST,'post-active'),
-            "SEO_title" => $db->secure_input($website->seoURL($website->stripVN(filter_input(INPUT_POST,'employer-post-title'))))
+            "experience"            => filter_input(INPUT_POST,'experience',FILTER_SANITIZE_NUMBER_INT),
+            "region"                => filter_input(INPUT_POST,'post-locations', FILTER_SANITIZE_NUMBER_INT),
+            "salary"                => filter_input(INPUT_POST,'post-salary', FILTER_SANITIZE_NUMBER_INT),
+            "date"                  => time(),
+            "date_available"        => strtotime(filter_input(INPUT_POST,'employer-start-date'). " " . date("G:i:s")),
+            "expires"               => (strtotime(filter_input(INPUT_POST,'employer-start-date')) + (21*86400)), //21 days limitation
+            "status"                => 1,
+            "SEO_title"             => $website->seoURL($website->stripVN(filter_input(INPUT_POST,'employer-post-title'))),
+            "work_location"         => filter_input(INPUT_POST,'job_location',FILTER_SANITIZE_STRING),
+            "contact_person"        => filter_input(INPUT_POST,'contact_person',FILTER_SANITIZE_STRING),
+            "contact_person_phone"  => filter_input(INPUT_POST,'contact_person_phone',FILTER_SANITIZE_NUMBER_INT),
+            "contact_person_email"  => filter_input(INPUT_POST,'contact_person_email',FILTER_SANITIZE_STRING)
          );
     
     
     $db->where('id', filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT));
     $id = $db->update('jobs', $data);
-    if($id){
-        $commonQueries->flash('message', $commonQueries->messageStyle('info', 'Lưu thay đổi thành công') );
-        $website->redirect($_SERVER['REQUEST_URI']);
+    if($id){//Update in jobs_location table        
+        $job_location = array(
+            'latitude'  => filter_input(INPUT_POST,'job_map_latitude',FILTER_SANITIZE_STRING),
+            'longitude' => filter_input(INPUT_POST,'job_map_longitude',FILTER_SANITIZE_STRING),
+            'job_id'    => filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT)
+        );        
+        
+        $updateColumns = Array ('latitude', 'longitude', 'job_id');
+        $db->onDuplicate($updateColumns);
+        if(!$db->insert('jobs_location', $job_location)){
+            echo "problem"; die;            
+        } else {             
+            $commonQueries->flash('message', $commonQueries->messageStyle('info', 'Lưu thay đổi thành công') );
+            $website->redirect($_SERVER['REQUEST_URI']);
+        }
+       
     } else {
         $message = "there were an error occurred";
         die;
@@ -53,135 +75,213 @@ $job = $db->where ("id", "$id")->getOne("jobs");
 ?>
 
 
-<h3><?php echo $MODIFY_SELECTED_ADD;?></h3>
 <h4><?php $commonQueries->flash('message');?></h4>
 
+<!--NAVIGATION-->
 <div class="row">
-    <div class="col-md-3 col-md-push-9">  
-        <div class="row top-bottom-margin">
-            <?php echo LinkTile
-                     (
-                            "application_management",
-                            "list&Proceed=1&id=".$id,
-                            $M_APPLICATIONS." (".$database->SQLCount("apply","WHERE posting_id=".$id).")",
-                            "",
-                            "yellow"
-                     );?>
-        </div>                         
-        <div class="row top-bottom-margin">
-            <?php echo LinkTile
-             (
-                    "jobs",
-                    "my",
-                    $M_GO_BACK,
-                    "",
-                    "red"
-             );?>
-        </div>
+    <section class="col-md-8 col-sm-6 col-xs-12">
+        <h5><?php $commonQueries->flash('message');?></h5>
+    </section>
+    <div class="col-md-2 col-sm-6 col-xs-12">
+        <?php echo LinkTile("application_management","list&Proceed=1&id=".$id,$M_APPLICATIONS." (".$database->SQLCount("apply","WHERE posting_id=".$id).")","","yellow");?>
     </div>
-    <form action="index.php?category=jobs&folder=my&page=edit&id=<?php echo $id?>" method="POST">
-        <div class="col-md-9 col-md-pull-3">
-            <div class="employer-post-form">
-                
-                <label>
-                    <span>Tiêu đề</span>
-                    <input type="text" name="employer-post-title" value="<?php echo $job['title']?>">
-                </label>
-                
-                <label>
-                    <span>Chi tiết</span>
-                    <aside><textarea type="text" name="employer-post-details" required><?php echo $job['message']?></textarea></aside>
-                </label>
-                
-                <label>
-                    <span>Yêu cầu công việc: </span>
-                    <aside><textarea type="text" name="employer-post-requires" required><?php echo $job['requires_description']?></textarea></aside>
-                </label>
-                
-                <label>
-                    <span>Các quyền lợi được hưởng: </span>
-                    <aside><textarea type="text" name="employer-post-benefits" required><?php echo $job['benefits_description']?></textarea></aside>
-                </label>
-                
-                <label>
-                    <span>Yêu cầu hồ sơ: </span>
-                    <aside><textarea type="text" name="employer-post-profileCV" required><?php echo $job['profileCV_description']?></textarea></aside>
-                </label>
-                
-                <label>
-                    <span>Ngành: </span>
-                    <select name="post-category" required>
-                        <option value="">Vui lòng chọn</option>
-                        <?php foreach ($categories as $value) :?>
-                        <option value="<?php echo $value['category_id']?>" <?php if($job['job_category'] == $value['category_id']){ echo "selected";}?>><?php echo $value['category_name_vi']?></option>    
-                        <?php endforeach;?>
-                    </select>
-                </label>
-                
-                <!--Job types-->
-                <label>
-                    <span>Loại công việc: </span>
-                    <select name="post-jobtypes" required>
-                        <option value="">Vui lòng chọn</option>
-                        <?php foreach ($job_types as $value) :?>
-                        <option value="<?php echo $value['id']?>" <?php if($job['job_type'] == $value['id']){ echo "selected";}?>><?php echo $value['job_name']?></option>    
-                        <?php endforeach;?>
-                    </select>
-                </label>
-                
-                <!--Location-->
-                <label>
-                    <span>Địa điểm: </span>
-                    <select name="post-locations" required>
-                        <option value="">Vui lòng chọn</option>
-                        <?php foreach ($locations as $value) :?>
-                        <option value="<?php echo $value['id']?>" <?php if($job['region'] == $value['id']){ echo "selected";}?>><?php echo $value['City']?></option>    
-                        <?php endforeach;?>
-                    </select>
-                </label>
-                
-                <!--Salary-->
-                <label>
-                    <span>Lương: </span>
-                    <select name="post-salary" required>
-                        <option value="">Vui lòng chọn</option>
-                        <?php foreach ($salaries as $value) :?>
-                        <option value="<?php echo $value['salary_id']?>" <?php if($job['salary'] == $value['salary_id']){ echo "selected";}?>><?php echo $value['salary_range']?></option>    
-                        <?php endforeach;?>
-                    </select>
-                </label>
-                
-                <!--Experience-->
-                <label>
-                    <span>Yêu cầu kinh nghiệm: </span>
-                    <select name="experience" required>
-                        <option value="">Vui lòng chọn</option>
-                        <?php foreach ($experience_list as $experience) :?>
-                        <option value="<?php echo $experience['experience_id']?>" <?php if($job['experience'] == $experience['experience_id']){ echo "selected";}?>><?php echo $experience['name']?></option>    
-                        <?php endforeach;?>
-                    </select>
-                </label>
-                
-                <!--Date start-->
-                <label>
-                    <span>Ngày bắt đầu: </span>
-                    <input type="text" name="employer-start-date" id="datePicker" value="<?php echo date('Y-m-d',$job['date'])?>">
-                </label>
-                
-                <!--Active or not?-->
-                <label>
-                    <span>Đang hoạt động : </span>
-                    <select name="post-active">
-                        <option value="1" <?php if($job['status'] == 1){echo "selected";} ?>>Có</option>
-                        <option value="0" <?php if($job['status'] == 0){echo "selected";} ?>>Không</option>
-                    </select>
-                </label>
-            </div>
-            <ul class="inline-buttons">
-                <li><input type="submit" name="submit" value="Lưu"></li>
-            </ul>
-        </div>
+    <div class="col-md-2 col-sm-6 col-xs-12">
+        <?php echo LinkTile("jobs","my",$M_GO_BACK,"","red");?>
+    </div>
 </div>
+
+
+<form action="" method="POST" class="sky-form newJob"> 
+    <header>Chỉnh sửa chi tiết công việc</header>
+    <fieldset>    
+        <section class="col col-6">
+            <label class="label">Tiêu đề công việc(*): </label>
+            <label class="input"><input type="text" name="employer-post-title" required value="<?php echo $job['title']?>"></label>
+        </section>
+
+        <section class="col col-12">
+            <label class="label">
+                Chi tiết công việc:
+            </label>
+            <label class="textarea">
+                    <textarea type="text" name="employer-post-details" required><?php echo $job['message']?></textarea>
+            </label>
+            <div class="note"><strong>Gợi ý:</strong> Hãy mô tả chi tiết nhưng đầu mục công việc để ứng viên có thể hiểu rõ hơn về yêu cầu của công ty bạn với vị trí này.</div>
+        </section>
+
+        <section class="col col-12">
+            <label class="label">
+                Yêu cầu công việc: 
+            </label>
+            <label class="textarea">
+                    <textarea type="text" name="employer-post-requires" required><?php echo $job['requires_description']?></textarea>
+            </label>
+            <div class="note"><strong>Gợi ý:</strong> Yêu cầu chi tiết về kỹ năng, thái độ của ứng viên với công việc này.</div>
+        </section>
+
+        <section class="col col-12">
+            <label class="label">
+                Các quyền lợi được hưởng: 
+            </label>
+            <label class="textarea">
+                    <textarea type="text" name="employer-post-benefits" required><?php echo $job['benefits_description']?></textarea>
+            </label>
+            <div class="note"><strong>Gợi ý:</strong> Liệt kê những quyền lợi hấp dẫn mà ứng viên sẽ được hưởng đối với vị trí này.</div>
+        </section>
+
+        <section class="col col-12">
+            <label class="label">
+                Yêu cầu hồ sơ: 
+            </label>
+            <label class="textarea">
+                    <textarea type="text" name="employer-post-profileCV" required>
+<?php echo $job['profileCV_description']?>
+                    </textarea>
+            </label>
+            <div class="note"><strong>Gợi ý:</strong> Liệt kê hồ sơ ứng viên cần chuẩn bị khi được nhận vào làm.</div>
+        </section>
+        
+        </fieldset>
+
+        <fieldset>
+
+        <section class="col col-4">
+            <label class="label">Ngành nghề: </label>
+            <label class="select">
+                <select name="post-category" required>
+                    <option value="">Vui lòng chọn</option>
+                                <?php foreach ($categories as $value) :?>
+                    <option value="<?php echo $value['category_id']?>" <?php if($value['category_id'] == $job['job_category']){echo "selected";}?>><?php echo $value['category_name_vi']?></option>    
+                                <?php endforeach;?>
+                </select>
+                <i></i>
+            </label>
+        </section>
+
+        <section class="col col-4">
+            <label class="label">Loại công việc: </label>
+            <label class="select">
+                <select name="post-jobtypes" required>
+                    <option value="">Vui lòng chọn</option>
+                                <?php foreach ($job_types as $value) :?>
+                    <option value="<?php echo $value['id']?>" <?php if($value['id'] == $job['job_type']){echo "selected";}?>><?php echo $value['job_name']?></option>    
+                                <?php endforeach;?>
+                </select>
+                <i></i>
+            </label>
+        </section>
+
+        <section class="col col-4">
+            <label class="label">Địa điểm: </label>
+            <label class="select">
+                <select name="post-locations" required>
+                    <option value="">Vui lòng chọn</option>
+                        <?php foreach ($locations as $value) :?>
+                    <option value="<?php echo $value['id']?>" <?php if($value['id'] == $job['region']){echo "selected";}?>><?php echo $value['City']?></option>    
+                        <?php endforeach;?>
+                </select>
+                <i></i>
+            </label>
+        </section>
+
+        <section class="col col-4">
+            <label class="label">Mức lương: </label>
+            <label class="select">
+                <select name="post-salary" required>
+                    <option value="">Vui lòng chọn</option>
+                        <?php foreach ($salaries as $value) :?>
+                    <option value="<?php echo $value['salary_id']?>" <?php if($value['salary_id'] == $job['salary']){echo "selected";}?>><?php echo $value['salary_range']?></option>    
+                        <?php endforeach;?>
+                </select>
+                <i></i>
+            </label>
+        </section>
+
+        <section class="col col-4">
+            <label class="label">Yêu cầu kinh nghiệm: </label>
+            <label class="select">
+                <select name="experience" required>
+                    <option value="">Vui lòng chọn</option>
+                        <?php foreach ($experience_list as $experience) :?>
+                    <option value="<?php echo $experience['experience_id']?>" <?php if($experience['experience_id'] == $job['experience']){echo "selected";}?>><?php echo $experience['name']?></option>    
+                        <?php endforeach;?>
+                </select>
+                <i></i>
+            </label>
+        </section>
+    
+        <section class="col col-4">
+            <label class="label">Ngày bắt đầu: </label>
+            <label class="input">
+                    <i class="icon-append fa fa-calendar"></i>
+                    <input type="text" name="employer-start-date" id="datePicker" placeholder="Start date" value="<?php echo date('Y-m-d',$job['date_available'])?>" required>
+            </label>
+        </section>
+
+        <section class="col col-3">
+            <label class="label">Địa điểm làm việc*: </label>
+            <label class="input"><input type="text" name="job_location" required value="<?php echo $job['work_location']?>"></label>
+        </section>
+            
+        <section class="col col-3">
+            <label class="label">Người liên hệ*: </label>
+            <label class="input"><input type="text" name="contact_person" required value="<?php echo $job['contact_person']?>"></label>
+        </section>
+            
+        <section class="col col-3">
+            <label class="label">Số Điện thoại liên hệ*: </label>
+            <label class="input"><input type="text" name="contact_person_phone" required value="<?php echo $job['contact_person_phone']?>"></label>
+        </section>
+            
+        <section class="col col-3">
+            <label class="label">Email liên hệ*: </label>
+            <label class="input"><input type="text" name="contact_person_email" required value="<?php echo $job['contact_person_email']?>"></label>
+        </section>
+            
+        <section class="col col-12">
+            <label id="map"></label>
+            <div class="note"><strong>Gợi ý:</strong> Chọn địa điểm làm việc giúp ứng viên có thể tìm đến dễ dàng hơn.</div>
+            <input type="hidden" id="job-map-latitude" name="job_map_latitude" value="<?php echo $latitude;?>">
+            <input type="hidden" id="job-map-longitude" name="job_map_longitude" value="<?php echo $longitude;?>">
+        </section>
+        
+    </fieldset>
+    
+    <footer>
+            <button type="submit" name="submit" class="button">Lưu</button>
+            <button type="button" class="button button-secondary" onclick="window.history.back();">Quay lại trang trước</button>
+    </footer>
+    
+    
 </form>
-</div>    
-<br/>
+
+<script>
+    /*GOOGLE MAPS*/
+    var marker;    
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 13,
+            center: {lat: <?php echo $latitude;?>, lng: <?php echo $longitude;?>}
+        });
+        
+        marker = new google.maps.Marker({
+            map: map,
+            draggable: true,
+            animation: google.maps.Animation.DROP,
+            position: {lat: <?php echo $latitude;?>, lng: <?php echo $longitude;?>}
+        });
+        
+        //Add listener
+        google.maps.event.addListener(marker, 'dragend', function (event) {
+            var latitude = this.position.lat();
+            var longitude = this.position.lng();
+            //Store value
+            $("#job-map-latitude").prop("value", latitude);
+            $("#job-map-longitude").prop("value", longitude);
+        }); //end addListener
+    }
+    /*GOOGLE MAPS*/
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?callback=initMap">
+</script>

@@ -84,8 +84,9 @@
         $db->join('apply', $DBprefix.'jobs.id = '.$DBprefix.'apply.posting_id', "LEFT");
         $db->join('job_statistics', $DBprefix.'jobs.id = '.$DBprefix.'job_statistics.job_id', "LEFT");
         $db->join('saved_jobs', $DBprefix.'jobs.id = '.$DBprefix.'saved_jobs.job_id', "LEFT");
+        $db->join('jobs_location', $DBprefix.'jobs.id = '.$DBprefix.'jobs_location.job_id', "LEFT");
        
-        if(!$db->delete("apply, jobsportal_job_statistics, jobsportal_saved_jobs, jobsportal_jobs")){
+        if(!$db->delete("apply, jobsportal_job_statistics, jobsportal_saved_jobs, jobsportal_jobs_location, jobsportal_jobs")){
             echo "problem when delete job";
         } else {
             $message = array(
