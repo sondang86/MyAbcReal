@@ -1,15 +1,12 @@
 <?php
 // Jobs Portal
-// http://www.netartmedia.net/jobsportal
-// Copyright (c) All Rights Reserved NetArt Media
-// Find out more about our products and services on:
-// http://www.netartmedia.net
-?><?php
+// Copyright (c) All Rights Reserved Vieclambanthoigian.com.vn
 if(!defined('IN_SCRIPT')) die("");
 global $db,$pagination, $categories, $categories_subs,$commonQueries, $commonQueries_Front, $locations, $companies,$SEO_setting, $Browser_detection, $userId_cookie;
 
 $featured_jobs = $commonQueries_Front->getJobsList('featured', NULL, $userId_cookie);
 $urgent_jobs = $commonQueries_Front->getJobsList('urgent', NULL, $userId_cookie);
+$latest_jobs = $commonQueries_Front->getLatestJobsList(FALSE);
 
 
 $segment = $website->getURL_segment($website->currentURL());
@@ -85,7 +82,7 @@ $segment = $website->getURL_segment($website->currentURL());
             <div class="col-md-12 more-details">           
                 <section class="col-md-6 col-xs-6 other_details">
                     <span title=" Save this job " class="action savejob fav  favReady">
-
+                        
                     <?php if($urgent_job['saved_jobId'] !== $urgent_job['job_id'] || $userId_cookie !== $urgent_job['user_uniqueId']){ //Show save job button?>                    
                         
                         <a href="#" data-browser="<?php echo $Browser_detection->getName();?>" data-category="<?php echo $urgent_job["category_id"]?>"  data-jobid="<?php echo $urgent_job["job_id"]?>" title="Lưu việc làm này" class="savethisJob" id="<?php echo $urgent_job["job_id"]?>" onclick="javascript:saveJob(this, sitePath)"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
@@ -93,7 +90,7 @@ $segment = $website->getURL_segment($website->currentURL());
                     <?php } else { // Show saved ?>
                         
                         <a href="#" title="Đã lưu" class="savethisJob" id="<?php echo $urgent_job["job_id"]?>"><i class="fa fa-check"></i>Đã lưu việc này</a>                    
-                                            
+                        
                     <?php }?>
                     </span> 
                     <span class="salary"><em></em>  Not disclosed </span> 
@@ -106,7 +103,7 @@ $segment = $website->getURL_segment($website->currentURL());
         </div>
         <?php endforeach;?>
     </div>
-        
+    
     
     <!--BY FEATURED-->
     <div id="by_featured" class="tab-pane fade in">
@@ -154,7 +151,7 @@ $segment = $website->getURL_segment($website->currentURL());
             <div class="col-md-12 more-details">           
                 <section class="col-md-6 col-xs-6 other_details">
                     <span title=" Save this job " class="action savejob fav  favReady">
-
+                        
                     <?php if($featured_job['saved_jobId'] !== $featured_job['job_id'] || $userId_cookie !== $featured_job['user_uniqueId']){ //Show save job button?>                    
                         
                         <a href="#" data-browser="<?php echo $Browser_detection->getName();?>" data-category="<?php echo $featured_job["category_id"]?>"  data-jobid="<?php echo $featured_job["job_id"]?>" title="Lưu việc làm này" class="savethisJob" id="<?php echo $featured_job["job_id"]?>" onclick="javascript:saveJob(this, sitePath)"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
@@ -162,7 +159,7 @@ $segment = $website->getURL_segment($website->currentURL());
                     <?php } else { // Show saved ?>
                         
                         <a href="#" title="Đã lưu" class="savethisJob" id="<?php echo $featured_job["job_id"]?>"><i class="fa fa-check"></i>Đã lưu việc này</a>                    
-                                            
+                        
                     <?php }?>
                     </span> 
                     <span class="salary"><em></em>  Not disclosed </span> 
@@ -177,6 +174,102 @@ $segment = $website->getURL_segment($website->currentURL());
     </div>
 </section>
 <!--CATEGORIES--> 
+
+
+<!--LATEST JOBS-->
+<section class="row stats top-title">
+    <header class="col-md-12">
+        <h4>Việc làm mới nhất: </h4>
+    </header>
+</section>
+
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#by_latest"><i class="fa fa-eyedropper"></i> Việc làm mới nhất</a></li>
+    <!--<li><a href="#by_featured"><i class="fa fa-eyedropper"></i> <?php echo $M_JOBS_BY_FEATURED;?></a></li>-->
+</ul>
+
+<!--CATEGORIES-->
+
+<section class="tab-content">    
+    <!--BY LATEST-->
+    <div id="by_urgent" class="tab-pane fade in active">
+        <?php foreach ($latest_jobs['jobs_list'] as $key => $latest_job) :?>
+        <div class="row joblistArea">
+            
+            <div class="col-md-12 joblist">
+                <a href="<?php $website->check_SEO_link("details", $SEO_setting, $latest_job['job_id'],$latest_job['SEO_title']);?>">
+                    <section class="banner">
+                        <img alt="SKP Business Consulting LLP" src="http://<?php echo $DOMAIN_NAME;?>/images/employers/logo/<?php echo $latest_job['logo']?>" width="120" height="50">
+                    </section>
+                    <p title="<?php echo $latest_job['title']?>" class="desig"><?php echo $latest_job['title']?></p>
+                    <p class="company">
+                        <i class="fa fa-briefcase"></i>
+                        <span><?php echo $latest_job['company']?></span>
+                    </p>
+                    
+                    <form class="more">
+                        <span class="exp"><i class="fa fa-comments-o"></i> <?php echo $latest_job['experience_name']?></span>
+                        <span class="loc">
+                            <i class="fa fa-location-arrow"></i>
+                            <span><?php echo $latest_job['City']?></span>            
+                        </span> 
+                    </form>
+                    
+                    <form class="more"> 
+                        <i class="fa fa-diamond"></i> <span> Chuyên ngành:</span>
+                        <span class="desc"> 
+                            <p iclass="skill"><?php echo $latest_job['category_name_vi']?></p> 
+                        </span>  
+                    </form>
+                    
+                    <form class="more"> 
+                        <i class="fa fa-money"></i> <span> Mức lương:</span>
+                        <span class="experience"> 
+                            <p><?php echo $latest_job['salary_range']?> $</p> 
+                        </span>  
+                    </form>
+                </a>
+                <!--FEATURED/URGENT JOB ICONS-->
+                <?php if($latest_job['featured'] == "1"):?>
+                <span class="featuredjob" title="Việc làm nổi bật">
+                    <i class="fa fa-star"></i>
+                </span> 
+                <?php endif;?>
+                <?php if($latest_job['urgent'] == "1"):?>
+                <span class="urgentjob" title="Tuyển dụng gấp">
+                    <i class="fa fa-fire" aria-hidden="true"></i>
+                </span> 
+                <?php endif;?>
+            </div>
+            
+            
+            <!--SAVE JOB-->
+            <div class="col-md-12 more-details">           
+                <section class="col-md-6 col-xs-6 other_details">
+                    <span title=" Save this job " class="action savejob fav  favReady">
+                        
+                    <?php if($urgent_job['saved_jobId'] !== $urgent_job['job_id'] || $userId_cookie !== $urgent_job['user_uniqueId']){ //Show save job button?>                    
+                        
+                        <a href="#" data-browser="<?php echo $Browser_detection->getName();?>" data-category="<?php echo $urgent_job["category_id"]?>"  data-jobid="<?php echo $urgent_job["job_id"]?>" title="Lưu việc làm này" class="savethisJob" id="<?php echo $urgent_job["job_id"]?>" onclick="javascript:saveJob(this, sitePath)"><i class="fa fa-floppy-o"></i>  Lưu việc làm này</a>
+                        
+                    <?php } else { // Show saved ?>
+                        
+                        <a href="#" title="Đã lưu" class="savethisJob" id="<?php echo $urgent_job["job_id"]?>"><i class="fa fa-check"></i>Đã lưu việc này</a>                    
+                        
+                    <?php }?>
+                    </span> 
+                    <span class="salary"><em></em>  Not disclosed </span> 
+                </section>
+                <section class="col-md-6 col-xs-6 rec_details">
+                    <span> Đăng bởi   <a title="việc làm đăng bởi  <?php echo $urgent_job['company']?> " class="rec_name">  <?php echo $urgent_job['company']?>  </a></span> 
+                    <span><i class="fa fa-clock-o"></i> <?php echo $commonQueries->time_ago($urgent_job['date']);?></span>
+                </section>
+            </div>    
+        </div>
+        <?php endforeach;?>
+    </div>
+    
+</section>
 
 
 <!--ADS HERE-->

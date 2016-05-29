@@ -29,13 +29,16 @@
                 'SEO_title' => $value['SEO_title']
             );
         }
-    } 
+    }    
 ?>
+
+<?php if($_SESSION['logged_in'] !== TRUE):?>
 <div class="row">
     <section class="col-md-12 ">
         <h5>Bạn chưa có tài khoản? Đăng ký tại <a href="<?php echo $FULL_DOMAIN_NAME;?>/mod-vn-employers_registration.html">đây</a></h5>
     </section>
 </div>
+<?php endif;?>
 
 <div class="row">
     <section class="col-md-12 ">

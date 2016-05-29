@@ -13,76 +13,78 @@ if (isset($_POST['submit'])){
     //Verify captcha
     if (md5($_POST['code']) !== $_SESSION['code']){
         $commonQueries->flash('message', $commonQueries->messageStyle('warning', 'Sai mã Captcha'));
-    } 
+    } else {
 
-    //Check if user already exists
-    $db->where('username', filter_input(INPUT_POST, 'email',FILTER_SANITIZE_EMAIL))->withTotalCount()->getOne('employers');
-    if ($db->totalCount > 0){
-        $commonQueries->flash('message', $commonQueries->messageStyle('warning', 'Địa chỉ email này đã được đăng ký, vui lòng dùng email khác'));
+        //Check if user already exists
+        $db->where('username', filter_input(INPUT_POST, 'email',FILTER_SANITIZE_EMAIL))->withTotalCount()->getOne('employers');
+        if ($db->totalCount > 0){
+            $commonQueries->flash('message', $commonQueries->messageStyle('warning', 'Địa chỉ email này đã được đăng ký, vui lòng dùng email khác'));
 
-    } else { // insert new user data to jobseekers, jobseeker_resumes tables
-        $verification_code = $commonQueries->generateConfirmationCode();
-        $password = password_hash(filter_input(INPUT_POST,'password', FILTER_SANITIZE_STRING), PASSWORD_DEFAULT, ['cost' => 12]);        
-        
-        $data = Array (
-            "date"                  => time(),
-            "registered_on"         => time(),
-            "username"              => filter_input(INPUT_POST,'email', FILTER_SANITIZE_STRING),
-            "active"                => 0, //default is inactive (0) until user verified email (1)
-            "password"              => $password,
-            "company"               => filter_input(INPUT_POST,'company_name', FILTER_SANITIZE_STRING),
-            "address"               => filter_input(INPUT_POST,'company_address', FILTER_SANITIZE_STRING),
-            "city"                  => filter_input(INPUT_POST,'company_city', FILTER_SANITIZE_NUMBER_INT),
-            "company_size"          => filter_input(INPUT_POST,'company_size', FILTER_SANITIZE_NUMBER_INT),
-            "company_description"   => filter_input(INPUT_POST,'company_description', FILTER_SANITIZE_STRING),
-            "website"               => filter_input(INPUT_POST,'company_website', FILTER_SANITIZE_STRING),            
-            "contact_person"        => filter_input(INPUT_POST,'contact_person', FILTER_SANITIZE_STRING),
-            "phone"                => filter_input(INPUT_POST,'mobile', FILTER_SANITIZE_NUMBER_INT),
-            "gender"                => filter_input(INPUT_POST,'gender', FILTER_SANITIZE_NUMBER_INT),
-            "newsletter"            => 1, 
-            "verification_code"     => $verification_code
-        );
-        $id = $db->insert ('employers', $data);
-        if ($id) { //Success
-            
-            //Send confirmation link
-            $mail = new PHPMailer;
+        } else { // insert new user data to jobseekers, jobseeker_resumes tables
+            $verification_code = $commonQueries->generateConfirmationCode();
+            $password = password_hash(filter_input(INPUT_POST,'password', FILTER_SANITIZE_STRING), PASSWORD_DEFAULT, ['cost' => 12]);        
 
-            //$mail->SMTPDebug = 3;                               // Enable verbose debug output
-            $mail->CharSet = 'UTF-8';                             // Unicode character encode
-            $mail->isSMTP();                                      // Set mailer to use SMTP
-            $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
-            $mail->SMTPAuth = true;                               // Enable SMTP authentication
-            $mail->Username = 'dang.viet.son.hp4@gmail.com';                 // SMTP username
-            $mail->Password = 'haiphong@!#123';                           // SMTP password
-            $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
-            $mail->Port = 587;                                    // TCP port to connect to
+            $data = Array (
+                "date"                  => time(),
+                "registered_on"         => time(),
+                "username"              => filter_input(INPUT_POST,'email', FILTER_SANITIZE_STRING),
+                "active"                => 0, //default is inactive (0) until user verified email (1)
+                "password"              => $password,
+                "company"               => filter_input(INPUT_POST,'company_name', FILTER_SANITIZE_STRING),
+                "address"               => filter_input(INPUT_POST,'company_address', FILTER_SANITIZE_STRING),
+                "city"                  => filter_input(INPUT_POST,'company_city', FILTER_SANITIZE_NUMBER_INT),
+                "company_size"          => filter_input(INPUT_POST,'company_size', FILTER_SANITIZE_NUMBER_INT),
+                "company_description"   => filter_input(INPUT_POST,'company_description', FILTER_SANITIZE_STRING),
+                "website"               => filter_input(INPUT_POST,'company_website', FILTER_SANITIZE_STRING),            
+                "contact_person"        => filter_input(INPUT_POST,'contact_person', FILTER_SANITIZE_STRING),
+                "phone"                => filter_input(INPUT_POST,'mobile', FILTER_SANITIZE_NUMBER_INT),
+                "gender"                => filter_input(INPUT_POST,'gender', FILTER_SANITIZE_NUMBER_INT),
+                "newsletter"            => 1, 
+                "verification_code"     => $verification_code,
+                "latitude"  => filter_input(INPUT_POST,'job_map_latitude',FILTER_SANITIZE_STRING),
+                "longitude" => filter_input(INPUT_POST,'job_map_longitude',FILTER_SANITIZE_STRING)
+            );
+            $id = $db->insert ('employers', $data);
+            if ($id) { //Success
 
-            $mail->setFrom('info@vieclambanthoigian.com.vn', 'Mailer');
-            $mail->addAddress('dang.viet.son.hp@gmail.com', '');     // Add a recipient
+                //Send confirmation link
+                $mail = new PHPMailer;
 
-            $mail->Subject = 'Xác nhận tài khoản tại vieclambanthoigian.com.vn';
-            $mail->Body    = "Chào bạn!\n"
-                            . "Cảm ơn bạn đã đăng ký tại vieclambanthoigian\n\n"
-                            . "Để hoàn tất đăng ký, bạn vui lòng truy cập vào địa chỉ dưới đây: \n\n"
-                            . "http://localhost/vieclambanthoigian.com.vn/index.php?mod=verifications&register=email&user=employer&id=$id&code=$verification_code \n\n";
-            
-//            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+                //$mail->SMTPDebug = 3;                               // Enable verbose debug output
+                $mail->CharSet = 'UTF-8';                             // Unicode character encode
+                $mail->isSMTP();                                      // Set mailer to use SMTP
+                $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+                $mail->SMTPAuth = true;                               // Enable SMTP authentication
+                $mail->Username = 'dang.viet.son.hp4@gmail.com';                 // SMTP username
+                $mail->Password = 'haiphong@!#123';                           // SMTP password
+                $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+                $mail->Port = 587;                                    // TCP port to connect to
 
-            if(!$mail->send()) {
-                echo 'Message could not be sent.';
-                echo 'Mailer Error: ' . $mail->ErrorInfo;
+                $mail->setFrom('info@vieclambanthoigian.com.vn', 'Mailer');
+                $mail->addAddress('dang.viet.son.hp@gmail.com', '');     // Add a recipient
+
+                $mail->Subject = 'Xác nhận tài khoản tại vieclambanthoigian.com.vn';
+                $mail->Body    = "Chào bạn!\n"
+                                . "Cảm ơn bạn đã đăng ký tại vieclambanthoigian\n\n"
+                                . "Để hoàn tất đăng ký, bạn vui lòng truy cập vào địa chỉ dưới đây: \n\n"
+                                . "http://localhost/vieclambanthoigian.com.vn/index.php?mod=verifications&register=email&user=employer&id=$id&code=$verification_code \n\n";
+
+
+                if(!$mail->send()) {
+                    echo 'Message could not be sent.';
+                    echo 'Mailer Error: ' . $mail->ErrorInfo;
+                } else {
+                    echo 'Message has been sent';
+                }
+
+                //Redirect back with message
+                $commonQueries->flash('message', $commonQueries->messageStyle('info', "Cảm ơn bạn đã đăng ký, bạn hãy kiểm tra email và xác nhận tài khoản để hoàn tất"));
+                $website->redirect('http://localhost/vieclambanthoigian.com.vn/index.php?mod=login');
+
             } else {
-                echo 'Message has been sent';
+                $commonQueries->flash('message', $commonQueries->messageStyle('error', 'Có lỗi xảy ra, vui lòng liên hệ info@vieclambanthoigian.com.vn'));
+                $website->redirect('http://localhost/vieclambanthoigian.com.vn/mod-vn-employers_registration.html');
             }
-            
-            //Redirect back with message
-            $commonQueries->flash('message', $commonQueries->messageStyle('info', "Cảm ơn bạn đã đăng ký, bạn hãy kiểm tra email và xác nhận tài khoản để hoàn tất"));
-            $website->redirect('http://localhost/vieclambanthoigian.com.vn/index.php?mod=login');
-
-        } else {
-            $commonQueries->flash('message', $commonQueries->messageStyle('error', 'Có lỗi xảy ra, vui lòng liên hệ info@vieclambanthoigian.com.vn'));
-            $website->redirect('http://localhost/vieclambanthoigian.com.vn/mod-vn-employers_registration.html');
         }
     }
 }; 
@@ -92,7 +94,9 @@ if (isset($_POST['submit'])){
 <h5><?php $commonQueries->flash('message')?></h5>
 <form action="" id="register-form" class="sky-form" method="POST">
     <header>Nhà tuyển dụng đăng ký</header>    
-    <fieldset>					
+    <fieldset>
+        
+        <!--EMAIL ADDRESS-->
         <section>
             <label class="input">
                 <i class="icon-append fa fa-envelope-o"></i>
@@ -101,6 +105,7 @@ if (isset($_POST['submit'])){
             </label>
         </section>
         
+        <!--PASSWORD-->
         <div class="row">
             <section class="col col-6">
                 <label class="input">
@@ -119,6 +124,7 @@ if (isset($_POST['submit'])){
             </section>
         </div>
         
+        <!--COMPANY NAME-->
         <div class="row">
             <section class="col col-6">
                 <label class="input">
@@ -127,17 +133,20 @@ if (isset($_POST['submit'])){
                     <b class="tooltip tooltip-bottom-right">Tên công ty của bạn</b>
                 </label>
             </section>
-
+            
+            <!--CONTACT PERSON-->
             <section class="col col-6">
                 <label class="input">
-                    <i class="icon-append fa fa-location-arrow"></i>
-                    <input type="text" name="company_address" placeholder="Địa chỉ" value="<?php if(isset($_POST['company_address'])){echo $_POST['company_address'];}?>">
-                    <b class="tooltip tooltip-bottom-right">Địa chỉ công ty</b>
+                    <i class="icon-append fa fa-user"></i>
+                    <input type="text" name="contact_person" placeholder="Người đại diện" required value="<?php if(isset($_POST['contact_person'])){echo $_POST['contact_person'];}?>">
+                    <b class="tooltip tooltip-bottom-right">Tên người đại diện tuyển dụng</b>
                 </label>
             </section>
+            
         </div>
-        
+                
         <div class="row">
+            <!--CITY-->
             <section class="col col-6">
                 <label class="select">
                     <select name="company_city">
@@ -150,6 +159,7 @@ if (isset($_POST['submit'])){
                 </label>
             </section>
             
+            <!--SIZE-->
             <section class="col col-6">
                 <label class="select">
                     <select name="company_size">
@@ -164,6 +174,8 @@ if (isset($_POST['submit'])){
         </div>    
         
         <div class="row">
+            
+            <!--DESCRIPTION-->
             <section class="col col-6">
                 <label class="textarea">
                     <i class="icon-append fa fa-file-text"></i>
@@ -172,27 +184,31 @@ if (isset($_POST['submit'])){
                 </label>
             </section>
         
+            <!--WEBSITE-->
             <section class="col col-6">
                 <label class="input">
                     <i class="icon-append fa fa-external-link"></i>
                     <input type="text" name="company_website" placeholder="Website" value="<?php if(isset($_POST['company_website'])){echo $_POST['company_website'];}?>">
                     <b class="tooltip tooltip-bottom-right">Website công ty</b>
                 </label>
-            </section>
-            
+            </section>            
+                        
         </div>
         
     </fieldset>
     
     <fieldset>
         <div class="row">
-            
+            <!--COMPANY ADDRESS-->
             <section class="col col-6">
                 <label class="input">
-                    <input type="text" name="contact_person" placeholder="Người đại diện" required value="<?php if(isset($_POST['contact_person'])){echo $_POST['contact_person'];}?>">
+                    <i class="icon-append fa fa-location-arrow"></i>
+                    <input type="text" name="company_address" placeholder="Địa chỉ" value="<?php if(isset($_POST['company_address'])){echo $_POST['company_address'];}?>">
+                    <b class="tooltip tooltip-bottom-right">Địa chỉ công ty</b>
                 </label>
             </section>
-            
+                        
+            <!--PHONE NUMBER-->
             <section class="col col-3">
                 <label class="input">
                     <i class="icon-append fa fa-phone"></i>
@@ -201,6 +217,7 @@ if (isset($_POST['submit'])){
                 </label>
             </section>
             
+            <!--GENDER-->
             <section class="col col-3">
                 <label class="select">
                     <select name="gender">
@@ -213,13 +230,26 @@ if (isset($_POST['submit'])){
                 </label>
             </section>
             
+            <!--GOOGLE MAPS-->
+            
+            <section class="col col-12">
+                <?php
+                    //Check latitude/longitute values for Google Maps
+                    $latitude = $commonQueries->check_LatitudeLongitude('','')['latitude'];
+                    $longitude = $commonQueries->check_LatitudeLongitude('','')['longitude'];
+                    require_once('include/google_maps.php');
+                ?>
+            </section>
+            
         </div>
         
+        <!--TERMS-->
         <section>
             <label class="checkbox"><input type="checkbox" name="subscription" id="subscription"><i></i>Tôi muốn nhận tin tức từ vieclambanthoigian.com.vn</label>
             <label class="checkbox"><input type="checkbox" name="terms" id="terms"><i></i>Tôi đồng ý với các điều khoản của vieclambanthoigian.com.vn</label>
         </section>
         
+        <!--CAPTCHA-->
         <section class="pull-right">
             <p>Mã Captcha</p>
             <span><input type="text" required name="code" value="" size="8"></span>
@@ -227,6 +257,8 @@ if (isset($_POST['submit'])){
         </section>
         
     </fieldset>
+    
+    <!--SUBMIT-->
     <footer>
         <button type="submit" class="button" name="submit">Submit</button>
     </footer>

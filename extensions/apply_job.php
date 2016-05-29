@@ -116,9 +116,9 @@ if (isset($_POST['submit']) && $_POST['apply_job'] == '1'){ //Update when form s
         <fieldset class="job-details-contact">
             <header>Thông tin liên hệ: </header>
             <section class="col-md-12">
-                <label><strong>Người liên hệ:</strong> <span><?php echo $job_details['work_location'];?></span></label>
+                <label><strong>Địa điểm nộp hồ sơ/làm việc:</strong> <span><?php echo $job_details['work_location'];?></span></label>
                 
-                <label><strong>Địa điểm nộp hồ sơ/làm việc:</strong>  <span><?php echo $job_details['contact_person'];?></span> </label>
+                <label><strong>Người liên hệ:</strong><span><?php echo $job_details['contact_person'];?></span> </label>
                 
                 <?php if($job_details['contact_person_phone'] !== 0): ?>
                 <label><strong>Số điện thoại liên hệ:</strong> <span><?php echo $job_details['contact_person_phone'];?></span> </label>
@@ -132,7 +132,10 @@ if (isset($_POST['submit']) && $_POST['apply_job'] == '1'){ //Update when form s
         
         <!--GOOGLE MAPS-->
         <section class="col-md-12">
-            <?php require_once ('include/google_maps.php');?>
+            <?php 
+                $note = "Bạn có thể kéo icon hình người nhỏ ở góc phải Map vào địa điểm mong muốn để xem địa điểm một cách chi tiết hơn.";
+                require_once ('include/google_maps.php');
+            ?>
         </section>
         
         
@@ -170,10 +173,13 @@ if (isset($_POST['submit']) && $_POST['apply_job'] == '1'){ //Update when form s
             </div>
             <?php endif;?>
             
-            <!--MESSAGE TO EMPLOYER-->
-            <div class="messageToEmployer col-md-12">  
-                <section>
-                    <textarea placeholder="Gửi tin nhắn của bạn tại đây..." name="message_to_employer"></textarea>
+            <!--MESSAGE TO EMPLOYER-->            
+            <div class="col-md-12 top-bottom-margin">
+                <section class="sky-form" style="box-shadow: none;">
+                    <label class="label"><strong>Gửi tin nhắn đến nhà tuyển dụng</strong></label>
+                    <label class="textarea textarea-resizable">
+                            <textarea rows="3" style="margin-top: 0px; margin-bottom: 0px; height: 182px;" placeholder="Tin nhắn của bạn cho vị trí làm việc này..." name="message_to_employer"></textarea>
+                    </label>
                 </section>
             </div>
 

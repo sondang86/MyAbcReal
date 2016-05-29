@@ -1,3 +1,4 @@
+<?php global $FULL_DOMAIN_NAME;?>
 <div class="modal modal-login" <?php if(isset($_REQUEST["error"])&&($_REQUEST["error"]=="login"||$_REQUEST["error"]=="none")) echo ' style="display:block"';?> id="login-modal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -32,15 +33,15 @@
                                                             
                         <div class="form-group email">
                             <label class="sr-only" for="login-email"><?php echo $M_YOUR_EMAIL;?></label>
-                            <img src="images/icon-user.gif" alt="" class="login-icon"/>
+                            <img src="<?php echo $FULL_DOMAIN_NAME;?>/images/icon-user.gif" alt="" class="login-icon"/>
                             <input id="login-email" name="email" type="email" class="form-control login-email" placeholder="<?php echo $M_YOUR_EMAIL;?>" required>
                         </div>
                         <div class="form-group password">
                             <label class="sr-only" for="login-password"><?php echo $M_PASSWORD;?></label>
-                            <img src="images/icon-password.gif" alt="" class="login-icon"/>
+                            <img src="<?php echo $FULL_DOMAIN_NAME;?>/images/icon-password.gif" alt="" class="login-icon"/>
                             <input id="login-password" name="password" type="password" class="form-control login-password" placeholder="<?php echo $M_PASSWORD;?>" required>
                             <p class="forgot-password">
-                                <a class="underline-link" href="<?php echo $this->mod_link("forgotten_password");?>"><?php echo $FORGOTTEN_PASSWORD;?></a> 
+                                <a class="underline-link" href="<?php echo $FULL_DOMAIN_NAME. '/' . $this->mod_link("forgotten_password");?>"><?php echo $FORGOTTEN_PASSWORD;?></a> 
                             </p>
                         </div>
                         <button type="submit" class="btn btn-block btn-primary custom-back-color"><?php echo $M_LOGIN;?></button>
@@ -96,9 +97,9 @@
                 <p>
                     <strong><?php echo $M_STILL_NO_ACCOUNT;?></strong>
                     <br/><br/>
-                    <a class="underline-link" href="<?php echo $this->mod_link("jobseekers");?>"><?php echo $M_CREATE_JOBSEEKER_ACCOUNT_SHORT;?></a>
+                    <a class="underline-link" href="<?php echo $FULL_DOMAIN_NAME. '/' . $this->mod_link("jobseekers");?>"><?php echo $M_CREATE_JOBSEEKER_ACCOUNT_SHORT;?></a>
 						 <?php echo $M_OR;?> 
-                    <a class="underline-link" href="<?php echo $this->mod_link("employers_registration");?>"><?php echo $M_SIGNUP_EMPLOYER_SHORT;?></a>
+                    <a class="underline-link" href="<?php echo $FULL_DOMAIN_NAME. '/' . $this->mod_link("employers_registration");?>"><?php echo $M_SIGNUP_EMPLOYER_SHORT;?></a>
                                                     
                 </p>                    
             </div>

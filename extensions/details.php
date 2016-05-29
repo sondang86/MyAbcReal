@@ -107,7 +107,10 @@
         
         <!--GOOGLE MAPS-->
         <section class="col-md-12">
-            <?php require_once ('include/google_maps.php');?>
+            <?php 
+                $note = "Bạn có thể kéo icon hình người nhỏ ở góc phải Map vào địa điểm mong muốn để xem địa điểm một cách chi tiết hơn.";
+                require_once ('include/google_maps.php');
+            ?>
         </section>
         
         <!--JOB APPLY NAV-->
@@ -140,8 +143,5 @@
 <?php } ?>
 
 <style>
-    .top-bottom-margin {
-        margin-top: 35px !important;
-        text-align: right;
-    }
+    
 </style>
