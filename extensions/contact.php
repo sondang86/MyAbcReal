@@ -5,161 +5,166 @@
 // http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("Oops! Nothing here");
-$process_error="";
-if(isset($_POST["SubmitContact"]))
-{	
-
-	if($website->GetParam("USE_CAPTCHA_IMAGES") && ( (md5($_POST['code']) != $_SESSION['code'])|| trim($_POST['code']) == "" ) )
-	
-	{
-		$process_error=$M_WRONG_CODE;
-		echo "<h3>".$M_WRONG_CODE."</h3>";
-	}
-	else
-	{
-		if($_POST["name"]!=""&&$_POST["message"]!=""&&$_POST["email"]!="")
-		{
-			$_POST["name"]=strip_tags(stripslashes($_POST["name"]));
-			$_POST["message"]=strip_tags(stripslashes($_POST["message"]));
-			$_POST["email"]=strip_tags(stripslashes($_POST["email"]));
-			$_POST["phone"]=strip_tags(stripslashes($_POST["phone"]));
-			
-			$headers  = "From: \"".strip_tags(stripslashes($_POST["name"]))."\"<".strip_tags(stripslashes($_POST["email"])).">\n";
-				
-			$email_text = $M_SENT_BY.": ".strip_tags(stripslashes($_POST["name"])).
-			", ".$M_EMAIL.": ".strip_tags(stripslashes($_POST["email"]));
-			if($_POST["phone"]!="")
-			{
-				$email_text .= ", ".$M_PHONE.": ".strip_tags(stripslashes($_POST["phone"]));
-			}
-			
-			$email_text .= "\n\n".stripslashes($_POST["message"]);
-
-		
-			
-				$database->SQLInsert
-				(
-					"messages",
-					array
-					(
-						"date",
-						"subject",
-						"message",
-						"name",
-						"email",
-						"phone"
-					),
-					array
-					(
-						time(),
-						$_POST["subject"],
-						$_POST["message"],
-						$_POST["name"],
-						$_POST["email"],
-						$_POST["phone"]
-					)
-				);
-				
-				mail
-				(
-					$website->GetParam("SYSTEM_EMAIL_ADDRESS"),
-					strip_tags(stripslashes($_POST["subject"])),
-					$email_text, 
-					$headers
-				);
-				?>
-				<h3><?php echo $MESSAGE_SENT;?></h3>
-				<?php
-			
-		}
-	}
-
-}
-else
-{
-if($process_error!="")
-{
-	?>
-	<h2><?php echo $process_error;?></h2>
-	<?php
-}
-
+global $db, $commonQueries, $commonQueries_Front;
+ 
+    if (isset($_POST['ContactSubmit'])){
+        $subject = filter_input(INPUT_POST, 'subject',FILTER_SANITIZE_STRING);
+        $message = filter_input(INPUT_POST, 'message',FILTER_SANITIZE_STRING);
+        $name = filter_input(INPUT_POST, 'name',FILTER_SANITIZE_STRING);
+        $email = filter_input(INPUT_POST, 'email',FILTER_SANITIZE_STRING);
+        $phone = filter_input(INPUT_POST, 'phone',FILTER_SANITIZE_NUMBER_INT);
+        
+        //Check CAPTCHA
+        if( (md5($_POST['code']) !== ($_SESSION['code'])|| trim($_POST['code']) == "" )) {//Wrong captcha
+            $commonQueries->flash('message', $commonQueries->messageStyle('danger', 'Sai mã Captcha'));
+            
+        } else { //Insert message into db 
+            $columns = Array(
+                'date'      => time(),
+                'subject'   => $subject,
+                "message"   => $message,
+                "name"      => $name,
+                "email"     => $email,
+                "phone"     => $phone
+            );
+           
+            if(!$db->insert ('messages', $columns)){
+                $commonQueries->flash('message', $commonQueries->messageStyle('danger', 'Có lỗi xảy ra, vui lòng liên hệ info@vieclambanthoigian.com.vn'));
+                $website->redirect($website->CurrentURL());
+            } else {
+                //Send message & copy email to both ADMIN & Sender
+                
+                
+                //Redirect back
+                $commonQueries->flash('message', $commonQueries->messageStyle('info', 'Cảm ơn bạn đã gửi tin nhắn, chúng tôi sẽ phản hồi trong thời gian sớm nhất !'));
+                $website->redirect($website->CurrentURL());
+            }
+        }
+    }
 ?>
 
-<form id="main" action="index.php" method="post"  enctype="multipart/form-data">
-	
-	<?php
-	if(isset($_REQUEST["mod"]))
-	{
-	?>
-	<input type="hidden" name="mod" value="<?php echo $_REQUEST["mod"];?>"/>
-	<?php
-	}
-	else
-	{
-	?>
-	<input type="hidden" name="page" value="<?php echo $_REQUEST["page"];?>"/>
-	<?php
-	}
-	?>
-	
-	<input type="hidden" name="SubmitContact" value="1"/>
-	<fieldset>
-		<legend><?php echo $M_ENTER_MESSAGE_OR_QUESTIONS;?></legend>
-		<ol>
-			<li>
-				<label for="subject"><?php echo $M_SUBJECT;?>(*)
-				<br>
-				
-				</label>
-				<input id="subject" <?php if(isset($_REQUEST["subject"])) echo "value=\"".$_REQUEST["subject"]."\"";?> name="subject" placeholder="" type="text" required/>
-			
-			</li>
-			<li>
-				<label for="description"><?php echo $M_MESSAGE_TEXT;?>(*)
-				<br>
-				
-				</label>
-				<textarea id="message" name="message" rows="8" required><?php if(isset($_REQUEST["message"])) echo stripslashes($_REQUEST["message"]);?></textarea>
-			</li>
-	</ol>
-	</fieldset>
-	<fieldset>
-		<legend><?php echo $M_YOUR_DETAILS;?></legend>
-		<ol>
-			
-			<li>
-				<label for="name"><?php echo $M_NAME;?>(*)</label>
-				<input id="name" <?php if(isset($_REQUEST["name"])) echo "value=\"".$_REQUEST["name"]."\"";?> name="name" placeholder="" type="text" required/>
-			</li>
-			<li>
-				<label for="email"><?php echo $M_YOUR_EMAIL;?>(*)</label>
-				<input id="email" <?php if(isset($_REQUEST["email"])) echo "value=\"".$_REQUEST["email"]."\"";?> name="email" placeholder="example@domain.com" type="email" required/>
-				
-			</li>
-			<li>
-				<label for="phone"><?php echo $M_PHONE;?></label>
-				<input id="phone" <?php if(isset($_REQUEST["phone"])) echo "value=\"".$_REQUEST["phone"]."\"";?> name="phone" placeholder="" type="text"/>
-			</li>
-			<?php
-			if($website->GetParam("USE_CAPTCHA_IMAGES")==1)
-			{
-			?>
-			<li>
-				<label for="code">
-				<img src="include/sec_image.php" width="100" height="30"/>
-				</label>
-				<input id="code" name="code" placeholder="<?php echo $M_PLEASE_ENTER_CODE;?>" type="text" required/>
-			</li>
-			<?php
-			}
-			?>
-		</ol>
-	</fieldset>
-	<fieldset>
-		<button type="submit" class="btn btn-primary pull-right"><?php echo $M_SEND;?></button>
-	</fieldset>
-</form>
-<?php
-}
-?>
+<h5><?php $commonQueries->flash('message');?></h5>
+<form action="" method="post" id="sky-form" class="sky-form">
+    <header>Liên hệ với vieclambanthoigian.com.vn</header>
+    
+    <fieldset>					
+        <div class="row">
+            <section class="col col-4">
+                <label class="label">Tên bạn</label>
+                <label class="input">
+                    <i class="icon-append fa fa-user"></i>
+                    <input type="text" name="name" id="name" required <?php if(!empty($name)){echo "value='$name'";}?>>
+                </label>
+            </section>
+            <section class="col col-4">
+                <label class="label">E-mail</label>
+                <label class="input">
+                    <i class="icon-append fa fa-envelope-o"></i>
+                    <input type="email" name="email" id="email" required <?php if(!empty($email)){echo "value='$email'";}?>>
+                </label>
+            </section>
+            <section class="col col-4">
+                <label class="label">Số điện thoại</label>
+                <label class="input">
+                    <i class="icon-append fa fa-phone"></i>
+                    <input type="text" name="phone" id="phone" required <?php if(!empty($phone)){echo "value='$phone'";}?>>
+                </label>
+            </section>
+        </div>
+                
+        <section>
+            <label class="label">Tiêu đề</label>
+            <label class="input">
+                <i class="icon-append fa fa-tag"></i>
+                <input type="text" name="subject" id="subject" required <?php if(!empty($subject)){echo "value='$subject'";}?>>
+            </label>
+        </section>
+                
+        <section>
+            <label class="label">Tin nhắn</label>
+            <label class="textarea">
+                <i class="icon-append fa fa-comment"></i>
+                <textarea rows="4" name="message" id="message" required><?php if(!empty($message)){echo "$message";}?></textarea>
+            </label>
+        </section>
+                
+        <section>
+            <label class="label">Vui lòng nhập chính xác mã CAPTCHA dưới đây:</label>
+            <label class="input input-captcha">
+                <img src="/vieclambanthoigian.com.vn/include/sec_image.php" width="100" height="35" alt="Captcha image" />
+                <input type="text" maxlength="6" name="code" id="captcha" required>
+            </label>
+        </section>
+                
+        <section>
+            <label class="checkbox"><input type="checkbox" checked="checked" name="copy"><i></i>Gửi bản copy vào địa chỉ email của tôi</label>
+        </section>
+    </fieldset>
+            
+    <footer>
+        <button type="submit" name="ContactSubmit" class="button">Gửi</button>
+    </footer>
+            
+    <div class="message">
+        <i class="fa fa-check"></i>
+        <p>Your message was successfully sent!</p>
+    </div>
+</form>	     
+        
+<script type="text/javascript">
+    $(function()
+    {
+        // Validation
+        $("#sky-form").validate({					
+            // Rules for form validation
+            rules:{
+                name:{
+                    required: true
+                },
+                email:{
+                    required: true,
+                    email: true
+                },
+                subject:{
+                    required: true
+                },
+                
+                message:{
+                    required: true,
+                    minlength: 10
+                },
+                captcha:{
+                    required: true
+                }
+            },
+                                            
+            // Messages for form validation
+            messages:{
+                name:
+                {
+                    required: 'Bạn chưa điền tên'
+                },
+                email:{
+                    required: 'Please enter your email address',
+                    email: 'Vui lòng nhập địa chỉ email chính xác'
+                },                
+                subject:{
+                    required: 'Tiêu đề không thể để trống'
+                },
+                
+                message:{
+                    required: 'Tin nhắn không thể để trống'
+                },
+                captcha:{
+                    required: 'Vui lòng nhập CAPTCHA'
+                }
+            },             
+                                            
+            // Do not change code below
+            errorPlacement: function(error, element)
+            {
+                error.insertAfter(element.parent());
+            }
+        });
+    });			
+</script>

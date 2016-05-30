@@ -1,8 +1,8 @@
 <?php
 if(!defined('IN_SCRIPT')) die("Oops! Nothing here");
     //Update when form submitted
-    //Wrong captcha
-    if($website->GetParam("USE_CAPTCHA_IMAGES") && ( (md5($_POST['code']) !== $_SESSION['code'])|| trim($_POST['code']) == "" ) ){
+    
+    if($website->GetParam("USE_CAPTCHA_IMAGES") && ( (md5($_POST['code']) !== $_SESSION['code'])|| trim($_POST['code']) == "" ) ){//Wrong captcha
         $commonQueries->flash('message', $commonQueries->messageStyle('danger', 'Sai mã Captcha'));
         $website->redirect($website->CurrentURL());
     } else {

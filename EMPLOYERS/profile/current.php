@@ -6,72 +6,87 @@ global $db, $commonQueries, $employerInfo;
 $company_info = $db->where('username', "$AuthUserName")->getOne('employers');
 ?>
 <div class="row">
-    <div class="col-md-8">
-        dasd
-    </div>
+    <div class="col-md-10"></div>
     <div class="col-md-2"><?php echo LinkTile("profile","edit",$M_EDIT,"","green");?></div>
-    <div class="col-md-2"><?php echo LinkTile("profile","logo",$M_LOGO,"","yellow");?></div>        
 </div>
-
-<div class="row">
-    <div class="col-md-12">
-        <h4><?php echo $VIEW_PROFILE;?></h4>
-        <table>
-            <tbody>
-                <tr height="38">
-                    <td width="120" valign="middle"><label>Tên đăng nhập:</label></td>
-                    <td valign="middle"><p><?php echo $company_info['username']?></p></td>
-                </tr>
-                <tr height="38">
-                    <td width="120" valign="middle"><label>Công ty:</label></td>
-                    <td valign="middle"><p><?php echo $company_info['company']?></p></td>
-                </tr>
-                <tr height="38">
-                    <td width="120" valign="middle"><label>Thông tin công ty:</label></td>
-                    <td valign="middle">
-                        <p><?php echo $company_info['company_description']?></p>
-                    </td>
-                </tr>
-                <tr height="38">
-                    <td width="120" valign="middle"><label>Người liên hệ:</label></td>
-                    <td valign="middle"><p><?php echo $company_info['contact_person']?></p></td>
-                </tr>
-                <tr height="38">
-                    <td width="120" valign="middle"><label>Địa chỉ:</label></td>
-                    <td valign="middle"><p><?php echo $company_info['address']?></p></td>
-                </tr>
-                <tr height="38">
-                    <td width="120" valign="middle"><label>Điện thoại:</label></td>
-                    <td valign="middle"><p><?php echo $company_info['phone']?></p></td>
-                </tr>
-                <tr height="38">
-                    <td width="120" valign="middle"><label>Fax:</label></td>
-                    <td valign="middle"><p><?php echo $company_info['fax']?></p></td>
-                </tr>
-                <tr height="38">
-                    <td width="120" valign="middle"><label>Trang web:</label></td>
-                    <td valign="middle"><p><?php echo $company_info['website']?></p></td>
-                </tr>
-                <tr height="38">
-                    <td width="120" valign="middle"><label>Video giới thiệu:</label></td>
-                    <td valign="middle"><p><?php echo $company_info['video_id']?></p></td>
-                </tr>
-                
-                <!--GOOGLE MAPS-->
-                <tr height="38">
-                    <td width="120" valign="middle"><label>Địa chỉ Google Maps:</label></td>
-                    <td valign="middle">
-                        <p>
-                            <?php 
-                                //Check latitude/longitute values for Google Maps
-                                $latitude = $commonQueries->check_LatitudeLongitude($employerInfo['latitude'],$employerInfo['longitude'])['latitude'];
-                                $longitude = $commonQueries->check_LatitudeLongitude($employerInfo['latitude'],$employerInfo['longitude'])['longitude'];
-                                require_once('../../vieclambanthoigian.com.vn/extensions/include/google_maps.php');
-                            ?>
-                        </p>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>    
+    
+<form class="sky-form newJob" id="edit-form"> 
+    <header>Thông tin công ty</header>
+    <fieldset>
+        <!--LOGIN NAME-->
+        <section class="col col-4">
+            <label class="label">Tên đăng nhập: </label>
+            <span><?php echo $company_info['username']?></span>
+        </section>
+            
+        <!--LOGO-->
+        <section class="col col-8 logoEdit">
+            <!--<label class="label">Logo công ty: </label>-->
+            <span class="logo">
+                <a href="index.php?category=profile&action=logo" title="Nhấn để thay đổi logo đại diện"><img src="http://localhost/vieclambanthoigian.com.vn/images/employers/logo/<?php echo $company_info['logo']?>" width="250" height="125" id="preview"></a>                
+            </span>
+        </section>
+            
+        <!--COMPANY NAME-->
+        <section class="col col-4">
+            <label class="label">Tên công ty(*): </label>
+            <label class="input"><input type="text" value="<?php echo $company_info['company']?>" disabled class="disabled"></label>
+        </section>
+            
+        <!--COMPANY DESCRIPTION-->
+        <section class="col col-12">
+            <label class="label">
+                Thông tin công ty(*):
+            </label>
+            <label class="textarea">
+                <textarea type="text" disabled class="disabled"><?php echo $company_info['company_description']?></textarea>
+            </label>
+            <div class="note"><strong>Note:</strong> Hãy mô tả ngắn gọn về công ty bạn giúp ứng viên có thể hiểu rõ hơn về văn hóa công ty.</div>
+        </section>
+            
+        <!--CONTACT PERSON-->
+        <section class="col col-4">
+            <label class="label">Tên người liên hệ(*): </label>
+            <label class="input"><input type="text" value="<?php echo $company_info['contact_person']?>" disabled class="disabled"></label>
+        </section>
+            
+        <!--ADDRESS-->
+        <section class="col col-4">
+            <label class="label">Địa chỉ(*): </label>
+            <label class="input"><input type="text" value="<?php echo $company_info['address']?>" disabled class="disabled"></label>
+        </section>
+            
+        <!--PHONE NUMBER-->
+        <section class="col col-4">
+            <label class="label">Điện thoại liên hệ(*): </label>
+            <label class="input"><input type="text" disabled class="disabled" value="<?php echo $company_info['phone']?>"></label>
+        </section>        
+            
+        <!--WEBSITE-->
+        <section class="col col-4">
+            <label class="label">Website: </label>
+            <label class="input"><input type="text" disabled class="disabled" value="<?php echo $company_info['website']?>"></label>
+        </section>
+            
+        <!--FAX NUMBER-->
+        <section class="col col-4">
+            <label class="label">Fax: </label>
+            <label class="input"><input type="text" value="<?php echo $company_info['fax']?>" disabled class="disabled"></label>
+        </section>
+    </fieldset>       
+    
+    <fieldset>
+        <!--GOOGLE MAPS-->
+        <section class="col col-12">
+            <label class="label">Địa chỉ Google Maps: </label>
+            <?php 
+                //Check latitude/longitute values for Google Maps
+                $latitude = $commonQueries->check_LatitudeLongitude($company_info['latitude'],$company_info['longitude'])['latitude'];
+                $longitude = $commonQueries->check_LatitudeLongitude($company_info['latitude'],$company_info['longitude'])['longitude'];
+                $note = "Chọn địa điểm làm việc để giúp ứng viên có thể tìm đường dễ dàng hơn.";
+                require_once('../../vieclambanthoigian.com.vn/extensions/include/google_maps.php');
+            ?>
+        </section>            
+    </fieldset>        
+      
+</form>

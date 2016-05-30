@@ -120,8 +120,7 @@ if (isset($_POST['submit'])){
     
 <script type="text/javascript">
     
-    $(function()
-    {
+    $(function(){
         // Validation
         $("#sky-form").validate(
         {					
