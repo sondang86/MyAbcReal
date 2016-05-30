@@ -168,7 +168,7 @@ $website->Statistics();
         
         //scrollbar        
         //https://github.com/noraesae/perfect-scrollbar
-        $('#by_featured, #by_urgent').perfectScrollbar();    
+        $('.perfectScrollbar').perfectScrollbar();    
     });
 </script>
 

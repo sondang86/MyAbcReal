@@ -2,7 +2,7 @@
 // Jobs Portal
 // Copyright (c) All Rights Reserved Vieclambanthoigian.com.vn
 if(!defined('IN_SCRIPT')) die("");
-global $db,$pagination, $categories, $categories_subs,$commonQueries, $commonQueries_Front, $locations, $companies,$SEO_setting, $Browser_detection, $userId_cookie;
+global $db,$pagination, $categories, $categories_subs,$commonQueries, $commonQueries_Front, $locations, $companies,$SEO_setting, $Browser_detection, $userId_cookie, $FULL_DOMAIN_NAME;
 
 $featured_jobs = $commonQueries_Front->getJobsList('featured', NULL, $userId_cookie);
 $urgent_jobs = $commonQueries_Front->getJobsList('urgent', NULL, $userId_cookie);
@@ -36,7 +36,7 @@ $segment = $website->getURL_segment($website->currentURL());
 <section class="tab-content">
     
     <!--BY URGENT-->
-    <div id="by_urgent" class="tab-pane fade in active">
+    <div id="by_urgent" class="tab-pane fade in active perfectScrollbar">
         <?php foreach ($urgent_jobs['jobs_list'] as $key => $urgent_job) :?>
         <div class="row joblistArea">
             <div class="col-md-12 joblist">
@@ -102,11 +102,17 @@ $segment = $website->getURL_segment($website->currentURL());
             </div>    
         </div>
         <?php endforeach;?>
+        
+        <div class="row footer-section">
+            <section class="col-md-12">
+                <a href="<?php echo $FULL_DOMAIN_NAME;?>/viec-tuyen-dung-gap/" class="btn btn-blue">Xem toàn bộ</a>
+            </section>
+        </div>
     </div>
     
     
     <!--BY FEATURED-->
-    <div id="by_featured" class="tab-pane fade in">
+    <div id="by_featured" class="tab-pane fade in perfectScrollbar">
         <?php foreach ($featured_jobs['jobs_list'] as $key => $featured_job) :?>
         <div class="row joblistArea">
             <div class="col-md-12 joblist">
@@ -171,6 +177,12 @@ $segment = $website->getURL_segment($website->currentURL());
             </div>    
         </div>
         <?php endforeach;?>
+        
+        <div class="row footer-section">
+            <section class="col-md-12">
+                <a href="<?php echo $FULL_DOMAIN_NAME;?>/viec-lam-noi-bat/" class="btn btn-blue">Xem toàn bộ</a>
+            </section>
+        </div>
     </div>
 </section>
 <!--CATEGORIES--> 
@@ -185,14 +197,13 @@ $segment = $website->getURL_segment($website->currentURL());
 
 <ul class="nav nav-tabs">
     <li class="active"><a href="#by_latest"><i class="fa fa-eyedropper"></i> Việc làm mới nhất</a></li>
-    <!--<li><a href="#by_featured"><i class="fa fa-eyedropper"></i> <?php echo $M_JOBS_BY_FEATURED;?></a></li>-->
 </ul>
 
 <!--CATEGORIES-->
 
 <section class="tab-content">    
     <!--BY LATEST-->
-    <div id="by_urgent" class="tab-pane fade in active">
+    <div id="by_urgent" class="tab-pane fade in active perfectScrollbar">
         <?php foreach ($latest_jobs['jobs_list'] as $key => $latest_job) :?>
         <div class="row joblistArea">
             
@@ -267,6 +278,11 @@ $segment = $website->getURL_segment($website->currentURL());
             </div>    
         </div>
         <?php endforeach;?>
+        <div class="row footer-section">
+            <section class="col-md-12">
+                <a href="<?php echo $FULL_DOMAIN_NAME;?>/viec-lam-moi-nhat/" class="btn btn-blue">Xem toàn bộ</a>
+            </section>
+        </div>
     </div>
     
 </section>

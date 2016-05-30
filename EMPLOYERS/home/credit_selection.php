@@ -11,7 +11,7 @@ if (isset($_POST['submit'])){
     //Insert on duplicate update    
     $data = array(
         'employer_id'                   => $employer_data['id'],
-        'subscription_request_type'     => filter_input(INPUT_POST, 'employer_message' , FILTER_SANITIZE_NUMBER_INT),
+        'subscription_request_type'     => filter_input(INPUT_POST, 'subscription_request_type' , FILTER_SANITIZE_NUMBER_INT),
         'date'                          => time(),
         'employer_message'              => filter_input(INPUT_POST, 'employer_message' , FILTER_SANITIZE_STRING),
         'is_processed'                  => 0, //Default is not processed, until admin approved 
@@ -25,7 +25,7 @@ if (isset($_POST['submit'])){
         echo 'problem';die;
     }    
     //Succeed, back to question page
-    $commonQueries->flash('message', $commonQueries->messageStyle('info', "Yêu cầu của bạn đang được xử lý..."));
+    $commonQueries->flash('message', $commonQueries->messageStyle('info', "Cảm ơn bạn đã gửi yêu cầu, chúng tôi sẽ gửi email thông báo tới bạn trong vòng 30-60 phút"));
     $website->redirect("index.php?category=home&action=credit_selection");    
 }  
     

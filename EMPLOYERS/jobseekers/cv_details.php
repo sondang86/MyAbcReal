@@ -1,7 +1,7 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
 global $db, $commonQueries,$FULL_DOMAIN_NAME, $EMPLOYER_DOMAIN_NAME, $employer_data;
-//If employer using free subscription, not allow them to see jobseeker CVs
+//If employer using free subscription, do not allow them to see jobseeker's contact 
 
 //Check if employer is allowed to see this CV
 
@@ -42,8 +42,16 @@ $profile_pic = $commonQueries->setDefault_ifEmpty($jobseeker_profile['profile_pi
             <section class="col-md-10 JS_profile">
                 <p><label>Họ và Tên: </label> <span><?php echo $jobseeker_profile['first_name'] ." ".$jobseeker_profile['last_name']?></span></p>
                 <p><label>Địa chỉ: </label> <span><?php echo $jobseeker_profile['address']?></span></p>
+                
+                <?php if($employer_data['subscription'] > '1'): //show this to our VIP employers?>
                 <p><label>Email: </label> <span><?php echo $jobseeker_profile['username']?></span></p>
                 <p><label>Số điện thoại: </label> <span><?php echo $jobseeker_profile['phone']?></span></p>
+                
+                <?php else: //No free meal for you my friend?>                
+                <p><label>Email: </label> <span>Tài khoản miễn phí không thể xem thông tin cá nhân ứng viên, vui lòng nâng cấp<a href="index.php?category=home&action=credits"> tại đây</a></span></p>
+                <p><label>Số điện thoại: </label> <span>Tài khoản miễn phí không thể xem thông tin cá nhân ứng viên, vui lòng nâng cấp<a href="index.php?category=home&action=credits"> tại đây</a></span></p>                
+                <?php endif;?>
+                
                 <p><label>Tình trạng hôn nhân: </label> <span><?php echo $jobseeker_profile['marital_status_name']?></span></p>
                 <p><label>Giới tính: </label> <span><?php echo $jobseeker_profile['gender_name']?></span></p>
             </section>

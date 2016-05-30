@@ -100,7 +100,7 @@ if (isset($_POST['submit'])){
             
         <div class="row">
             <section class="col col-6 uploadForm">
-                <input id="uploadFile" placeholder="Tên tập tin" name="upload_name" disabled="disabled"/>
+                <input id="uploadFile" placeholder="Tên tập tin" disabled="disabled"/>
                 <p class="btn btn-default btn-file">
                     Chọn <input id="logo" type="file" name="file" class="upload" required/>
                 </p>
@@ -155,7 +155,7 @@ if (isset($_POST['submit'])){
     $(function() {
         //Append selected upload file name to disabled input box
         //http://www.tutorialrepublic.com/faq/how-to-get-selected-file-name-from-input-type-file-using-jquery.php
-        $("input:file[id=uploadBtn]").change (function(e) {
+        $("input:file[id=logo]").change (function(e) {
             
             $("#uploadFile").val(e.target.files[0].name); // remove fakepath, output file name only
             

@@ -24,3 +24,35 @@ and open the template in the editor.
 .section {
     margin: 40px 0;
 }
+
+.JS_profile {
+    p {
+        overflow: auto;
+        display: block;
+        
+        label{
+            width: 20%;
+            float: left;
+        }
+        
+        span {
+            width: 80%;
+            float: left;
+        }
+    }
+}
+
+.logoEdit {
+    overflow: auto;
+    
+    label {
+        display: block;
+        float: left;
+        margin-right: 20px;
+    }
+    
+    span {
+        display: block;
+        float: left;
+    }
+}

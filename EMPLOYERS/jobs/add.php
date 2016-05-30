@@ -7,10 +7,6 @@ $jobs_count = $db->totalCount;
 $db->join('subscriptions', $DBprefix."employers.subscription = " . $DBprefix."subscriptions.id", "LEFT");
 $employer_subscription = $db->where('username', "$AuthUserName")->withTotalCount()->getOne('employers', array($DBprefix.'employers.subscription', $DBprefix.'subscriptions.listings', $DBprefix.'subscriptions.featured_listings'));
 
-//Check latitude/longitute values for Google Maps
-$latitude = $commonQueries->check_LatitudeLongitude($employerInfo['latitude'],$employerInfo['longitude'])['latitude'];
-$longitude = $commonQueries->check_LatitudeLongitude($employerInfo['latitude'],$employerInfo['longitude'])['longitude'];
-
     //New job submitted
     if(isset($_POST['submit'])){
         //Store job information      
@@ -245,6 +241,9 @@ $longitude = $commonQueries->check_LatitudeLongitude($employerInfo['latitude'],$
         <!--GOOGLE MAPS-->
         <section class="col col-12">
             <?php 
+                //Check latitude/longitute values for Google Maps
+                $latitude = $commonQueries->check_LatitudeLongitude($employerInfo['latitude'],$employerInfo['longitude'])['latitude'];
+                $longitude = $commonQueries->check_LatitudeLongitude($employerInfo['latitude'],$employerInfo['longitude'])['longitude'];
                 $note = "Bạn nên chọn địa điểm làm việc để giúp ứng viên có thể tìm đường dễ dàng hơn.";
                 require_once('../../vieclambanthoigian.com.vn/extensions/include/google_maps.php');
             ?>

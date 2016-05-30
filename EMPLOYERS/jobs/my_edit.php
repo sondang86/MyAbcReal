@@ -74,9 +74,6 @@ $longitude = $commonQueries->check_LatitudeLongitude($job['latitude'],$job['long
 }
 ?>
 
-
-<h4><?php $commonQueries->flash('message');?></h4>
-
 <!--NAVIGATION-->
 <div class="row">
     <section class="col-md-8 col-sm-6 col-xs-12">

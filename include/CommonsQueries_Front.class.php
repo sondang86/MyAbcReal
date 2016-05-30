@@ -107,8 +107,9 @@ class CommonsQueries_Front {
     /**
     *   get latest jobs list with pagination option
     *   @param var pagination true/false
+    *   @param var limit limit records to be selected
     */
-    public function getLatestJobsList($pagination=TRUE){
+    public function getLatestJobsList($pagination=TRUE, $limit='20'){
         $latest_jobs_columns = array(
             $this->_dbPrefix."jobs.id as job_id",$this->_dbPrefix."jobs.job_category",$this->_dbPrefix."jobs.title",
             $this->_dbPrefix."jobs.SEO_title",$this->_dbPrefix."jobs.date",$this->_dbPrefix."jobs.expires",
@@ -149,7 +150,7 @@ class CommonsQueries_Front {
             $latest_jobs['totalCount'] = $this->_db->totalCount;
             
         } else { //No pagination
-            $latest_jobs['jobs_list'] = $this->_db->withTotalCount()->get("jobs", NULL, $latest_jobs_columns);   
+            $latest_jobs['jobs_list'] = $this->_db->withTotalCount()->get("jobs", $limit, $latest_jobs_columns);   
             $latest_jobs['totalCount'] = $this->_db->totalCount;            
         }
         
