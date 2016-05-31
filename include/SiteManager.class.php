@@ -278,17 +278,17 @@ class SiteManager
 		$this->TemplateHTML = stripslashes($templateArray["html"]);
 		$this->TemplateHTML = str_replace(" />","/>",$this->TemplateHTML);
                     
-		$pattern = "/{(\w+)}/i";
-		preg_match_all($pattern, $this->TemplateHTML, $items_found);
-		foreach($items_found[1] as $item_found)
-		{
-			global $$item_found;
-			if(isset($$item_found))
-			{
-				$this->TemplateHTML=str_replace("{".$item_found."}",$$item_found,$this->TemplateHTML);
-			}
-		}
-                    
+//		$pattern = "/{(\w+)}/i";
+//		preg_match_all($pattern, $this->TemplateHTML, $items_found);
+//		foreach($items_found[1] as $item_found)
+//		{
+//			global $item_found;
+//			if(isset($item_found))
+//			{
+//				$this->TemplateHTML=str_replace("{".$item_found."}",$item_found,$this->TemplateHTML);
+//			}
+//		}
+                
 		///adsense
 		$this->TemplateHTML = str_replace("<site top_banners/>","<site top_banners/>".stripslashes($this->params[190]),$this->TemplateHTML);
 		$this->TemplateHTML = str_replace("<site side_column_banners/>","<site side_column_banners/>".stripslashes($this->params[191]),$this->TemplateHTML);

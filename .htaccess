@@ -6,38 +6,38 @@ RewriteRule ^([^/\.]+).rss$ rss.php?type=$1 [L]
 RewriteRule ^news-([0-9]+)-.*$ index.php?mod=news&id=$1&lang=en [L]
 RewriteRule ^tintuc-([0-9]+)-.*$ index.php?mod=news&id=$1&lang=vn [L]
 
-RewriteRule ^location-([^0-9]+)-([0-9\-]+).html$ index.php?lang=en&mod=search&location=$2 [L]
-RewriteRule ^vitri-([^0-9]+)-([0-9\-]+).html$ index.php?lang=vn&mod=search&location=$2 [L]
-
-RewriteRule ^category-([^0-9]+)-([0-9\-]+).html$ index.php?lang=en&mod=search&category=$2 [L]
-RewriteRule ^theloai-([^0-9]+)-([0-9\-]+).html$ index.php?lang=vn&mod=search&category=$2 [L]
-
-RewriteRule ^reviews-([^0-9]+)-([0-9\-]+).html$ index.php?lang=en&mod=reviews&id=$2 [L]
-RewriteRule ^danhgia-([^0-9]+)-([0-9\-]+).html$ index.php?lang=vn&mod=reviews&id=$2 [L]
-
-RewriteRule ^jobs-([^0-9]+)-([0-9\-]+).html$ index.php?lang=en&mod=search&company=$2 [L]
-RewriteRule ^vieclam-([^0-9]+)-([0-9\-]+).html$ index.php?lang=vn&mod=search&company=$2 [L]
-
-RewriteRule ^courses-([^0-9]+)-([0-9\-]+).html$ index.php?lang=en&mod=courses&category=$2 [L]
-RewriteRule ^cursos-([^0-9]+)-([0-9\-]+).html$ index.php?lang=vn&mod=courses&category=$2 [L]
+#RewriteRule ^location-([^0-9]+)-([0-9\-]+).html$ index.php?lang=en&mod=search&location=$2 [L]
+#RewriteRule ^vitri-([^0-9]+)-([0-9\-]+).html$ index.php?lang=vn&mod=search&location=$2 [L]
+#
+#RewriteRule ^category-([^0-9]+)-([0-9\-]+).html$ index.php?lang=en&mod=search&category=$2 [L]
+#RewriteRule ^theloai-([^0-9]+)-([0-9\-]+).html$ index.php?lang=vn&mod=search&category=$2 [L]
+#
+#RewriteRule ^reviews-([^0-9]+)-([0-9\-]+).html$ index.php?lang=en&mod=reviews&id=$2 [L]
+#RewriteRule ^danhgia-([^0-9]+)-([0-9\-]+).html$ index.php?lang=vn&mod=reviews&id=$2 [L]
+#
+#RewriteRule ^jobs-([^0-9]+)-([0-9\-]+).html$ index.php?lang=en&mod=search&company=$2 [L]
+#RewriteRule ^vieclam-([^0-9]+)-([0-9\-]+).html$ index.php?lang=vn&mod=search&company=$2 [L]
+#
+#RewriteRule ^courses-([^0-9]+)-([0-9\-]+).html$ index.php?lang=en&mod=courses&category=$2 [L]
+#RewriteRule ^cursos-([^0-9]+)-([0-9\-]+).html$ index.php?lang=vn&mod=courses&category=$2 [L]
 
 RewriteRule ^course-([a-z0-9\-]+)-([0-9\-]+).html$ index.php?mod=course_details&lang=en&id=$2 [L]
 RewriteRule ^khoahoc-([a-z0-9\-]+)-([0-9\-]+).html$ index.php?mod=course_details&lang=vn&id=$2 [L]
 
-RewriteRule ^company-([a-z0-9\-]+)-([0-9\-]+).html$ index.php?mod=company&lang=en&id=$2 [L]
-RewriteRule ^congty-([a-z0-9\-]+)-([0-9\-]+).html$ index.php?mod=company&lang=vn&id=$2 [L]
+#RewriteRule ^company-([a-z0-9\-]+)-([0-9\-]+).html$ index.php?mod=company&lang=en&id=$2 [L]
+#RewriteRule ^congty-([a-z0-9\-]+)-([0-9\-]+).html$ index.php?mod=company&lang=vn&id=$2 [L]
+#
+#RewriteRule ^job-([a-z0-9\-]+)-([0-9\-]+).html$ index.php?mod=details&lang=en&id=$2 [L]
+#RewriteRule ^nghenghiep-([a-z0-9\-]+)-([0-9\-]+).html$ index.php?mod=details&lang=vn&id=$2 [L]
+#
+#RewriteRule ^fjob-([a-z0-9]+)-([a-z0-9\-]+).html$ index.php?mod=feed_details&lang=en&id=$1 [L]
+#RewriteRule ^fanuncio-([a-z0-9]+)-([a-z0-9\-]+).html$ index.php?mod=feed_details&lang=vn&id=$1 [L]
 
-RewriteRule ^job-([a-z0-9\-]+)-([0-9\-]+).html$ index.php?mod=details&lang=en&id=$2 [L]
-RewriteRule ^nghenghiep-([a-z0-9\-]+)-([0-9\-]+).html$ index.php?mod=details&lang=vn&id=$2 [L]
+#RewriteRule ^mod-([a-z]{2})-latest-jobs.html$ index.php?lang=$1&mod=search&latest=1 [L]
+#RewriteRule ^mod-latest-jobs.html$ index.php?mod=search&latest=1 [L]
 
-RewriteRule ^fjob-([a-z0-9]+)-([a-z0-9\-]+).html$ index.php?mod=feed_details&lang=en&id=$1 [L]
-RewriteRule ^fanuncio-([a-z0-9]+)-([a-z0-9\-]+).html$ index.php?mod=feed_details&lang=vn&id=$1 [L]
-
-RewriteRule ^mod-([a-z]{2})-latest-jobs.html$ index.php?lang=$1&mod=search&latest=1 [L]
-RewriteRule ^mod-latest-jobs.html$ index.php?mod=search&latest=1 [L]
-
-RewriteRule ^mod-([a-z]{2})-featured-jobs.html$ index.php?lang=$1&mod=search&featured=1 [L]
-RewriteRule ^mod-featured-jobs.html$ index.php?mod=search&featured=1 [L]
+#RewriteRule ^mod-([a-z]{2})-featured-jobs.html$ index.php?lang=$1&mod=search&featured=1 [L]
+#RewriteRule ^mod-featured-jobs.html$ index.php?mod=search&featured=1 [L]
 
 RewriteRule ^mod-([a-z]{2})-([^/\.]+).html$ index.php?lang=$1&mod=$2 [L]
 RewriteRule ^mod-([^/\.]+).html$ index.php?mod=$1 [L]
@@ -52,8 +52,6 @@ RewriteRule ^nha-tuyen-dung.html$ index.php?mod=employers_registration&lang=vn
 RewriteRule ^([^/\.]+).html$ index.php?page=$1 [L]
 
 RewriteRule ^chi-tiet-cong-viec/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?mod=details&id=$1
-#RewriteRule ^viec-lam-noi-bat/?$ index.php?mod=featured
-#RewriteRule ^viec-lam-moi-nhat/?$ index.php?mod=latest_jobs
 RewriteRule ^nop-ho-so/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?mod=apply_job&posting_id=$1&lang=vn
 RewriteRule ^viec-lam-da-luu/?$ index.php?mod=saved&lang=vn
 RewriteRule ^viec-lam-cung-cong-ty/([0-9]+)/([A-Za-z0-9-]+)?$ index.php?mod=job_by_company&company=$1&lang=vn
@@ -66,6 +64,7 @@ RewriteRule ^tim-kiem/?(.*)?$ index.php?mod=search [QSA]
 RewriteRule ^viec-lam-moi-nhat/?(.*)?$ index.php?mod=latest_jobs [QSA]
 RewriteRule ^viec-theo-tinh-chat/?(.*)?$ index.php?mod=jobs_by_type [QSA]
 
+#Jobs by types
 RewriteRule ^viec-lam-luong-cao/?(.*)?$ index.php?mod=jobs_by_type&name=salary [QSA]
 RewriteRule ^viec-lam-toan-thoi-gian/?(.*)?$ index.php?mod=jobs_by_type&name=job_type&job_type=1 [QSA]
 RewriteRule ^viec-lam-part-time/?(.*)?$ index.php?mod=jobs_by_type&name=job_type&job_type=3 [QSA]
@@ -74,11 +73,19 @@ RewriteRule ^viec-lam-freelancer/?(.*)?$ index.php?mod=jobs_by_type&name=job_typ
 RewriteRule ^viec-lam-noi-bat/?(.*)?$ index.php?mod=featured [QSA]
 RewriteRule ^viec-tuyen-dung-gap/?(.*)?$ index.php?mod=urgent [QSA]
 RewriteRule ^nha-tuyen-dung/?(.*)?$ index.php?mod=recruiters [QSA]
+#Jobs by types
+
+#candidates
+RewriteRule ^ung-vien/?$ index.php?mod=candidates [QSA]
+RewriteRule ^ung-vien-noi-bat/?$ index.php?mod=candidates&url=ung-vien-noi-bat&sort_by=featured [QSA]
+RewriteRule ^ung-vien-moi-nhat/?$ index.php?mod=candidates&url=ung-vien-moi-nhat&sort_by=latest [QSA]
+RewriteRule ^chi-tiet-ung-vien/[0-9]+/([A-Za-z0-9-]+)?$ index.php?mod=candidate_details
 
 #save URL
 RewriteRule ^luu-viec-lam/?$ index.php?mod=save 
 
-#404 error
+
+#404 error customize
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ 404.php [L]
@@ -93,3 +100,5 @@ RewriteRule ^(.*)$ 404.php [L]
     Order Allow,Deny
     Allow from all
 </FilesMatch>
+#404 error customize
+

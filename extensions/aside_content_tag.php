@@ -6,6 +6,7 @@
 
 ?>
 
+<?php if (empty($_GET['page']) || $_GET['page'] !== 'vn_ung-vien'):?>
 <!--Job by attribute-->
 <div class="gray-wrap">
     <header class="row top-bottom-margin">
@@ -89,3 +90,72 @@
     </div>
     <div class="text-center"><a class="underline-link" href="<?php echo $FULL_DOMAIN_NAME;?>/viec-lam-noi-bat/">Xem toàn bộ</a></div>    
 </div>
+
+<?php else: //List candidates?>
+
+<!--Featured candidates-->
+<div class="gray-wrap">
+    <header class="row">
+        <h4 class="col-md-12 aside-header">
+            <i class="fa fa-newspaper-o"></i> 
+            Ứng viên nổi bật        
+        </h4>
+    </header>
+    <hr class="top-bottom-margin">
+    <?php foreach ($urgent_jobs['jobs_list'] as $urgent_job):?>
+    <div class="row">
+        <article class="col-md-12">
+            <div class="row">
+                <div class="col-md-12 aside-content">
+                    <!--Content-->
+                    <h5 class="no-margin">
+                        <a href="<?php echo $FULL_DOMAIN_NAME;?>/chi-tiet-cong-viec/<?php echo $urgent_job['job_id']?>/<?php echo $urgent_job['SEO_title']?>" class="aside-link" title="<?php echo $urgent_job['title']?>">
+                            <?php echo $website->limitCharacters($urgent_job['title'],50)?>                     
+                        </a>
+                        <p class="sub-text">
+                            <?php echo $website->limitCharacters($urgent_job['message'],250)?>
+                        </p>
+                        <p class="sub-text"><strong><?php echo $commonQueries->time_ago($urgent_job['date']);?> </strong></p>
+                    </h5>               
+                    <hr class="top-bottom-margin">
+                </div>    
+            </div>
+        </article>
+    </div>
+    <?php endforeach;?>
+    <div class="text-center"><a class="underline-link" href="<?php echo $FULL_DOMAIN_NAME;?>/viec-tuyen-dung-gap/">Xem toàn bộ</a></div>    
+</div>
+
+<!--Newest candidates-->
+<div class="gray-wrap">
+    <header class="row">
+        <h4 class="col-md-12 aside-header">
+            <i class="fa fa-newspaper-o"></i> 
+            Ứng viên mới nhất        
+        </h4>
+    </header>
+    <hr class="top-bottom-margin">
+    <?php foreach ($urgent_jobs['jobs_list'] as $urgent_job):?>
+    <div class="row">
+        <article class="col-md-12">
+            <div class="row">
+                <div class="col-md-12 aside-content">
+                    <!--Content-->
+                    <h5 class="no-margin">
+                        <a href="<?php echo $FULL_DOMAIN_NAME;?>/chi-tiet-cong-viec/<?php echo $urgent_job['job_id']?>/<?php echo $urgent_job['SEO_title']?>" class="aside-link" title="<?php echo $urgent_job['title']?>">
+                            <?php echo $website->limitCharacters($urgent_job['title'],50)?>                     
+                        </a>
+                        <p class="sub-text">
+                            <?php echo $website->limitCharacters($urgent_job['message'],250)?>
+                        </p>
+                        <p class="sub-text"><strong><?php echo $commonQueries->time_ago($urgent_job['date']);?> </strong></p>
+                    </h5>               
+                    <hr class="top-bottom-margin">
+                </div>    
+            </div>
+        </article>
+    </div>
+    <?php endforeach;?>
+    <div class="text-center"><a class="underline-link" href="<?php echo $FULL_DOMAIN_NAME;?>/viec-tuyen-dung-gap/">Xem toàn bộ</a></div>    
+</div>
+<?php endif;?>

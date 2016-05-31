@@ -32,7 +32,19 @@ global $db, $commonQueries, $commonQueries_Front;
                 $commonQueries->flash('message', $commonQueries->messageStyle('danger', 'Có lỗi xảy ra, vui lòng liên hệ info@vieclambanthoigian.com.vn'));
                 $website->redirect($website->CurrentURL());
             } else {
-                //Send message & copy email to both ADMIN & Sender
+                //Email handling
+                $email_subject  = 'vieclambanthoigian.com.vn';
+                $email_body     = "Chào bạn!\n"
+                                . "Cảm ơn bạn đã liên hệ với vieclambanthoigian,Chúng tôi sẽ phản hồi trong thời gian sớm nhất \n\n"
+                                . "Dưới đây là nội dung tin nhắn bạn đã gửi: \n\n"
+                                . "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                                . "$title \n\n"
+                                . "$message"
+                                . "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n"
+                                . "Trân trọng \n\n"
+                                . "Vieclambanthoigian.com.vn";
+                
+                require_once ('include/email_handling.php');
                 
                 
                 //Redirect back
@@ -67,7 +79,7 @@ global $db, $commonQueries, $commonQueries_Front;
                 <label class="label">Số điện thoại</label>
                 <label class="input">
                     <i class="icon-append fa fa-phone"></i>
-                    <input type="text" name="phone" id="phone" required <?php if(!empty($phone)){echo "value='$phone'";}?>>
+                    <input type="text" name="phone" id="phone" <?php if(!empty($phone)){echo "value='$phone'";}?>>
                 </label>
             </section>
         </div>
@@ -121,10 +133,16 @@ global $db, $commonQueries, $commonQueries_Front;
                 name:{
                     required: true
                 },
+                
                 email:{
                     required: true,
                     email: true
                 },
+                 
+                phone:{
+                    required: true
+                }, 
+                  
                 subject:{
                     required: true
                 },
@@ -133,7 +151,8 @@ global $db, $commonQueries, $commonQueries_Front;
                     required: true,
                     minlength: 10
                 },
-                captcha:{
+                
+                code:{
                     required: true
                 }
             },
@@ -145,9 +164,14 @@ global $db, $commonQueries, $commonQueries_Front;
                     required: 'Bạn chưa điền tên'
                 },
                 email:{
-                    required: 'Please enter your email address',
+                    required: 'Email không thể để trống',
                     email: 'Vui lòng nhập địa chỉ email chính xác'
-                },                
+                },   
+                
+                phone:{
+                    required: 'Vui lòng nhập số điện thoại'
+                }, 
+                
                 subject:{
                     required: 'Tiêu đề không thể để trống'
                 },
@@ -155,7 +179,8 @@ global $db, $commonQueries, $commonQueries_Front;
                 message:{
                     required: 'Tin nhắn không thể để trống'
                 },
-                captcha:{
+                
+                code:{
                     required: 'Vui lòng nhập CAPTCHA'
                 }
             },             

@@ -21,5 +21,5 @@ if(!defined('IN_SCRIPT')) die("Oops! Nothing here");
 
     if(!$mail->send()) {
         echo 'Message could not be sent.';
-        echo 'Mailer Error: ' . $mail->ErrorInfo;
+        echo 'Mailer Error: ' . $mail->ErrorInfo; die;
     }

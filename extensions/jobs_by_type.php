@@ -26,11 +26,11 @@
     //Pagination options
     $url = $website->getURL_segment($website->CurrentURL(), 2);
     $reload="http://$DOMAIN_NAME/$url/?";//Link href        
-    $jobs_by_type = $commonQueries->jobs_by_type_pagination("$column", $job_type, "$current_page", 4);
+    $jobs_by_type = $commonQueries->jobs_by_type_pagination("$column", $job_type, "$current_page", 20);
     
     //Jobs by high salary
     if ($job_type == '0'){
-        $jobs_by_type = $commonQueries->jobs_by_type_pagination("salary", '3', "$current_page", 4, ">=");
+        $jobs_by_type = $commonQueries->jobs_by_type_pagination("salary", '3', "$current_page", 20, ">=");
     }    
 ?>
 <div class="row">

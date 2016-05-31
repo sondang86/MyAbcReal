@@ -228,7 +228,6 @@
             
             return $jobs_list;  
         }
-            
         
         
         /**
@@ -1241,7 +1240,7 @@
         *  @param var by_expected_position search by expected_position included
         *  @param var by_experience_level search by experience_level included
         */
-        public function Search_Resumes($condition=TRUE,$queryString="",$page_number, $by_category="",$by_location="",$by_education="",$by_expected_position="",$by_experience_level="", $by_date_updated="") {
+        public function Search_Resumes($condition=TRUE,$queryString="",$page_number, $by_category="",$by_location="",$by_education="",$by_expected_position="",$by_experience_level="", $by_date_updated="", $pageLimit='10') {
             $jobsInfo_columns = Array (
                 $this->_dbPrefix."jobseeker_resumes.id as resume_id",$this->_dbPrefix."jobseeker_resumes.username",
                 $this->_dbPrefix."jobseeker_resumes.title as resume_title",$this->_dbPrefix."jobseeker_resumes.skills as resume_skills",
@@ -1301,7 +1300,7 @@
             }
                 
             //Get the data
-            $this->_db->pageLimit = 5;
+            $this->_db->pageLimit = $pageLimit;
             $resumes['resumes'] = $this->_db->withTotalCount()->orderBy("date_updated","DESC")->arraybuilder()->paginate('jobseeker_resumes', $page_number, $jobsInfo_columns);
             $resumes['totalCount'] = $this->_db->totalCount; 
             $resumes['totalPages'] = $this->_db->totalPages;

@@ -123,7 +123,7 @@ else
 $website->Render();
     
 /// Inserting the statistics information in the database
-$website->Statistics();
+//$website->Statistics();
 
 ?>
     
