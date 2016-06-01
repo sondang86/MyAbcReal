@@ -4,13 +4,11 @@
     $featured_jobs = $commonQueries_Front->getJobsList('featured', 5);
     $urgent_jobs = $commonQueries_Front->getJobsList('urgent', 5);
 
+    if (empty($_GET['page']) || ($_GET['page'] !== 'vn_ung-vien') && ($_GET['page'] !== 'jobseeker_details'))://Show jobs lists for jobseekers & guests    
+    
 ?>
 
-<?php // if($_GET['mod'] !== 'candidate_details'){
-//    echo 'true';
-//}?>
 
-<?php if (empty($_GET['page']) || ($_GET['page'] !== 'vn_ung-vien') && ($_GET['mod'] !== 'candidate_details')):?>
 <!--Job by attribute-->
 <div class="gray-wrap">
     <header class="row top-bottom-margin">
@@ -102,10 +100,37 @@ if (!empty($_GET['page'] && $_GET['page'] == 'jobseeker_details')): //Candidate 
     $jobseeker_categories = $commonQueries->getJobseeker_categories($jobseeker_profile['jobseeker_id']);
     $jobseeker_locations = $commonQueries->getJobseeker_locations($jobseeker_profile['jobseeker_id']);
     $jobseeker_languagues = $commonQueries->getJobseeker_languages($jobseeker_profile['jobseeker_id']);
+    $skills = $db->orderBy("skill_id","desc")->get('skills');
+    
+    //Employer payment verify
+    if (($_SESSION['logged_in'] == 1) && ($_SESSION['user_type'] == 'employer')){//user is employer logged in
+        $employerInfo = $db->where('username', $_SESSION['username'])->getOne('employers');
+        if ($employerInfo['subscription'] > 1){ //Account payment verified, show email & phone
+            $verified_employer = TRUE;
+        } else {
+            $verified_employer = FALSE;
+        }
+    } else { // not logged in or account is jobseeker
+        $verified_employer = FALSE;
+    }
+        
+//    print_r($_SESSION);
+    
 ?>
+
+<style>
+    .sky-form {
+        outline: none;
+    }
+    
+    .sky-form .rating {
+        font-size: 12px;
+    }
+</style>
+<!--CANDIDATE DETAILS-->
 <div class="gray-wrap">
     <fieldset class="row">
-        <main class="candidate_details">
+        <main class="candidate_details clearfix">
             
             <!--IMAGE-->
             <header class="col-md-12">
@@ -174,17 +199,74 @@ if (!empty($_GET['page'] && $_GET['page'] == 'jobseeker_details')): //Candidate 
                 <span><?php echo $jobseeker_profile['marital_status_name']?></span>
             </section>
             
+            <?php if ($verified_employer == TRUE):?>
             <section class="col-md-12">
-                <label>Phone: </label>
-                <span><a href="/vieclambanthoigian.com.vn/mod-vn-employers_registration.html">Đăng ký</a> để thấy link</span>
+                <label>Số điện thoại: </label>
+                <span><?php echo $jobseeker_profile['phone'];?></span>
             </section>
             
             <section class="col-md-12">
-                <label>Email: </label>
-                <span><a href="/vieclambanthoigian.com.vn/mod-vn-employers_registration.html">Đăng ký</a> để thấy link</span>
+                <label>Email liên hệ: </label>
+                <span><?php echo $jobseeker_profile['username'];?></span>
             </section>
+            <?php else: ?>
             
+            <footer class="note col-md-12">
+                <label>Lưu ý: chỉ nhà tuyển dụng đã xác thực tài khoản mới có thể xem được email và số điện thoại của ứng viên</label>
+            </footer>
+            
+            <?php endif;?>
         </main>
+        
+        
+        
+        <div class="sky-form">
+            <fieldset>
+                <section>
+                    <label class="label">Các kỹ năng: </label>
+                    <div class="rating">
+                        <?php foreach ($skills as $skill) :?>
+                        <input type="radio" name="it-skill-rating" id="stars-rating-<?php echo $skill['skill_id']?>" disabled <?php if($jobseeker_resume['IT_skill_name'] == $skill['name']){ echo "checked='checked'";}?>>
+                        <label for="stars-rating-<?php echo $skill['skill_id']?>" title="<?php echo $skill['name']?>"><i class="fa fa-star"></i></label>                        
+                        <?php endforeach;?>
+                        Tin học: 
+                    </div>
+                    
+                    <div class="rating">
+                        <?php foreach ($skills as $skill) :?>
+                        <input type="radio" name="group-skill-rating" id="stars-rating-<?php echo $skill['skill_id']?>" disabled <?php if($jobseeker_resume['group_skill_name'] == $skill['name']){ echo "checked='checked'";}?>>
+                        <label for="stars-rating-<?php echo $skill['skill_id']?>" title="<?php echo $skill['name']?>"><i class="fa fa-heart" style="font-size:16px"></i></label>                        
+                        <?php endforeach;?>
+                        Làm việc nhóm: 
+                    </div>
+                    
+                    <div class="rating">
+                        <?php foreach ($skills as $skill) :?>
+                        <input type="radio" name="pressure-skill-rating" id="stars-rating-<?php echo $skill['skill_id']?>" disabled <?php if($jobseeker_resume['pressure_skill_name'] == $skill['name']){ echo "checked='checked'";}?>>
+                        <label for="stars-rating-<?php echo $skill['skill_id']?>" title="<?php echo $skill['name']?>"><i class="fa fa-smile-o" style="font-size:19px;"></i></label>                        
+                        <?php endforeach;?>
+                        Chịu áp lực công việc: 
+                    </div>
+                    
+                    <!--LANGUAGES-->
+                    <?php if($jobseeker_languagues['totalCount'] > 0): //Show this only found records?>                    
+                    <?php foreach ($jobseeker_languagues['jobseeker_languages'] as $jobseeker_languague):?>
+                    
+                    <div class="rating">
+                        <?php foreach ($skills as $skill) :?>
+                        <input type="radio" name="language-<?php echo $jobseeker_languague['language_name'];?>-rating" id="stars-rating-<?php echo $skill['skill_id']?>" disabled <?php if($jobseeker_languague['level_id'] == $skill['skill_id']){ echo "checked='checked'";}?>>
+                        <label for="stars-rating-<?php echo $skill['skill_id']?>" title="<?php echo $skill['name']?>"><i class="fa fa-star"></i></label>                        
+                        <?php endforeach;?>
+                        
+                        Ngoại ngữ (<?php echo $jobseeker_languague['language_name']?>): 
+                    </div>
+                    
+                    <?php endforeach;?>                    
+                    <?php endif;?>
+                    <div class="note"><strong>Note:</strong> Theo thang điểm từ thấp đến cao.</div>
+                </section>
+            </fieldset>
+        </div>
     </fieldset>
 </div>
 <?php endif;?>

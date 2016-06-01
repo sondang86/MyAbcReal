@@ -86,6 +86,9 @@ and open the template in the editor.
 }
 
 .candidate_details {
+    box-shadow: 0 0 20px rgba(0,0,0,.3);
+    font-size: 13px;
+    
     header {
         background: #f5f5f5;
         img {
@@ -121,6 +124,10 @@ and open the template in the editor.
     margin-bottom: 30px;
     padding: 20px;
     position: relative;
+    
+    h5 {
+        font-size: 20px !important;
+    }
 }
 
 .candidates-item .social-icons {
@@ -159,4 +166,20 @@ and open the template in the editor.
     display: inline-block;
     color: #808080;
     margin-bottom: 10px;
+}
+
+.candidate-details-section {
+    min-height: 200px;    
+    margin: 0 auto;
+    border-bottom: 1px solid #ccccff;
+    margin-bottom: 5px;
+    
+    h5 {
+        font-size: 20px;
+        font-weight: bold;
+    }
+    p {
+        font-size: 12px;
+    }
+    
 }

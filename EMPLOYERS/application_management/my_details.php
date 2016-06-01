@@ -148,7 +148,7 @@ $answers = $commonQueries->getQuestionnaireAnswers($jobseeker_data['username'], 
                 </label>
                 
                 <!--LANGUAGES-->
-                <?php foreach ($jobseeker_languagues as $jobseeker_languague) :?>
+                <?php foreach ($jobseeker_languagues['jobseeker_languages'] as $jobseeker_languague) :?>
                 <label>
                     <span><b><?php echo $M_FOREIGN_LANGUAGE;?>/Trình độ: </b></span>
                     <aside>

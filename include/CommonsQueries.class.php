@@ -992,13 +992,16 @@
         */        
         public function getJobseeker_languages($jobseeker_id){
             $selected_cols = array(
-                $this->_dbPrefix."jobseeker_languages.updated_at",
+                $this->_dbPrefix."jobseeker_languages.updated_at",$this->_dbPrefix."jobseeker_languages.language_id",
+                $this->_dbPrefix."jobseeker_languages.level_id",
                 $this->_dbPrefix."skill_languages.language_name",$this->_dbPrefix."skill_languages.language_name_en",
                 $this->_dbPrefix."language_levels.level_name",$this->_dbPrefix."language_levels.level_name_en"
             );
             $this->_db->join("language_levels", $this->_dbPrefix."jobseeker_languages.level_id=".$this->_dbPrefix."language_levels.level", "LEFT");
             $this->_db->join("skill_languages", $this->_dbPrefix."jobseeker_languages.language_id=".$this->_dbPrefix."skill_languages.language_id", "LEFT");
-            $jobseeker_languagues = $this->_db->withTotalCount()->where('jobseeker_id', $jobseeker_id)->get('jobseeker_languages', NULL, $selected_cols);
+            $jobseeker_languagues['jobseeker_languages'] = $this->_db->withTotalCount()->where('jobseeker_id', $jobseeker_id)->get('jobseeker_languages', NULL, $selected_cols);
+            $jobseeker_languagues['totalCount'] = $this->_db->totalCount;
+            
             return $jobseeker_languagues;
         }
             
@@ -1184,7 +1187,8 @@
                 $this->_dbPrefix."jobseeker_resumes.id as resume_id",$this->_dbPrefix."jobseeker_resumes.username",
                 $this->_dbPrefix."jobseeker_resumes.skills",$this->_dbPrefix."jobseeker_resumes.username",
                 $this->_dbPrefix."jobseeker_resumes.career_objective",$this->_dbPrefix."jobseeker_resumes.facebook_URL",
-                $this->_dbPrefix."jobseeker_resumes.experiences",$this->_dbPrefix."jobseeker_resumes.name_current_position",    
+                $this->_dbPrefix."jobseeker_resumes.experiences",$this->_dbPrefix."jobseeker_resumes.name_current_position",
+                $this->_dbPrefix."jobseeker_resumes.referrers",
                 $this->_dbPrefix."job_experience.name as job_experience_name",$this->_dbPrefix."job_experience.name_en as job_experience_name_en",
                 $this->_dbPrefix."education.education_name",$this->_dbPrefix."education.education_name_en",
                 $this->_dbPrefix."languages.name as language_name",

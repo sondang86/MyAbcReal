@@ -115,6 +115,7 @@ global $db, $commonQueries, $commonQueries_Front;
             
     <footer>
         <button type="submit" name="ContactSubmit" class="button">Gửi</button>
+        <i>Hiện tại website đang trong giai đoạn thử nghiệm, Vieclambanthoigian.com.vn luôn rất mong nhận được sự góp ý và ủng hộ của mọi người. Mọi yêu cầu, góp ý xin vui lòng gửi về email info@vieclambanthoigian.com.vn. Chúng tôi sẽ phản hồi trong thời gian sớm nhất.</i>
     </footer>
             
     <div class="message">

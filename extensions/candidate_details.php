@@ -7,11 +7,10 @@
     $jobseeker_categories = $commonQueries->getJobseeker_categories($jobseeker_profile['jobseeker_id']);
     $jobseeker_locations = $commonQueries->getJobseeker_locations($jobseeker_profile['jobseeker_id']);
     $jobseeker_languagues = $commonQueries->getJobseeker_languages($jobseeker_profile['jobseeker_id']);
-        
-        
+      
         
 //    echo "<pre>";
-//    print_r($jobseeker_resume);
+//    print_r($jobseeker_languagues);
 //    echo "</pre>";
 ?>
 
@@ -23,37 +22,42 @@
 </div>
     
 <main class="candidates-item candidates-single-item">
-    <h6 class="title"><a href="http://431.da1.myftpupload.com/candidate/john-doe/">John Doe</a></h6>
+    <h5 class="title"><?php echo $jobseeker_profile['first_name']?></h5>
     <span class="meta">
         27 Years Old - 																				Victoria, Australia									</span>
-    
-    <!-- <ul class="top-btns">
-            <li><a href="#" class="btn btn-gray fa fa-star"></a></li>
-    </ul> -->
-            
+
     <ul class="social-icons clearfix">
-        <li><a href="http://fb.com" class="btn btn-gray fa fa-facebook"></a></li>										<li><a href="http://fb.com" class="btn btn-gray fa fa-twitter"></a></li>										<li><a href="http://fb.com" class="btn btn-gray fa fa-google-plus"></a></li>																				<li><a href="http://fb.com" class="btn btn-gray fa fa-instagram"></a></li>										<li><a href="http://fb.com" class="btn btn-gray fa fa-linkedin"></a></li>									</ul>
-    
-    <p>
-    </p><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit, maxime, excepturi, mollitia, voluptatibus similique aliquid a dolores autem laudantium sapiente ad enim ipsa modi laborum accusantium deleniti neque architecto vitae.</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea, nihil, dolores, culpa ullam vero ipsum placeat accusamus nemo ipsa cupiditate id molestiae consectetur quae pariatur repudiandae vel ex quaerat nam iusto aliquid laborum quia adipisci aut ut impedit obcaecati nisi deleniti tempore maxime sequi fugit reiciendis libero quo. Rerum, assumenda.</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Exercitationem, at nemo inventore temporibus corporis suscipit.</p>
-    <p></p>
-            
-        <ul class="list-unstyled">
-            
-            
-            
-            
+        <li><a href="<?php echo $jobseeker_resume['facebook_URL']?>" class="btn btn-gray fa fa-facebook" target="_blank"></a></li>
+        <li><a href="#" class="btn btn-gray fa fa-twitter"></a></li>
+        <li><a href="#" class="btn btn-gray fa fa-google-plus"></a></li>
+        <li><a href="#" class="btn btn-gray fa fa-instagram"></a></li>
+        <li><a href="#" class="btn btn-gray fa fa-linkedin"></a></li>
     </ul>
-            
-            
-            
+    
+    <section class="candidate-details-section">
+        <H5>Mục tiêu nghề nghiệp</H5>
+        <p><?php echo nl2br($jobseeker_resume['career_objective'])?></p>
+    </section>
+    
+    <section class="candidate-details-section">
+        <h5>Kinh nghiệm làm việc</h5>
+        <p><?php echo nl2br($jobseeker_resume['experiences'])?></p>
+    </section>
+    
+    <section class="candidate-details-section">
+        <H5>Kỹ năng, khả năng, tài năng và thành tựu</H5>
+        <p><?php echo nl2br($jobseeker_resume['skills'])?></p>
+    </section>
+    
+    <section class="candidate-details-section">
+        <h5>Người tham khảo</h5>
+        <p><?php echo nl2br($jobseeker_resume['referrers'])?></p>
+    </section>
     <hr>
             
         <div class="clearfix">
             
-        <a href="#" class="btn btn-default pull-left" data-toggle="modal" data-target="#myModal"><i class="fa fa-envelope-o"></i> Contact Me</a>
+        <a href="#" class="btn btn-default pull-left" data-toggle="modal" data-target="#myModal"><i class="fa fa-envelope-o"></i> Gửi tin nhắn</a>
                 
         <!-- Modal -->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -61,33 +65,43 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Send Us a Message</h4>
+                        <h4 class="modal-title" id="myModalLabel">Gửi tin nhắn cho ứng viên</h4>
                     </div>
-                        <form method="post" action="" class="ng-pristine ng-valid">
+                        <form method="post" action="" class="sky-form">
                             
                             <div class="modal-body">
                                 
                             <input type="hidden" name="to" value="">
                                     
-                            <div class="form-group">
-                                <label for="from">Your Email address</label>
-                                <input type="text" id="form" name="from" class="form-control" placeholder="Enter your email">
-                            </div>
+                            <section>
+                                <label class="label">E-mail</label>
+                                <label class="input">
+                                    <i class="icon-append fa fa-envelope-o"></i>
+                                    <input type="email" name="email" id="email" required="" aria-required="true">
+                                </label>
+                            </section>
                                     
-                            <div class="form-group">
-                                <label for="subject">Subject</label>
-                                <input type="text" id="subject" name="subject" class="form-control" placeholder="Enter your subject ">
-                            </div>
+                            <section>
+                                <label class="label">Tiêu đề</label>
+                                <label class="input">
+                                    <i class="icon-append fa fa-tag"></i>
+                                    <input type="text" name="subject" id="subject" required="" aria-required="true">
+                                </label>
+                            </section>
                                     
-                            <div class="form-group">
-                                <label for="message">Message</label>
-                                <textarea name="message" id="message" rows="5" placeholder="Enter your message..."></textarea>
-                            </div>
+                            <section>
+                                <label class="label">Tin nhắn</label>
+                                <label class="textarea">
+                                    <i class="icon-append fa fa-comment"></i>
+                                    <textarea rows="4" name="message" id="message" required="" aria-required="true"></textarea>
+                                </label>
+                            </section>
                                     
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-red" data-dismiss="modal">Close</button>
-                            <input type="hidden" id="nonce_contact_form" name="nonce_contact_form" value="d64a515304"><input type="hidden" name="_wp_http_referer" value="/candidate/john-doe/">											        <button type="submit" class="btn btn-default">Submit</button>
+                            <button type="button" class="btn btn-red" data-dismiss="modal">Đóng</button>
+                            <input type="hidden" id="nonce_contact_form" name="nonce_contact_form" value="d64a515304"><input type="hidden" name="_wp_http_referer" value="/candidate/john-doe/">
+                            <button type="submit" class="btn btn-primary">Gửi</button>
                         </div>
                                 
                     </form>
