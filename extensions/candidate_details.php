@@ -8,16 +8,41 @@
     $jobseeker_locations = $commonQueries->getJobseeker_locations($jobseeker_profile['jobseeker_id']);
     $jobseeker_languagues = $commonQueries->getJobseeker_languages($jobseeker_profile['jobseeker_id']);
       
-        
-//    echo "<pre>";
-//    print_r($jobseeker_languagues);
-//    echo "</pre>";
+    $next_resume = $commonQueries->get_NextPrev_Record($jobseeker_resume['resume_id'], '>', 'jobseeker_resumes');
+    $prev_resume = $commonQueries->get_NextPrev_Record($jobseeker_resume['resume_id'], '<', 'jobseeker_resumes');
+    
+    //message handling
+    if (isset($_POST['submit'])){
+        $data = array(
+            'date'      => time(),
+            'user_from' => filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL),  
+            'user_to'   => $jobseeker_resume['username'],
+            'subject'   => filter_input(INPUT_POST, 'subject', FILTER_SANITIZE_EMAIL),
+            'message'   => filter_input(INPUT_POST, 'message', FILTER_SANITIZE_EMAIL)
+        );
+        $id = $db->insert('user_messages', $data);
+        if (!$id){
+            $commonQueries->flash('message', $commonQueries->messageStyle('danger', "Có lỗi xảy ra, không thể gửi tin nhắn. Vui lòng liên hệ info@vieclambanthoigian.com.vn"));
+            $website->redirect($website->CurrentURL());
+        } else {
+            //Refresh the page
+            $commonQueries->flash('message', $commonQueries->messageStyle('info', "Bạn đã gửi tin nhắn đến ứng viên"));
+            $website->redirect($website->CurrentURL()); 
+        }
+    }
 ?>
 
+<h5><?php $commonQueries->flash('message')?></h5>
 <div class="clearfix hidden-xs candidates-nav">
-    <a href="http://431.da1.myftpupload.com/candidate-listing" class="btn btn-gray pull-left">Back to Listings</a>
-    <div class="pull-right">
-        <a class="btn btn-gray" href="http://431.da1.myftpupload.com/candidate/mike-doe/" rel="next">Next</a>
+    <a href="<?php echo $FULL_DOMAIN_NAME;?>/vn_ung-vien.html" class="btn btn-gray pull-left">Quay lại danh sách ứng viên</a>
+    <div class="pull-right">        
+        <?php if($prev_resume['totalCount'] > 0):?>
+        <a class="btn btn-gray" href="<?php echo $FULL_DOMAIN_NAME;?>/chi-tiet-ung-vien/<?php echo $prev_resume['record']['id'];?>/<?php echo $website->seoURL($prev_resume['record']['title']);?>" rel="prev">Ứng viên trước đó</a>
+        <?php endif;?>
+        
+        <?php if($next_resume['totalCount'] > 0):?>
+        <a class="btn btn-gray" href="<?php echo $FULL_DOMAIN_NAME;?>/chi-tiet-ung-vien/<?php echo $next_resume['record']['id'];?>/<?php echo $website->seoURL($next_resume['record']['title']);?>" rel="next">Ứng viên tiếp theo</a>
+        <?php endif;?>        
     </div>
 </div>
     
@@ -67,11 +92,11 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                         <h4 class="modal-title" id="myModalLabel">Gửi tin nhắn cho ứng viên</h4>
                     </div>
-                        <form method="post" action="" class="sky-form">
+                        <form method="POST" action="" class="sky-form">
                             
                             <div class="modal-body">
                                 
-                            <input type="hidden" name="to" value="">
+                            <input type="hidden" name="to" value="<?php echo $jobseeker_resume['resume_id']?>">
                                     
                             <section>
                                 <label class="label">E-mail</label>
@@ -101,7 +126,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-red" data-dismiss="modal">Đóng</button>
                             <input type="hidden" id="nonce_contact_form" name="nonce_contact_form" value="d64a515304"><input type="hidden" name="_wp_http_referer" value="/candidate/john-doe/">
-                            <button type="submit" class="btn btn-primary">Gửi</button>
+                            <button type="submit" name="submit" class="btn btn-primary">Gửi</button>
                         </div>
                                 
                     </form>
@@ -111,9 +136,9 @@
                 
         <ul class="social-icons pull-right">
             <li><span>Share</span></li>
-            <li><a href="http://www.facebook.com/sharer.php?u=http://431.da1.myftpupload.com/candidate/john-doe/" class="btn btn-gray fa fa-facebook" target="_blank"></a></li>
-            <li><a href="http://twitthis.com/twit?url=http://431.da1.myftpupload.com/candidate/john-doe/" class="btn btn-gray fa fa-twitter" target="_blank"></a></li>
-            <li><a href="https://plus.google.com/share?url=http://431.da1.myftpupload.com/candidate/john-doe/" class="btn btn-gray fa fa-google-plus" target="_blank"></a></li>
+            <li><a href="http://www.facebook.com/sharer.php?u=<?php echo $FULL_DOMAIN_NAME;?>/chi-tiet-ung-vien/<?php echo $prev_resume['record']['id'];?>/<?php echo $website->seoURL($prev_resume['record']['title']);?>" class="btn btn-gray fa fa-facebook" target="_blank"></a></li>
+            <li><a href="http://twitthis.com/twit?url=<?php echo $FULL_DOMAIN_NAME;?>/chi-tiet-ung-vien/<?php echo $prev_resume['record']['id'];?>/<?php echo $website->seoURL($prev_resume['record']['title']);?>" class="btn btn-gray fa fa-twitter" target="_blank"></a></li>
+            <li><a href="https://plus.google.com/share?url=<?php echo $FULL_DOMAIN_NAME;?>/chi-tiet-ung-vien/<?php echo $prev_resume['record']['id'];?>/<?php echo $website->seoURL($prev_resume['record']['title']);?>" class="btn btn-gray fa fa-google-plus" target="_blank"></a></li>
         </ul>
     </div>
 </main>

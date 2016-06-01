@@ -1482,6 +1482,28 @@
             
             return $value;
         }
+        
+        /**
+        *   check whether google Maps Latitude/Longitude are neither empty, then replace with default settings
+        *   @param var id current id to be check for next/prev record
+        *   @param var operator_condition > for next or < for prev
+        *   @param var table default table to search
+        */
+        public function get_NextPrev_Record($id, $operator_condition='>', $table="jobseeker_resumes"){
+            $this->_db->where('id', $id, "$operator_condition");
+
+            if ($operator_condition == ">"){//Next
+                $this->_db->orderBy("id","asc");
+                
+            } elseif ($operator_condition == "<"){ //Prev
+                $this->_db->orderBy("id","desc");
+            }
+            
+            $record['record']       = $this->_db->withTotalCount()->getOne("$table");
+            $record['totalCount']   = $this->_db->totalCount;
+
+            return $record;
+        }
             
     }
 ?>

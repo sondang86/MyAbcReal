@@ -103,7 +103,7 @@ if (!empty($_GET['page'] && $_GET['page'] == 'jobseeker_details')): //Candidate 
     $skills = $db->orderBy("skill_id","desc")->get('skills');
     
     //Employer payment verify
-    if (($_SESSION['logged_in'] == 1) && ($_SESSION['user_type'] == 'employer')){//user is employer logged in
+    if ((isset($_SESSION['logged_in'])) && ($_SESSION['user_type'] == 'employer')){//user is employer logged in
         $employerInfo = $db->where('username', $_SESSION['username'])->getOne('employers');
         if ($employerInfo['subscription'] > 1){ //Account payment verified, show email & phone
             $verified_employer = TRUE;

@@ -79,7 +79,7 @@ RewriteRule ^nha-tuyen-dung/?(.*)?$ index.php?mod=recruiters [L,NC,QSA]
 RewriteRule ^ung-vien/?$ index.php?mod=candidates [QSA]
 RewriteRule ^ung-vien-noi-bat/?$ index.php?mod=candidates&url=ung-vien-noi-bat&sort_by=featured [L,NC,QSA]
 RewriteRule ^ung-vien-moi-nhat/?$ index.php?mod=candidates&url=ung-vien-moi-nhat&sort_by=latest [L,NC,QSA]
-RewriteRule ^chi-tiet-ung-vien/([0-9]+)/([A-Za-z0-9-]+)/?$ index.php?mod=candidate_details&page=jobseeker_details&jobseeker_id=$1&title=$2 [L,NC,QSA]
+RewriteRule ^chi-tiet-ung-vien/([0-9]+)/(.*)/?$ index.php?mod=candidate_details&page=jobseeker_details&jobseeker_id=$1&title=$2 [L,NC,QSA]
 
 #save URL
 RewriteRule ^luu-viec-lam/?$ index.php?mod=save 
