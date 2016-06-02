@@ -14,11 +14,21 @@
         <link href="/vieclambanthoigian.com.vn/css/sky-forms.css" rel="stylesheet" type="text/css"/>
         <link href="/vieclambanthoigian.com.vn/css/commons.css" rel="stylesheet" type="text/css"/>
             
-        <script type="text/javascript" src="/vieclambanthoigian.com.vn/js/jquery.min.js"></script>
-        <!-- bxSlider Javascript file -->
+        <!--<script type="text/javascript" src="/vieclambanthoigian.com.vn/js/jquery.min.js"></script>-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+        
+        <!-- bxSlider -->
         <script src="/vieclambanthoigian.com.vn/js/jquery.bxslider.min.js" type="text/javascript"></script>
-        <!-- bxSlider CSS file -->
-        <link href="/vieclambanthoigian.com.vn/css/jquery.bxslider.css" rel="stylesheet" type="text/css"/> 
+        <link href="/vieclambanthoigian.com.vn/css/jquery.bxslider.css" rel="stylesheet" type="text/css"/>
+        
+        <!-- Include Date Range Picker -->
+        <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+        <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+        
+        <!--For save job-->
         <script>
             var sitePath = 'http://localhost/vieclambanthoigian.com.vn';
         </script>
@@ -164,7 +174,7 @@
                     <div class="clearfix"></div>
                 </div>
             </div>
-        </div>
+        </div>        
         <link href="/vieclambanthoigian.com.vn/css/jquery-confirm.min.css" rel="stylesheet" type="text/css"/>
         <script src="/vieclambanthoigian.com.vn/js/jquery-confirm.min.js" type="text/javascript"></script>
         <script src="/vieclambanthoigian.com.vn/js/jquery.modal.js" type="text/javascript"></script>

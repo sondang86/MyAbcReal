@@ -1031,6 +1031,7 @@
             $selected_columns = array(
                 $this->_dbPrefix."jobseekers.id as jobseeker_id",$this->_dbPrefix."jobseekers.username",
                 $this->_dbPrefix."jobseekers.first_name",$this->_dbPrefix."jobseekers.last_name",
+                $this->_dbPrefix."jobseekers.dob",
                 $this->_dbPrefix."jobseekers.address",$this->_dbPrefix."jobseekers.phone",
                 $this->_dbPrefix."jobseekers.description",$this->_dbPrefix."jobseekers.profile_pic",
                 $this->_dbPrefix."jobseekers.profile_description",$this->_dbPrefix."jobseekers.profile_description",
@@ -1185,7 +1186,7 @@
         public function getJobseekerResume($resume_id){
             $jobseeker_resume_columns = array(
                 $this->_dbPrefix."jobseeker_resumes.id as resume_id",$this->_dbPrefix."jobseeker_resumes.username",
-                $this->_dbPrefix."jobseeker_resumes.skills",$this->_dbPrefix."jobseeker_resumes.username",
+                $this->_dbPrefix."jobseeker_resumes.title",$this->_dbPrefix."jobseeker_resumes.skills",$this->_dbPrefix."jobseeker_resumes.username",
                 $this->_dbPrefix."jobseeker_resumes.career_objective",$this->_dbPrefix."jobseeker_resumes.facebook_URL",
                 $this->_dbPrefix."jobseeker_resumes.experiences",$this->_dbPrefix."jobseeker_resumes.name_current_position",
                 $this->_dbPrefix."jobseeker_resumes.referrers",

@@ -7,7 +7,7 @@ if(!defined('IN_SCRIPT')) die("Oops! Nothing here");
         $website->redirect($website->CurrentURL());
     } else {
         //Insert record to apply table
-        $attachment = isset($_POST['attachment']) ? '1' : '0'; //Convert to true or false value
+        $attachment = isset($_POST['attachment']) ? '1' : '0'; //Convert checkbox value to true or false 
         $data = Array (
             'message'       => filter_input(INPUT_POST,'message_to_employer',FILTER_SANITIZE_STRING),
             'posting_id'    => $job_id,

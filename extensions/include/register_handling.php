@@ -2,7 +2,7 @@
     if(!defined('IN_SCRIPT')) die("");
     global $db, $commonQueries, $FULL_DOMAIN_NAME;
 
-    if (isset($_POST['submit'])){
+    if (isset($_POST['quick_register_submit'])){
         $email = filter_input(INPUT_POST,'email', FILTER_SANITIZE_STRING);
 
         //Verify captcha
@@ -34,6 +34,7 @@
                 "password"          => $password,
                 "mobile"            => filter_input(INPUT_POST,'mobile', FILTER_SANITIZE_NUMBER_INT),
                 "first_name"        => filter_input(INPUT_POST,'firstname', FILTER_SANITIZE_STRING),
+                "dob"               => strtotime(filter_input(INPUT_POST, 'dob' ,FILTER_SANITIZE_STRING)),
     //            "last_name"         => filter_input(INPUT_POST,'lastname', FILTER_SANITIZE_STRING),
                 "newsletter"        => 1, 
                 "gender"            => filter_input(INPUT_POST,'gender', FILTER_SANITIZE_NUMBER_INT),

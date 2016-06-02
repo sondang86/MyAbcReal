@@ -168,7 +168,17 @@ $website->Render();
         
         //scrollbar        
         //https://github.com/noraesae/perfect-scrollbar
-        $('.perfectScrollbar').perfectScrollbar();    
+        $('.perfectScrollbar').perfectScrollbar();  
+        
+        // Date range picker        
+        $(function() {
+            $('#dob').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                startDate: "05/27/1995"
+            });
+        });
+        
     });
 </script>
 

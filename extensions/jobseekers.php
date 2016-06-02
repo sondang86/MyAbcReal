@@ -1,9 +1,9 @@
 <?php
 // Jobs Portal, copyright vieclambanthoigian.com.vn 2016
  if(!defined('IN_SCRIPT')) die("Oops! Nothing here");
- global $db, $commonQueries, $gender;
+ global $db, $commonQueries, $gender, $FULL_DOMAIN_NAME;
  
-if (isset($_POST['submit'])){
+if (isset($_POST['jobseekers_submit'])){
     $email = filter_input(INPUT_POST,'email', FILTER_SANITIZE_STRING);
     
     //Verify captcha
@@ -34,6 +34,7 @@ if (isset($_POST['submit'])){
                 "password"          => $password,
                 "mobile"            => filter_input(INPUT_POST,'mobile', FILTER_SANITIZE_NUMBER_INT),
                 "first_name"        => filter_input(INPUT_POST,'firstname', FILTER_SANITIZE_STRING),
+                "dob"               => strtotime(filter_input(INPUT_POST, 'dob' ,FILTER_SANITIZE_STRING)),
     //            "last_name"         => filter_input(INPUT_POST,'lastname', FILTER_SANITIZE_STRING),
                 "newsletter"        => 1, 
                 "gender"            => filter_input(INPUT_POST,'gender', FILTER_SANITIZE_NUMBER_INT),
@@ -62,7 +63,7 @@ if (isset($_POST['submit'])){
                 $mail->Body    = "Chào bạn!\n"
                                 . "Cảm ơn bạn đã đăng ký tại vieclambanthoigian\n\n"
                                 . "Để hoàn tất đăng ký, bạn vui lòng truy cập vào địa chỉ dưới đây: \n\n"
-                                . "http://$DOMAIN_NAME/index.php?mod=verifications&register=email&user=jobseeker&id=$id&code=$verification_code \n\n";
+                                . "$FULL_DOMAIN_NAME/index.php?mod=verifications&register=email&user=jobseeker&id=$id&code=$verification_code \n\n";
 
 
                 if(!$mail->send()) {
@@ -74,11 +75,11 @@ if (isset($_POST['submit'])){
 
                 //Redirect back with message
                 $commonQueries->flash('message', $commonQueries->messageStyle('info', "Cảm ơn bạn đã đăng ký, bạn hãy kiểm tra email và xác nhận tài khoản để hoàn tất"));
-                $website->redirect("http://$DOMAIN_NAME/vn_Ng%C6%B0%E1%BB%9Di+t%C3%ACm+vi%E1%BB%87c.html");
+                $website->redirect("$FULL_DOMAIN_NAME/index.php?mod=login");
 
             } else {
                 $commonQueries->flash('message', $commonQueries->messageStyle('error', 'Có lỗi xảy ra, vui lòng liên hệ info@vieclambanthoigian.com.vn'));
-                $website->redirect("http://$DOMAIN_NAME/vn_Ng%C6%B0%E1%BB%9Di+t%C3%ACm+vi%E1%BB%87c.html");
+                $website->redirect("$FULL_DOMAIN_NAME/index.php?mod=login");
             }
         }
     }
@@ -131,16 +132,20 @@ if (isset($_POST['submit'])){
                     </label>
                 </section>
                 
-                <section class="col col-6">
+                <section class="col col-3">
                     <label class="input">
                         <input type="text" name="firstname" placeholder="Họ và tên" required value="<?php if(isset($_POST['firstname'])){echo $_POST['firstname'];}?>">
                     </label>
                 </section>
-<!--                <section class="col col-3">
+
+                <section class="col col-3">
                     <label class="input">
-                        <input type="text" name="lastname" placeholder="Tên" required>
+                        <i class="icon-append fa fa-calendar"></i>
+                        <input type="text" name="dob" id="dob" placeholder="Ngày sinh">
                     </label>
-                </section>-->
+                </section>
+                
+                
                 <section class="col col-3">
                     <label class="select">
                         <select name="gender">
@@ -153,8 +158,6 @@ if (isset($_POST['submit'])){
                     </label>
                 </section>
             </div>
-                
-            
                 
             <section>
                 <label class="checkbox"><input type="checkbox" name="subscription" id="subscription"><i></i>Tôi muốn nhận tin tức từ vieclambanthoigian.com.vn</label>
@@ -169,11 +172,11 @@ if (isset($_POST['submit'])){
             
         </fieldset>
         <footer>
-            <button type="submit" class="button" name="submit">Đăng ký</button>
+            <button type="submit" class="button" name="jobseekers_submit">Đăng ký</button>
         </footer>
     </form>
         
-    <script type="text/javascript">
+    <script type="text/javascript">        
         $(function()
         {
             // Validation		
@@ -202,21 +205,19 @@ if (isset($_POST['submit'])){
                         minlength: 6,
                         number: true
                     },
-                    firstname:
-                            {
-                                required: true
+                    firstname:{
+                        required: true
                     },
-//                    lastname:
-//                            {
-//                                required: true
-//                    },
-                    gender:
-                            {
-                                required: true
+                    gender:{
+                        required: true
                     },
-                    terms:
-                            {
-                                required: true
+                    dob: {
+                        required: true,
+//                        date: true
+                    },
+                    
+                    terms:{
+                        required: true
                     }
                 },
                 
@@ -245,9 +246,6 @@ if (isset($_POST['submit'])){
                     firstname:{
                         required: 'Họ và tên của bạn'
                     },
-//                    lastname:{
-//                        required: 'Tên bạn'
-//                    },
                     gender:{
                         required: 'Vui lòng lựa chọn giới tính'
                     },

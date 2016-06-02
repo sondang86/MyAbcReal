@@ -13,23 +13,45 @@
     
     //message handling
     if (isset($_POST['submit'])){
+        $title = filter_input(INPUT_POST, 'subject', FILTER_SANITIZE_STRING);
+        $message = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_STRING);
+        
         $data = array(
             'date'      => time(),
             'user_from' => filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL),  
             'user_to'   => $jobseeker_resume['username'],
-            'subject'   => filter_input(INPUT_POST, 'subject', FILTER_SANITIZE_EMAIL),
-            'message'   => filter_input(INPUT_POST, 'message', FILTER_SANITIZE_EMAIL)
+            'subject'   => "$title",
+            'message'   => "$message"
         );
+        
         $id = $db->insert('user_messages', $data);
         if (!$id){
             $commonQueries->flash('message', $commonQueries->messageStyle('danger', "Có lỗi xảy ra, không thể gửi tin nhắn. Vui lòng liên hệ info@vieclambanthoigian.com.vn"));
             $website->redirect($website->CurrentURL());
         } else {
-            //Refresh the page
+            //Send email notify to jobseeker
+            $email_subject  = "Tin nhắn mới từ vieclambanthoigian.com.vn";
+            $email_body     = "Chào bạn!\n"
+                            . "Bạn có tin nhắn mới trên vieclambanthoigian.com.vn \n\n"
+                            . "Dưới đây là nội dung tin nhắn: \n\n"
+                            . "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n"
+                            . "$title \n\n"
+                            . "$message\n\n"
+                            . "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n"
+                            . "Trân trọng \n\n"
+                            . "Vieclambanthoigian.com.vn";
+            
+            include_once ('include/email_handling.php');
+            
+            //Redirect back
             $commonQueries->flash('message', $commonQueries->messageStyle('info', "Bạn đã gửi tin nhắn đến ứng viên"));
             $website->redirect($website->CurrentURL()); 
         }
     }
+    
+//    echo "<pre>";
+//    print_r($jobseeker_resume);
+//    echo "</pre>";
 ?>
 
 <h5><?php $commonQueries->flash('message')?></h5>
@@ -47,9 +69,9 @@
 </div>
     
 <main class="candidates-item candidates-single-item">
-    <h5 class="title"><?php echo $jobseeker_profile['first_name']?></h5>
+    <h5 class="title"><?php echo $jobseeker_resume['title']?></h5>
     <span class="meta">
-        27 Years Old - 																				Victoria, Australia									</span>
+        <?php echo filter_var($commonQueries->timeCalculation(time(), $jobseeker_profile['dob'],1), FILTER_SANITIZE_NUMBER_INT);?> Years Old - 																				Victoria, Australia									</span>
 
     <ul class="social-icons clearfix">
         <li><a href="<?php echo $jobseeker_resume['facebook_URL']?>" class="btn btn-gray fa fa-facebook" target="_blank"></a></li>
@@ -136,9 +158,9 @@
                 
         <ul class="social-icons pull-right">
             <li><span>Share</span></li>
-            <li><a href="http://www.facebook.com/sharer.php?u=<?php echo $FULL_DOMAIN_NAME;?>/chi-tiet-ung-vien/<?php echo $prev_resume['record']['id'];?>/<?php echo $website->seoURL($prev_resume['record']['title']);?>" class="btn btn-gray fa fa-facebook" target="_blank"></a></li>
-            <li><a href="http://twitthis.com/twit?url=<?php echo $FULL_DOMAIN_NAME;?>/chi-tiet-ung-vien/<?php echo $prev_resume['record']['id'];?>/<?php echo $website->seoURL($prev_resume['record']['title']);?>" class="btn btn-gray fa fa-twitter" target="_blank"></a></li>
-            <li><a href="https://plus.google.com/share?url=<?php echo $FULL_DOMAIN_NAME;?>/chi-tiet-ung-vien/<?php echo $prev_resume['record']['id'];?>/<?php echo $website->seoURL($prev_resume['record']['title']);?>" class="btn btn-gray fa fa-google-plus" target="_blank"></a></li>
+            <li><a href="http://www.facebook.com/sharer.php?u=<?php echo $FULL_DOMAIN_NAME;?>/chi-tiet-ung-vien/<?php echo $jobseeker_resume['resume_id'];?>/<?php echo $website->seoURL($jobseeker_resume['title']);?>" class="btn btn-gray fa fa-facebook" target="_blank"></a></li>
+            <li><a href="http://twitthis.com/twit?url=<?php echo $FULL_DOMAIN_NAME;?>/chi-tiet-ung-vien/<?php echo $jobseeker_resume['resume_id'];?>/<?php echo $website->seoURL($jobseeker_resume['title']);?>" class="btn btn-gray fa fa-twitter" target="_blank"></a></li>
+            <li><a href="https://plus.google.com/share?url=<?php echo $FULL_DOMAIN_NAME;?>/chi-tiet-ung-vien/<?php echo $jobseeker_resume['resume_id'];?>/<?php echo $website->seoURL($jobseeker_resume['title']);?>" class="btn btn-gray fa fa-google-plus" target="_blank"></a></li>
         </ul>
     </div>
 </main>

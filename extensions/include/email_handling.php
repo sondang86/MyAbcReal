@@ -1,8 +1,14 @@
 <?php
 if(!defined('IN_SCRIPT')) die("Oops! Nothing here");
 //Send email confirmation link
-    $mail = new PHPMailer;
-
+    if (class_exists('PHPMailer')){
+        $mail = new PHPMailer;
+    }
+    
+    if (empty($recipient)){//Default recipient
+        $recipient = 'dang.viet.son.hp@gmail.com';
+    }
+    
     $mail->CharSet = 'UTF-8';                             // Unicode character encode
     $mail->isSMTP();                                      // Set mailer to use SMTP
     $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
@@ -13,7 +19,7 @@ if(!defined('IN_SCRIPT')) die("Oops! Nothing here");
     $mail->Port = 587;                                    // TCP port to connect to
 
     $mail->setFrom('info@vieclambanthoigian.com.vn', 'Mailer');
-    $mail->addAddress('dang.viet.son.hp@gmail.com', '');     // Add a recipient
+    $mail->addAddress("$recipient", '');     // Add a recipient
 
     $mail->Subject = $email_subject;
     $mail->Body    = $email_body;

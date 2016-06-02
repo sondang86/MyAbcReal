@@ -22,7 +22,7 @@
 </style>
 
 <?php
-    if(isset($_POST['submit'])){
+    if(isset($_POST['quick_register_submit'])){
         require_once ('register_handling.php'); //Perform register process
     }
 ?>
@@ -57,7 +57,7 @@
             </div>
         
             <div class="row">                
-                <section class="col col-4">
+                <section class="col col-6">
                     <label class="input">
                         <i class="icon-append fa fa-phone"></i>
                         <input type="text" name="mobile" placeholder="Số điện thoại">
@@ -65,13 +65,20 @@
                     </label>
                 </section>
                 
-                <section class="col col-4">
+                <section class="col col-6">
                     <label class="input">
                         <input type="text" name="firstname" placeholder="Họ và tên" required>
                     </label>
                 </section>
+                
+                <section class="col col-6">
+                    <label class="input">
+                        <i class="icon-append fa fa-calendar"></i>
+                        <input type="text" name="dob" id="dob" placeholder="Ngày sinh">
+                    </label>
+                </section>
 
-                <section class="col col-4">
+                <section class="col col-6">
                     <label class="select">
                         <select name="gender">
                             <option value="0" selected disabled>Giới tính</option>
@@ -98,7 +105,7 @@
             
         </fieldset>
         <footer>
-            <button type="submit" class="button" name="submit">Đăng ký</button>
+            <button type="submit" class="button" name="quick_register_submit">Đăng ký</button>
         </footer>
     </form>
     

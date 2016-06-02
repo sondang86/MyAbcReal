@@ -113,9 +113,9 @@ if (!empty($_GET['page'] && $_GET['page'] == 'jobseeker_details')): //Candidate 
     } else { // not logged in or account is jobseeker
         $verified_employer = FALSE;
     }
+
+
         
-//    print_r($_SESSION);
-    
 ?>
 
 <style>
@@ -146,7 +146,7 @@ if (!empty($_GET['page'] && $_GET['page'] == 'jobseeker_details')): //Candidate 
             
             <section class="col-md-12">
                 <label>Tuổi: </label>
-                <span><?php echo $jobseeker_resume['username']?></span>
+                <span><?php echo filter_var($commonQueries->timeCalculation(time(), $jobseeker_profile['dob'],1), FILTER_SANITIZE_NUMBER_INT);?></span>
             </section>
             
             <section class="col-md-12">
