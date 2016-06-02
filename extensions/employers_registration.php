@@ -67,7 +67,9 @@ if (isset($_POST['submit'])){
                 $mail->Body    = "Chào bạn!\n"
                                 . "Cảm ơn bạn đã đăng ký tại vieclambanthoigian\n\n"
                                 . "Để hoàn tất đăng ký, bạn vui lòng truy cập vào địa chỉ dưới đây: \n\n"
-                                . "http://localhost/vieclambanthoigian.com.vn/index.php?mod=verifications&register=email&user=employer&id=$id&code=$verification_code \n\n";
+                                . "http://localhost/vieclambanthoigian.com.vn/index.php?mod=verifications&register=email&user=employer&id=$id&code=$verification_code \n\n"
+                                . "Trân trọng \n"
+                                . "Vieclambanthoigian.com.vn";
 
 
                 if(!$mail->send()) {

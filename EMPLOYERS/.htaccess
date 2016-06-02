@@ -1,6 +1,21 @@
 RewriteEngine on
 
 RewriteRule ^tim-kiem-ung-vien/?(.*)?$ index.php?category=jobseekers&action=search [QSA]
+
+RewriteRule ^dang-ky index.php?category=home&action=credits
+RewriteRule ^doi-mat-khau index.php?category=home&action=password
+RewriteRule ^tin-nhan index.php?category=home&action=received
+
+RewriteRule ^thong-tin-ca-nhan index.php?category=profile&action=current
+RewriteRule ^chinh-sua-thong-tin-ca-nhan index.php?category=profile&action=edit
+
+RewriteRule ^danh-sach-cong-viec index.php?category=jobs&action=my
+RewriteRule ^dang-viec-moi index.php?category=jobs&action=add
+
+RewriteRule ^danh-sach-don-xin-viec index.php?category=application_management&action=list
+RewriteRule ^don-da-phe-duyet index.php?category=application_management&action=approved
+RewriteRule ^don-da-tu-choi index.php?category=application_management&action=rejected
+
 #404 error
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

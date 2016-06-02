@@ -84,7 +84,9 @@ if (isset($_POST['type']) && ($_POST['type'] == 'password_reset')){
             $mail->Body    = "Chào bạn!\n"
                             . "Cảm ơn bạn đã đăng ký tại vieclambanthoigian\n\n"
                             . "Để hoàn tất reset mật khẩu, bạn vui lòng truy cập vào địa chỉ dưới đây: \n\n"
-                            . "http://$DOMAIN_NAME/index.php?mod=reset_password&user=$user_email&id=$id&code=$reset_email_code \n\n";
+                            . "http://$DOMAIN_NAME/index.php?mod=reset_password&user=$user_email&id=$id&code=$reset_email_code \n\n"
+                            . "Trân trọng \n"
+                            . "Vieclambanthoigian.com.vn";
             
             
             if(!$mail->send()) {//For debug purpose only

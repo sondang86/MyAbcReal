@@ -121,11 +121,11 @@ if(
         <div class="container">
             <nav class="row">
                 <ul class="col-md-12 nav navbar-nav navbar-left">
-                    <li>Browse jobs :</li> 
-                    <li class="active"><a href="http://<?php echo $DOMAIN_NAME?>/viec-lam-moi-nhat/"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/all-jobs-icon.png"> Việc làm mới nhất</a></li>
-                    <li><a href="#"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/jobs-by-company-icon.png"> Việc tuyển dụng gấp</a></li>
-                    <li><a href="#"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/jobs-by-category-icon.png"> Việc làm theo ngành</a></li>
-                    <li><a href="#"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/jobs-by-location-icon.png"> Việc làm theo địa điểm</a></li>
+                    <li>Việc làm theo tính chất :</li> 
+                    <li class="active"><a href="<?php echo $FULL_DOMAIN_NAME?>/viec-lam-moi-nhat/"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/all-jobs-icon.png"> Việc làm mới nhất</a></li>
+                    <li><a href="<?php echo $FULL_DOMAIN_NAME?>/viec-tuyen-dung-gap/"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/jobs-by-company-icon.png"> Việc tuyển dụng gấp</a></li>
+                    <li><a href="<?php echo $FULL_DOMAIN_NAME?>/viec-lam-noi-bat/"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/jobs-by-category-icon.png"> Việc làm nổi bật</a></li>
+                    <li><a href="<?php echo $FULL_DOMAIN_NAME?>/viec-lam-moi-nhat/"><img src="http://freelancewebdesignerchennai.com/demo/job-portal//images/jobs-by-location-icon.png"> Việc làm theo địa điểm</a></li>
                 </ul>
             </nav>
         </div>

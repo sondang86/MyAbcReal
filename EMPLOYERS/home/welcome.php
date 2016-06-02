@@ -4,7 +4,7 @@
 // Check http://www.netartmedia.net/jobsportal for demos and information
     
 if(!defined('IN_SCRIPT')) die("");
-global $db;
+global $db, $commonQueries, $FULL_DOMAIN_NAME;
 
 $jobs_by_employer_columns = array(
     $DBprefix."jobs.id as jobId",$DBprefix."jobs.title",
@@ -14,40 +14,6 @@ $jobs_by_employer_columns = array(
 $db->join('job_statistics', $DBprefix."jobs.id = " . $DBprefix."job_statistics.job_id", "LEFT");
 $jobs_by_employer = $db->where("employer", "$AuthUserName")->orderBy('date', 'DESC')->get("jobs", NULL, $jobs_by_employer_columns);
 
-//echo "<pre>";
-//print_r($jobs_by_employer);
-//echo "</pre>";    
-
-//if(isset($_REQUEST["bn"]))
-//{
-//	if($_REQUEST["bn"]=="s")
-//	{
-//		$o = str_replace("b-","",str_replace("box-","",$_REQUEST["o"]));
-//		$n = str_replace("b-","",str_replace("box-","",$_REQUEST["n"]));
-//		$temp_value = $AdminUser["box_".$o];
-//                    
-//		$database->SQLUpdate("employers",array("box_".$o),array($AdminUser["box_".$n]),"username='".$AuthUserName."'");
-//		$database->SQLUpdate("employers",array("box_".$n),array($temp_value),"username='".$AuthUserName."'");
-//		$AdminUser=$database->DataArray("employers","username='".$AuthUserName."'");
-//	}
-//	else
-//	if($_REQUEST["bn"]=="a")
-//	{
-//		$o = str_replace("b-","",str_replace("box-","",$_REQUEST["o"]));
-//		$n = strip_tags(stripslashes($_REQUEST["n"]));
-//		$current_value = $AdminUser["box_".$o];
-//		$p_items = explode("#",$current_value);
-//		$passed_value =  explode("-",$n);	
-//                    
-//		if(trim($passed_value[0])!=""&&trim($passed_value[1])!="")
-//		{
-//			$new_value = $passed_value[0]."#".$passed_value[1]."#".$p_items[2];
-//			$database->SQLUpdate("employers",array("box_".$o),array($new_value),"username='".$AuthUserName."'");
-//			$AdminUser=$database->DataArray("employers","username='".$AuthUserName."'");
-//		}
-//	}
-//            
-//}
 ?>
     
     <div class="col-md-3 welcome-left-block">
@@ -126,91 +92,58 @@ $jobs_by_employer = $db->where("employer", "$AuthUserName")->orderBy('date', 'DE
 		?>
     <br/><br/>
 </div>
-    <div id="home-links-area" class="col-md-9">
-            
+
+<div id="home-links-area" class="col-md-9">    
     <div class="row" style="padding:10px">
-		<?php
-                    
-                    
-		$arr_cache_texts=array();
-		$arr_box_sizes = array("","3","3","3","3","3","3","3","3");
-                    
-                    
-		if($AdminUser["box_1"]==""&&$AdminUser["box_2"]==""&&$AdminUser["box_3"]==""&&$AdminUser["box_4"]==""&&$AdminUser["box_5"]==""&&$AdminUser["box_6"]==""&&$AdminUser["box_7"]==""&&$AdminUser["box_8"]=="")
-		{
-			$arr_box_names = array();
-			$arr_set_perms = array();
-			for($i=1;$i<=6;$i++)
-			{
-                            
-                            $p_items = explode("@",$currentUser->arrPermissions[$i]);
-                                
-                            if(sizeof($p_items) != 4) continue;
-                            if($p_items[3]=="welcome") continue;
-                            array_push($arr_box_names,"box_".$i);
-                            array_push($arr_set_perms,$p_items[2]."#".$p_items[3]."#".$i);
-				
-			}
-                            
-                            
-			$database->SQLUpdate("employers",$arr_box_names,$arr_set_perms,"id=".$AdminUser["id"]);
-			$AdminUser=$database->DataArray("employers","id=".$AdminUser["id"]);
-		}
-                    
-		for($i=1;$i<=6;$i++)
-		{
-			$p_items = explode("#",$AdminUser["box_".$i]);
-			if(sizeof($p_items)==1) continue;
-                            
-				$str_arr_texts = $p_items[0]."_oLinkTexts";
-				$str_arr_actions = $p_items[0]."_oLinkActions";
-                                    
-				if(!isset($$str_arr_texts)||!isset($$str_arr_actions)) continue;
-                                    
-				$arr_texts = $$str_arr_texts;
-				$arr_actions = $$str_arr_actions;
-				$key = array_search($p_items[1], $arr_actions); 
-                                    
-				?>
-        <div class="col-md-4 col-sm-6 col-xs-12 t-padding" id="box-<?php echo $i;?>">
-            <div class="tile-p" id="b-<?php echo $i;?>">
-					<?php
-					$show_text = $arr_texts[$key];
-					$b_pos = strpos($show_text, ' ');
-					if($b_pos===false)
-					{
-						$t_key = array_search($p_items[0], $oLinkActions); 
-						if(isset($oLinkTexts[$t_key]))
-						{
-							$show_text = $oLinkTexts[$t_key]." / ".$show_text;
-						}
-					}
-                                            
-                                            
-                                            
-                                            
-					if($p_items[0]=="home"&&$p_items[1]=="messages")
-					{
-						$show_text.=" (".$new_messages.")";
-					}
-                                            
-					echo LinkTile
-					 (
-						$p_items[0],
-						$p_items[1],
-						$show_text,
-						"",
-						"box-".(isset($p_items[2])?$p_items[2]:$i),
-						"home"
-					 );
-					?>
+        <div class="col-md-4 col-sm-6 col-xs-12 t-padding" id="box-1">
+            <div class="tile-p" id="b-1">
+                <a class="home-tile box-1-back" href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/index.php?category=jobs&amp;action=add"><img class="pull-right" src="http://localhost/vieclambanthoigian.com.vn/EMPLOYERS/images/icons/add.png">
+                    <h3 class="h3-tile">Đăng việc mới</h3>
+                </a>            
             </div>
         </div>
-                                    
-        <?php }?>
-                    
+            
+        <div class="col-md-4 col-sm-6 col-xs-12 t-padding" id="box-2">
+            <div class="tile-p" id="b-2">
+                <a class="home-tile box-2-back" href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/index.php?category=jobs&amp;action=my"><img class="pull-right" src="http://localhost/vieclambanthoigian.com.vn/EMPLOYERS/images/icons/my.png">
+                    <h3 class="h3-tile">Danh sách công việc</h3>
+                </a>            
+            </div>
+        </div>
+            
+        <div class="col-md-4 col-sm-6 col-xs-12 t-padding" id="box-3">
+            <div class="tile-p" id="b-3">
+                <a class="home-tile box-3-back" href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/index.php?category=application_management&amp;action=list"><img class="pull-right" src="http://localhost/vieclambanthoigian.com.vn/EMPLOYERS/images/icons/list.png">
+                    <h3 class="h3-tile">Đơn xin việc</h3>
+                </a>            
+            </div>
+        </div>
+            
+        <div class="col-md-4 col-sm-6 col-xs-12 t-padding" id="box-4">
+            <div class="tile-p" id="b-4">
+                <a class="home-tile box-4-back" href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/index.php?category=home&amp;action=received"><img class="pull-right" src="http://localhost/vieclambanthoigian.com.vn/EMPLOYERS/images/icons/received.png">
+                    <h3 class="h3-tile">Tin nhắn</h3>
+                </a>            
+            </div>
+        </div>
+            
+        <div class="col-md-4 col-sm-6 col-xs-12 t-padding" id="box-5">
+            <div class="tile-p" id="b-5">
+                <a class="home-tile box-5-back" href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/index.php?category=profile&amp;action=edit"><img class="pull-right" src="http://localhost/vieclambanthoigian.com.vn/EMPLOYERS/images/icons/edit.png">
+                    <h3 class="h3-tile">Chỉnh sửa thông tin cá nhân</h3>
+                </a>            
+            </div>
+        </div>
+            
+        <div class="col-md-4 col-sm-6 col-xs-12 t-padding" id="box-6">
+            <div class="tile-p" id="b-6">
+                <a class="home-tile box-6-back" href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/tim-kiem-ung-vien/"><img class="pull-right" src="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/images/icons/logo.png">
+                    <h3 class="h3-tile">Tìm kiếm ứng viên</h3>
+                </a>            
+            </div>
+        </div>
     </div>
-                    
+        
 </div>
 
 <style>

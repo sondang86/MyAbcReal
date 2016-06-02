@@ -104,8 +104,9 @@
             </section>
             
         </fieldset>
-        <footer>
+        <footer>            
             <button type="submit" class="button" name="quick_register_submit">Đăng ký</button>
+            <a href="<?php echo $FULL_DOMAIN_NAME;?>/mod-vn-employers_registration.html" class="button" >Nhà tuyển dụng</a>
         </footer>
     </form>
     

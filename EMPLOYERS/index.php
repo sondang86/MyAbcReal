@@ -92,15 +92,6 @@ $subscriptions      = $db->get('subscriptions');
 
 include_once("../ADMIN/texts_".$lang.".php");
 
-//else
-//{
-//	include_once("../ADMIN/texts_en.php");
-//}
-//include_once("../include/texts_".$lang.".php");
-    
-    
-//include_once ('users_template.htm');    
-
 $website->LoadTemplate(-1);
 $website->TemplateHTML=str_replace('"css/','"/vieclambanthoigian.com.vn/css/',$website->TemplateHTML);
 $website->TemplateHTML=str_replace('"images/','"/vieclambanthoigian.com.vn/images/',$website->TemplateHTML);
