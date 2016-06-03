@@ -1,20 +1,8 @@
 <?php
 // Jobs Portal
-// http://www.netartmedia.net/jobsportal
-// Copyright (c) All Rights Reserved NetArt Media
-// Find out more about our products and services on:
-// 
-//
-?><?php 
-/**
- * This is approved form message
- * 
- */
 
 if(!defined('IN_SCRIPT')) die("");
-global $db;
-?>
-<?php
+global $db, $commonQueries,$FULL_DOMAIN_NAME;
 //Sanitize prevents harmful input
 $id=$_REQUEST["id"];
 $website->ms_i($id);
@@ -24,6 +12,9 @@ if(isset($_REQUEST["posting_id"]))
 $posting_id=$_REQUEST["posting_id"];
 $website->ms_i($posting_id);
 
+$db->where ('id', $id);
+$db->where('posting_id', $posting_id); 
+$userData = $db->getOne('apply');
 
 //    Update data when form submitted
 if(isset($_POST['submit'])){
@@ -37,7 +28,7 @@ if(isset($_POST['submit'])){
     $db->where ('id', $id);
     $db->where('posting_id', $posting_id);    
     if ($db->update ('apply', $dataInsert)){ //success redirect to list applied jobs page
-        $website->redirect('index.php?category=application_management&action=list'); 
+        $website->redirect($FULL_DOMAIN_NAME . '/EMPLOYERS/don-da-phe-duyet/'); 
     } else {
         echo 'update failed: ' . $db->getLastError();die;
     }
@@ -47,18 +38,7 @@ if(isset($_POST['submit'])){
 <!--Approved Message form--> 
 <div class="row">
     <div class="col-md-3 col-md-push-9 col-sm-4 col-sm-push-8 col-xs-12">
-	<?php
-            
-            
-	echo LinkTile
-	 (
-		"application_management",
-		"list-id=".$posting_id."-Proceed=1",
-		$M_GO_BACK,
-		"",
-		"red"
-	 );
-?>
+	<?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/danh-sach-don-xin-viec/", 'Quay lại', 'red');?>
     </div>
     
     <div class="col-md-9 col-md-pull-3 col-sm-8 col-sm-pull-4 col-xs-12 reply-form">
@@ -72,16 +52,11 @@ if(isset($_POST['submit'])){
         </h4>
         
 <?php
-    $db->where ('id', $id);
-    $db->where('posting_id', $posting_id); 
-    $userData = $db->get('apply')[0];
+    
  ?>
             
             
-        <form action="<?php echo $website->lastURL();?>" id="EditForm" method="POST">
-<!--            <input type="hidden" name="category" value="<?php echo $_GET['category']?>">
-            <input type="hidden" name="folder" value="<?php echo $_GET['folder']?>">
-            <input type="hidden" name="page" value="<?php echo $_GET['page']?>">-->
+        <form action="" id="EditForm" method="POST">
             <input type="hidden" name="id" value="<?php echo $_GET['id']?>">
             <input type="hidden" name="posting_id" value="<?php echo $_GET['posting_id']?>">
             <span><label>Lý do:</label></span>

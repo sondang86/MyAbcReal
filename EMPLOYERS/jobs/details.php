@@ -21,7 +21,7 @@ $job = $db->where("id", "$id")->getOne("jobs");
         <div class="row">
             <div class="col-md-12 col-sm-6 col-xs-12 top-bottom-margin">
                 
-            <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/sua-doi-cong-viec/". $job['id'] . "/" . $website->seoURL($job['title']) , 'Sửa đổi công việc', 'green');?>    
+            <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/sua-cong-viec/". $job['id'] . "/" . $website->seoURL($job['title']) , 'Sửa đổi công việc', 'green');?>    
                 
             </div>
             <div class="col-md-12 col-sm-6 col-sm-6 top-bottom-margin">

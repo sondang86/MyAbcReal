@@ -168,13 +168,13 @@ class AdminPage
 		 
 		if($new_applications>0)
 		{
-			$login_links .='<span class="home-warning-text r-margin-15"> <img src="../images/warning.png"/> <a class="underline-link" href="index.php?category=application_management&action=list"><b>'.$new_applications.' '.$M_NEW_APPLICATIONS.'</b></a></span> ';
+			$login_links .='<span class="home-warning-text r-margin-15"> <img src="/vieclambanthoigian.com.vn/images/warning.png"/> <a class="underline-link" href="/vieclambanthoigian.com.vn/EMPLOYERS/danh-sach-don-xin-viec/"><b>'.$new_applications.' '.$M_NEW_APPLICATIONS.'</b></a></span> ';
 		}
 		
 		
 		$login_links.='
-			<a class="btn btn-default btn-blue btn-sm" href="../logout.php">LOGOUT</a>
-			<a class="btn btn-default btn-green btn-sm" href="../index.php">MAIN WEBSITE</a>
+			<a class="btn btn-default btn-blue btn-sm" href="/vieclambanthoigian.com.vn/logout.php">LOGOUT</a>
+			<a class="btn btn-default btn-green btn-sm" href="/vieclambanthoigian.com.vn/index.php">MAIN WEBSITE</a>
 		';
 		$this->pageHTML = str_replace("<site login_links/>",$login_links,$this->pageHTML);
 			

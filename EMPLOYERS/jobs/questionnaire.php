@@ -5,7 +5,7 @@
 // 
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries,$DOMAIN_NAME;
+global $db, $commonQueries,$DOMAIN_NAME, $FULL_DOMAIN_NAME;
 $job_id = filter_input(INPUT_GET,'id', FILTER_SANITIZE_NUMBER_INT);
     
 //Fetch questionnaire data   
@@ -31,10 +31,10 @@ if(isset($_POST['delete'])){
         <h4><?php echo $commonQueries->flash('questionnaire_message');?></h4>        
     </section>
     <aside class="col-md-2 col-sm-6 col-xs-12">
-        <?php echo LinkTile ("jobs","new_questionnaire&job_id=$job_id",$M_ADD_NEW_QUESTION,"","blue");?> 
+        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/them-cau-hoi/$job_id/", 'Thêm câu hỏi mới', 'blue');?>
     </aside>
     <aside class="col-md-2 col-sm-6 col-xs-12">
-        <?php echo LinkTile ("jobs","my",$M_GO_BACK,"","red");?>    
+        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/danh-sach-cong-viec/", 'Quay lại', 'red');?>
     </aside>
 </div>
 
@@ -79,7 +79,8 @@ if(isset($_POST['delete'])){
                     <td><?php echo date('Y m d G:i',$questionnaire['date']);?></td>
                     <td valign="middle"><?php echo $questionnaire['questionnaire_typeName'];?></td>
                     <td><?php echo $questionnaire['question'];?></td>
-                    <td><a href="index.php?category=jobs&folder=questionnaire&page=edit&id=<?php echo $questionnaire['questionnaire_id'];?>&job_id=<?php echo $questionnaire['job_id'];?>" title="Sửa câu hỏi này"><img src="../images/job-details.png"></a></td>
+                    <td><a href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/sua-cau-hoi/<?php echo $questionnaire['questionnaire_id'];?>/<?php echo $questionnaire['job_id'];?>/" title="Sửa câu hỏi này"><img src="<?php echo $FULL_DOMAIN_NAME;?>/images/job-details.png"></a></td>
+                    
                 </tr>
                 <?php endforeach;?>
             </tbody>
@@ -89,14 +90,14 @@ if(isset($_POST['delete'])){
 <?php } else { //Job question does not belong to employer
         echo "Không tìm thấy dữ liệu :(";
     } 
-} else { ?>
+} else { //No question found ?>
 <div class="row questionnaire-title">
     <section class="col-md-8 col-xs-12"></section>
     <aside class="col-md-2 col-sm-6 col-xs-12">
-            <?php echo LinkTile ("jobs","new_questionnaire&job_id=$job_id",$M_ADD_NEW_QUESTION,"","blue");?> 
+        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/them-cau-hoi/$job_id/", 'Thêm câu hỏi mới', 'blue');?>        
     </aside>
     <aside class="col-md-2 col-sm-6 col-xs-12">
-            <?php echo LinkTile ("jobs","my",$M_GO_BACK,"","red");?>    
+        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/danh-sach-cong-viec/", 'Danh sách công việc', 'green');?>        
     </aside>
 </div>
 <div class="col-md-12">

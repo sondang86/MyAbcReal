@@ -17,7 +17,7 @@ $CVs_applied = $commonQueries_Employers->getCVApplieds_status('0', $AuthUserName
         <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/danh-sach-don-xin-viec/", 'Danh sách các đơn xin việc', 'blue');?>
     </section>
     <section class="col-md-2 col-sm-3 col-xs-4">
-        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/don-da-phe-duyet/", 'Đơn đã từ chối', 'green');?>
+        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/don-da-phe-duyet/", 'Đơn đã đồng ý', 'green');?>
     </section>    
     <section class="col-md-2 col-sm-3 col-xs-4">
         <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/don-da-tu-choi/", 'Đơn đã từ chối', 'red');?>
@@ -47,10 +47,10 @@ $CVs_applied = $commonQueries_Employers->getCVApplieds_status('0', $AuthUserName
                             <?php echo $CV_applied['title'];?>                      
                         </a>
                     </td>
-                    <td><a href="index.php?category=application_management&amp;folder=my&amp;page=details&amp;posting_id=<?php echo $CV_applied['job_id']?>&amp;apply_id=<?php echo $CV_applied['apply_id']?>"><img src="/vieclambanthoigian.com.vn/images/job-details.png" border="0"></a></td>
+                    <td><a href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/CV-ung-vien/<?php echo $CV_applied['job_id']?>/<?php echo $CV_applied['apply_id']?>/"><img src="/vieclambanthoigian.com.vn/images/job-details.png" border="0"></a></td>
                     <td style="text-align: center;">
-                        <a href="index.php?category=application_management&amp;folder=list&amp;page=reply&amp;Proceed=approve&amp;id=<?php echo $CV_applied['apply_id']?>&amp;posting_id=<?php echo $CV_applied['job_id']?>" style="color:green;text-decoration:underline"><b>Phê duyệt</b></a>
-                        <a href="index.php?category=application_management&amp;folder=list&amp;page=reply2&amp;Proceed=reject&amp;id=<?php echo $CV_applied['apply_id']?>&amp;posting_id=<?php echo $CV_applied['job_id']?>" style="color:red;text-decoration:underline"><b>Từ chối</b></a>
+                        <a href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/duyet-CV/<?php echo $CV_applied['apply_id']?>/<?php echo $CV_applied['job_id']?>/" style="color:green;text-decoration:underline"><b>Phê duyệt</b></a>
+                        <a href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/tu-choi-CV/<?php echo $CV_applied['apply_id']?>/<?php echo $CV_applied['job_id']?>/" style="color:red;text-decoration:underline"><b>Từ chối</b></a>
                     </td>
                 </tr>
                     <?php endforeach;?>

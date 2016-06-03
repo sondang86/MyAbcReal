@@ -6,16 +6,13 @@
 // http://www.netartmedia.net
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries;
+global $db, $commonQueries, $FULL_DOMAIN_NAME;
 $job_id = filter_input(INPUT_GET,'job_id', FILTER_SANITIZE_NUMBER_INT);
-$questionnaire_id = filter_input(INPUT_GET,'id', FILTER_SANITIZE_NUMBER_INT);
+$questionnaire_id = filter_input(INPUT_GET,'questionnaire_id', FILTER_SANITIZE_NUMBER_INT);
 //Fetch questionnaire data   
 $questionnaire = $commonQueries->getQuestionnaire($job_id, $AuthUserName,$questionnaire_id, FALSE);
 $questionnaires_questions = $commonQueries->getQuestionnaireQuestions($questionnaire_id, $job_id); 
-    
-//echo "<pre>";
-//print_r($questionnaires_questions);
-//echo "</pre>";
+
     
     
 if (isset($_POST['submit'])){
@@ -43,7 +40,7 @@ if (isset($_POST['submit'])){
         
     //Succeed, back to question page
     $commonQueries->flash('questionnaire_message', $commonQueries->messageStyle('info', 'Lưu thay đổi thành công!'));
-    $website->redirect("index.php?category=jobs&folder=questionnaire&page=edit&id=$questionnaire_id&job_id=$job_id");
+    $website->redirect($FULL_DOMAIN_NAME."/EMPLOYERS/sua-cau-hoi/$questionnaire_id/$job_id/");
 }
     
     
@@ -55,7 +52,7 @@ if ($questionnaire['employer'] == $AuthUserName){?>
         <?php $commonQueries->flash('questionnaire_message')?>
     </h4>
     <aside class="col-md-2 fright">
-        <?php echo LinkTile ("jobs","questionnaire&id=".$_REQUEST["job_id"],$M_GO_BACK,"","red");?>    
+        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/danh-sach-cau-hoi/$job_id/", 'Danh sách câu hỏi', 'red');?>
     </aside>
 </div>
     

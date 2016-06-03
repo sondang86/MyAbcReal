@@ -109,7 +109,7 @@ global $db,$commonQueries, $FULL_DOMAIN_NAME;
                     
                     //Final delete apply Id 
                     $database->SQLDelete("apply","id",$_REQUEST["CheckList"]);
-                    $website->redirect("index.php?category=application_management&action=rejected");                    
+                    $website->redirect($FULL_DOMAIN_NAME . '/EMPLOYERS/don-da-tu-choi/');                    
                     
             }
     }
@@ -120,7 +120,7 @@ global $db,$commonQueries, $FULL_DOMAIN_NAME;
     } else { ?>
 
 
-<form action="index.php?category=application_management&action=rejected" method="POST">
+<form action="" method="POST">
     <div class="table-responsive">
         <table class="table">
             <thead>
@@ -141,9 +141,9 @@ global $db,$commonQueries, $FULL_DOMAIN_NAME;
                     <td><?php echo $CV_approved['first_name']?></td>
                     <td><?php echo $CV_approved['last_name']?></td>
                     <td style="text-align: center;">
-                        <a href="index.php?category=application_management&amp;folder=list&amp;page=reply&amp;Proceed=approve&amp;id=<?php echo $CV_approved['id2']?>&amp;posting_id=<?php echo $CV_approved['posting_id']?>" style="color:green;text-decoration:underline"><b>Phê duyệt</b></a>
+                        <a href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/duyet-CV/<?php echo $CV_approved['id2']?>/<?php echo $CV_approved['posting_id']?>/" style="color:green;text-decoration:underline"><b>Phê duyệt</b></a>
                     </td>
-                    <td><a href="index.php?category=application_management&amp;folder=my&amp;page=details&amp;posting_id=<?php echo $CV_approved['posting_id']?>&amp;apply_id=<?php echo $CV_approved['id2']?>"><img src="../images/job-details.png" border="0"></a></td>
+                    <td><a href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/CV-ung-vien/<?php echo $CV_approved['posting_id']?>/<?php echo $CV_approved['id2']?>/"><img src="<?php echo $FULL_DOMAIN_NAME;?>/images/job-details.png" border="0"></a></td>
                 </tr>
                 <?php endforeach;?>
             </tbody>

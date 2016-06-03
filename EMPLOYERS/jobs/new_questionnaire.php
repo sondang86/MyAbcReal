@@ -1,5 +1,5 @@
 <?php    
-    global $db, $commonQueries;
+    global $db, $commonQueries, $FULL_DOMAIN_NAME;
     $job_id = filter_input(INPUT_GET,'job_id', FILTER_SANITIZE_NUMBER_INT);
     $job_info = $commonQueries->jobDetails($job_id);
     
@@ -7,7 +7,7 @@
     $questions_count = $commonQueries->countRecords('job_id', $job_id, 'questionnaire'); 
     if ($questions_count->count >= 3){
         $commonQueries->flash('questionnaire_message', $commonQueries->messageStyle('danger', 'Mỗi việc chỉ có tối đa là 3 câu hỏi'));
-        $website->redirect("index.php?category=jobs&action=questionnaire&id=$job_id");
+        $website->redirect($FULL_DOMAIN_NAME ."/EMPLOYERS/cau-hoi/$job_id");
     }
     
     //Fetch questionnaire data   
@@ -49,7 +49,7 @@
             
         //Succeed, back to question page
         $commonQueries->flash('message', $commonQueries->messageStyle('info', "Đã thêm câu hỏi mới"));
-        $website->redirect("index.php?category=jobs&action=questionnaire&id=$job_id");
+        $website->redirect($FULL_DOMAIN_NAME ."/EMPLOYERS/danh-sach-cau-hoi/$job_id");
     }
   
 if ($AuthUserName !== $job_info['employer']){//Job question does not belong to current employer
@@ -109,9 +109,12 @@ if ($AuthUserName !== $job_info['employer']){//Job question does not belong to c
 
 <!--QUESTIONNAIRES SECTION-->
 <div class="row questionnaire-title">
-    <section class="col-md-10"></section>    
+    <section class="col-md-8"></section>    
     <aside class="col-md-2">
-        <?php echo LinkTile ("jobs","my",$M_GO_BACK,"","red");?>    
+        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/danh-sach-cong-viec/", 'Danh sách công việc', 'green');?>
+    </aside>
+    <aside class="col-md-2">
+        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/cau-hoi/$job_id/", 'Danh sách câu hỏi', 'blue');?>
     </aside>
 </div>
 
@@ -120,15 +123,13 @@ if ($AuthUserName !== $job_info['employer']){//Job question does not belong to c
     <form method="POST" id="myform">
         <!--SELECTION-->
         <div class="row question_selection">
-            <section>
-                <span class="col-md-2">Loại câu hỏi: </span>
-                <aside class="col-md-8">
-                    <select id="pollSelection" name="pollSelection">
-                        <option value="1">Người dùng trả lời</option>
-                        <option value="2">Trắc nghiệm</option>
-                    </select>
-                </aside>
-            </section> 
+            <span class="col-md-2">Loại câu hỏi: </span>
+            <aside class="col-md-8" style="margin-top: -5px;">
+                <select id="pollSelection" name="pollSelection">
+                    <option value="1">Người dùng trả lời</option>
+                    <option value="2">Trắc nghiệm</option>
+                </select>
+            </aside>
         </div>
         
         <!--QUESTION-->

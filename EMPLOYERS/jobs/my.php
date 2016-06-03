@@ -64,12 +64,12 @@ $job_by_employer = $commonQueries->job_by_id('jobs','employer',"$AuthUserName");
                                         <i class="fa fa-trash-o" aria-hidden="true"></i>
                                     </a>
                                 </td>                                 
-                                <td class="col-md-1" style="text-align: center"><a href="index.php?category=jobs&amp;folder=my&amp;page=edit&amp;id=<?php echo $value['id']?>"><img src="../images/edit-icon.gif" width="24" height="20" border="0"></a></td>
+                                <td class="col-md-1" style="text-align: center"><a href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/sua-cong-viec/<?php echo $value['id']?>/<?php echo $website->seoURL($value['title']);?>"><img src="../images/edit-icon.gif" width="24" height="20" border="0"></a></td>
                                 <td class="col-md-1"><?php echo date('Y-m-d', $value['date'])?></td>
                                 <td class="col-md-1"><?php echo date('Y-m-d', $value['expires'])?></td>
                                 <td class="col-md-2"><?php echo $website->limitCharacters($value['title'],50);?></td>
                                 <td class="col-md-3"><?php echo $website->limitCharacters($value['message'], 200);?></td>
-                                <td class="col-md-2"><a href="index.php?category=jobs&amp;action=questionnaire&amp;id=<?php echo $value['id']?>">Bảng câu hỏi (<?php echo $questions_count;?>)</a></td>
+                                <td class="col-md-2"><a href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/danh-sach-cau-hoi/<?php echo $value['id']?>/">Bảng câu hỏi (<?php echo $questions_count;?>)</a></td>
                                 
                                 <td>
                                     <a href="#" class="confirm_featured" data-title="Vui lòng xác nhận" data-jobid="<?php echo $value['id']?>" data-featured="<?php echo $value['featured']?>">

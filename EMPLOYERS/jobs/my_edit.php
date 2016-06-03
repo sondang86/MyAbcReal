@@ -80,10 +80,10 @@ $longitude = $commonQueries->check_LatitudeLongitude($job['latitude'],$job['long
         <h5><?php $commonQueries->flash('message');?></h5>
     </section>
     <div class="col-md-2 col-sm-6 col-xs-12">
-        <?php echo LinkTile("application_management","list&Proceed=1&id=".$id,$M_APPLICATIONS." (".$database->SQLCount("apply","WHERE posting_id=".$id).")","","yellow");?>
+        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/danh-sach-don-xin-viec/", 'Danh sách đơn xin việc', 'blue');?>
     </div>
     <div class="col-md-2 col-sm-6 col-xs-12">
-        <?php echo LinkTile("jobs","my",$M_GO_BACK,"","red");?>
+        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/danh-sach-cong-viec/", 'Danh sách công việc', 'green');?>
     </div>
 </div>
 

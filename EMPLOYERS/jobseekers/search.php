@@ -22,9 +22,7 @@
         <h4><?php $commonQueries->flash('message');?></h4>        
     </section>
     <section class="col-md-2 navigation-tabs">
-        <?php 
-            echo LinkTile("home","welcome",$M_DASHBOARD,"","blue");
-        ?>
+        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/", "$M_DASHBOARD", 'blue');?>        
     </section>
 </div>
 
