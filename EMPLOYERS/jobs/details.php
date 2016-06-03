@@ -4,15 +4,14 @@
 // Check http://www.netartmedia.net/jobsportal for demos and information
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-?>
-<?php
+global $db, $commonQueries, $FULL_DOMAIN_NAME;
+
 $id=$_REQUEST["id"];
 $website->ms_i($id);
-if($database->SQLCount("jobs","WHERE employer='".$AuthUserName."' AND id=".$id." ") == 0)
-{
-	die("");
+if($database->SQLCount("jobs","WHERE employer='".$AuthUserName."' AND id=".$id." ") == 0){
+    die("");
 }
-global $db, $commonQueries;
+
 $job = $db->where("id", "$id")->getOne("jobs");
 
 ?>
@@ -22,7 +21,7 @@ $job = $db->where("id", "$id")->getOne("jobs");
         <div class="row">
             <div class="col-md-12 col-sm-6 col-xs-12 top-bottom-margin">
                 
-            <?php echo LinkTile("jobs","my_edit&id=".$id,$MODIFY,"","lila");?>
+            <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/sua-doi-cong-viec/". $job['id'] . "/" . $website->seoURL($job['title']) , 'Sửa đổi công việc', 'green');?>    
                 
             </div>
             <div class="col-md-12 col-sm-6 col-sm-6 top-bottom-margin">

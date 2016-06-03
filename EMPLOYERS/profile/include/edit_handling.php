@@ -60,8 +60,10 @@ if (isset($_POST['submit'])){
                     break;
             }
         }   
-    // if no errors
-    } 
+
+    } else { //Keep current image
+        $image_name = $employer_data['id'] . '.jpg';
+    }
     
     //Perform update         
     $data = Array (

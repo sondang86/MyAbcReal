@@ -4,26 +4,20 @@
 // Check http://www.netartmedia.net/jobsportal for demos and information
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-global $db;
+global $db,$commonQueries, $FULL_DOMAIN_NAME;
 ?>
 
 <div class="row">
     <section class="col-md-6 col-sm-3 col-xs-12"></section>
     
     <section class="col-md-2 col-sm-3 col-xs-4">
-        <?php 
-            echo LinkTile( "application_management","approved",$M_APPROVED_APPLICATIONS,"","green");
-        ?>
+        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/danh-sach-don-xin-viec/", 'Danh sách các đơn xin việc', 'blue');?>
     </section>
     <section class="col-md-2 col-sm-3 col-xs-4">
-        <?php 
-            echo LinkTile( "application_management","list",$JOBSEEKERS_APPLIED,"","blue");
-        ?>
-    </section>
+        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/don-da-phe-duyet/", 'Đơn đã phê duyệt', 'green');?>
+    </section>    
     <section class="col-md-2 col-sm-3 col-xs-4">
-        <?php 
-            echo LinkTile("application_management","rejected",$M_REJECTED_APPLICATIONS,"","red");
-        ?>
+        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/don-da-tu-choi/", 'Đơn đã từ chối', 'red');?>
     </section>
 </div>
 

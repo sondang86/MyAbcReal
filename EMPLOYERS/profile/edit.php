@@ -4,7 +4,7 @@
 // Check http://www.netartmedia.net/jobsportal for demos and information
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries, $employer_data;
+global $db, $commonQueries, $employer_data, $FULL_DOMAIN_NAME;
 //Get company info
 $company_info = $db->where('username', "$AuthUserName")->getOne('employers');
 //Edit form handle
@@ -13,11 +13,11 @@ require_once ('include/edit_handling.php');
 ?>
 
 <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-9">
         <h5><?php $commonQueries->flash('message')?></h5>
     </div>
-    <div class="col-md-2">        
-        <?php echo LinkTile("home","welcome",$M_DASHBOARD,"","blue");?>              
+    <div class="col-md-3">        
+        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/", 'Về trang chính', 'blue');?>
     </div>   
 </div>
     

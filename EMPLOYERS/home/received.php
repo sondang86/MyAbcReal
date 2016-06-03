@@ -3,7 +3,7 @@
 // Copyright (c) All Rights Reserved, vieclambanthoigian.com.vn
 
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries, $commonQueries_Employers;
+global $db, $commonQueries, $commonQueries_Employers, $FULL_DOMAIN_NAME;
 
 
 $user_messages = $commonQueries_Employers->get_user_messages("$AuthUserName");
@@ -32,7 +32,7 @@ $id = 0;
         <?php $commonQueries->flash('message')?>
     </section>
     <section class="col-md-3">
-        <?php echo LinkTile("home","welcome",$M_DASHBOARD,"","blue");?>
+        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/", 'Về trang chính', 'blue');?>
     </section>
 </div>
     

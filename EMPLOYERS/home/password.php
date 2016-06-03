@@ -3,7 +3,7 @@
 // Copyright (c) All Rights Reserved, 
 
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries, $employer_data;
+global $db, $commonQueries, $employer_data, $FULL_DOMAIN_NAME;
 
 //Password changing handle
 if (isset($_POST['submit'])){
@@ -17,12 +17,12 @@ if (isset($_POST['submit'])){
         } else {
             //Redirect back with message
             $commonQueries->flash('message', $commonQueries->messageStyle('info', "Bạn đã thay đổi mật khẩu thành công"));
-            $website->redirect('index.php?category=home&action=password');
+            $website->redirect($FULL_DOMAIN_NAME . '/EMPLOYERS/doi-mat-khau/');
         };  
 
     } else {
         $commonQueries->flash('message', $commonQueries->messageStyle('warning', "Mật khẩu không chính xác, vui lòng kiểm tra lại"));
-        $website->redirect('index.php?category=home&action=password');
+        $website->redirect($FULL_DOMAIN_NAME . '/EMPLOYERS/doi-mat-khau/');
     }    
     
 }
@@ -34,7 +34,7 @@ if (isset($_POST['submit'])){
         <?php $commonQueries->flash('message')?>
     </section>
     <section class="col-md-3">
-        <?php echo LinkTile("home","welcome",$M_DASHBOARD,"","blue");?>
+        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/", 'Về trang chính', 'blue');?>
     </section>
 </div>
 

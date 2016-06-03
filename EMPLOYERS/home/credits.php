@@ -1,6 +1,6 @@
 <?php
     if(!defined('IN_SCRIPT')) die("");
-    global $db, $commonQueries, $commonQueries_Employers;
+    global $db, $commonQueries, $commonQueries_Employers, $FULL_DOMAIN_NAME;
 
     $current_subscription = $commonQueries_Employers->getCurrent_Subscriptions($AuthUserName);
     
@@ -15,7 +15,7 @@
     </section>
         
     <section class="col-md-2 navigation-tabs">
-        <?php echo LinkTile("home","welcome",$M_DASHBOARD,"","blue");?>
+        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/", 'Về trang chính', 'blue');?>
     </section>
 </div>
     
@@ -66,7 +66,7 @@
                 </ul>
                 
                 <div class="pricing-footer">                    
-                    <a href="index.php?category=home&action=credit_selection&type=2" class="btn btn-default btn-lg">CHỌN<i class="glyphicon glyphicon-play-circle"></i></a>
+                    <a href="<?php echo "$FULL_DOMAIN_NAME/EMPLOYERS/dang-ky-dich-vu/"?>" class="btn btn-default btn-lg">CHỌN<i class="glyphicon glyphicon-play-circle"></i></a>
                 </div>
             </section>
         </div>
@@ -92,7 +92,7 @@
                 </ul>
                 
                 <div class="pricing-footer">                    
-                    <a href="index.php?category=home&action=credit_selection&type=3" class="btn btn-default btn-lg">CHỌN <i class="glyphicon glyphicon-play-circle"></i></a>
+                    <a href="<?php echo "$FULL_DOMAIN_NAME/EMPLOYERS/dang-ky-dich-vu/"?>" class="btn btn-default btn-lg">CHỌN<i class="glyphicon glyphicon-play-circle"></i></a>
                 </div>
             </section>
         </div>

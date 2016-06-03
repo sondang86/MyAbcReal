@@ -55,6 +55,8 @@ $employer_subscription = $db->where('username', "$AuthUserName")->withTotalCount
 }
 ?>
 
+
+
 <!--NAVIGATION-->
 <div class="row">
     <section class="col-md-9 col-sm-6 col-xs-12">
@@ -62,7 +64,7 @@ $employer_subscription = $db->where('username', "$AuthUserName")->withTotalCount
         <h5><?php $commonQueries->flash('message');?></h5>
     </section>
     <div class="col-md-3 col-sm-6 col-xs-12">
-        <?php echo LinkTile("jobs","my",$MY_JOB_ADS,"","blue");?>
+        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/danh-sach-cong-viec/", 'Danh sách công việc', 'blue');?>
     </div>
 </div>
 

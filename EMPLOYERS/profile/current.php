@@ -1,13 +1,15 @@
 <?php
 // Jobs Portal 
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries, $employerInfo;
+global $db, $commonQueries, $employerInfo, $FULL_DOMAIN_NAME;
 //Get company info
 $company_info = $db->where('username', "$AuthUserName")->getOne('employers');
 ?>
 <div class="row">
-    <div class="col-md-10"></div>
-    <div class="col-md-2"><?php echo LinkTile("profile","edit",$M_EDIT,"","green");?></div>
+    <div class="col-md-9"></div>
+    <div class="col-md-3">
+        <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/chinh-sua-thong-tin-ca-nhan/", 'Chỉnh sửa', 'green');?>
+    </div>
 </div>
     
 <form class="sky-form newJob" id="edit-form"> 

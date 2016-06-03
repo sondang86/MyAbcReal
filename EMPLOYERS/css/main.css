@@ -906,10 +906,10 @@ body {
 @media (max-width: 992px) 
 {
     
-    .dropdown-menu
+/*    .dropdown-menu
     {
         display:none !important;
-    }
+    }*/
     
     .container
     {
@@ -930,20 +930,20 @@ body {
         text-align: center;
     }
     
-    .navbar-nav > li > a 
+/*    .navbar-nav > li > a 
     {
         font-size:18px !important;
         
         float:left !important;
         clear:both !important;
-    }
+    }*/
     
     
     
-    .nav .dropdown-menu
+/*    .nav .dropdown-menu
     {
         display: none !important;
-    }
+    }*/
     
     
 }
@@ -986,7 +986,7 @@ body {
 
 
 
-.navbar-nav li:hover
+/*.navbar-nav li:hover
 {
     background:#ffffff !important;
     
@@ -1088,10 +1088,13 @@ body {
     position: absolute; 
     left: 100%; 
     top:0;
+}*/
+
+/*MAIN NAVIGATION*/
+.main-navigation {
+    padding-left: 0px;
+    padding-right: 0px;
 }
-
-
-
 
 
 .admin-site-logo
@@ -1187,11 +1190,11 @@ input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea
 
 
 
-.dropdown-menu
+/*.dropdown-menu
 {
     position:relative;
     left:17px !important;
-}
+}*/
 
 
 

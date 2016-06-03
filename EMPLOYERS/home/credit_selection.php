@@ -26,7 +26,7 @@ if (isset($_POST['submit'])){
     }    
     //Succeed, back to question page
     $commonQueries->flash('message', $commonQueries->messageStyle('info', "Cảm ơn bạn đã gửi yêu cầu, chúng tôi sẽ gửi email thông báo tới bạn trong vòng 30-60 phút"));
-    $website->redirect("index.php?category=home&action=credit_selection");    
+    $website->redirect("dang-ky-dich-vu/");    
 }  
     
 //If credit id not exists, redirect back to credits area with message

@@ -1505,6 +1505,18 @@
 
             return $record;
         }
+        
+        /**
+        *   check whether google Maps Latitude/Longitude are neither empty, then replace with default settings
+        *   @param var link link URL
+        *   @param var text text to be shown
+        *   @param var color link title color
+        */
+        public function LinkTitle($link, $text, $color){
+            return "<a class='small-tile $color-back' href='$link'><img class='pull-right' width='32' src='/vieclambanthoigian.com.vn/EMPLOYERS/images/icons/my.png'>
+                        <h3 class='h3-tile'>$text</h3>
+                    </a>";
+        }
             
     }
 ?>

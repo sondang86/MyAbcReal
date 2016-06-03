@@ -11,10 +11,8 @@ $job_by_employer = $commonQueries->job_by_id('jobs','employer',"$AuthUserName");
     <div class="col-md-9">
         <?php $commonQueries->flash('message')?>
     </div>
-    <div class="col-md-3 pull-right">
-    <?php
-        echo LinkTile("jobs","add",$M_NEW_JOB,"","green");
-    ?>
+    <div class="col-md-3 pull-right">    
+    <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/dang-viec-moi/", 'Đăng việc mới', 'green');?>
     </div>
 </nav>     
 

@@ -97,7 +97,7 @@ $jobs_by_employer = $db->where("employer", "$AuthUserName")->orderBy('date', 'DE
     <div class="row" style="padding:10px">
         <div class="col-md-4 col-sm-6 col-xs-12 t-padding" id="box-1">
             <div class="tile-p" id="b-1">
-                <a class="home-tile box-1-back" href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/index.php?category=jobs&amp;action=add"><img class="pull-right" src="http://localhost/vieclambanthoigian.com.vn/EMPLOYERS/images/icons/add.png">
+                <a class="home-tile box-1-back" href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/dang-viec-moi/"><img class="pull-right" src="http://localhost/vieclambanthoigian.com.vn/EMPLOYERS/images/icons/add.png">
                     <h3 class="h3-tile">Đăng việc mới</h3>
                 </a>            
             </div>
@@ -105,7 +105,7 @@ $jobs_by_employer = $db->where("employer", "$AuthUserName")->orderBy('date', 'DE
             
         <div class="col-md-4 col-sm-6 col-xs-12 t-padding" id="box-2">
             <div class="tile-p" id="b-2">
-                <a class="home-tile box-2-back" href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/index.php?category=jobs&amp;action=my"><img class="pull-right" src="http://localhost/vieclambanthoigian.com.vn/EMPLOYERS/images/icons/my.png">
+                <a class="home-tile box-2-back" href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/danh-sach-cong-viec/"><img class="pull-right" src="http://localhost/vieclambanthoigian.com.vn/EMPLOYERS/images/icons/my.png">
                     <h3 class="h3-tile">Danh sách công việc</h3>
                 </a>            
             </div>
@@ -113,7 +113,7 @@ $jobs_by_employer = $db->where("employer", "$AuthUserName")->orderBy('date', 'DE
             
         <div class="col-md-4 col-sm-6 col-xs-12 t-padding" id="box-3">
             <div class="tile-p" id="b-3">
-                <a class="home-tile box-3-back" href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/index.php?category=application_management&amp;action=list"><img class="pull-right" src="http://localhost/vieclambanthoigian.com.vn/EMPLOYERS/images/icons/list.png">
+                <a class="home-tile box-3-back" href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/danh-sach-don-xin-viec/"><img class="pull-right" src="http://localhost/vieclambanthoigian.com.vn/EMPLOYERS/images/icons/list.png">
                     <h3 class="h3-tile">Đơn xin việc</h3>
                 </a>            
             </div>
@@ -121,7 +121,7 @@ $jobs_by_employer = $db->where("employer", "$AuthUserName")->orderBy('date', 'DE
             
         <div class="col-md-4 col-sm-6 col-xs-12 t-padding" id="box-4">
             <div class="tile-p" id="b-4">
-                <a class="home-tile box-4-back" href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/index.php?category=home&amp;action=received"><img class="pull-right" src="http://localhost/vieclambanthoigian.com.vn/EMPLOYERS/images/icons/received.png">
+                <a class="home-tile box-4-back" href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/tin-nhan/"><img class="pull-right" src="http://localhost/vieclambanthoigian.com.vn/EMPLOYERS/images/icons/received.png">
                     <h3 class="h3-tile">Tin nhắn</h3>
                 </a>            
             </div>
@@ -129,7 +129,7 @@ $jobs_by_employer = $db->where("employer", "$AuthUserName")->orderBy('date', 'DE
             
         <div class="col-md-4 col-sm-6 col-xs-12 t-padding" id="box-5">
             <div class="tile-p" id="b-5">
-                <a class="home-tile box-5-back" href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/index.php?category=profile&amp;action=edit"><img class="pull-right" src="http://localhost/vieclambanthoigian.com.vn/EMPLOYERS/images/icons/edit.png">
+                <a class="home-tile box-5-back" href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/chinh-sua-thong-tin-ca-nhan/"><img class="pull-right" src="http://localhost/vieclambanthoigian.com.vn/EMPLOYERS/images/icons/edit.png">
                     <h3 class="h3-tile">Chỉnh sửa thông tin cá nhân</h3>
                 </a>            
             </div>
@@ -175,7 +175,7 @@ $jobs_by_employer = $db->where("employer", "$AuthUserName")->orderBy('date', 'DE
                 <div class="list-group">
                     
                     <?php foreach ($jobs_by_employer as $job) :?>                            
-                    <a  href="index.php?category=jobs&action=details&id=<?php echo $job["jobId"];?>" class="list-group-item no-decoration" >
+                    <a  href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/chi-tiet-cong-viec/<?php echo $job["jobId"];?>/<?php echo $website->seoURL($job["title"]);?>" class="list-group-item no-decoration" >
                         <div class="row">
                             <div class="col-md-2">
                             <?php echo date('d/m/Y',$job["date"]);?>
@@ -196,7 +196,7 @@ $jobs_by_employer = $db->where("employer", "$AuthUserName")->orderBy('date', 'DE
                     
                 </div>
                             
-                <a href="<?php echo CreateLink("jobs","my");?>" class="btn btn-default btn-block alt-back"><?php echo $M_SEE_ALL;?></a>
+                <a href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/danh-sach-cong-viec/" class="btn btn-default btn-block alt-back"><?php echo $M_SEE_ALL;?></a>
             </div>
         </div>
     </div>
