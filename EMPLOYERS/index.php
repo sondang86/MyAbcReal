@@ -76,7 +76,36 @@ $currentUser->LoadPermissions();
 $lang = $currentUser->GetLanguage();
 
 //Common tables
-$employerInfo = $db->where('username', "$AuthUserName")->getOne('employers');
+$cols = Array(
+    $DBprefix."employers.id",$DBprefix."employers.username",$DBprefix."employers.company",
+    $DBprefix."employers.company_description",$DBprefix."employers.contact_person",$DBprefix."employers.address",
+    $DBprefix."employers.city",$DBprefix."employers.company_size",$DBprefix."employers.phone",
+    $DBprefix."employers.fax",$DBprefix."employers.website",$DBprefix."employers.phone",$DBprefix."employers.password",
+    $DBprefix."employers.active",$DBprefix."employers.language",$DBprefix."employers.logo",
+    $DBprefix."employers.registered_on",$DBprefix."employers.gender",$DBprefix."employers.subscription",
+    $DBprefix."employers.subscription_date",$DBprefix."employers.subscription_date_end",
+    $DBprefix."employers.latitude",$DBprefix."employers.longitude",
+    $DBprefix."subscriptions.id as subscription_id",$DBprefix."subscriptions.name as subscription_name",
+    $DBprefix."subscriptions.description as subscription_description",$DBprefix."subscriptions.listings as subscription_listing",
+    $DBprefix."subscriptions.featured_listings",$DBprefix."subscriptions.urgent_listings",
+    $DBprefix."subscriptions.price as subscription_price"
+);
+$db->join('subscriptions', $DBprefix . 'employers.subscription = ' . $DBprefix . 'subscriptions.id', "LEFT");
+$employerInfo = $db->where('username', "$AuthUserName")->getOne('employers', $cols);
+
+//Check subscription
+if ($employerInfo['subscription'] > 1){ //Not a free subscription
+    if (time() >= $employerInfo['subscription_date_end']){ //Subscription expired
+        $subscription_cols = Array(
+            'subscription' => '1'
+        );
+        if($db->where('username', "$AuthUserName")->update('employers', $subscription_cols, 1)){
+            $commonQueries->flash('message', $commonQueries->messageStyle('info', "Thông báo: gói đăng ký của bạn đã hết hạn"));
+        };
+    }
+}
+
+
 $categories         = $db->get ('categories');
 $job_types          = $db->get ('job_types');
 $locations          = $db->get ('locations');
@@ -86,7 +115,6 @@ $experience_list    = $db->get('job_experience');
 $positions          = $db->get('positions');
 $education          = $db->get('education');
 $gender             = $db->get('gender');
-$employer_data      = $db->where('username', "$AuthUserName")->getOne('employers');
 $time_range         = $db->get('time_range');
 $subscriptions      = $db->get('subscriptions');
 

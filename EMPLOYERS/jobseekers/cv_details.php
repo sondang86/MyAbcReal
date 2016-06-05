@@ -1,6 +1,6 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries,$FULL_DOMAIN_NAME, $EMPLOYER_DOMAIN_NAME, $employer_data;
+global $db, $commonQueries,$FULL_DOMAIN_NAME, $EMPLOYER_DOMAIN_NAME, $employerInfo;
 //If employer using free subscription, do not allow them to see jobseeker's contact 
 
 //Check if employer is allowed to see this CV
@@ -16,7 +16,7 @@ $jobseeker_languagues = $commonQueries->getJobseeker_languages($jobseeker_profil
 $jobseeker_data = $db->where('username', "$jobseeker_username")->getOne("jobseeker_resumes");
 
 //Count view to the database
-$commonQueries->Insert_View($jobseeker_data['id'], $AuthUserName, $jobseeker_username, $employer_data['id']);
+$commonQueries->Insert_View($jobseeker_data['id'], $AuthUserName, $jobseeker_username, $employerInfo['id']);
 
 //Set default image if empty
 $profile_pic = $commonQueries->setDefault_ifEmpty($jobseeker_profile['profile_pic'],"$FULL_DOMAIN_NAME/images/commons/jobs_portal_logo_demo.jpg","$FULL_DOMAIN_NAME/images/jobseekers/profile_pic/" . $jobseeker_profile['profile_pic']);
@@ -43,7 +43,7 @@ $profile_pic = $commonQueries->setDefault_ifEmpty($jobseeker_profile['profile_pi
                 <p><label>Họ và Tên: </label> <span><?php echo $jobseeker_profile['first_name'] ." ".$jobseeker_profile['last_name']?></span></p>
                 <p><label>Địa chỉ: </label> <span><?php echo $jobseeker_profile['address']?></span></p>
                 
-                <?php if($employer_data['subscription'] > '1'): //show this to our VIP employers?>
+                <?php if($employerInfo['subscription'] > '1'): //show this to our VIP employers?>
                 <p><label>Email: </label> <span><?php echo $jobseeker_profile['username']?></span></p>
                 <p><label>Số điện thoại: </label> <span><?php echo $jobseeker_profile['phone']?></span></p>
                 

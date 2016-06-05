@@ -17,10 +17,10 @@ if (isset($_POST['delete']) && ($_POST['delete'] == "1")){
     if(!$db->where('id', $message_id)->withTotalCount()->where('user_to', "$AuthUserName")->delete('user_messages')){
         //Failed
         $commonQueries->flash('message', $commonQueries->messageStyle('danger', "Có lỗi, không thể xóa"));
-        $website->redirect('index.php?category=home&action=received');
+        $website->redirect($FULL_DOMAIN_NAME . "/EMPLOYERS/tin-nhan/");
     } else { //Success
         $commonQueries->flash('message', $commonQueries->messageStyle('info', "Xóa thành công"));
-        $website->redirect('index.php?category=home&action=received');
+        $website->redirect($FULL_DOMAIN_NAME . "/EMPLOYERS/tin-nhan/");
     };
     
 }

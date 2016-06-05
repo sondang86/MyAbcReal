@@ -19,7 +19,7 @@ RewriteRule ^don-da-tu-choi index.php?category=application_management&action=rej
 
 RewriteRule ^chi-tiet-cong-viec/([0-9]+)/(.*)/?$ index.php?category=jobs&action=details&id=$1 [L,NC,QSA]
 RewriteRule ^sua-cong-viec/([0-9]+)/(.*)/?$ index.php?category=jobs&action=my_edit&id=$1 [L,NC,QSA]
-RewriteRule ^danh-sach-cau-hoi/([0-9]+)/?$ index.php?category=jobs&action=questionnaire&id=$1 [L,NC,QSA]
+RewriteRule ^danh-sach-cau-hoi/([0-9]+)/(.*)?$ index.php?category=jobs&action=questionnaire&id=$1 [L,NC,QSA]
 RewriteRule ^them-cau-hoi/([0-9]+)/?$ index.php?category=jobs&action=new_questionnaire&job_id=$1 [L,NC,QSA]
 RewriteRule ^sua-cau-hoi/([0-9]+)/([0-9]+)/?$ index.php?category=jobs&folder=questionnaire&page=edit&questionnaire_id=$1&job_id=$2 [L,NC,QSA]
 RewriteRule ^CV-ung-vien/([0-9]+)/([0-9]+)/?$ index.php?category=application_management&folder=my&page=details&posting_id=$1&apply_id=$2 [L,NC,QSA]

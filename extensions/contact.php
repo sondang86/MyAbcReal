@@ -37,7 +37,7 @@ global $db, $commonQueries, $commonQueries_Front;
                 $email_body     = "Chào bạn!\n"
                                 . "Cảm ơn bạn đã liên hệ với vieclambanthoigian,Chúng tôi sẽ phản hồi trong thời gian sớm nhất \n\n"
                                 . "Dưới đây là nội dung tin nhắn bạn đã gửi: \n\n"
-                                . "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                                . "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n"
                                 . "$title \n\n"
                                 . "$message"
                                 . "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n"

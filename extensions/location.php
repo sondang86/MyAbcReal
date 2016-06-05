@@ -26,6 +26,9 @@ if (isset($_GET['id'])){
                 <section class="row">
                     <figure class="col-md-3">
                         <img src="<?php echo $commonQueries->setDefault_logoIfEmpty($job['company_logo'], "employers")?>">
+                        <?php if($job['subscription'] > 1):?>
+                        <p><label><i class="fa fa-check-square-o" aria-hidden="true"></i> NTD đã xác thực</label></p>
+                        <?php endif;?>
                         <p><a href="<?php echo $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $job["employer_id"], $website->seoURL($job["company"]));?>">Việc làm khác từ <?php echo $job["company"]?></a></p>
                         <p><a href="<?php echo $website->check_SEO_link("companyInfo", $SEO_setting, $job["employer_id"], $website->seoURL($job["company"]));?>">Thông tin công ty</a></p>
                     </figure>

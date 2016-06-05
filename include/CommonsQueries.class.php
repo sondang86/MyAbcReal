@@ -130,7 +130,7 @@
                 $this->_dbPrefix."job_types.job_name",$this->_dbPrefix."job_types.job_name_en",
                 $this->_dbPrefix."salary.salary_range",$this->_dbPrefix."salary.salary_range_en",
                 $this->_dbPrefix."employers.id as employer_id",$this->_dbPrefix."employers.username as employer_username",
-                $this->_dbPrefix."employers.logo",$this->_dbPrefix."employers.company"
+                $this->_dbPrefix."employers.logo",$this->_dbPrefix."employers.company",$this->_dbPrefix."employers.subscription"
             );
                 
             $this->_db->join("categories", $this->_dbPrefix."jobs.job_category=".$this->_dbPrefix."categories.category_id", "LEFT");
@@ -168,7 +168,8 @@
                 $this->_dbPrefix."categories.category_name_vi",$this->_dbPrefix."categories.category_id", //Categories table
                 $this->_dbPrefix."salary.salary_id",$this->_dbPrefix."salary.salary_range", //Salary table
                 $this->_dbPrefix."locations.City",$this->_dbPrefix."locations.id as location_id", //Locations table
-                $this->_dbPrefix."employers.id as employer_id",$this->_dbPrefix."employers.company as company",$this->_dbPrefix."employers.logo as company_logo" //Employer table
+                $this->_dbPrefix."employers.id as employer_id",$this->_dbPrefix."employers.company as company",$this->_dbPrefix."employers.logo as company_logo", //Employer table
+                $this->_dbPrefix."employers.subscription",
                 );
             $this->_db->join('categories', "jobsportal_jobs.job_category = jobsportal_categories.category_id", "LEFT");
             $this->_db->join('salary', "jobsportal_jobs.salary = jobsportal_salary.salary_id", "LEFT");
@@ -202,7 +203,8 @@
                 $this->_dbPrefix."categories.category_name_vi",$this->_dbPrefix."categories.category_id", //Categories table
                 $this->_dbPrefix."salary.salary_id",$this->_dbPrefix."salary.salary_range", //Salary table
                 $this->_dbPrefix."locations.City",$this->_dbPrefix."locations.id as location_id", //Locations table
-                $this->_dbPrefix."employers.id as employer_id",$this->_dbPrefix."employers.company as company",$this->_dbPrefix."employers.logo as company_logo", //Employer table
+                $this->_dbPrefix."employers.id as employer_id",$this->_dbPrefix."employers.company as company",
+                $this->_dbPrefix."employers.logo as company_logo",$this->_dbPrefix."employers.subscription", //Employer table
                 $this->_dbPrefix."job_types.job_name as job_name",$this->_dbPrefix."job_types.job_name_en as job_name_en",
                 );
             $this->_db->join('categories', "jobsportal_jobs.job_category = jobsportal_categories.category_id", "LEFT");
@@ -248,7 +250,8 @@
                 $this->_dbPrefix."categories.category_name_vi",$this->_dbPrefix."categories.category_id", //Categories table
                 $this->_dbPrefix."salary.salary_id",$this->_dbPrefix."salary.salary_range", //Salary table
                 $this->_dbPrefix."locations.City",$this->_dbPrefix."locations.id as location_id", //Locations table
-                $this->_dbPrefix."employers.id as employer_id",$this->_dbPrefix."employers.company as company",$this->_dbPrefix."employers.logo as company_logo", //Employer table
+                $this->_dbPrefix."employers.id as employer_id",$this->_dbPrefix."employers.company as company",
+                $this->_dbPrefix."employers.logo as company_logo",$this->_dbPrefix."employers.subscription", //Employer table
                 $this->_dbPrefix."saved_jobs.user_type as saved_job_userType",$this->_dbPrefix."saved_jobs.date as saved_jobDate",
                 $this->_dbPrefix."saved_jobs.browser", $this->_dbPrefix."saved_jobs.IPAddress",  
                 $this->_dbPrefix."saved_jobs.user_uniqueId as user_uniqueId",$this->_dbPrefix."saved_jobs.job_id as saved_jobId"//saved jobs table
@@ -517,7 +520,9 @@
                 $this->_dbPrefix."jobs.requires_description",$this->_dbPrefix."jobs.benefits_description",
                 $this->_dbPrefix."jobs.profileCV_description",
                 $this->_dbPrefix."jobs.title",$this->_dbPrefix."jobs.SEO_title",$this->_dbPrefix."jobs.date as date",
-                $this->_dbPrefix."jobs.message",$this->_dbPrefix."employers.company",$this->_dbPrefix."employers.logo",$this->_dbPrefix."employers.id as employer_id",
+                $this->_dbPrefix."jobs.message",
+                $this->_dbPrefix."employers.company",$this->_dbPrefix."employers.logo",
+                $this->_dbPrefix."employers.id as employer_id",$this->_dbPrefix."employers.subscription",
                 $this->_dbPrefix."categories.category_name_vi",$this->_dbPrefix."categories.category_name",$this->_dbPrefix."categories.id as category_id",
                 $this->_dbPrefix."locations.City",$this->_dbPrefix."locations.City_en",$this->_dbPrefix."locations.id as location_id",
                 $this->_dbPrefix."job_types.job_name",$this->_dbPrefix."job_types.job_name_en",

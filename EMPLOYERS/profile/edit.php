@@ -4,7 +4,7 @@
 // Check http://www.netartmedia.net/jobsportal for demos and information
 ?><?php
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries, $employer_data, $FULL_DOMAIN_NAME;
+global $db, $commonQueries, $employerInfo, $FULL_DOMAIN_NAME;
 //Get company info
 $company_info = $db->where('username', "$AuthUserName")->getOne('employers');
 //Edit form handle

@@ -74,8 +74,11 @@
             
         </section> 
         
-        <figure class="col-md-4">
+        <figure class="col-md-4 banner">
             <img src="<?php echo $company_logo?>" width="300" class="img-responsive">
+            <?php if($company_info['subscription'] > 1):?>
+            <p><label><i class="fa fa-check-square-o" aria-hidden="true"></i> NTD đã xác thực</label></p>
+            <?php endif;?>
         </figure>
     </div>     
     <div class="tabbable row">

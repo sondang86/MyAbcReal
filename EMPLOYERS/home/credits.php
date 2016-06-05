@@ -1,11 +1,9 @@
 <?php
     if(!defined('IN_SCRIPT')) die("");
     global $db, $commonQueries, $commonQueries_Employers, $FULL_DOMAIN_NAME;
-
     $current_subscription = $commonQueries_Employers->getCurrent_Subscriptions($AuthUserName);
     
 ?>
-
 
 <div class="row">
     <section class="col-md-10">
@@ -21,7 +19,16 @@
     
 <div class="row subscription-main">
     <div class="col-xs-12">
+        <?php if($current_subscription['current_subscription'] == 1):?>
         <h4>Bạn đang dùng gói <?php echo $current_subscription['name']?></h4>
+        
+        <?php else :?>
+        <section class="note">Bạn đang dùng gói 
+                <strong><?php echo $current_subscription['name'];?></strong>
+                từ ngày <?php echo date('d-m-Y', $employerInfo['subscription_date']);?>, hết hạn vào <?php echo date('d-m-Y',$employerInfo['subscription_date_end']);?>. Sau khi hết hạn, tài khoản của bạn sẽ tự động trở về gói miễn phí
+        </section>
+        <?php endif;?>
+        
         <h5>Để đăng ký gói dịch vụ mới, bạn vui lòng chọn gói đăng ký rồi làm theo form hướng dẫn. Nếu bạn chưa chọn bất cứ đăng ký nào thì mặc định sẽ là gói miễn phí</h5>
         <h5>Vui lòng gọi hotline 0984363189 nếu bạn có bất kỳ vướng mắc gì</h5>
     </div>
@@ -35,10 +42,11 @@
                         Miễn phí - Free
                     </li>
                         
-                    <li>Đăng tối đa 3 tin</li>
-                    <li>Xem 100 hồ sơ ứng viên/ ngày</li>
-                    <li>Sửa, đóng, làm mới tin sau 3 ngày</li>
-                    <li>Tin hiển thị tại tối đa 1 ngành nghề.</li>  
+                    <li>Đăng tối đa 5 tin tuyển dụng</li>
+                    <li>Có thể xóa tin sau 3 ngày</li>
+                    <!--<li>Tin hiển thị tại tối đa 1 ngành nghề.</li>-->
+                    <li>Số lượng đăng việc hấp dẫn 1</li>   
+                    <li>Số lượng đăng việc tuyển gấp 0</li>
                 </ul>
                 <div class="pricing-footer">
                     
@@ -53,16 +61,16 @@
                 <ul>
                     <li class="price">
                         <i class="glyphicon glyphicon-indent-right"></i>
-                        Gói cơ bản - 300k/tháng
+                        Tuyển dụng cơ bản - 300k/tháng
                     </li>
                         
-                    <li>Đăng tin không giới hạn</li>
-                    <li>Xem 100 hồ sơ ứng viên/ ngày</li>
-                    <li>Sửa, đóng, làm mới tin</li>
+                    <li>Có thể đăng tối đa 20 tin tuyển dụng</li>
+                    <li>Có thể xóa tin đã đăng sau 1 ngày</li>
                     <li>Tài khoản đóng dấu "Tài khoản xác thực", tin đóng dấu tin xác thực nhằm gia tăng sự tin tưởng của ứng viên</li>
-                    <li>Tin hiển thị tại tối đa 3 ngành nghề.</li>                    
+                    <!--<li>Tin hiển thị tại tối đa 2 ngành nghề.</li>-->
+                    <li>Có thể xem email và số điện thoại của ứng viên</li>
                     <li>Số lượng đăng việc hấp dẫn 5</li>   
-                    <li>Số lượng đăng việc tuyển gấp 1</li>
+                    <li>Số lượng đăng việc tuyển gấp 3</li>
                 </ul>
                 
                 <div class="pricing-footer">                    
@@ -76,75 +84,23 @@
             <section class="db-pricing-seven">
                 <ul>
                     <li class="price">
-                        <i class="glyphicon glyphicon-list-alt"></i>
-                        Gói tối ưu/500k tháng
+                        <i class="glyphicon glyphicon-indent-right"></i>
+                        Tuyển dụng tối ưu - 500k/tháng
                     </li>
-                        
-                    <li>Tin hiển thị tại box "Tuyển dụng tiêu điểm" tại trang ngành đăng tuyển (hiển thị logo công ty kèm theo)</li>
-                    <li>Hiển thị cố định tại box tiêu điểm ở tất cả các kết quả tìm kiếm liên quan trên hệ thống</li>
-                    <li>Xác thực tài khoản tương đương thời gian sử dụng</li>
-                    <li>Tin hiển thị nổi bật trong danh sách tin ngành nghề (màu xanh)</li>
-                    <li>Tin được đóng dấu “Tin tiêu điểm” thu hút ứng viên</li>
-                    <li>Tin hiển thị tối đa trong 5 ngành nghề (3 ngành nghề khách chọn, 2 ngành nghề CSKH hỗ trợ)</li>
-                    <li>Quảng cáo CPM hiển thị luân phiên trong box Tuyển dụng nhanh ở tất cả các việc làm chi tiết</li>
-                    <li>Số lượng đăng việc hấp dẫn 15</li>   
-                    <li>Số lượng đăng việc tuyển gấp 5</li>
+
+                    <li>Có thể đăng tối đa 40 tin tuyển dụng</li>
+                    <li>Xóa tin ngay lập tức</li>
+                    <li>Tài khoản đóng dấu "Tài khoản xác thực", tin đóng dấu tin xác thực nhằm gia tăng sự tin tưởng của ứng viên</li>
+                    <!--<li>Tin hiển thị tại tối đa 4 ngành nghề.</li>-->  
+                    <li>Có thể xem email và số điện thoại của ứng viên</li>
+                    <li>Số lượng đăng việc hấp dẫn 12</li>   
+                    <li>Số lượng đăng việc tuyển gấp 6</li>
                 </ul>
-                
+
                 <div class="pricing-footer">                    
                     <a href="<?php echo "$FULL_DOMAIN_NAME/EMPLOYERS/dang-ky-dich-vu/"?>" class="btn btn-default btn-lg">CHỌN<i class="glyphicon glyphicon-play-circle"></i></a>
                 </div>
             </section>
         </div>
-    </div>        
+    </div>
 </div>
-
-<style>    
-    .db-pricing-seven:hover {
-        margin-top: 5px;
-        -moz-transition: margin-top 0.25s ease 0s;
-        -ms-transition: margin-top 0.25s ease 0s;
-        transition: margin-top 0.25s ease 0s;
-    }
-        
-    .db-pricing-seven {
-        margin-bottom: 30px;
-        margin-top: 30px;
-        text-align: center;
-        border: 1px solid #C5C2C2;
-        background-color: #EDEDED;
-    }
-        
-    .db-pricing-seven ul {
-        list-style: none;
-        margin: 0;
-        text-align: center;
-        padding-left: 0px;
-    }
-        
-    .db-pricing-seven ul li.price {
-        background-color: #fff;
-        padding: 40px 20px 20px 20px;
-        font-size: 20px;
-        font-weight: 900;
-        color: #353c3e;
-        font-weight: 900;
-    }
-        
-    .db-pricing-seven ul li {
-        border-bottom: solid 1px #D8D8D8;
-        padding-top: 20px;
-        padding-bottom: 20px;
-        cursor: pointer;
-        text-transform: uppercase;
-    }
-        
-    .db-pricing-seven .pricing-footer {
-        padding: 20px;
-    }
-    
-    .subscription-main {
-        background-color: #f1f4f4;
-    }
-        
-</style>

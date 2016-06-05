@@ -67,10 +67,21 @@
         $date_created = $db->where('id', $job_id)->getOne('jobs', 'date');
         $days = date('d',time() - $date_created['date']);
         
-        if ($_POST['subscription'] == '1'){
+        
+        if ($_POST['subscription'] == '1'){//Check free account
             if ($days <= 3){
                 $message = array(
                     "message"   => "Tài khoản miễn phí chỉ có thể xóa việc đã đăng sau 3 ngày",
+                    "status"    => "0", //Failed
+                    "job_id"    => $job_id
+                );
+
+                echo json_encode($message);die;
+            }
+        } elseif ($_POST['subscription'] == '2') {
+            if ($days <= 1){
+                $message = array(
+                    "message"   => "Vui lòng đợi, bạn có thể xóa việc đã đăng sau 1 ngày",
                     "status"    => "0", //Failed
                     "job_id"    => $job_id
                 );

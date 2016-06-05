@@ -68,7 +68,7 @@ RewriteRule ^(.*)$ 404.php [L]
     Deny from all
 #    Allow from 127.0.0.1
 </Files>
-<FilesMatch "index.php|sec_image.php|login.php|logout.php|loginaction.php|admin_page.php|404.php|set_featured.php|remove_question.php">
+<FilesMatch "index.php|sec_image.php|login.php|logout.php|loginaction.php|admin_page.php|404.php|set_featured.php|remove_question.php|handleReview.php|save_updates.php">
     Order Allow,Deny
     Allow from all
 </FilesMatch>

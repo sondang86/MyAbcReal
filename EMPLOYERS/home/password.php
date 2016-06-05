@@ -3,14 +3,14 @@
 // Copyright (c) All Rights Reserved, 
 
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries, $employer_data, $FULL_DOMAIN_NAME;
+global $db, $commonQueries, $employerInfo, $FULL_DOMAIN_NAME;
 
 //Password changing handle
 if (isset($_POST['submit'])){
     $current_password = filter_input(INPUT_POST,'current_password', FILTER_SANITIZE_STRING);        
     $new_password = password_hash(filter_input(INPUT_POST,'password', FILTER_SANITIZE_STRING), PASSWORD_DEFAULT, ['cost' => 12]);        
     
-    if (password_verify($current_password, $employer_data['password'])){//Password matched
+    if (password_verify($current_password, $employerInfo['password'])){//Password matched
         //Change user password
         if(!$db->where('username', "$AuthUserName")->update('employers', array('password' => "$new_password"))){
             echo 'There was a problem while update password';  

@@ -71,8 +71,13 @@
         </article>
         
         <aside class="col-md-3 job-details-aside">
-            <a href="<?php $website->check_SEO_link("companyInfo", $SEO_setting, $job_details['employer_id'],$website->seoUrl($job_details['company']));?>">
+            <a href="<?php $website->check_SEO_link("companyInfo", $SEO_setting, $job_details['employer_id'],$website->seoUrl($job_details['company']));?>" class="banner">
                 <img class="logo-border img-responsive" src="<?php echo $company_logo;?>" alt="<?php echo $job_details['company']?>">
+                
+                <?php if($job_details['subscription'] > 1):?>
+                <p><small><i class="fa fa-check-square-o" aria-hidden="true"></i> NTD đã xác thực</small></p>
+                <?php endif;?>
+                
             </a>
             <a href="<?php $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $job_details['employer_id'],$website->seoUrl($job_details['company']));?>" class="sub-text underline-link">Việc làm khác từ <?php echo $job_details['company']?></a>            
             <a href="<?php $website->check_SEO_link("companyInfo", $SEO_setting, $job_details['employer_id'],$website->seoUrl($job_details['company']));?>" class="sub-text underline-link">Thông tin công ty</a>

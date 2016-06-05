@@ -6,15 +6,18 @@
 if(!defined('IN_SCRIPT')) die("");
 global $db, $commonQueries, $FULL_DOMAIN_NAME;
 
-$id=$_REQUEST["id"];
-$website->ms_i($id);
+$id= filter_input(INPUT_GET,'id', FILTER_SANITIZE_NUMBER_INT);
+
 if($database->SQLCount("jobs","WHERE employer='".$AuthUserName."' AND id=".$id." ") == 0){
     die("");
 }
 
 $job = $db->where("id", "$id")->getOne("jobs");
+$db->where("posting_id", "$id")->withTotalCount()->get("apply");
+$applied_CVs_count = $db->totalCount;
 
 ?>
+
 
 <div class="row">
     <div class="col-md-3 col-md-push-9">
@@ -25,24 +28,11 @@ $job = $db->where("id", "$id")->getOne("jobs");
                 
             </div>
             <div class="col-md-12 col-sm-6 col-sm-6 top-bottom-margin">
-                
-            <?php echo LinkTile("jobs","questionnaire&id=".$id,$M_QUESTIONNAIRE." (".$database->SQLCount("questionnaire","WHERE job_id=".$id).")","","blue");?>
+            <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/danh-sach-cau-hoi/". $job['id'] . "/" . $website->seoURL($job['title']) , "$M_QUESTIONNAIRE", 'blue');?>        
             </div>
             
-            <div class="col-md-12 col-sm-6 col-xs-12 top-bottom-margin">   
-
-            </div>    
             <div class="col-md-12 col-sm-6 col-xs-12 top-bottom-margin">
-            <?php
-                    echo LinkTile
-                     (
-                            "application_management",
-                            "list&Proceed=1&id=".$id,
-                            $M_APPLICATIONS." (".$database->SQLCount("apply","WHERE posting_id=".$id).")",
-                            "",
-                            "yellow"
-                     );
-            ?>
+            <?php echo $commonQueries->LinkTitle("$FULL_DOMAIN_NAME/EMPLOYERS/danh-sach-don-xin-viec/", "$M_APPLICATIONS ($applied_CVs_count)", 'yellow');?>      
             </div>
         </div>
     </div>  

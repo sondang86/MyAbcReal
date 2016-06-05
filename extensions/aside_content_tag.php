@@ -113,7 +113,14 @@ if (!empty($_GET['page'] && $_GET['page'] == 'jobseeker_details')): //Candidate 
     } else { // not logged in or account is jobseeker
         $verified_employer = FALSE;
     }
-
+    
+    
+    //Check profile pic
+    if ($jobseeker_profile['profile_pic'] == ""){
+        $profile_pic = "avatar_nam.jpg";
+    } else {
+        $profile_pic = $jobseeker_profile['profile_pic'];
+    }
 
         
 ?>
@@ -134,7 +141,7 @@ if (!empty($_GET['page'] && $_GET['page'] == 'jobseeker_details')): //Candidate 
             
             <!--IMAGE-->
             <header class="col-md-12">
-                <img src="http://431.da1.myftpupload.com/wp-content/themes/careersWP/assets/img/userpic.gif" alt="">
+                <img src="<?php echo $FULL_DOMAIN_NAME;?>/images/jobseekers/profile_pic/<?php echo $profile_pic;?>" alt="">
             </header>
             
             <!--CANDIDATE DETAILS-->

@@ -1,6 +1,6 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries, $employer_data;
+global $db, $commonQueries, $employerInfo;
     
 $job_id=filter_input(INPUT_GET,'posting_id', FILTER_SANITIZE_NUMBER_INT);
 $apply_id= filter_input(INPUT_GET,'apply_id', FILTER_SANITIZE_NUMBER_INT);
@@ -20,7 +20,7 @@ $user_file = $db->where('user_id', $jobseeker_data['id'])->withTotalCount()->get
 $user_file_count = $db->totalCount;
 
 //Count view to the database
-$commonQueries->Insert_View($jobseeker_data['id'], $AuthUserName, $jobseeker_username, $employer_data['id']);
+$commonQueries->Insert_View($jobseeker_data['id'], $AuthUserName, $jobseeker_username, $employerInfo['id']);
 
 
 $jobseeker_resume = $commonQueries->getJobseekerResume($jobseeker_data['id']);

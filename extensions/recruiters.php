@@ -13,7 +13,7 @@
     
     // set page limit to 2 results per page. 20 by default
     $db->pageLimit = 5;
-    $companies = $db->arraybuilder()->paginate("employers", $current_page);  
+    $companies = $db->orderBy("subscription","desc")->arraybuilder()->paginate("employers", $current_page);  
     
     
     
@@ -47,7 +47,8 @@
 </div>
 <?php foreach ($companies as $company):
     //Count total jobs of employer
-    $db->where("employer", $company['username'])->withTotalCount()->get("jobs");    
+    $db->where("employer", $company['username'])->withTotalCount()->get("jobs");   
+    $logo = $commonQueries->setDefault_ifEmpty($company['logo'], 'sample.jpg', $company['logo']);
 ?>
 <div class="recruiter">    
     <!--TOTAL JOBS-->
@@ -61,10 +62,12 @@
     
     <div class="row recruiterDetails">
         <!--COMPANY INFO-->
-        <section class="col-md-3 col-xs-12">
-            <!--<p><a href="<?php $website->check_SEO_link("companyInfo",$SEO_setting, $company['id'], $website->seoUrl($company['company']))?>"><?php echo $company['company']?></a></p>-->
+        <section class="col-md-3 col-xs-12 banner">
             <a href="<?php $website->check_SEO_link("companyInfo",$SEO_setting, $company['id'], $website->seoUrl($company['company']))?>">
-                <img align="left" class="img-right-margin img-responsive" src="http://<?php echo $DOMAIN_NAME?>/images/employers/logo/<?php echo $company['logo']?>">
+                <img align="left" class="img-right-margin img-responsive" src="<?php echo $FULL_DOMAIN_NAME?>/images/employers/logo/<?php echo $logo;?>" title="<?php echo $company['company']?>">
+                <?php if($company['subscription'] > 1):?>
+                <p><label><i class="fa fa-check-square-o" aria-hidden="true"></i> NTD đã xác thực</label></p>
+                <?php endif;?>
             </a>
         </section>
         

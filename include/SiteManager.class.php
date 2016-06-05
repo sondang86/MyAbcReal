@@ -649,7 +649,7 @@ class SiteManager
                     //Display this only in home page
                     !isset($_REQUEST["mod"])&&!isset($_REQUEST["page"]) 
                     ||( isset($_REQUEST["page"]) &&( $_REQUEST["page"]=="en_Home" 
-                    || $_REQUEST["page"]=="vn_Trang chủ" ))
+                    || $_REQUEST["page"]=="vn_trang-chu" || $_REQUEST["page"]=="vn_nha-tuyen-dung" ))
                 ) {
                     array_push($arrTags, array("carousel","carousel_tag.php"));
                 }

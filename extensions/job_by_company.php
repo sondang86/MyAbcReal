@@ -9,9 +9,6 @@ $employerId = $commonQueries->check_present_id("company", $SEO_setting);
 
 $jobs_by_employerId = $commonQueries->jobs_by_employerId($employerId);
 
-//echo "<pre>";
-//print_r($jobs_by_employerId);
-//echo"</pre>";
 ?>
 
 <div class="row">
@@ -30,6 +27,9 @@ $jobs_by_employerId = $commonQueries->jobs_by_employerId($employerId);
                     <section class="row">
                         <figure class="col-md-3">
                             <img src="<?php echo $commonQueries->setDefault_logoIfEmpty($job['logo'], "employers")?>">
+                            <?php if($job['subscription'] > 1):?>
+                            <p><label><i class="fa fa-check-square-o" aria-hidden="true"></i> NTD đã xác thực</label></p>
+                            <?php endif;?>
                             <!--<p><a href="<?php echo $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $job["employer_id"],$website->seoURL($job["company"]));?>" class="sub-text underline-link"><?php echo $M_MORE_JOBS_FROM;?> <?php echo stripslashes($job["company"]);?></a></p>-->
                             <p><a href="<?php echo $website->check_SEO_link("companyInfo", $SEO_setting, $job["employer_id"],$website->seoURL($job['company']));?>" class="sub-text underline-link"><?php echo $M_COMPANY_DETAILS;?></a></p>
                         </figure>

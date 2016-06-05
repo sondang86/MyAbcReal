@@ -4,7 +4,7 @@
 // Check http://www.netartmedia.net/jobsportal for demos and information
     
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries, $FULL_DOMAIN_NAME;
+global $db, $commonQueries, $FULL_DOMAIN_NAME, $employerInfo;
 
 $jobs_by_employer_columns = array(
     $DBprefix."jobs.id as jobId",$DBprefix."jobs.title",
@@ -12,86 +12,25 @@ $jobs_by_employer_columns = array(
     $DBprefix."job_statistics.views_count",
 );
 $db->join('job_statistics', $DBprefix."jobs.id = " . $DBprefix."job_statistics.job_id", "LEFT");
-$jobs_by_employer = $db->where("employer", "$AuthUserName")->orderBy('date', 'DESC')->get("jobs", NULL, $jobs_by_employer_columns);
+$jobs_by_employer = $db->where("employer", "$AuthUserName")->withTotalCount()->orderBy('date', 'DESC')->get("jobs", NULL, $jobs_by_employer_columns);
+$job_count = $db->totalCount;
 
+$new_messages = $db->where('user_to', "$AuthUserName")->withTotalCount()->get('user_messages');
+$new_messages_count = $db->totalCount;
 ?>
     
-    <div class="col-md-3 welcome-left-block">
-            
-    <span class="large-font">
-		<?php echo $M_WELCOME;?> <?php echo $LoginInfo["contact_person"];?>,
-    </span>
-                    
-                    
-		<?php
-                    
-			$last_login = $database->DataArray_Query("SELECT max(date) max_date FROM ".$DBprefix."login_log WHERE username='".$AuthUserName."' AND action='login' AND date<(SELECT max(date) max_date FROM ".$DBprefix."login_log WHERE username='".$AuthUserName."' AND action='login')");
-			$last_date=date("F j, Y",$last_login["max_date"]);
-			//$login_stat=str_replace("{show_date}","<a href=\"".CreateLink("home","connections")."\">".$last_date."</a>",$M_LOGIN_STAT_MESSAGE);
-			$login_stat="";
-			$strServerName=$_SERVER["SERVER_NAME"];
-                            
-                            
-                            
-			$new_messages = $database->SQLCount("user_messages","WHERE user_to='".$AuthUserName."'");
-                            
-                            
-			if($new_messages>0)
-			{
-			?>
-    <br/><br/>
-    <img src="http://<?php echo $DOMAIN_NAME;?>/images/warning.png"/>
-    <span class="home-warning-text">
-        <a href="http://<?php echo $DOMAIN_NAME;?>/EMPLOYERS/index.php?category=home&action=received"><?php echo $new_messages;?> <?php echo $M_NEW_MESSAGES;?></a>
-    </span>
-			<?php
-			}
-			else
-			{
-			?>
-    <br/><br/>
-    <span class="home-warning-text">
-					<?php echo $ANY_MESSAGES;?>
-    </span>
-                                    
-			<?php
-			}
-                            
-                            
-			if($website->GetParam("CHARGE_TYPE") == 1)
-			{
-			?>
-    <br/><br/>
-				<?php echo $M_CURRENTLY_YOU_HAVE;?>:<br/>
-    <a class="underline-link" href="index.php?category=home&action=credits"><strong><?php if($arrUser["subscription"]==0) echo "0";else echo "1";?></strong></a> <?php echo $M_SUBSCRIPTION;?>, 
-				<?php 
-				if($arrUser["subscription"]>0)
-				{
-				?>
-    <br/><?php echo $REMAINING_ADS;?>: 
-    <strong>
-					<?php
-					$arrSubscription = $database->DataArray("subscriptions","id=".$arrUser["subscription"]);
-                                            
-					echo ($arrSubscription["listings"]-$database->SQLCount("jobs","WHERE employer='".$AuthUserName."'"));
-					?>
-    </strong>
-					<?php
-				}
-				?>
-			<?php
-			}
-			else
-			if($website->GetParam("CHARGE_TYPE")==2)
-			{
-			?>
-    <br/><br/>
-				<?php echo $M_CURRENTLY_YOU_HAVE.': <a class="red-font underline-link" href="index.php?category=home&action=credits">'.$AdminUser["credits"].' '.$M_CREDITS.'<a>';?>
-			<?php
-			}
-		?>
-    <br/><br/>
+<div class="col-md-3 welcome-left-block">
+    <h5><?php $commonQueries->flash('message');?></h5>
+    
+    <h4><strong><?php echo $M_WELCOME;?> <?php echo $LoginInfo["contact_person"];?>,</strong></h4> 
+    
+    <h5><strong>Thống kê hiện tại: </strong></h5>
+    <p>Bạn có: <a href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/tin-nhan/"><?php echo $new_messages_count;?> tin nhắn mới </a></p>
+
+    <p>Gói đăng ký hiện tại: <a href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/dang-ky/"><?php echo $employerInfo['subscription_name']?></a> </p></p>
+<p>Số công việc đã đăng: <a href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/danh-sach-cong-viec/"><?php echo $job_count;?>/<?php echo $employerInfo['subscription_listing']?></a> </p>
 </div>
+
 
 <div id="home-links-area" class="col-md-9">    
     <div class="row" style="padding:10px">

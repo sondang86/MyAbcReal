@@ -1,6 +1,6 @@
 <?php
     if(!defined('IN_SCRIPT')) die("");
-    global $db, $commonQueries, $DOMAIN_NAME;
+    global $db, $commonQueries, $DOMAIN_NAME, $FULL_DOMAIN_NAME;
     
     
     //Page setting
@@ -10,7 +10,7 @@
         $current_page = filter_input(INPUT_GET,'trang', FILTER_SANITIZE_NUMBER_INT);
     }     
     $jobseekers_list = $commonQueries->Search_Resumes(FALSE, '', $current_page);
-        
+    
     //Pagination options
     if (isset($_GET['page']) && ($_GET['page'] == 'vn_ung-vien')){
         $url = 'ung-vien';
@@ -46,13 +46,15 @@
 
 <!--LIST-->
 <div class="jobsByType_list">    
-    <?php foreach ($jobseekers_list['resumes'] as $resume) :?>
+    <?php foreach ($jobseekers_list['resumes'] as $resume) :
+        $profile_pic = $commonQueries->setDefault_ifEmpty($resume['profile_pic'], 'sample.jpg', $resume['profile_pic']);        
+    ?>
     <section class="col-sm-6 col-xs-12 jobByType">
         <fieldset>
             <header>
-                <figure><img src="/vieclambanthoigian.com.vn/images/jobseekers/profile_pic/avatar_nam.jpg" width="80" height="80"></figure>
+                <figure><img src="<?php echo $FULL_DOMAIN_NAME;?>/images/jobseekers/profile_pic/<?php echo $profile_pic;?>" width="80" height="80"></figure>
                 <span>
-                    <p><small><a href="http://<?php echo $DOMAIN_NAME;?>/chi-tiet-ung-vien/<?php echo $resume['resume_id']?>/<?php echo $website->seoUrl($resume['resume_title'])?>"><?php echo $resume['resume_title']?></a></small></p>
+                    <p><small><a href="<?php echo $FULL_DOMAIN_NAME;?>/chi-tiet-ung-vien/<?php echo $resume['resume_id']?>/<?php echo $website->seoUrl($resume['resume_title'])?>"><?php echo $resume['resume_title']?></a></small></p>
                     <p><small>Ngành nghề: <?php echo $resume['category_name_vi']?></small></p>
                     <p><small>Mức lương: <?php echo $resume['salary_range']?></small></p>
                     <p><small>Loại công việc: <?php echo $resume['job_name']?></small></p>

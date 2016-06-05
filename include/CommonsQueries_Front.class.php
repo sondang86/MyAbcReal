@@ -24,8 +24,9 @@ class CommonsQueries_Front {
         //Get featured jobs list
         $selected_jobsType_columns = array(
             $this->_dbPrefix."jobs.id as job_id",$this->_dbPrefix."jobs.job_category",
-            $this->_dbPrefix."jobs.title",$this->_dbPrefix."jobs.SEO_title",$this->_dbPrefix."jobs.date",
-            $this->_dbPrefix."jobs.message",$this->_dbPrefix."employers.company",$this->_dbPrefix."employers.logo",
+            $this->_dbPrefix."jobs.title",$this->_dbPrefix."jobs.SEO_title",$this->_dbPrefix."jobs.date",$this->_dbPrefix."jobs.message",
+            $this->_dbPrefix."employers.company",$this->_dbPrefix."employers.logo",
+            $this->_dbPrefix."employers.id as employer_id",$this->_dbPrefix."employers.subscription as employer_subscription",
             $this->_dbPrefix."categories.category_name_vi",$this->_dbPrefix."categories.category_name",$this->_dbPrefix."categories.id as category_id",
             $this->_dbPrefix."locations.City",$this->_dbPrefix."locations.City_en",$this->_dbPrefix."locations.id as location_id",
             $this->_dbPrefix."job_types.job_name",$this->_dbPrefix."job_types.job_name_en",
@@ -33,7 +34,7 @@ class CommonsQueries_Front {
             $this->_dbPrefix."salary.salary_range",$this->_dbPrefix."salary.salary_range_en",
             $this->_dbPrefix."saved_jobs.user_type as saved_job_userType",$this->_dbPrefix."saved_jobs.date as saved_jobDate",
             $this->_dbPrefix."saved_jobs.browser", $this->_dbPrefix."saved_jobs.IPAddress",  
-            $this->_dbPrefix."saved_jobs.user_uniqueId as user_uniqueId",$this->_dbPrefix."saved_jobs.job_id as saved_jobId"//saved jobs table
+            $this->_dbPrefix."saved_jobs.user_uniqueId as user_uniqueId",$this->_dbPrefix."saved_jobs.job_id as saved_jobId",//saved jobs table
         );
 
         $this->_db->join("employers", $this->_dbPrefix."jobs.employer=".$this->_dbPrefix."employers.username", "LEFT");
@@ -42,6 +43,7 @@ class CommonsQueries_Front {
         $this->_db->join("job_types", $this->_dbPrefix."jobs.job_type=".$this->_dbPrefix."job_types.id", "LEFT");
         $this->_db->join("job_experience", $this->_dbPrefix."jobs.experience=".$this->_dbPrefix."job_experience.experience_id", "LEFT");
         $this->_db->join("salary", $this->_dbPrefix."jobs.salary=".$this->_dbPrefix."salary.salary_id", "LEFT");
+        
         
         $this->_db->join('saved_jobs', $this->_dbPrefix."jobs.id = ".$this->_dbPrefix."saved_jobs.job_id AND "
                 .$this->_dbPrefix."saved_jobs.user_uniqueId = '$userId_cookie' AND "
@@ -71,8 +73,9 @@ class CommonsQueries_Front {
     public function getJobsList_pagination($job_type="featured", $current_page="1", $page_limit='5'){
         $featured_jobs_columns = array(
             $this->_dbPrefix."jobs.id as job_id",$this->_dbPrefix."jobs.job_category",
-            $this->_dbPrefix."jobs.title",$this->_dbPrefix."jobs.SEO_title",
-            $this->_dbPrefix."jobs.message",$this->_dbPrefix."employers.company",$this->_dbPrefix."employers.logo",
+            $this->_dbPrefix."jobs.title",$this->_dbPrefix."jobs.SEO_title",$this->_dbPrefix."jobs.message",
+            $this->_dbPrefix."employers.company",$this->_dbPrefix."employers.logo",
+            $this->_dbPrefix."employers.id as employer_id",$this->_dbPrefix."employers.subscription",
             $this->_dbPrefix."categories.category_name_vi",$this->_dbPrefix."categories.category_name",
             $this->_dbPrefix."locations.City",$this->_dbPrefix."locations.City_en",
             $this->_dbPrefix."job_types.job_name",$this->_dbPrefix."job_types.job_name_en",
@@ -108,14 +111,15 @@ class CommonsQueries_Front {
     *   get latest jobs list with pagination option
     *   @param var pagination true/false
     *   @param var limit limit records to be selected
-    */
+    */    
     public function getLatestJobsList($pagination=TRUE, $limit='20'){
         $latest_jobs_columns = array(
             $this->_dbPrefix."jobs.id as job_id",$this->_dbPrefix."jobs.job_category",$this->_dbPrefix."jobs.title",
             $this->_dbPrefix."jobs.SEO_title",$this->_dbPrefix."jobs.date",$this->_dbPrefix."jobs.expires",
             $this->_dbPrefix."jobs.applications",$this->_dbPrefix."jobs.message",
             $this->_dbPrefix."jobs.featured",$this->_dbPrefix."jobs.urgent",
-            $this->_dbPrefix."employers.id as employer_id",$this->_dbPrefix."employers.company",$this->_dbPrefix."employers.logo",
+            $this->_dbPrefix."employers.id as employer_id",$this->_dbPrefix."employers.company",
+            $this->_dbPrefix."employers.logo",$this->_dbPrefix."employers.subscription as employer_subscription",
             $this->_dbPrefix."categories.category_name_vi",$this->_dbPrefix."categories.category_name",
             $this->_dbPrefix."locations.City",$this->_dbPrefix."locations.City_en",
             $this->_dbPrefix."job_types.job_name",$this->_dbPrefix."job_types.job_name_en",

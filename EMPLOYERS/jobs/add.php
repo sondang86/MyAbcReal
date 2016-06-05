@@ -45,12 +45,12 @@ $employer_subscription = $db->where('username', "$AuthUserName")->withTotalCount
             echo "problem"; die;
             
         } else {        
-            $commonQueries->flash('message', '<h4>Thêm việc mới thành công</h4>' );
-            $website->redirect("index.php?category=jobs&action=my&result=added");
+            $commonQueries->flash('message', $commonQueries->messageStyle('info', 'Thêm việc mới thành công!'));
+            $website->redirect($FULL_DOMAIN_NAME . "/EMPLOYERS/danh-sach-cong-viec/");
         }
     } else {
-        $commonQueries->flash('message', '<h4>there were an error occurred</h4>' );
-        $website->redirect("index.php?category=jobs&action=add");
+        $commonQueries->flash('message', $commonQueries->messageStyle('danger', 'there were an error occurred!'));
+        $website->redirect($FULL_DOMAIN_NAME . "/EMPLOYERS/danh-sach-cong-viec/");
     }
 }
 ?>
@@ -60,7 +60,6 @@ $employer_subscription = $db->where('username', "$AuthUserName")->withTotalCount
 <!--NAVIGATION-->
 <div class="row">
     <section class="col-md-9 col-sm-6 col-xs-12">
-        <h4><label>Đăng việc mới</label></h4>
         <h5><?php $commonQueries->flash('message');?></h5>
     </section>
     <div class="col-md-3 col-sm-6 col-xs-12">
@@ -70,11 +69,11 @@ $employer_subscription = $db->where('username', "$AuthUserName")->withTotalCount
 
 <?php if ($jobs_count >= $employer_subscription['listings']): ?>
 <h5><?php echo $M_REACHED_MAXIMUM_SUBSCR;?></h5>
-<a class="underline-link" href="index.php?category=home&action=credits"><?php echo $M_PLEASE_SELECT_TO_POST;?></a>
+<a class="underline-link" href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/dang-ky/"><?php echo $M_PLEASE_SELECT_TO_POST;?></a>
 
 <?php else : //New job post form, Allow employers to post job if they're not reached limit subscription posts?>
 
-<form action="index.php?category=jobs&action=add" method="POST" class="sky-form newJob"> 
+<form action="" method="POST" class="sky-form newJob"> 
     <header><?php echo $POST_NEW_ADD;?></header>
     <fieldset>    
         <!--JOB TITLE-->

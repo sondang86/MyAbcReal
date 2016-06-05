@@ -5,11 +5,11 @@
 // http://www.netartmedia.net
 
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries, $employer_data;
+global $db, $commonQueries, $employerInfo;
 
 if (isset($_POST['submit'])){
     //Store image under jpg format
-    $image_name = $employer_data['id'] . '.jpg';
+    $image_name = $employerInfo['id'] . '.jpg';
     //Update logo info 
     $db->where('username', "$AuthUserName")->update('employers', array('logo' => "$image_name")); 
     
@@ -93,7 +93,7 @@ if (isset($_POST['submit'])){
         <div class="row">                        
             <section class="col col-6">
                 <label class="logo">                    
-                    <img src="/vieclambanthoigian.com.vn/images/employers/logo/<?php echo $employer_data['logo']?>" id="preview" height="125" width="250">
+                    <img src="/vieclambanthoigian.com.vn/images/employers/logo/<?php echo $employerInfo['logo']?>" id="preview" height="125" width="250">
                 </label>
             </section>
         </div>

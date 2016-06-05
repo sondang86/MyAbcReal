@@ -75,6 +75,9 @@
             <a href="<?php $website->check_SEO_link("details", $SEO_setting, $job['job_id'],$job['SEO_title'])?>">
                 <section class="banner">
                     <img src="<?php echo $company_logo;?>" width="120" height="50">
+                    <?php if($job['subscription'] > 1):?>
+                    <p><small><i class="fa fa-check-square-o" aria-hidden="true"></i> NTD đã xác thực</small></p>
+                    <?php endif;?>
                 </section>
                 <p title="<?php echo $job['title']?>" class="desig"><?php echo $job['title']?></p>
                 <p class="company">

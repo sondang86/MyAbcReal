@@ -1,5 +1,5 @@
 <?php
-    global $db, $commonQueries, $commonQueries_Admin;
+    global $db, $commonQueries, $commonQueries_Admin, $FULL_DOMAIN_NAME;
     
     $pending_subscription_requests = $commonQueries_Admin->getSubscriptions_List();
     
@@ -23,7 +23,12 @@ if (isset($_POST['proceed']) && ($_POST['proceed'] == '1')){ //Request submitted
     //Approve selected request id
     if (isset($_POST['approve'])){
         //Update user subscription
-        if(!$db->where('username', "$filtered_username")->update('employers', array('subscription' => $subscription_request))){
+        $data_update = Array(
+            'subscription'          => $subscription_request, 
+            'subscription_date'     => time(),
+            'subscription_date_end' => time() + (86400 * 30) // Activated 30 days subscription
+        );
+        if(!$db->where('username', "$filtered_username")->update('employers', $data_update)){
             echo "error occurred";die;
             
         } else {
@@ -31,7 +36,22 @@ if (isset($_POST['proceed']) && ($_POST['proceed'] == '1')){ //Request submitted
             //set to approved status (1) in jobsportal_subscription_employer_request table
             if(!$db->where('employer_id', "$employer_id")->update('subscription_employer_request', array('is_processed' => 1))){
                 echo "can't update this shit";die;
-            } else {            
+            } else {
+                //Send email notify customer
+                $email_subject  = 'Tin nhắn từ vieclambanthoigian.com.vn';
+                $email_body     = "Chào bạn!\n"
+                                . "Gói đăng ký '" . $_POST['request_subscription_name'] . "' của bạn đã được xác thực \n\n"
+                                . "Để tiếp tục đăng việc mới, vui lòng truy cập địa chỉ dưới đây: \n\n"
+                                . "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n"
+                                . "$FULL_DOMAIN_NAME/EMPLOYERS/ \n\n"
+                                . "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n"
+                                . "Vui lòng gọi cho chúng tôi hotline 0984363189 hoặc email info@vieclambanthoigian.com.vn nếu bạn có bất kỳ thắc mắc gì \n\n"
+                                . "Trân trọng \n\n"
+                                . "Vieclambanthoigian.com.vn";
+
+                require_once (DIR_BASE . 'extensions/include/email_handling.php');
+                
+                
                 //Refresh the page
                 $commonQueries->flash('message', $commonQueries->messageStyle('info', "Đã xác nhận"));
                 $website->redirect("index.php?category=users&action=subscription_requests");              
@@ -44,7 +64,17 @@ if (isset($_POST['proceed']) && ($_POST['proceed'] == '1')){ //Request submitted
         //Set status to rejected (2)
         if(!$db->where('employer_id', "$employer_id")->update('subscription_employer_request', array('is_processed' => 2))){
             echo "can't update this shit";die;
-        } else {            
+        } else {           
+            //Send email notify customer
+            $email_subject  = 'Tin nhắn từ vieclambanthoigian.com.vn';
+            $email_body     = "Chào bạn!\n"
+                            . "Gói đăng ký '" . $_POST['request_subscription_name'] . "' của bạn không được xác thực \n\n"
+                            . "Vui lòng gọi cho chúng tôi hotline 0984363189 hoặc email info@vieclambanthoigian.com.vn nếu bạn có bất kỳ thắc mắc/yêu cầu gì \n\n"
+                            . "Trân trọng \n\n"
+                            . "Vieclambanthoigian.com.vn";
+
+            require_once (DIR_BASE . 'extensions/include/email_handling.php');            
+            
             //Refresh the page
             $commonQueries->flash('message', $commonQueries->messageStyle('info', "Đã từ chối"));
             $website->redirect("index.php?category=users&action=subscription_requests");              
@@ -151,6 +181,8 @@ if (isset($_POST['proceed']) && ($_POST['proceed'] == '1')){ //Request submitted
                                 <input type="hidden" name="current_sucscription" value="<?php echo $pending_subscription_request['current_sucscription']?>">
                                 <input type="hidden" name="sub_request_id" value="<?php echo $pending_subscription_request['sub_request_id']?>">
                                 <input type="hidden" name="employer_id" value="<?php echo $pending_subscription_request['employer_id']?>">
+                                <input type="hidden" name="request_subscription_name" value="<?php echo $pending_subscription_request['request_subscription'];?>">
+                                
                             </td>                            
                             <td>
                                 <?php echo $pending_subscription_request['employer_message']?>

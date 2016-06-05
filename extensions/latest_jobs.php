@@ -1,6 +1,6 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
-global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,$featured_jobs,$SEO_setting;
+global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,$featured_jobs,$SEO_setting, $FULL_DOMAIN_NAME;
 $website->Title("Việc làm mới nhất");
 $website->MetaDescription("abc");
 $website->MetaKeywords("def");
@@ -50,11 +50,13 @@ $latest_jobs = $db->arraybuilder()->paginate("jobs", $current_page,$latest_jobs_
     </section>
         
     <!--LIST JOBS-->
-        <?php foreach ($latest_jobs as $job) :?>
+        <?php foreach ($latest_jobs as $job) :
+            $logo = $commonQueries->setDefault_ifEmpty($job['logo'], 'sample.jpg', $job['logo']);
+        ?>
     <div class="col-md-12 category-details">
         <section class="row">
             <figure class="col-md-3">
-                <img src="http://<?php echo $DOMAIN_NAME?>/images/employers/logo/<?php echo $job['logo']?>">
+                <img src="<?php echo $FULL_DOMAIN_NAME?>/images/employers/logo/<?php echo $logo?>">
                 <p><a href="<?php echo $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $job["employer_id"], $website->seoURL($job['company']));?>" class="sub-text underline-link"><?php echo $M_MORE_JOBS_FROM;?> <?php echo stripslashes($job["company"]);?></a></p>
                 <p><a href="<?php echo $website->check_SEO_link("companyInfo", $SEO_setting, $job["employer_id"]), $website->seoURL($job['company']);?>" class="sub-text underline-link"><?php echo $M_COMPANY_DETAILS;?></a></p>
             </figure>

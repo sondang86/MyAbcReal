@@ -6,7 +6,7 @@ if (isset($_POST['submit'])){
     //File upload handle
     if (isset($_FILES['file']) && ($_FILES['file']['error'] !== 4)){ //Make sure file upload exists
         //Store image under jpg format
-        $image_name = $employer_data['id'] . '.jpg';
+        $image_name = $employerInfo['id'] . '.jpg';
         //Update logo info 
 //        $db->where('username', "$AuthUserName")->update('employers', array('logo' => "$image_name")); 
 
@@ -62,7 +62,7 @@ if (isset($_POST['submit'])){
         }   
 
     } else { //Keep current image
-        $image_name = $employer_data['id'] . '.jpg';
+        $image_name = $employerInfo['id'] . '.jpg';
     }
     
     //Perform update         
@@ -81,7 +81,7 @@ if (isset($_POST['submit'])){
     $db->where('username', "$AuthUserName");
     if ($db->update ('employers', $data)){
         $commonQueries->flash('message', $commonQueries->messageStyle('info', 'Lưu thay đổi thành công!'));
-        $website->redirect('index.php?category=profile&action=edit');
+        $website->redirect($FULL_DOMAIN_NAME . "/EMPLOYERS/chinh-sua-thong-tin-ca-nhan/");
     } else{
         echo 'update failed: ' . $db->getLastError();die;
     }

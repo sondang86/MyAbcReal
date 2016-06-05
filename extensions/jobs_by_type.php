@@ -1,6 +1,6 @@
 <?php
     if(!defined('IN_SCRIPT')) die("");
-    global $db, $commonQueries;
+    global $db, $commonQueries, $FULL_DOMAIN_NAME;
       
     //Page 
     if(!isset($_GET['trang']) || !$commonQueries->isLegal_Number($_GET['trang'])){
@@ -25,7 +25,7 @@
    
     //Pagination options
     $url = $website->getURL_segment($website->CurrentURL(), 2);
-    $reload="http://$DOMAIN_NAME/$url/?";//Link href        
+    $reload="$FULL_DOMAIN_NAME/$url/?";//Link href        
     $jobs_by_type = $commonQueries->jobs_by_type_pagination("$column", $job_type, "$current_page", 20);
     
     //Jobs by high salary
@@ -67,11 +67,18 @@
 
 <!--LIST-->
 <div class="jobsByType_list">    
-    <?php foreach ($jobs_by_type['jobs_list'] as $job) :?>
+    <?php foreach ($jobs_by_type['jobs_list'] as $job) :
+          $profile_pic = $commonQueries->setDefault_ifEmpty($job['company_logo'], 'sample.jpg', $job['company_logo']);
+    ?>
     <section class="col-sm-6 col-xs-12 jobByType">
         <fieldset>
             <header>
-                <figure><img src="/vieclambanthoigian.com.vn/images/jobseekers/profile_pic/avatar_nam.jpg" width="80" height="80"></figure>
+                <figure>
+                    <img src="<?php echo $FULL_DOMAIN_NAME;?>/images/employers/logo/<?php echo $profile_pic;?>" width="80" height="80">
+                    <?php if($job['subscription'] > 1):?>
+                    <label><small><i class="fa fa-check-square-o" aria-hidden="true"></i> NTD đã xác thực</small></label>
+                <?php endif;?>
+                </figure>
                 <span>
                     <p><small><a href="http://<?php echo $DOMAIN_NAME;?>/chi-tiet-cong-viec/<?php echo $job['job_id']?>/<?php echo $job['SEO_title']?>"><?php echo $job['title']?></a></small></p>
                     <p><small>Ngành nghề: <?php echo $job['category_name_vi']?></small></p>

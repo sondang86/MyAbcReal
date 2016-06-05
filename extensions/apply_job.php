@@ -68,10 +68,12 @@ if (isset($_POST['submit']) && $_POST['apply_job'] == '1'){ //Update when form s
 
                 </article>
 
+                
                 <aside class="col-md-3 job-details-aside">
                     <a href="<?php $website->check_SEO_link("companyInfo", $SEO_setting, $job_details['employer_id'],$website->seoUrl($job_details['company']));?>">
                         <img class="logo-border img-responsive" src="<?php echo $company_logo;?>" alt="<?php echo $job_details['company']?>">
                     </a>
+                    
                     <a href="<?php $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $job_details['employer_id'],$website->seoUrl($job_details['company']));?>" class="sub-text underline-link">Việc làm khác từ <?php echo $job_details['company']?></a>            
                     <a href="<?php $website->check_SEO_link("companyInfo", $SEO_setting, $job_details['employer_id'],$website->seoUrl($job_details['company']));?>" class="sub-text underline-link">Thông tin công ty</a>
                     <h5><span class="red-font"><strong><?php echo $M_ALREADY_APPLIED ?></strong></span></h5>
@@ -107,6 +109,10 @@ if (isset($_POST['submit']) && $_POST['apply_job'] == '1'){ //Update when form s
                 <a href="<?php $website->check_SEO_link("companyInfo", $SEO_setting, $job_details['employer_id'],$website->seoUrl($job_details['company']));?>">
                     <img class="logo-border img-responsive" src="<?php echo $company_logo;?>" alt="<?php echo $job_details['company']?>">
                 </a>
+                <?php if($job_details['subscription'] > 1):?>
+                <label><i class="fa fa-check-square-o" aria-hidden="true"></i> NTD đã xác thực</label>
+                <?php endif;?>
+                
                 <a href="<?php $website->check_SEO_link("jobs_by_companyId", $SEO_setting, $job_details['employer_id'],$website->seoUrl($job_details['company']));?>" class="sub-text underline-link">Việc làm khác từ <?php echo $job_details['company']?></a>            
                 <a href="<?php $website->check_SEO_link("companyInfo", $SEO_setting, $job_details['employer_id'],$website->seoUrl($job_details['company']));?>" class="sub-text underline-link">Thông tin công ty</a>
             </aside>

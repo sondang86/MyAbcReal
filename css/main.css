@@ -902,7 +902,7 @@ form#main ol li
     padding: 0;
     /*margin: 0;*/
     list-style: none;
-    text-align: left;
+    text-align: left;    
 }
 
 .nav:before,
@@ -2045,7 +2045,7 @@ nav{
 }
 
 .navbar-nav li a {
-    /*color: transparent;*/
+    color: #717174;
 }
 
 .no-padding
@@ -2683,7 +2683,7 @@ div.upload input:hover {
 
 .jobsByType_list section {
     transition: all 0.3s ease;
-    opacity:0.5;
+    /*opacity:0.5;*/
     background: #fff;
     margin-bottom: 20px;
     border: 1px solid #cccccc;
@@ -2722,7 +2722,7 @@ div.upload input:hover {
 .jobByType fieldset header figure {
     overflow: auto;
     float: left;
-    width: 25%;
+    width: 30%;
     margin-right: 20px;
 }
 

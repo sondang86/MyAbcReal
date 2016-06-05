@@ -136,7 +136,7 @@ $job_by_employer = $commonQueries->job_by_id('jobs','employer',"$AuthUserName");
             confirm: function(){
                 $.ajax({ //Sending data to Server side
                     
-                    url: "http://<?php echo $DOMAIN_NAME?>/extensions/set_featured.php",
+                    url: "<?php echo $FULL_DOMAIN_NAME?>/extensions/set_featured.php",
                     type: "post",
                     dataType: "JSON",
                     data: {
@@ -174,7 +174,7 @@ $job_by_employer = $commonQueries->job_by_id('jobs','employer',"$AuthUserName");
                 //Make sure user delete questions first, questions list must be empty to proceed next
                 if(question_count == "0"){
                     $.ajax({ //Sending data to Server side                    
-                        url: "http://<?php echo $DOMAIN_NAME?>/extensions/remove_question.php",
+                        url: "<?php echo $FULL_DOMAIN_NAME?>/extensions/remove_question.php",
                         type: "post",
                         dataType: "JSON",
                         data: {

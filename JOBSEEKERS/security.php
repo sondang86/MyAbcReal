@@ -8,9 +8,10 @@
     define("SUCCESS_PAGE", "index.php");
     define("LOGIN_EXPIRE_AFTER", 20000);
         
-    global $db;
+    global $db, $FULL_DOMAIN_NAME;
     if(empty($_SESSION['username']) || ($_SESSION['user_type'] !== "jobseeker")){ //User not logged in or their session expired
-            die("<script>document.location.href=\"".LOGIN_PAGE."?error=expired\";</script>");
+//            die("<script>document.location.href=\"".LOGIN_PAGE."?error=expired\";</script>");
+            $website->redirect($FULL_DOMAIN_NAME . '/index.php?error=expired');
     }
     else {        
         //Verify if user information match in db

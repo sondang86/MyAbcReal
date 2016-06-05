@@ -10,7 +10,7 @@
       
     $next_resume = $commonQueries->get_NextPrev_Record($jobseeker_resume['resume_id'], '>', 'jobseeker_resumes');
     $prev_resume = $commonQueries->get_NextPrev_Record($jobseeker_resume['resume_id'], '<', 'jobseeker_resumes');
-    
+        
     //message handling
     if (isset($_POST['submit'])){
         $title = filter_input(INPUT_POST, 'subject', FILTER_SANITIZE_STRING);
@@ -48,9 +48,9 @@
             $website->redirect($website->CurrentURL()); 
         }
     }
-    
+//    
 //    echo "<pre>";
-//    print_r($jobseeker_resume);
+//    print_r($jobseeker_profile);
 //    echo "</pre>";
 ?>
 
@@ -68,10 +68,17 @@
     </div>
 </div>
     
+
+<?php
+//echo "<pre>";
+//print_r($jobseeker_resume);
+//echo "</pre>";
+?>
+
 <main class="candidates-item candidates-single-item">
     <h5 class="title"><?php echo $jobseeker_resume['title']?></h5>
     <span class="meta">
-        <?php echo filter_var($commonQueries->timeCalculation(time(), $jobseeker_profile['dob'],1), FILTER_SANITIZE_NUMBER_INT);?> Years Old - 																				Victoria, Australia									</span>
+        <?php echo filter_var($commonQueries->timeCalculation(time(), $jobseeker_profile['dob'],1), FILTER_SANITIZE_NUMBER_INT);?> tuổi - <?php echo $website->limitCharacters($jobseeker_profile['address'], 100)?> </span>
 
     <ul class="social-icons clearfix">
         <li><a href="<?php echo $jobseeker_resume['facebook_URL']?>" class="btn btn-gray fa fa-facebook" target="_blank"></a></li>

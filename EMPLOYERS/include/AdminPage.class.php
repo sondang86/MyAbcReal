@@ -20,7 +20,7 @@ class AdminPage
 	
 	function Process($is_mobile=false)
 	{
-		global $is_mobile,$DOMAIN_NAME,$website,$lang,$AdminUser,$arrUser,$LoginInfo,$currentUser,$AuthUserName,$database, $_REQUEST, $DBprefix,$employer_data;
+		global $is_mobile,$DOMAIN_NAME,$website,$lang,$AdminUser,$arrUser,$LoginInfo,$currentUser,$AuthUserName,$database, $_REQUEST, $DBprefix,$employerInfo;
 		
 		include("../include/texts_".$lang.".php");
 		
@@ -121,7 +121,7 @@ class AdminPage
 		}
 		else
 		{       //Company logo
-                        $logo = $employer_data['logo'];
+                        $logo = $employerInfo['logo'];
                         if (($logo) !== ""){
                             $logo_html .= '<a href="http://'.$DOMAIN_NAME.'/EMPLOYERS"><img src="http://'.$DOMAIN_NAME.'/images/employers/logo/' . $logo .'" class="img-responsive site-logo"/></a>';
                             

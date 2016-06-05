@@ -32,8 +32,12 @@
         <section class="row">
             <figure class="col-md-3">
                 <img src="<?php echo $company_logo;?>">
-                <p>Việc làm khác từ TEK</p>
-                <p>Thông tin công ty</p>
+                <?php if($job['subscription'] > 1):?>
+                <p><label><i class="fa fa-check-square-o" aria-hidden="true"></i> NTD đã xác thực</label></p>
+                <?php endif;?>
+                
+                <p><a href="#">Việc làm khác từ <?php echo $job['company']?></a></p>
+                <p><a href="#">Thông tin công ty</a></p>
             </figure>
             <article class="col-md-9">
                 <h5><strong>Tiêu đề công việc:</strong> <?php echo $job['title']?></h5>

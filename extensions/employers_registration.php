@@ -181,7 +181,7 @@ if (isset($_POST['submit'])){
             <section class="col col-6">
                 <label class="textarea">
                     <i class="icon-append fa fa-file-text"></i>
-                    <textarea type="text" name="company_description" placeholder="Giới thiệu"><?php if(isset($_POST['company_description'])){echo $_POST['company_description'];}?></textarea>
+                    <textarea rows="5" type="text" name="company_description" placeholder="Giới thiệu"><?php if(isset($_POST['company_description'])){echo $_POST['company_description'];}?></textarea>
                     <b class="tooltip tooltip-bottom-right">Giới thiệu về công ty</b>
                 </label>
             </section>
@@ -193,8 +193,8 @@ if (isset($_POST['submit'])){
                     <input type="text" name="company_website" placeholder="Website" value="<?php if(isset($_POST['company_website'])){echo $_POST['company_website'];}?>">
                     <b class="tooltip tooltip-bottom-right">Website công ty</b>
                 </label>
-            </section>            
-                        
+            </section>     
+            
         </div>
         
     </fieldset>
@@ -251,11 +251,13 @@ if (isset($_POST['submit'])){
             <label class="checkbox"><input type="checkbox" name="terms" id="terms"><i></i>Tôi đồng ý với các điều khoản của vieclambanthoigian.com.vn</label>
         </section>
         
-        <!--CAPTCHA-->
-        <section class="pull-right">
-            <p>Mã Captcha</p>
-            <span><input type="text" required name="code" value="" size="8"></span>
-            <span><img src="/vieclambanthoigian.com.vn/include/sec_image.php" width="150" height="30" ></span>
+        <!--CAPTCHA-->        
+        <section class="col col-3 pull-right">
+            <label class="label">Vui lòng nhập chính xác mã CAPTCHA dưới đây:</label>
+            <label class="input input-captcha">
+                <img src="/vieclambanthoigian.com.vn/include/sec_image.php" width="100" height="35" alt="Captcha image" />
+                <input type="text" maxlength="6" name="code" id="captcha" required>
+            </label>
         </section>
         
     </fieldset>
