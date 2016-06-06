@@ -1,9 +1,6 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
 global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,$featured_jobs,$SEO_setting;
-$website->Title("Việc làm theo công ty");
-$website->MetaDescription("abc");
-$website->MetaKeywords("def");
 
 $employerId = $commonQueries->check_present_id("company", $SEO_setting);
 
@@ -55,3 +52,10 @@ $jobs_by_employerId = $commonQueries->jobs_by_employerId($employerId);
                 </div>
         <?php }?>
 </div>
+
+<?php
+    //SEO optimization
+    $website->Title("Danh sách việc làm công ty " . $jobs_by_employerId[0]['company']);
+    $website->MetaDescription("Danh sách tuyển dụng hấp dẫn tại " . $jobs_by_employerId[0]['company']);
+    $website->MetaKeywords("");
+?>

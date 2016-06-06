@@ -1,9 +1,6 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
 global $db,$categories, $categories_subs,$commonQueries, $locations, $companies,$featured_jobs,$SEO_setting, $FULL_DOMAIN_NAME;
-$website->Title("Việc làm mới nhất");
-$website->MetaDescription("abc");
-$website->MetaKeywords("def");
     
 $latest_jobs_columns = array(
     $DBprefix."jobs.id as job_id",$DBprefix."jobs.job_category",$DBprefix."jobs.title",
@@ -84,3 +81,10 @@ $latest_jobs = $db->arraybuilder()->paginate("jobs", $current_page,$latest_jobs_
         <?php $commonQueries->pagination($reload, $current_page, $db->totalPages, 0);?>
     </section>
 </div>
+
+<?php  
+    //SEO optimization
+    $website->Title("Danh sách những việc làm mới");
+    $website->MetaDescription($website->limitCharacters('Tuyển dụng việc làm tại vieclambanthoigian, tiết kiệm hơn, hiệu quả hơn', 120));
+    $website->MetaKeywords("");
+?>

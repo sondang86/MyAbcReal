@@ -1,7 +1,7 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
 global $db, $SEO_setting, $commonQueries;
-$website->Title("Việc làm theo công ty");
+$website->Title("Việc làm theo địa điểm");
 $website->MetaDescription("abc");
 $website->MetaKeywords("def");
 if (isset($_GET['id'])){

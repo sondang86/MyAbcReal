@@ -19,7 +19,7 @@
     }
             
     $reload="http://$DOMAIN_NAME/$url/?";//Link href        
-       
+    print_r($_GET);
 ?>
 
 <!--NAV BAR-->
@@ -79,3 +79,10 @@
         <?php $commonQueries->pagination($reload, $current_page, $jobseekers_list['totalPages'], 0);?>
     </section>
 </div>
+
+<?php  
+    //SEO optimization
+    $website->Title("Danh sách ứng viên tốt nhất được cập nhật liên tục tại vieclambanthoigian.com.vn");
+    $website->MetaDescription($website->limitCharacters('Danh sách hồ sơ ứng viên tìm việc chất lượng cao được cập nhật mỗi ngày tại vieclambanthoigian.com.vn. Cơ hội tuyển chọn nhân tài cho nhà tuyển dụng.', 120));
+    $website->MetaKeywords("");
+?>

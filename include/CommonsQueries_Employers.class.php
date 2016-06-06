@@ -98,5 +98,23 @@ class CommonsQueries_Employers {
         
         return $CVs_applied;
     }
+    
+    /**
+    *   get list of CV applies with status pending/accept/rejected (0/1/2)
+    *   @param var status pending/accept/rejected (0/1/2)
+    */
+    
+    public function jobs_by_employer($username){
+        $jobs_by_employer_columns = array(
+            $this->_dbPrefix."jobs.id as jobId",$this->_dbPrefix."jobs.title",
+            $this->_dbPrefix."jobs.applications",$this->_dbPrefix."jobs.date",
+            $this->_dbPrefix."job_statistics.views_count",
+        );
+        $this->_db->join('job_statistics', $this->_dbPrefix."jobs.id = " . $this->_dbPrefix."job_statistics.job_id", "LEFT");
+        $jobs_by_employer['jobs'] = $this->_db->where("employer", "$username")->withTotalCount()->orderBy('date', 'DESC')->get("jobs", NULL, $jobs_by_employer_columns);
+        $jobs_by_employer['totalCount'] = $this->_db->totalCount;
+        
+        return $jobs_by_employer;
+    }
 }
 

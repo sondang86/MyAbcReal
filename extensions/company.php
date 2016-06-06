@@ -1,7 +1,7 @@
 <?php
-    if(!defined('IN_SCRIPT')) die("Oops! Nothing here");
+    if(!defined('IN_SCRIPT')) die("Oops! Nothing here");    
     global $db, $commonQueries, $SEO_setting;
-    $company_id = $commonQueries->check_present_id("id",$SEO_setting);
+    $company_id = $commonQueries->check_present_id("id",$SEO_setting);    
         
     $website->ms_i($company_id); //validate first    
     $company_jobs = $commonQueries->jobs_by_employerId($company_id, array(0,5)); //get 5 jobs only
@@ -30,8 +30,7 @@
         
     $reviews = $db->rawQuery("SELECT count(id) as number,avg(vote) as vote FROM ".$DBprefix."company_reviews WHERE company_id=$company_id");            
         
-    //Company reviews
-        
+    //Company reviews        
     $cols = array(
         $DBprefix."company_reviews.date",$DBprefix."company_reviews.title",$DBprefix."company_reviews.html",
         $DBprefix."company_reviews.company_id",$DBprefix."company_reviews.vote",$DBprefix."company_reviews.jobseeker_id",
@@ -564,3 +563,10 @@
 <!--https://github.com/antennaio/jquery-bar-rating-->
 <link href="/vieclambanthoigian.com.vn/css/fontawesome-stars.css" rel="stylesheet" type="text/css"/>
 <script src="/vieclambanthoigian.com.vn/js/jquery.barrating.min.js" type="text/javascript"></script>
+
+<?php
+    //SEO Optimization
+    $website->Title('Thông tin công ty ' . $company_info['company']);
+    $website->MetaDescription('Thông tin công ty ' . $company_info['company'] . ' và thông tin tuyển dụng tại ' . $company_info['company']);
+    $website->MetaKeywords("");
+?>

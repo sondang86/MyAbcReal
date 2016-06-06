@@ -68,3 +68,11 @@
         <?php $commonQueries->pagination($reload, $current_page, $urgent_jobs_list['totalPages'], 0);?>
     </section>
 </div>
+
+
+<?php  
+    //SEO optimization
+    $website->Title("Danh sách việc tuyển dụng gấp");
+    $website->MetaDescription($website->limitCharacters('Tuyển dụng gấp, tuyển dụng hiệu quả trong thời gian ngắn', 120));
+    $website->MetaKeywords("");
+?>

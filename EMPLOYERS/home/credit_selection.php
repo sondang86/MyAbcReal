@@ -5,7 +5,6 @@
         
     $current_subscription_request = $commonQueries_Employers->Employer_Subscriptions_request($AuthUserName);
     $current_subscription = $commonQueries_Employers->getCurrent_Subscriptions($AuthUserName);
-
     
 if (isset($_POST['credit_selection_submit'])){
     require_once ('include/credit_selection_handling.php'); // handling credit form submission
@@ -36,6 +35,7 @@ if (isset($_POST['credit_selection_submit'])){
     </section>
 </div>
 
+
 <?php if($current_subscription_request['totalCount'] !== "0") :?>
 
 <!--CURRENT SUBSCRIPTION REQUEST TABLE-->
@@ -44,18 +44,18 @@ if (isset($_POST['credit_selection_submit'])){
     <table class="table" style="border-color:#eeeeee;border-width:1px 1px 1px 1px;border-style:solid">
         <tbody>
             <tr class="table-tr header-title">
-                <td class="col-md-2">                                
+                <td class="col-md-1">                                
                     <a class="header-td underline-link" href="#">
                         Ngày yêu cầu
                     </a>
                 </td>
-                <td class="col-md-2">                                
+                <td class="col-md-1">                                
                     <a class="header-td underline-link" href="#">
                         Gói đăng ký hiện tại
                     </a>
                 </td>
                                 
-                <td class="col-md-2">                                
+                <td class="col-md-1">                                
                     <a class="header-td underline-link" href="#">
                         Gói đăng ký yêu cầu
                     </a>
@@ -70,7 +70,17 @@ if (isset($_POST['credit_selection_submit'])){
                     <a class="header-td underline-link" href="#">
                         Trạng thái
                     </a>
-                </td>                
+                </td>
+                <td class="col-md-1">
+                    <a class="header-td underline-link" href="#">
+                        Ngày bắt đầu
+                    </a>
+                </td> 
+                <td class="col-md-2">
+                    <a class="header-td underline-link" href="#">
+                        Ngày kết thúc
+                    </a>
+                </td> 
             </tr>
                             
             <tr bgcolor="#ffffff" class="header-title" height="30">
@@ -79,6 +89,8 @@ if (isset($_POST['credit_selection_submit'])){
                 <td><?php echo $current_subscription_request['data']['request_subscription']?></td>                            
                 <td><?php echo $current_subscription_request['data']['employer_message']?></td>
                 <td><?php echo $current_subscription_request['data']['status_name']?></td>
+                <td><?php echo date('d-M-Y', $employerInfo['subscription_date']);?></td>
+                <td><?php echo date('d-M-Y G:m:s',$employerInfo['subscription_date_end']);?></td>
             </tr>
         </tbody>
     </table>
@@ -88,7 +100,7 @@ if (isset($_POST['credit_selection_submit'])){
     
 <!--SUBSCRIPTION FORM-->
 <div class="request_form">
-    <?php require_once ('templates/credit_selection_request_form.php');?>
+    <?php require_once ('views/credit_selection_request_form.php');?>
 </div>
 <!--SUBSCRIPTION FORM-->
 

@@ -138,3 +138,10 @@
         $(this).parent().addClass("active");
     });
 </script>
+
+<?php  
+    //SEO optimization
+    $website->Title("Tìm kiếm công việc theo tính chất");
+    $website->MetaDescription($website->limitCharacters('Danh sách công việc theo tính chất tại vieclambanthoigian.com.vn', 120));
+    $website->MetaKeywords("");
+?>

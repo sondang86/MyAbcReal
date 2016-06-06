@@ -166,7 +166,7 @@
     </div>
 </div>    
 <?php
-$website->Title("Tìm kiếm");
-$website->MetaDescription("");
-$website->MetaKeywords("");
+    $website->Title("Tuyển dụng nhân viên " . $category . ", việc làm " . $queryString);
+    $website->MetaDescription("Tìm kiếm việc làm nổi bật, việc tuyển gấp, việc part-time, sinh viên tìm việc tại vieclambanthoigian.com.vn");
+    $website->MetaKeywords("");
 ?>

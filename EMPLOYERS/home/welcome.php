@@ -4,16 +4,9 @@
 // Check http://www.netartmedia.net/jobsportal for demos and information
     
 if(!defined('IN_SCRIPT')) die("");
-global $db, $commonQueries, $FULL_DOMAIN_NAME, $employerInfo;
+global $db, $commonQueries, $commonQueries_Employers, $FULL_DOMAIN_NAME, $employerInfo;
 
-$jobs_by_employer_columns = array(
-    $DBprefix."jobs.id as jobId",$DBprefix."jobs.title",
-    $DBprefix."jobs.applications",$DBprefix."jobs.date",
-    $DBprefix."job_statistics.views_count",
-);
-$db->join('job_statistics', $DBprefix."jobs.id = " . $DBprefix."job_statistics.job_id", "LEFT");
-$jobs_by_employer = $db->where("employer", "$AuthUserName")->withTotalCount()->orderBy('date', 'DESC')->get("jobs", NULL, $jobs_by_employer_columns);
-$job_count = $db->totalCount;
+$jobs_by_employer = $commonQueries_Employers->jobs_by_employer($AuthUserName);
 
 $new_messages = $db->where('user_to', "$AuthUserName")->withTotalCount()->get('user_messages');
 $new_messages_count = $db->totalCount;
@@ -28,7 +21,7 @@ $new_messages_count = $db->totalCount;
     <p>Bạn có: <a href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/tin-nhan/"><?php echo $new_messages_count;?> tin nhắn mới </a></p>
 
     <p>Gói đăng ký hiện tại: <a href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/dang-ky/"><?php echo $employerInfo['subscription_name']?></a> </p></p>
-<p>Số công việc đã đăng: <a href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/danh-sach-cong-viec/"><?php echo $job_count;?>/<?php echo $employerInfo['subscription_listing']?></a> </p>
+    <p>Số công việc đã đăng: <a href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/danh-sach-cong-viec/"><?php echo $jobs_by_employer['totalCount'];?>/<?php echo $employerInfo['subscription_listing']?></a> </p>
 </div>
 
 
@@ -113,7 +106,7 @@ $new_messages_count = $db->totalCount;
             <div class="panel-body">
                 <div class="list-group">
                     
-                    <?php foreach ($jobs_by_employer as $job) :?>                            
+                    <?php foreach ($jobs_by_employer['jobs'] as $job) :?>                            
                     <a  href="<?php echo $FULL_DOMAIN_NAME;?>/EMPLOYERS/chi-tiet-cong-viec/<?php echo $job["jobId"];?>/<?php echo $website->seoURL($job["title"]);?>" class="list-group-item no-decoration" >
                         <div class="row">
                             <div class="col-md-2">

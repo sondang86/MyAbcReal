@@ -1,9 +1,7 @@
 <?php
 if(!defined('IN_SCRIPT')) die("Oops! Nothing here");
 global $db, $SEO_setting, $commonQueries;
-$website->Title("Việc làm");
-$website->MetaDescription("abc");
-$website->MetaKeywords("def");
+
 if (isset($_GET['id'])){
     //sanitize first
     $website->ms_i($_GET['id']); 
@@ -59,4 +57,8 @@ if (isset($_GET['id'])){
      echo "Oopps, Not found any records!";
  }
 }
+    //SEO optimization
+    $website->Title("Danh sách việc làm chuyên ngành " . $jobs_list[0]['category_name_vi']);
+    $website->MetaDescription("Tuyển dụng việc làm chuyên ngành" .$jobs_list[0]['category_name_vi']. " tại vieclambanthoigian.com.vn" );
+    $website->MetaKeywords("");
 ?>

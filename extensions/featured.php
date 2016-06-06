@@ -1,9 +1,6 @@
 <?php
 if(!defined('IN_SCRIPT')) die("");
 global $db,$categories, $categories_subs,$commonQueries,$commonQueries_Front, $locations, $companies, $SEO_setting, $FULL_DOMAIN_NAME;
-$website->Title("Việc làm nổi bật");
-$website->MetaDescription("abc");
-$website->MetaKeywords("def");
         
 //Pagination options
 $reload= $FULL_DOMAIN_NAME."/viec-lam-noi-bat/?";//Link href
@@ -69,3 +66,10 @@ $reload= $FULL_DOMAIN_NAME."/viec-lam-noi-bat/?";//Link href
         <?php $commonQueries->pagination($reload, $current_page, $featured_jobs['totalPages'], 0);?>
     </section>
 </div>
+
+<?php  
+    //SEO optimization
+    $website->Title("Danh sách việc nổi bật");
+    $website->MetaDescription($website->limitCharacters('Tuyển dụng nổi bật, tuyển dụng hiệu quả hơn', 120));
+    $website->MetaKeywords("");
+?>

@@ -68,13 +68,6 @@
     </div>
 </div>
     
-
-<?php
-//echo "<pre>";
-//print_r($jobseeker_resume);
-//echo "</pre>";
-?>
-
 <main class="candidates-item candidates-single-item">
     <h5 class="title"><?php echo $jobseeker_resume['title']?></h5>
     <span class="meta">
@@ -171,3 +164,11 @@
         </ul>
     </div>
 </main>
+
+
+<?php  
+    //SEO optimization
+    $website->Title("Hồ sơ ứng viên " . $jobseeker_profile['first_name'] . " - " . $jobseeker_resume['title']);
+    $website->MetaDescription($website->limitCharacters('Danh sách hồ sơ ứng viên tìm việc chất lượng cao, liên tục được cập nhật mỗi ngày tại vieclambanthoigian.com.vn. Cơ hội tuyển chọn nhân tài cho nhà tuyển dụng.', 120));
+    $website->MetaKeywords("");
+?>

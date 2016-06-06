@@ -145,8 +145,9 @@
     <article class="job-details-wrap">
         <h4>Không tìm thấy dữ liệu :(</h4>
     </article>
-<?php } ?>
-
-<style>
-    
-</style>
+<?php } 
+    //SEO optimization
+    $website->Title($job_details['title'] . " - " . $job_details['company']);
+    $website->MetaDescription($website->limitCharacters($job_details['message'], 120));
+    $website->MetaKeywords("");
+?>
