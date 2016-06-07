@@ -19,7 +19,6 @@
     }
             
     $reload="http://$DOMAIN_NAME/$url/?";//Link href        
-    print_r($_GET);
 ?>
 
 <!--NAV BAR-->

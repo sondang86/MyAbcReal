@@ -48,10 +48,7 @@
             $website->redirect($website->CurrentURL()); 
         }
     }
-//    
-//    echo "<pre>";
-//    print_r($jobseeker_profile);
-//    echo "</pre>";
+
 ?>
 
 <h5><?php $commonQueries->flash('message')?></h5>

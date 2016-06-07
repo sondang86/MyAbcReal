@@ -3,12 +3,15 @@
     global $db, $website, $SEO_setting, $commonQueries, $commonQueries_Front, $FULL_DOMAIN_NAME;
     $featured_jobs = $commonQueries_Front->getJobsList('featured', 5);
     $urgent_jobs = $commonQueries_Front->getJobsList('urgent', 5);
-
-    if (empty($_GET['page']) || ($_GET['page'] !== 'vn_ung-vien') && ($_GET['page'] !== 'jobseeker_details'))://Show jobs lists for jobseekers & guests    
     
+    //Set default value  to avoid undefined index
+    $page   = isset($_GET['page'])  ? $_GET['page'] : '';
+    $mod    = isset($_GET['mod'])   ? $_GET['mod']  :  ''; 
+    
+    if ( ($page !== 'vn_ung-vien') && ($mod !== 'candidate_details')){//Show jobs lists for jobseekers & guests    
+        
 ?>
-
-
+    
 <!--Job by attribute-->
 <div class="gray-wrap">
     <header class="row top-bottom-margin">
@@ -25,7 +28,7 @@
         </article>
     </section>
 </div>
-
+    
 <!--URGENT JOBS-->
 <div class="gray-wrap">
     <header class="row">
@@ -58,8 +61,8 @@
     <?php endforeach;?>
     <div class="text-center"><a class="underline-link" href="<?php echo $FULL_DOMAIN_NAME;?>/viec-tuyen-dung-gap/">Xem toàn bộ</a></div>    
 </div>
-
-
+    
+    
 <!--FEATURED JOBS-->
 <div class="gray-wrap">
     <header class="row">
@@ -92,48 +95,39 @@
     </div>
     <div class="text-center"><a class="underline-link" href="<?php echo $FULL_DOMAIN_NAME;?>/viec-lam-noi-bat/">Xem toàn bộ</a></div>    
 </div>
-
-<?php else: //List candidates
-if (!empty($_GET['page'] && $_GET['page'] == 'jobseeker_details')): //Candidate details 
-    $jobseeker_resume = $commonQueries->getJobseekerResume(filter_input(INPUT_GET,'jobseeker_id', FILTER_SANITIZE_NUMBER_INT))['jobseeker_resumes'];
-    $jobseeker_profile = $commonQueries->getJobseeker_profile($jobseeker_resume['username']);
-    $jobseeker_categories = $commonQueries->getJobseeker_categories($jobseeker_profile['jobseeker_id']);
-    $jobseeker_locations = $commonQueries->getJobseeker_locations($jobseeker_profile['jobseeker_id']);
-    $jobseeker_languagues = $commonQueries->getJobseeker_languages($jobseeker_profile['jobseeker_id']);
-    $skills = $db->orderBy("skill_id","desc")->get('skills');
     
-    //Employer payment verify
-    if ((isset($_SESSION['logged_in'])) && ($_SESSION['user_type'] == 'employer')){//user is employer logged in
-        $employerInfo = $db->where('username', $_SESSION['username'])->getOne('employers');
-        if ($employerInfo['subscription'] > 1){ //Account payment verified, show email & phone
-            $verified_employer = TRUE;
-        } else {
+<?php } else { //List candidates    
+     
+     
+    if ( (!empty($_GET['mod']) && ($_GET['mod'] == 'candidate_details'))){ //Candidate details 
+        $jobseeker_resume = $commonQueries->getJobseekerResume(filter_input(INPUT_GET,'jobseeker_id', FILTER_SANITIZE_NUMBER_INT))['jobseeker_resumes'];
+        $jobseeker_profile = $commonQueries->getJobseeker_profile($jobseeker_resume['username']);
+        $jobseeker_categories = $commonQueries->getJobseeker_categories($jobseeker_profile['jobseeker_id']);
+        $jobseeker_locations = $commonQueries->getJobseeker_locations($jobseeker_profile['jobseeker_id']);
+        $jobseeker_languagues = $commonQueries->getJobseeker_languages($jobseeker_profile['jobseeker_id']);
+        $skills = $db->orderBy("skill_id","desc")->get('skills');
+
+        //Employer payment verify
+        if ((isset($_SESSION['logged_in'])) && ($_SESSION['user_type'] == 'employer')){//user is employer logged in
+            $employerInfo = $db->where('username', $_SESSION['username'])->getOne('employers');
+            if ($employerInfo['subscription'] > 1){ //Account payment verified, show email & phone
+                $verified_employer = TRUE;
+            } else {
+                $verified_employer = FALSE;
+            }
+        } else { // not logged in or account is jobseeker
             $verified_employer = FALSE;
         }
-    } else { // not logged in or account is jobseeker
-        $verified_employer = FALSE;
-    }
-    
-    
-    //Check profile pic
-    if ($jobseeker_profile['profile_pic'] == ""){
-        $profile_pic = "avatar_nam.jpg";
-    } else {
-        $profile_pic = $jobseeker_profile['profile_pic'];
-    }
 
-        
+
+        //Check profile pic
+        if ($jobseeker_profile['profile_pic'] == ""){
+            $profile_pic = "avatar_nam.jpg";
+        } else {
+            $profile_pic = $jobseeker_profile['profile_pic'];
+        }
 ?>
-
-<style>
-    .sky-form {
-        outline: none;
-    }
-    
-    .sky-form .rating {
-        font-size: 12px;
-    }
-</style>
+ 
 <!--CANDIDATE DETAILS-->
 <div class="gray-wrap">
     <fieldset class="row">
@@ -143,90 +137,90 @@ if (!empty($_GET['page'] && $_GET['page'] == 'jobseeker_details')): //Candidate 
             <header class="col-md-12">
                 <img src="<?php echo $FULL_DOMAIN_NAME;?>/images/jobseekers/profile_pic/<?php echo $profile_pic;?>" alt="">
             </header>
-            
+                
             <!--CANDIDATE DETAILS-->
             <section class="col-md-12">
                 <h4>Chi tiết ứng viên</h4>
                 <label>Tên ứng viên: </label>
                 <span><?php echo $jobseeker_profile['first_name']?></span>
             </section>
-            
+                
             <section class="col-md-12">
                 <label>Tuổi: </label>
                 <span><?php echo filter_var($commonQueries->timeCalculation(time(), $jobseeker_profile['dob'],1), FILTER_SANITIZE_NUMBER_INT);?></span>
             </section>
-            
+                
             <section class="col-md-12">
                 <label>Vị trí hiện tại: </label>
                 <span><?php echo $jobseeker_resume['current_position_name']?></span>
             </section>
-            
+                
             <section class="col-md-12">
                 <label>Vị trí mong muốn: </label>
                 <span><?php echo $jobseeker_resume['expected_position_name']?></span>
             </section>
-            
+                
             <section class="col-md-12">
                 <label>Mức lương hiện tại: </label>
                 <span><?php echo $jobseeker_resume['current_salary']?></span>
             </section>
-            
+                
             <section class="col-md-12">
                 <label>Mức lương mong muốn: </label>
                 <span><?php echo $jobseeker_resume['expected_salary_range']?></span>
             </section>
-            
+                
             <section class="col-md-12">
                 <label>Nơi làm việc mong muốn: </label>
                 <span><?php echo $jobseeker_resume['desired_city']?></span>
             </section>
-            
+                
             <section class="col-md-12">
                 <label>Kinh nghiệm: </label>
                 <span><?php echo $jobseeker_resume['job_experience_name']?></span>
             </section>
-            
+                
             <section class="col-md-12">
                 <label>Ngành nghề mong muốn: </label>
                 <span><?php echo $jobseeker_resume['desired_category_vi']?></span>
             </section>
-            
+                
             <section class="col-md-12">
                 <label>Học vấn: </label>
                 <span><?php echo $jobseeker_resume['education_name']?></span>
             </section>
-            
+                
             <section class="col-md-12">
                 <label>Giới tính: </label>
                 <span><?php echo $jobseeker_profile['gender_name']?></span>
             </section>
-            
+                
             <section class="col-md-12">
                 <label>Hôn nhân: </label>
                 <span><?php echo $jobseeker_profile['marital_status_name']?></span>
             </section>
-            
-            <?php if ($verified_employer == TRUE):?>
+                
+            <?php if ($verified_employer == TRUE){?>
             <section class="col-md-12">
                 <label>Số điện thoại: </label>
                 <span><?php echo $jobseeker_profile['phone'];?></span>
             </section>
-            
+                
             <section class="col-md-12">
                 <label>Email liên hệ: </label>
                 <span><?php echo $jobseeker_profile['username'];?></span>
             </section>
-            <?php else: ?>
-            
+            <?php } else { ?>
+                
             <footer class="note col-md-12">
                 <label>Lưu ý: chỉ nhà tuyển dụng đã xác thực tài khoản mới có thể xem được email và số điện thoại của ứng viên</label>
             </footer>
-            
-            <?php endif;?>
+                
+            <?php };?>
         </main>
-        
-        
-        
+            
+            
+            
         <div class="sky-form">
             <fieldset>
                 <section>
@@ -238,7 +232,7 @@ if (!empty($_GET['page'] && $_GET['page'] == 'jobseeker_details')): //Candidate 
                         <?php endforeach;?>
                         Tin học: 
                     </div>
-                    
+                        
                     <div class="rating">
                         <?php foreach ($skills as $skill) :?>
                         <input type="radio" name="group-skill-rating" id="stars-rating-<?php echo $skill['skill_id']?>" disabled <?php if($jobseeker_resume['group_skill_name'] == $skill['name']){ echo "checked='checked'";}?>>
@@ -246,7 +240,7 @@ if (!empty($_GET['page'] && $_GET['page'] == 'jobseeker_details')): //Candidate 
                         <?php endforeach;?>
                         Làm việc nhóm: 
                     </div>
-                    
+                        
                     <div class="rating">
                         <?php foreach ($skills as $skill) :?>
                         <input type="radio" name="pressure-skill-rating" id="stars-rating-<?php echo $skill['skill_id']?>" disabled <?php if($jobseeker_resume['pressure_skill_name'] == $skill['name']){ echo "checked='checked'";}?>>
@@ -254,32 +248,33 @@ if (!empty($_GET['page'] && $_GET['page'] == 'jobseeker_details')): //Candidate 
                         <?php endforeach;?>
                         Chịu áp lực công việc: 
                     </div>
-                    
+                        
                     <!--LANGUAGES-->
-                    <?php if($jobseeker_languagues['totalCount'] > 0): //Show this only found records?>                    
-                    <?php foreach ($jobseeker_languagues['jobseeker_languages'] as $jobseeker_languague):?>
+                    <?php if($jobseeker_languagues['totalCount'] > 0){ //Show this only found records?>  
                     
+                    <?php foreach ($jobseeker_languagues['jobseeker_languages'] as $jobseeker_languague):?>
+                        
                     <div class="rating">
                         <?php foreach ($skills as $skill) :?>
                         <input type="radio" name="language-<?php echo $jobseeker_languague['language_name'];?>-rating" id="stars-rating-<?php echo $skill['skill_id']?>" disabled <?php if($jobseeker_languague['level_id'] == $skill['skill_id']){ echo "checked='checked'";}?>>
                         <label for="stars-rating-<?php echo $skill['skill_id']?>" title="<?php echo $skill['name']?>"><i class="fa fa-star"></i></label>                        
                         <?php endforeach;?>
-                        
+                            
                         Ngoại ngữ (<?php echo $jobseeker_languague['language_name']?>): 
                     </div>
-                    
+                        
                     <?php endforeach;?>                    
-                    <?php endif;?>
+                    <?php };?>
                     <div class="note"><strong>Note:</strong> Theo thang điểm từ thấp đến cao.</div>
                 </section>
             </fieldset>
         </div>
     </fieldset>
 </div>
-<?php endif;?>
-
-
-
+<?php };?>
+    
+    
+    
 <!--Featured candidates-->
 <div class="gray-wrap">
     <header class="row">
@@ -310,9 +305,9 @@ if (!empty($_GET['page'] && $_GET['page'] == 'jobseeker_details')): //Candidate 
         </article>
     </div>
     <?php endforeach;?>
-    <div class="text-center"><a class="underline-link" href="<?php echo $FULL_DOMAIN_NAME;?>/viec-tuyen-dung-gap/">Xem toàn bộ</a></div>    
+    <div class="text-center"><a class="underline-link" href="<?php echo $FULL_DOMAIN_NAME;?>/ung-vien-noi-bat/">Xem toàn bộ</a></div>    
 </div>
-
+    
 <!--Newest candidates-->
 <div class="gray-wrap">
     <header class="row">
@@ -343,6 +338,17 @@ if (!empty($_GET['page'] && $_GET['page'] == 'jobseeker_details')): //Candidate 
         </article>
     </div>
     <?php endforeach;?>
-    <div class="text-center"><a class="underline-link" href="<?php echo $FULL_DOMAIN_NAME;?>/viec-tuyen-dung-gap/">Xem toàn bộ</a></div>    
+    <div class="text-center"><a class="underline-link" href="<?php echo $FULL_DOMAIN_NAME;?>/ung-vien-moi-nhat/">Xem toàn bộ</a></div>    
 </div>
-<?php endif;?>
+<?php };?>
+
+   
+<style>
+    .sky-form {
+        outline: none;
+    }
+        
+    .sky-form .rating {
+        font-size: 12px;
+    }
+</style>
